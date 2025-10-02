@@ -1,13 +1,14 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: bilibili/im/type.proto
-//
+// Generated from bilibili/im/type.proto.
+
 // @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names, unused_import
 
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
@@ -23,8 +24,8 @@ const Exp$json = {
 };
 
 /// Descriptor for `Exp`. Decode as a `google.protobuf.EnumDescriptorProto`.
-final $typed_data.Uint8List expDescriptor = $convert.base64Decode(
-    'CgNFeHASCwoHSW52YWxpZBAAEgsKB05ld19BdmEQAQ==');
+final $typed_data.Uint8List expDescriptor =
+    $convert.base64Decode('CgNFeHASCwoHSW52YWxpZBAAEgsKB05ld19BdmEQAQ==');
 
 @$core.Deprecated('Use msgTypeDescriptor instead')
 const MsgType$json = {
@@ -166,10 +167,24 @@ const AiCardInfo$json = {
   '2': [
     {'1': 'ai_uid', '3': 1, '4': 1, '5': 3, '10': 'aiUid'},
     {'1': 'ai_status', '3': 2, '4': 1, '5': 3, '10': 'aiStatus'},
-    {'1': 'u_info', '3': 3, '4': 1, '5': 11, '6': '.bilibili.im.type.UInfo', '10': 'uInfo'},
+    {
+      '1': 'u_info',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.UInfo',
+      '10': 'uInfo'
+    },
     {'1': 'title', '3': 4, '4': 1, '5': 9, '10': 'title'},
     {'1': 'subtitle', '3': 5, '4': 1, '5': 9, '10': 'subtitle'},
-    {'1': 'ai_logo', '3': 6, '4': 1, '5': 11, '6': '.bilibili.im.type.AILogo', '10': 'aiLogo'},
+    {
+      '1': 'ai_logo',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.AILogo',
+      '10': 'aiLogo'
+    },
     {'1': 'uid', '3': 7, '4': 1, '5': 3, '10': 'uid'},
   ],
 };
@@ -201,10 +216,38 @@ final $typed_data.Uint8List aiEntryDescriptor = $convert.base64Decode(
 const AiInfo$json = {
   '1': 'AiInfo',
   '2': [
-    {'1': 'card_info', '3': 1, '4': 1, '5': 11, '6': '.bilibili.im.type.AiCardInfo', '10': 'cardInfo'},
-    {'1': 'im_info', '3': 2, '4': 1, '5': 11, '6': '.bilibili.im.type.ImInfo', '10': 'imInfo'},
-    {'1': 'ai_entry', '3': 3, '4': 1, '5': 11, '6': '.bilibili.im.type.AiEntry', '10': 'aiEntry'},
-    {'1': 'story', '3': 4, '4': 1, '5': 11, '6': '.bilibili.im.type.Story', '10': 'story'},
+    {
+      '1': 'card_info',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.AiCardInfo',
+      '10': 'cardInfo'
+    },
+    {
+      '1': 'im_info',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.ImInfo',
+      '10': 'imInfo'
+    },
+    {
+      '1': 'ai_entry',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.AiEntry',
+      '10': 'aiEntry'
+    },
+    {
+      '1': 'story',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.Story',
+      '10': 'story'
+    },
   ],
 };
 
@@ -220,8 +263,22 @@ const AttestationDisplay$json = {
   '1': 'AttestationDisplay',
   '2': [
     {'1': 'type', '3': 1, '4': 1, '5': 5, '10': 'type'},
-    {'1': 'common_info', '3': 2, '4': 1, '5': 11, '6': '.bilibili.im.type.CommonInfo', '10': 'commonInfo'},
-    {'1': 'splice_info', '3': 3, '4': 1, '5': 11, '6': '.bilibili.im.type.SpliceInfo', '10': 'spliceInfo'},
+    {
+      '1': 'common_info',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.CommonInfo',
+      '10': 'commonInfo'
+    },
+    {
+      '1': 'splice_info',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.SpliceInfo',
+      '10': 'spliceInfo'
+    },
     {'1': 'icon', '3': 4, '4': 1, '5': 9, '10': 'icon'},
     {'1': 'desc', '3': 5, '4': 1, '5': 9, '10': 'desc'},
   ],
@@ -246,10 +303,38 @@ const Card$json = {
     {'1': 'rank', '3': 6, '4': 1, '5': 5, '10': 'rank'},
     {'1': 'level', '3': 7, '4': 1, '5': 5, '10': 'level'},
     {'1': 'silence', '3': 8, '4': 1, '5': 5, '10': 'silence'},
-    {'1': 'vip', '3': 9, '4': 1, '5': 11, '6': '.bilibili.im.type.VipInfo', '10': 'vip'},
-    {'1': 'pendant', '3': 10, '4': 1, '5': 11, '6': '.bilibili.im.type.PendantInfo', '10': 'pendant'},
-    {'1': 'nameplate', '3': 11, '4': 1, '5': 11, '6': '.bilibili.im.type.NameplateInfo', '10': 'nameplate'},
-    {'1': 'official', '3': 12, '4': 1, '5': 11, '6': '.bilibili.im.type.OfficialInfo', '10': 'official'},
+    {
+      '1': 'vip',
+      '3': 9,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.VipInfo',
+      '10': 'vip'
+    },
+    {
+      '1': 'pendant',
+      '3': 10,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.PendantInfo',
+      '10': 'pendant'
+    },
+    {
+      '1': 'nameplate',
+      '3': 11,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.NameplateInfo',
+      '10': 'nameplate'
+    },
+    {
+      '1': 'official',
+      '3': 12,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.OfficialInfo',
+      '10': 'official'
+    },
     {'1': 'birthday', '3': 13, '4': 1, '5': 3, '10': 'birthday'},
     {'1': 'is_fake_account', '3': 20, '4': 1, '5': 5, '10': 'isFakeAccount'},
     {'1': 'is_deleted', '3': 21, '4': 1, '5': 5, '10': 'isDeleted'},
@@ -259,10 +344,38 @@ const Card$json = {
     {'1': 'is_senior_member', '3': 25, '4': 1, '5': 5, '10': 'isSeniorMember'},
     {'1': 'digital_id', '3': 26, '4': 1, '5': 9, '10': 'digitalId'},
     {'1': 'digital_type', '3': 27, '4': 1, '5': 3, '10': 'digitalType'},
-    {'1': 'attestation', '3': 28, '4': 1, '5': 11, '6': '.bilibili.im.type.AttestationDisplay', '10': 'attestation'},
-    {'1': 'expert_info', '3': 29, '4': 1, '5': 11, '6': '.bilibili.im.type.ExpertInfo', '10': 'expertInfo'},
-    {'1': 'honours', '3': 30, '4': 1, '5': 11, '6': '.bilibili.im.type.UserHonourInfo', '10': 'honours'},
-    {'1': 'name_render', '3': 31, '4': 1, '5': 11, '6': '.bilibili.account.service.v1.NameRender', '10': 'nameRender'},
+    {
+      '1': 'attestation',
+      '3': 28,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.AttestationDisplay',
+      '10': 'attestation'
+    },
+    {
+      '1': 'expert_info',
+      '3': 29,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.ExpertInfo',
+      '10': 'expertInfo'
+    },
+    {
+      '1': 'honours',
+      '3': 30,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.UserHonourInfo',
+      '10': 'honours'
+    },
+    {
+      '1': 'name_render',
+      '3': 31,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.account.service.v1.NameRender',
+      '10': 'nameRender'
+    },
   ],
 };
 
@@ -339,12 +452,25 @@ final $typed_data.Uint8List friendRelationDescriptor = $convert.base64Decode(
 const GptMsgContent$json = {
   '1': 'GptMsgContent',
   '2': [
-    {'1': 'content', '3': 1, '4': 1, '5': 11, '6': '.bilibili.im.type.RichTextMsgContent', '10': 'content'},
+    {
+      '1': 'content',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.RichTextMsgContent',
+      '10': 'content'
+    },
     {'1': 'show_like', '3': 2, '4': 1, '5': 8, '10': 'showLike'},
     {'1': 'show_change', '3': 3, '4': 1, '5': 8, '10': 'showChange'},
     {'1': 'gpt_session_id', '3': 4, '4': 1, '5': 3, '10': 'gptSessionId'},
     {'1': 'gpt_bind_query', '3': 5, '4': 1, '5': 9, '10': 'gptBindQuery'},
-    {'1': 'session_closed_line', '3': 6, '4': 1, '5': 9, '10': 'sessionClosedLine'},
+    {
+      '1': 'session_closed_line',
+      '3': 6,
+      '4': 1,
+      '5': 9,
+      '10': 'sessionClosedLine'
+    },
     {'1': 'voice_url', '3': 7, '4': 1, '5': 9, '10': 'voiceUrl'},
     {'1': 'sub_type', '3': 8, '4': 1, '5': 3, '10': 'subType'},
     {'1': 'voice_time', '3': 9, '4': 1, '5': 3, '10': 'voiceTime'},
@@ -370,8 +496,9 @@ const GptRcmdQuestionBizInfo$json = {
 };
 
 /// Descriptor for `GptRcmdQuestionBizInfo`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List gptRcmdQuestionBizInfoDescriptor = $convert.base64Decode(
-    'ChZHcHRSY21kUXVlc3Rpb25CaXpJbmZvEhoKCHF1ZXN0aW9uGAEgASgJUghxdWVzdGlvbg==');
+final $typed_data.Uint8List gptRcmdQuestionBizInfoDescriptor =
+    $convert.base64Decode(
+        'ChZHcHRSY21kUXVlc3Rpb25CaXpJbmZvEhoKCHF1ZXN0aW9uGAEgASgJUghxdWVzdGlvbg==');
 
 @$core.Deprecated('Use groupRelationDescriptor instead')
 const GroupRelation$json = {
@@ -477,7 +604,14 @@ const KeyHitInfos$json = {
   '2': [
     {'1': 'toast', '3': 1, '4': 1, '5': 9, '10': 'toast'},
     {'1': 'rule_id', '3': 2, '4': 1, '5': 5, '10': 'ruleId'},
-    {'1': 'high_text', '3': 3, '4': 3, '5': 11, '6': '.bilibili.im.type.HighText', '10': 'highText'},
+    {
+      '1': 'high_text',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.im.type.HighText',
+      '10': 'highText'
+    },
   ],
 };
 
@@ -501,9 +635,21 @@ const Medal$json = {
     {'1': 'is_receive', '3': 8, '4': 1, '5': 5, '10': 'isReceive'},
     {'1': 'medal_color_start', '3': 9, '4': 1, '5': 3, '10': 'medalColorStart'},
     {'1': 'medal_color_end', '3': 10, '4': 1, '5': 3, '10': 'medalColorEnd'},
-    {'1': 'medal_color_border', '3': 11, '4': 1, '5': 3, '10': 'medalColorBorder'},
+    {
+      '1': 'medal_color_border',
+      '3': 11,
+      '4': 1,
+      '5': 3,
+      '10': 'medalColorBorder'
+    },
     {'1': 'medal_color_name', '3': 12, '4': 1, '5': 3, '10': 'medalColorName'},
-    {'1': 'medal_color_level', '3': 13, '4': 1, '5': 3, '10': 'medalColorLevel'},
+    {
+      '1': 'medal_color_level',
+      '3': 13,
+      '4': 1,
+      '5': 3,
+      '10': 'medalColorLevel'
+    },
     {'1': 'guard_level', '3': 14, '4': 1, '5': 3, '10': 'guardLevel'},
   ],
 };
@@ -540,9 +686,30 @@ const Msg$json = {
     {'1': 'notify_code', '3': 14, '4': 1, '5': 9, '10': 'notifyCode'},
     {'1': 'msg_source', '3': 15, '4': 1, '5': 5, '10': 'msgSource'},
     {'1': 'new_face_version', '3': 16, '4': 1, '5': 5, '10': 'newFaceVersion'},
-    {'1': 'key_hit_infos', '3': 17, '4': 1, '5': 11, '6': '.bilibili.im.type.KeyHitInfos', '10': 'keyHitInfos'},
-    {'1': 'account_info', '3': 18, '4': 1, '5': 11, '6': '.bilibili.im.type.AccountInfo', '10': 'accountInfo'},
-    {'1': 'gpt_msg_content', '3': 19, '4': 1, '5': 11, '6': '.bilibili.im.type.GptMsgContent', '10': 'gptMsgContent'},
+    {
+      '1': 'key_hit_infos',
+      '3': 17,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.KeyHitInfos',
+      '10': 'keyHitInfos'
+    },
+    {
+      '1': 'account_info',
+      '3': 18,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.AccountInfo',
+      '10': 'accountInfo'
+    },
+    {
+      '1': 'gpt_msg_content',
+      '3': 19,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.GptMsgContent',
+      '10': 'gptMsgContent'
+    },
     {'1': 'canal_token', '3': 20, '4': 1, '5': 9, '10': 'canalToken'},
   ],
 };
@@ -608,7 +775,13 @@ const PendantInfo$json = {
     {'1': 'image', '3': 3, '4': 1, '5': 9, '10': 'image'},
     {'1': 'expire', '3': 4, '4': 1, '5': 3, '10': 'expire'},
     {'1': 'image_enhance', '3': 5, '4': 1, '5': 9, '10': 'imageEnhance'},
-    {'1': 'image_enhance_frame', '3': 6, '4': 1, '5': 9, '10': 'imageEnhanceFrame'},
+    {
+      '1': 'image_enhance_frame',
+      '3': 6,
+      '4': 1,
+      '5': 9,
+      '10': 'imageEnhanceFrame'
+    },
   ],
 };
 
@@ -628,8 +801,8 @@ const Prompt$json = {
 };
 
 /// Descriptor for `Prompt`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List promptDescriptor = $convert.base64Decode(
-    'CgZQcm9tcHQSEAoDbXNnGAEgASgJUgNtc2c=');
+final $typed_data.Uint8List promptDescriptor =
+    $convert.base64Decode('CgZQcm9tcHQSEAoDbXNnGAEgASgJUgNtc2c=');
 
 @$core.Deprecated('Use relationLogDescriptor instead')
 const RelationLog$json = {
@@ -637,8 +810,22 @@ const RelationLog$json = {
   '2': [
     {'1': 'log_type', '3': 1, '4': 1, '5': 5, '10': 'logType'},
     {'1': 'oplog_seqno', '3': 2, '4': 1, '5': 3, '10': 'oplogSeqno'},
-    {'1': 'friend_relation', '3': 3, '4': 1, '5': 11, '6': '.bilibili.im.type.FriendRelation', '10': 'friendRelation'},
-    {'1': 'group_relation', '3': 4, '4': 1, '5': 11, '6': '.bilibili.im.type.GroupRelation', '10': 'groupRelation'},
+    {
+      '1': 'friend_relation',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.FriendRelation',
+      '10': 'friendRelation'
+    },
+    {
+      '1': 'group_relation',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.GroupRelation',
+      '10': 'groupRelation'
+    },
   ],
 };
 
@@ -653,7 +840,14 @@ final $typed_data.Uint8List relationLogDescriptor = $convert.base64Decode(
 const RichTextMsgContent$json = {
   '1': 'RichTextMsgContent',
   '2': [
-    {'1': 'paragraphs', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.dynamic.v2.Paragraph', '10': 'paragraphs'},
+    {
+      '1': 'paragraphs',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.dynamic.v2.Paragraph',
+      '10': 'paragraphs'
+    },
   ],
 };
 
@@ -678,7 +872,14 @@ const SessionInfo$json = {
     {'1': 'ack_ts', '3': 10, '4': 1, '5': 3, '10': 'ackTs'},
     {'1': 'session_ts', '3': 11, '4': 1, '5': 3, '10': 'sessionTs'},
     {'1': 'unread_count', '3': 12, '4': 1, '5': 5, '10': 'unreadCount'},
-    {'1': 'last_msg', '3': 13, '4': 1, '5': 11, '6': '.bilibili.im.type.Msg', '10': 'lastMsg'},
+    {
+      '1': 'last_msg',
+      '3': 13,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.Msg',
+      '10': 'lastMsg'
+    },
     {'1': 'group_type', '3': 14, '4': 1, '5': 5, '10': 'groupType'},
     {'1': 'can_fold', '3': 15, '4': 1, '5': 5, '10': 'canFold'},
     {'1': 'status', '3': 16, '4': 1, '5': 5, '10': 'status'},
@@ -689,16 +890,57 @@ const SessionInfo$json = {
     {'1': 'is_intercept', '3': 21, '4': 1, '5': 5, '10': 'isIntercept'},
     {'1': 'is_trust', '3': 22, '4': 1, '5': 5, '10': 'isTrust'},
     {'1': 'system_msg_type', '3': 23, '4': 1, '5': 5, '10': 'systemMsgType'},
-    {'1': 'account_info', '3': 24, '4': 1, '5': 11, '6': '.bilibili.im.type.AccountInfo', '10': 'accountInfo'},
+    {
+      '1': 'account_info',
+      '3': 24,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.AccountInfo',
+      '10': 'accountInfo'
+    },
     {'1': 'live_status', '3': 25, '4': 1, '5': 5, '10': 'liveStatus'},
-    {'1': 'biz_msg_unread_count', '3': 26, '4': 1, '5': 5, '10': 'bizMsgUnreadCount'},
-    {'1': 'user_label', '3': 27, '4': 1, '5': 11, '6': '.bilibili.im.type.UserLabel', '10': 'userLabel'},
+    {
+      '1': 'biz_msg_unread_count',
+      '3': 26,
+      '4': 1,
+      '5': 5,
+      '10': 'bizMsgUnreadCount'
+    },
+    {
+      '1': 'user_label',
+      '3': 27,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.UserLabel',
+      '10': 'userLabel'
+    },
     {'1': 'is_huahuo', '3': 28, '4': 1, '5': 5, '10': 'isHuahuo'},
-    {'1': 'u_info', '3': 29, '4': 1, '5': 11, '6': '.bilibili.im.type.UInfo', '10': 'uInfo'},
+    {
+      '1': 'u_info',
+      '3': 29,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.UInfo',
+      '10': 'uInfo'
+    },
     {'1': 'stranger', '3': 30, '4': 1, '5': 5, '10': 'stranger'},
-    {'1': 'ai_info', '3': 31, '4': 1, '5': 11, '6': '.bilibili.im.type.AiInfo', '10': 'aiInfo'},
+    {
+      '1': 'ai_info',
+      '3': 31,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.AiInfo',
+      '10': 'aiInfo'
+    },
     {'1': 'is_hide_edit', '3': 32, '4': 1, '5': 8, '10': 'isHideEdit'},
-    {'1': 'ext', '3': 33, '4': 1, '5': 11, '6': '.bilibili.im.type.SessionInfoExt', '10': 'ext'},
+    {
+      '1': 'ext',
+      '3': 33,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.SessionInfoExt',
+      '10': 'ext'
+    },
   ],
 };
 
@@ -750,15 +992,22 @@ const SpliceInfo$json = {
 };
 
 /// Descriptor for `SpliceInfo`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List spliceInfoDescriptor = $convert.base64Decode(
-    'CgpTcGxpY2VJbmZvEhQKBXRpdGxlGAEgASgJUgV0aXRsZQ==');
+final $typed_data.Uint8List spliceInfoDescriptor =
+    $convert.base64Decode('CgpTcGxpY2VJbmZvEhQKBXRpdGxlGAEgASgJUgV0aXRsZQ==');
 
 @$core.Deprecated('Use storyDescriptor instead')
 const Story$json = {
   '1': 'Story',
   '2': [
     {'1': 'tip', '3': 1, '4': 1, '5': 9, '10': 'tip'},
-    {'1': 'items', '3': 2, '4': 3, '5': 11, '6': '.bilibili.im.type.StoryItem', '10': 'items'},
+    {
+      '1': 'items',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.im.type.StoryItem',
+      '10': 'items'
+    },
   ],
 };
 
@@ -775,7 +1024,14 @@ const StoryItem$json = {
     {'1': 'show_name', '3': 2, '4': 1, '5': 9, '10': 'showName'},
     {'1': 'ai_msg', '3': 3, '4': 1, '5': 9, '10': 'aiMsg'},
     {'1': 'selected', '3': 4, '4': 1, '5': 8, '10': 'selected'},
-    {'1': 'prompts', '3': 5, '4': 3, '5': 11, '6': '.bilibili.im.type.Prompt', '10': 'prompts'},
+    {
+      '1': 'prompts',
+      '3': 5,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.im.type.Prompt',
+      '10': 'prompts'
+    },
   ],
 };
 
@@ -789,8 +1045,22 @@ final $typed_data.Uint8List storyItemDescriptor = $convert.base64Decode(
 const UInfo$json = {
   '1': 'UInfo',
   '2': [
-    {'1': 'ava', '3': 1, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.AvatarItem', '10': 'ava'},
-    {'1': 'card', '3': 2, '4': 1, '5': 11, '6': '.bilibili.im.type.Card', '10': 'card'},
+    {
+      '1': 'ava',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.AvatarItem',
+      '10': 'ava'
+    },
+    {
+      '1': 'card',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.Card',
+      '10': 'card'
+    },
   ],
 };
 
@@ -805,8 +1075,22 @@ const UserHonourInfo$json = {
   '1': 'UserHonourInfo',
   '2': [
     {'1': 'mid', '3': 1, '4': 1, '5': 3, '10': 'mid'},
-    {'1': 'colour', '3': 2, '4': 1, '5': 11, '6': '.bilibili.im.type.UserHonourStyle', '10': 'colour'},
-    {'1': 'tags', '3': 3, '4': 3, '5': 11, '6': '.bilibili.im.type.HonourTag', '10': 'tags'},
+    {
+      '1': 'colour',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.UserHonourStyle',
+      '10': 'colour'
+    },
+    {
+      '1': 'tags',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.im.type.HonourTag',
+      '10': 'tags'
+    },
   ],
 };
 
@@ -835,8 +1119,21 @@ const UserLabel$json = {
   '1': 'UserLabel',
   '2': [
     {'1': 'label_type', '3': 1, '4': 1, '5': 5, '10': 'labelType'},
-    {'1': 'medal', '3': 2, '4': 1, '5': 11, '6': '.bilibili.im.type.Medal', '10': 'medal'},
-    {'1': 'guardian_relation', '3': 3, '4': 1, '5': 5, '10': 'guardianRelation'},
+    {
+      '1': 'medal',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.Medal',
+      '10': 'medal'
+    },
+    {
+      '1': 'guardian_relation',
+      '3': 3,
+      '4': 1,
+      '5': 5,
+      '10': 'guardianRelation'
+    },
   ],
 };
 
@@ -855,11 +1152,24 @@ const VipInfo$json = {
     {'1': 'due_date', '3': 3, '4': 1, '5': 3, '10': 'dueDate'},
     {'1': 'vip_pay_type', '3': 4, '4': 1, '5': 5, '10': 'vipPayType'},
     {'1': 'theme_type', '3': 5, '4': 1, '5': 5, '10': 'themeType'},
-    {'1': 'label', '3': 6, '4': 1, '5': 11, '6': '.bilibili.im.type.VipLabel', '10': 'label'},
+    {
+      '1': 'label',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.im.type.VipLabel',
+      '10': 'label'
+    },
     {'1': 'avatar_subscript', '3': 7, '4': 1, '5': 5, '10': 'avatarSubscript'},
     {'1': 'nickname_color', '3': 8, '4': 1, '5': 9, '10': 'nicknameColor'},
     {'1': 'role', '3': 9, '4': 1, '5': 3, '10': 'role'},
-    {'1': 'avatar_subscript_url', '3': 10, '4': 1, '5': 9, '10': 'avatarSubscriptUrl'},
+    {
+      '1': 'avatar_subscript_url',
+      '3': 10,
+      '4': 1,
+      '5': 9,
+      '10': 'avatarSubscriptUrl'
+    },
     {'1': 'tv_vip_status', '3': 11, '4': 1, '5': 5, '10': 'tvVipStatus'},
     {'1': 'tv_vip_pay_type', '3': 12, '4': 1, '5': 5, '10': 'tvVipPayType'},
     {'1': 'tv_due_date', '3': 13, '4': 1, '5': 3, '10': 'tvDueDate'},
@@ -890,10 +1200,34 @@ const VipLabel$json = {
     {'1': 'bg_color', '3': 7, '4': 1, '5': 9, '10': 'bgColor'},
     {'1': 'border_color', '3': 8, '4': 1, '5': 9, '10': 'borderColor'},
     {'1': 'use_img_label', '3': 9, '4': 1, '5': 8, '10': 'useImgLabel'},
-    {'1': 'img_label_uri_hans', '3': 10, '4': 1, '5': 9, '10': 'imgLabelUriHans'},
-    {'1': 'img_label_uri_hant', '3': 11, '4': 1, '5': 9, '10': 'imgLabelUriHant'},
-    {'1': 'img_label_uri_hans_static', '3': 12, '4': 1, '5': 9, '10': 'imgLabelUriHansStatic'},
-    {'1': 'img_label_uri_hant_static', '3': 13, '4': 1, '5': 9, '10': 'imgLabelUriHantStatic'},
+    {
+      '1': 'img_label_uri_hans',
+      '3': 10,
+      '4': 1,
+      '5': 9,
+      '10': 'imgLabelUriHans'
+    },
+    {
+      '1': 'img_label_uri_hant',
+      '3': 11,
+      '4': 1,
+      '5': 9,
+      '10': 'imgLabelUriHant'
+    },
+    {
+      '1': 'img_label_uri_hans_static',
+      '3': 12,
+      '4': 1,
+      '5': 9,
+      '10': 'imgLabelUriHansStatic'
+    },
+    {
+      '1': 'img_label_uri_hant_static',
+      '3': 13,
+      '4': 1,
+      '5': 9,
+      '10': 'imgLabelUriHantStatic'
+    },
   ],
 };
 
@@ -908,4 +1242,3 @@ final $typed_data.Uint8List vipLabelDescriptor = $convert.base64Decode(
     'aW1nX2xhYmVsX3VyaV9oYW5zX3N0YXRpYxgMIAEoCVIVaW1nTGFiZWxVcmlIYW5zU3RhdGljEj'
     'gKGWltZ19sYWJlbF91cmlfaGFudF9zdGF0aWMYDSABKAlSFWltZ0xhYmVsVXJpSGFudFN0YXRp'
     'Yw==');
-

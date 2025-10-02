@@ -1,6 +1,6 @@
 // This is a generated file - do not edit.
 //
-// Generated from bilibili/app/viewunite/pgcanymodel.proto.
+// Generated from bilibili/rpc.proto.
 
 // @dart = 3.3
 

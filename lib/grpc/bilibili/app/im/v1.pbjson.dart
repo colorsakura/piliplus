@@ -1,13 +1,14 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: bilibili/app/im/v1.proto
-//
+// Generated from bilibili/app/im/v1.proto.
+
 // @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names, unused_import
 
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
@@ -329,7 +330,14 @@ final $typed_data.Uint8List airDropShareUserInfoDescriptor = $convert.base64Deco
 const AirDropToImReply$json = {
   '1': 'AirDropToImReply',
   '2': [
-    {'1': 'user_infos', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.im.v1.AirDropShareUserInfo', '10': 'userInfos'},
+    {
+      '1': 'user_infos',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.AirDropShareUserInfo',
+      '10': 'userInfos'
+    },
   ],
 };
 
@@ -342,7 +350,14 @@ final $typed_data.Uint8List airDropToImReplyDescriptor = $convert.base64Decode(
 const AirDropToImReq$json = {
   '1': 'AirDropToImReq',
   '2': [
-    {'1': 'adf', '3': 1, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.AirDropFrom', '10': 'adf'},
+    {
+      '1': 'adf',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.AirDropFrom',
+      '10': 'adf'
+    },
   ],
 };
 
@@ -372,7 +387,14 @@ const BehaviorAlertToast$json = {
     {'1': 'title', '3': 1, '4': 1, '5': 9, '10': 'title'},
     {'1': 'content', '3': 2, '4': 1, '5': 9, '10': 'content'},
     {'1': 'type_str', '3': 3, '4': 1, '5': 9, '10': 'typeStr'},
-    {'1': 'type', '3': 4, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.AlertToastType', '10': 'type'},
+    {
+      '1': 'type',
+      '3': 4,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.AlertToastType',
+      '10': 'type'
+    },
   ],
 };
 
@@ -402,21 +424,29 @@ const CancelInterceptInDustbinReply$json = {
 };
 
 /// Descriptor for `CancelInterceptInDustbinReply`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List cancelInterceptInDustbinReplyDescriptor = $convert.base64Decode(
-    'Ch1DYW5jZWxJbnRlcmNlcHRJbkR1c3RiaW5SZXBseQ==');
+final $typed_data.Uint8List cancelInterceptInDustbinReplyDescriptor =
+    $convert.base64Decode('Ch1DYW5jZWxJbnRlcmNlcHRJbkR1c3RiaW5SZXBseQ==');
 
 @$core.Deprecated('Use cancelInterceptInDustbinReqDescriptor instead')
 const CancelInterceptInDustbinReq$json = {
   '1': 'CancelInterceptInDustbinReq',
   '2': [
-    {'1': 'session_id', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.SessionId', '10': 'sessionId'},
+    {
+      '1': 'session_id',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.SessionId',
+      '10': 'sessionId'
+    },
   ],
 };
 
 /// Descriptor for `CancelInterceptInDustbinReq`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List cancelInterceptInDustbinReqDescriptor = $convert.base64Decode(
-    'ChtDYW5jZWxJbnRlcmNlcHRJbkR1c3RiaW5SZXESPAoKc2Vzc2lvbl9pZBgBIAEoCzIdLmJpbG'
-    'liaWxpLmFwcC5pbS52MS5TZXNzaW9uSWRSCXNlc3Npb25JZA==');
+final $typed_data.Uint8List cancelInterceptInDustbinReqDescriptor =
+    $convert.base64Decode(
+        'ChtDYW5jZWxJbnRlcmNlcHRJbkR1c3RiaW5SZXESPAoKc2Vzc2lvbl9pZBgBIAEoCzIdLmJpbG'
+        'liaWxpLmFwcC5pbS52MS5TZXNzaW9uSWRSCXNlc3Npb25JZA==');
 
 @$core.Deprecated('Use clearAlertReplyDescriptor instead')
 const ClearAlertReply$json = {
@@ -424,14 +454,21 @@ const ClearAlertReply$json = {
 };
 
 /// Descriptor for `ClearAlertReply`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List clearAlertReplyDescriptor = $convert.base64Decode(
-    'Cg9DbGVhckFsZXJ0UmVwbHk=');
+final $typed_data.Uint8List clearAlertReplyDescriptor =
+    $convert.base64Decode('Cg9DbGVhckFsZXJ0UmVwbHk=');
 
 @$core.Deprecated('Use clearAlertReqDescriptor instead')
 const ClearAlertReq$json = {
   '1': 'ClearAlertReq',
   '2': [
-    {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.AlertToastType', '10': 'type'},
+    {
+      '1': 'type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.AlertToastType',
+      '10': 'type'
+    },
   ],
 };
 
@@ -446,15 +483,29 @@ const ClearUnreadReply$json = {
 };
 
 /// Descriptor for `ClearUnreadReply`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List clearUnreadReplyDescriptor = $convert.base64Decode(
-    'ChBDbGVhclVucmVhZFJlcGx5');
+final $typed_data.Uint8List clearUnreadReplyDescriptor =
+    $convert.base64Decode('ChBDbGVhclVucmVhZFJlcGx5');
 
 @$core.Deprecated('Use clearUnreadReqDescriptor instead')
 const ClearUnreadReq$json = {
   '1': 'ClearUnreadReq',
   '2': [
-    {'1': 'page_type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.SessionPageType', '10': 'pageType'},
-    {'1': 'session_id', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.SessionId', '10': 'sessionId'},
+    {
+      '1': 'page_type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.SessionPageType',
+      '10': 'pageType'
+    },
+    {
+      '1': 'session_id',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.SessionId',
+      '10': 'sessionId'
+    },
   ],
 };
 
@@ -470,10 +521,24 @@ const Contact$json = {
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 3, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
-    {'1': 'avatar', '3': 3, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.AvatarItem', '10': 'avatar'},
+    {
+      '1': 'avatar',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.AvatarItem',
+      '10': 'avatar'
+    },
     {'1': 'vip_info', '3': 4, '4': 1, '5': 9, '10': 'vipInfo'},
     {'1': 'url', '3': 5, '4': 1, '5': 9, '10': 'url'},
-    {'1': 'name_render', '3': 6, '4': 1, '5': 11, '6': '.bilibili.account.service.v1.NameRender', '10': 'nameRender'},
+    {
+      '1': 'name_render',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.account.service.v1.NameRender',
+      '10': 'nameRender'
+    },
     {'1': 'is_special_follow', '3': 7, '4': 1, '5': 8, '10': 'isSpecialFollow'},
     {'1': 'face', '3': 8, '4': 1, '5': 9, '10': 'face'},
     {'1': 'official_type', '3': 9, '4': 1, '5': 5, '10': 'officialType'},
@@ -494,7 +559,14 @@ final $typed_data.Uint8List contactDescriptor = $convert.base64Decode(
 const ContactTab$json = {
   '1': 'ContactTab',
   '2': [
-    {'1': 'tab', '3': 1, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.ContactTabType', '10': 'tab'},
+    {
+      '1': 'tab',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.ContactTabType',
+      '10': 'tab'
+    },
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
   ],
 };
@@ -508,10 +580,38 @@ final $typed_data.Uint8List contactTabDescriptor = $convert.base64Decode(
 const ContactsReply$json = {
   '1': 'ContactsReply',
   '2': [
-    {'1': 'contacts', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.im.v1.Contact', '10': 'contacts'},
-    {'1': 'tab', '3': 2, '4': 3, '5': 11, '6': '.bilibili.app.im.v1.ContactTab', '10': 'tab'},
-    {'1': 'current_tab', '3': 3, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.ContactTabType', '10': 'currentTab'},
-    {'1': 'pagination_params', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.PaginationParams', '10': 'paginationParams'},
+    {
+      '1': 'contacts',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.Contact',
+      '10': 'contacts'
+    },
+    {
+      '1': 'tab',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.ContactTab',
+      '10': 'tab'
+    },
+    {
+      '1': 'current_tab',
+      '3': 3,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.ContactTabType',
+      '10': 'currentTab'
+    },
+    {
+      '1': 'pagination_params',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.PaginationParams',
+      '10': 'paginationParams'
+    },
   ],
 };
 
@@ -527,8 +627,22 @@ final $typed_data.Uint8List contactsReplyDescriptor = $convert.base64Decode(
 const ContactsReq$json = {
   '1': 'ContactsReq',
   '2': [
-    {'1': 'tab', '3': 1, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.ContactTabType', '10': 'tab'},
-    {'1': 'pagination_params', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.PaginationParams', '10': 'paginationParams'},
+    {
+      '1': 'tab',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.ContactTabType',
+      '10': 'tab'
+    },
+    {
+      '1': 'pagination_params',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.PaginationParams',
+      '10': 'paginationParams'
+    },
   ],
 };
 
@@ -542,8 +656,22 @@ final $typed_data.Uint8List contactsReqDescriptor = $convert.base64Decode(
 const ContactsSearchReply$json = {
   '1': 'ContactsSearchReply',
   '2': [
-    {'1': 'contacts', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.im.v1.Contact', '10': 'contacts'},
-    {'1': 'pagination_params', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.PaginationParams', '10': 'paginationParams'},
+    {
+      '1': 'contacts',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.Contact',
+      '10': 'contacts'
+    },
+    {
+      '1': 'pagination_params',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.PaginationParams',
+      '10': 'paginationParams'
+    },
   ],
 };
 
@@ -558,8 +686,22 @@ const ContactsSearchReq$json = {
   '1': 'ContactsSearchReq',
   '2': [
     {'1': 'keyword', '3': 1, '4': 1, '5': 9, '10': 'keyword'},
-    {'1': 'tab', '3': 2, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.ContactTabType', '10': 'tab'},
-    {'1': 'pagination_params', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.PaginationParams', '10': 'paginationParams'},
+    {
+      '1': 'tab',
+      '3': 2,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.ContactTabType',
+      '10': 'tab'
+    },
+    {
+      '1': 'pagination_params',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.PaginationParams',
+      '10': 'paginationParams'
+    },
   ],
 };
 
@@ -590,14 +732,21 @@ const DeleteSessionListReply$json = {
 };
 
 /// Descriptor for `DeleteSessionListReply`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List deleteSessionListReplyDescriptor = $convert.base64Decode(
-    'ChZEZWxldGVTZXNzaW9uTGlzdFJlcGx5');
+final $typed_data.Uint8List deleteSessionListReplyDescriptor =
+    $convert.base64Decode('ChZEZWxldGVTZXNzaW9uTGlzdFJlcGx5');
 
 @$core.Deprecated('Use deleteSessionListReqDescriptor instead')
 const DeleteSessionListReq$json = {
   '1': 'DeleteSessionListReq',
   '2': [
-    {'1': 'page_type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.SessionPageType', '10': 'pageType'},
+    {
+      '1': 'page_type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.SessionPageType',
+      '10': 'pageType'
+    },
   ],
 };
 
@@ -612,14 +761,21 @@ const DeleteSessionReply$json = {
 };
 
 /// Descriptor for `DeleteSessionReply`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List deleteSessionReplyDescriptor = $convert.base64Decode(
-    'ChJEZWxldGVTZXNzaW9uUmVwbHk=');
+final $typed_data.Uint8List deleteSessionReplyDescriptor =
+    $convert.base64Decode('ChJEZWxldGVTZXNzaW9uUmVwbHk=');
 
 @$core.Deprecated('Use deleteSessionReqDescriptor instead')
 const DeleteSessionReq$json = {
   '1': 'DeleteSessionReq',
   '2': [
-    {'1': 'session_id', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.SessionId', '10': 'sessionId'},
+    {
+      '1': 'session_id',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.SessionId',
+      '10': 'sessionId'
+    },
   ],
 };
 
@@ -637,15 +793,29 @@ const FilledLabel$json = {
 };
 
 /// Descriptor for `FilledLabel`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List filledLabelDescriptor = $convert.base64Decode(
-    'CgtGaWxsZWRMYWJlbBISCgR0ZXh0GAEgASgJUgR0ZXh0');
+final $typed_data.Uint8List filledLabelDescriptor =
+    $convert.base64Decode('CgtGaWxsZWRMYWJlbBISCgR0ZXh0GAEgASgJUgR0ZXh0');
 
 @$core.Deprecated('Use filterConfigDescriptor instead')
 const FilterConfig$json = {
   '1': 'FilterConfig',
   '2': [
-    {'1': 'filters', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.im.v1.SessionsFilter', '10': 'filters'},
-    {'1': 'current_filter', '3': 2, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.SessionFilterType', '10': 'currentFilter'},
+    {
+      '1': 'filters',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.SessionsFilter',
+      '10': 'filters'
+    },
+    {
+      '1': 'current_filter',
+      '3': 2,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.SessionFilterType',
+      '10': 'currentFilter'
+    },
   ],
 };
 
@@ -659,7 +829,14 @@ final $typed_data.Uint8List filterConfigDescriptor = $convert.base64Decode(
 const FoldId$json = {
   '1': 'FoldId',
   '2': [
-    {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.SessionType', '10': 'type'},
+    {
+      '1': 'type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.SessionType',
+      '10': 'type'
+    },
   ],
 };
 
@@ -673,7 +850,14 @@ const GetImSettingsReply$json = {
   '1': 'GetImSettingsReply',
   '2': [
     {'1': 'page_title', '3': 1, '4': 1, '5': 9, '10': 'pageTitle'},
-    {'1': 'settings', '3': 2, '4': 3, '5': 11, '6': '.bilibili.app.im.v1.GetImSettingsReply.SettingsEntry', '10': 'settings'},
+    {
+      '1': 'settings',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.GetImSettingsReply.SettingsEntry',
+      '10': 'settings'
+    },
   ],
   '3': [GetImSettingsReply_SettingsEntry$json],
 };
@@ -683,7 +867,14 @@ const GetImSettingsReply_SettingsEntry$json = {
   '1': 'SettingsEntry',
   '2': [
     {'1': 'key', '3': 1, '4': 1, '5': 5, '10': 'key'},
-    {'1': 'value', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.Setting', '10': 'value'},
+    {
+      '1': 'value',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.Setting',
+      '10': 'value'
+    },
   ],
   '7': {'7': true},
 };
@@ -700,7 +891,14 @@ final $typed_data.Uint8List getImSettingsReplyDescriptor = $convert.base64Decode
 const GetImSettingsReq$json = {
   '1': 'GetImSettingsReq',
   '2': [
-    {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.IMSettingType', '10': 'type'},
+    {
+      '1': 'type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.IMSettingType',
+      '10': 'type'
+    },
   ],
 };
 
@@ -713,14 +911,22 @@ final $typed_data.Uint8List getImSettingsReqDescriptor = $convert.base64Decode(
 const GetQuickLinkUnreadReply$json = {
   '1': 'GetQuickLinkUnreadReply',
   '2': [
-    {'1': 'items', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.im.v1.QuickLinkUnreadItem', '10': 'items'},
+    {
+      '1': 'items',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.QuickLinkUnreadItem',
+      '10': 'items'
+    },
   ],
 };
 
 /// Descriptor for `GetQuickLinkUnreadReply`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getQuickLinkUnreadReplyDescriptor = $convert.base64Decode(
-    'ChdHZXRRdWlja0xpbmtVbnJlYWRSZXBseRI9CgVpdGVtcxgBIAMoCzInLmJpbGliaWxpLmFwcC'
-    '5pbS52MS5RdWlja0xpbmtVbnJlYWRJdGVtUgVpdGVtcw==');
+final $typed_data.Uint8List getQuickLinkUnreadReplyDescriptor =
+    $convert.base64Decode(
+        'ChdHZXRRdWlja0xpbmtVbnJlYWRSZXBseRI9CgVpdGVtcxgBIAMoCzInLmJpbGliaWxpLmFwcC'
+        '5pbS52MS5RdWlja0xpbmtVbnJlYWRJdGVtUgVpdGVtcw==');
 
 @$core.Deprecated('Use getQuickLinkUnreadReqDescriptor instead')
 const GetQuickLinkUnreadReq$json = {
@@ -728,14 +934,21 @@ const GetQuickLinkUnreadReq$json = {
 };
 
 /// Descriptor for `GetQuickLinkUnreadReq`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getQuickLinkUnreadReqDescriptor = $convert.base64Decode(
-    'ChVHZXRRdWlja0xpbmtVbnJlYWRSZXE=');
+final $typed_data.Uint8List getQuickLinkUnreadReqDescriptor =
+    $convert.base64Decode('ChVHZXRRdWlja0xpbmtVbnJlYWRSZXE=');
 
 @$core.Deprecated('Use getTotalUnreadReplyDescriptor instead')
 const GetTotalUnreadReply$json = {
   '1': 'GetTotalUnreadReply',
   '2': [
-    {'1': 'total', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.Unread', '10': 'total'},
+    {
+      '1': 'total',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.Unread',
+      '10': 'total'
+    },
   ],
 };
 
@@ -750,8 +963,8 @@ const GetTotalUnreadReq$json = {
 };
 
 /// Descriptor for `GetTotalUnreadReq`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getTotalUnreadReqDescriptor = $convert.base64Decode(
-    'ChFHZXRUb3RhbFVucmVhZFJlcQ==');
+final $typed_data.Uint8List getTotalUnreadReqDescriptor =
+    $convert.base64Decode('ChFHZXRUb3RhbFVucmVhZFJlcQ==');
 
 @$core.Deprecated('Use groupIdDescriptor instead')
 const GroupId$json = {
@@ -762,8 +975,8 @@ const GroupId$json = {
 };
 
 /// Descriptor for `GroupId`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List groupIdDescriptor = $convert.base64Decode(
-    'CgdHcm91cElkEhkKCGdyb3VwX2lkGAEgASgDUgdncm91cElk');
+final $typed_data.Uint8List groupIdDescriptor =
+    $convert.base64Decode('CgdHcm91cElkEhkKCGdyb3VwX2lkGAEgASgDUgdncm91cElk');
 
 @$core.Deprecated('Use imageLabelDescriptor instead')
 const ImageLabel$json = {
@@ -785,7 +998,14 @@ const KeywordBlockingAddReply$json = {
   '1': 'KeywordBlockingAddReply',
   '2': [
     {'1': 'toast', '3': 1, '4': 1, '5': 9, '10': 'toast'},
-    {'1': 'item', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.KeywordBlockingItem', '10': 'item'},
+    {
+      '1': 'item',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.KeywordBlockingItem',
+      '10': 'item'
+    },
   ],
 };
 
@@ -803,8 +1023,9 @@ const KeywordBlockingAddReq$json = {
 };
 
 /// Descriptor for `KeywordBlockingAddReq`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List keywordBlockingAddReqDescriptor = $convert.base64Decode(
-    'ChVLZXl3b3JkQmxvY2tpbmdBZGRSZXESGAoHa2V5d29yZBgBIAEoCVIHa2V5d29yZA==');
+final $typed_data.Uint8List keywordBlockingAddReqDescriptor =
+    $convert.base64Decode(
+        'ChVLZXl3b3JkQmxvY2tpbmdBZGRSZXESGAoHa2V5d29yZBgBIAEoCVIHa2V5d29yZA==');
 
 @$core.Deprecated('Use keywordBlockingDeleteReplyDescriptor instead')
 const KeywordBlockingDeleteReply$json = {
@@ -815,8 +1036,9 @@ const KeywordBlockingDeleteReply$json = {
 };
 
 /// Descriptor for `KeywordBlockingDeleteReply`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List keywordBlockingDeleteReplyDescriptor = $convert.base64Decode(
-    'ChpLZXl3b3JkQmxvY2tpbmdEZWxldGVSZXBseRIUCgV0b2FzdBgBIAEoCVIFdG9hc3Q=');
+final $typed_data.Uint8List keywordBlockingDeleteReplyDescriptor =
+    $convert.base64Decode(
+        'ChpLZXl3b3JkQmxvY2tpbmdEZWxldGVSZXBseRIUCgV0b2FzdBgBIAEoCVIFdG9hc3Q=');
 
 @$core.Deprecated('Use keywordBlockingDeleteReqDescriptor instead')
 const KeywordBlockingDeleteReq$json = {
@@ -827,8 +1049,9 @@ const KeywordBlockingDeleteReq$json = {
 };
 
 /// Descriptor for `KeywordBlockingDeleteReq`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List keywordBlockingDeleteReqDescriptor = $convert.base64Decode(
-    'ChhLZXl3b3JkQmxvY2tpbmdEZWxldGVSZXESGAoHa2V5d29yZBgBIAEoCVIHa2V5d29yZA==');
+final $typed_data.Uint8List keywordBlockingDeleteReqDescriptor =
+    $convert.base64Decode(
+        'ChhLZXl3b3JkQmxvY2tpbmdEZWxldGVSZXESGAoHa2V5d29yZBgBIAEoCVIHa2V5d29yZA==');
 
 @$core.Deprecated('Use keywordBlockingItemDescriptor instead')
 const KeywordBlockingItem$json = {
@@ -839,14 +1062,22 @@ const KeywordBlockingItem$json = {
 };
 
 /// Descriptor for `KeywordBlockingItem`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List keywordBlockingItemDescriptor = $convert.base64Decode(
-    'ChNLZXl3b3JkQmxvY2tpbmdJdGVtEhgKB2tleXdvcmQYASABKAlSB2tleXdvcmQ=');
+final $typed_data.Uint8List keywordBlockingItemDescriptor =
+    $convert.base64Decode(
+        'ChNLZXl3b3JkQmxvY2tpbmdJdGVtEhgKB2tleXdvcmQYASABKAlSB2tleXdvcmQ=');
 
 @$core.Deprecated('Use keywordBlockingListReplyDescriptor instead')
 const KeywordBlockingListReply$json = {
   '1': 'KeywordBlockingListReply',
   '2': [
-    {'1': 'items', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.im.v1.KeywordBlockingItem', '10': 'items'},
+    {
+      '1': 'items',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.KeywordBlockingItem',
+      '10': 'items'
+    },
     {'1': 'list_limit', '3': 2, '4': 1, '5': 5, '10': 'listLimit'},
     {'1': 'char_limit', '3': 3, '4': 1, '5': 5, '10': 'charLimit'},
     {'1': 'list_limit_text', '3': 4, '4': 1, '5': 9, '10': 'listLimitText'},
@@ -866,8 +1097,8 @@ const KeywordBlockingListReq$json = {
 };
 
 /// Descriptor for `KeywordBlockingListReq`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List keywordBlockingListReqDescriptor = $convert.base64Decode(
-    'ChZLZXl3b3JkQmxvY2tpbmdMaXN0UmVx');
+final $typed_data.Uint8List keywordBlockingListReqDescriptor =
+    $convert.base64Decode('ChZLZXl3b3JkQmxvY2tpbmdMaXN0UmVx');
 
 @$core.Deprecated('Use medalDescriptor instead')
 const Medal$json = {
@@ -883,9 +1114,21 @@ const Medal$json = {
     {'1': 'is_receive', '3': 8, '4': 1, '5': 5, '10': 'isReceive'},
     {'1': 'medal_color_start', '3': 9, '4': 1, '5': 9, '10': 'medalColorStart'},
     {'1': 'medal_color_end', '3': 10, '4': 1, '5': 9, '10': 'medalColorEnd'},
-    {'1': 'medal_color_border', '3': 11, '4': 1, '5': 9, '10': 'medalColorBorder'},
+    {
+      '1': 'medal_color_border',
+      '3': 11,
+      '4': 1,
+      '5': 9,
+      '10': 'medalColorBorder'
+    },
     {'1': 'medal_color_name', '3': 12, '4': 1, '5': 9, '10': 'medalColorName'},
-    {'1': 'medal_color_level', '3': 13, '4': 1, '5': 9, '10': 'medalColorLevel'},
+    {
+      '1': 'medal_color_level',
+      '3': 13,
+      '4': 1,
+      '5': 9,
+      '10': 'medalColorLevel'
+    },
     {'1': 'guard_level', '3': 14, '4': 1, '5': 3, '10': 'guardLevel'},
   ],
 };
@@ -907,7 +1150,14 @@ const MsgSummary$json = {
   '1': 'MsgSummary',
   '2': [
     {'1': 'raw_msg', '3': 1, '4': 1, '5': 9, '10': 'rawMsg'},
-    {'1': 'prefix_type', '3': 2, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.MsgSummaryPrefixType', '10': 'prefixType'},
+    {
+      '1': 'prefix_type',
+      '3': 2,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.MsgSummaryPrefixType',
+      '10': 'prefixType'
+    },
     {'1': 'prefix_text', '3': 3, '4': 1, '5': 9, '10': 'prefixText'},
     {'1': 'is_group_owner', '3': 4, '4': 1, '5': 8, '10': 'isGroupOwner'},
   ],
@@ -952,7 +1202,14 @@ final $typed_data.Uint8List operationContentDescriptor = $convert.base64Decode(
 const PaginationParams$json = {
   '1': 'PaginationParams',
   '2': [
-    {'1': 'offsets', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.im.v1.PaginationParams.OffsetsEntry', '10': 'offsets'},
+    {
+      '1': 'offsets',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.PaginationParams.OffsetsEntry',
+      '10': 'offsets'
+    },
     {'1': 'has_more', '3': 2, '4': 1, '5': 8, '10': 'hasMore'},
   ],
   '3': [PaginationParams_OffsetsEntry$json],
@@ -963,7 +1220,14 @@ const PaginationParams_OffsetsEntry$json = {
   '1': 'OffsetsEntry',
   '2': [
     {'1': 'key', '3': 1, '4': 1, '5': 5, '10': 'key'},
-    {'1': 'value', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.Offset', '10': 'value'},
+    {
+      '1': 'value',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.Offset',
+      '10': 'value'
+    },
   ],
   '7': {'7': true},
 };
@@ -994,7 +1258,14 @@ final $typed_data.Uint8List pinSessionReplyDescriptor = $convert.base64Decode(
 const PinSessionReq$json = {
   '1': 'PinSessionReq',
   '2': [
-    {'1': 'session_id', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.SessionId', '10': 'sessionId'},
+    {
+      '1': 'session_id',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.SessionId',
+      '10': 'sessionId'
+    },
     {'1': 'top_time_micros', '3': 2, '4': 1, '5': 3, '10': 'topTimeMicros'},
   ],
 };
@@ -1014,8 +1285,8 @@ const PrivateId$json = {
 };
 
 /// Descriptor for `PrivateId`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List privateIdDescriptor = $convert.base64Decode(
-    'CglQcml2YXRlSWQSHQoKdGFsa2VyX3VpZBgBIAEoA1IJdGFsa2VyVWlk');
+final $typed_data.Uint8List privateIdDescriptor = $convert
+    .base64Decode('CglQcml2YXRlSWQSHQoKdGFsa2VyX3VpZBgBIAEoA1IJdGFsa2VyVWlk');
 
 @$core.Deprecated('Use quickLinkBubbleDescriptor instead')
 const QuickLinkBubble$json = {
@@ -1025,8 +1296,22 @@ const QuickLinkBubble$json = {
     {'1': 'avatar', '3': 2, '4': 1, '5': 9, '10': 'avatar'},
     {'1': 'nick_name', '3': 3, '4': 1, '5': 9, '10': 'nickName'},
     {'1': 'content', '3': 4, '4': 1, '5': 9, '10': 'content'},
-    {'1': 'quick_link_item', '3': 5, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.QuickLinkItemType', '10': 'quickLinkItem'},
-    {'1': 'msg_type', '3': 6, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.QuickLinkMsgType', '10': 'msgType'},
+    {
+      '1': 'quick_link_item',
+      '3': 5,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.QuickLinkItemType',
+      '10': 'quickLinkItem'
+    },
+    {
+      '1': 'msg_type',
+      '3': 6,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.QuickLinkMsgType',
+      '10': 'msgType'
+    },
   ],
 };
 
@@ -1042,8 +1327,22 @@ final $typed_data.Uint8List quickLinkBubbleDescriptor = $convert.base64Decode(
 const QuickLinkConfig$json = {
   '1': 'QuickLinkConfig',
   '2': [
-    {'1': 'items', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.im.v1.QuickLinkItem', '10': 'items'},
-    {'1': 'bubble', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.QuickLinkBubble', '10': 'bubble'},
+    {
+      '1': 'items',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.QuickLinkItem',
+      '10': 'items'
+    },
+    {
+      '1': 'bubble',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.QuickLinkBubble',
+      '10': 'bubble'
+    },
     {'1': 'is_legacy_style', '3': 3, '4': 1, '5': 8, '10': 'isLegacyStyle'},
   ],
 };
@@ -1063,8 +1362,22 @@ const QuickLinkItem$json = {
     {'1': 'icon', '3': 2, '4': 1, '5': 9, '10': 'icon'},
     {'1': 'icon_dark', '3': 3, '4': 1, '5': 9, '10': 'iconDark'},
     {'1': 'url', '3': 4, '4': 1, '5': 9, '10': 'url'},
-    {'1': 'unread', '3': 5, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.Unread', '10': 'unread'},
-    {'1': 'item_type', '3': 6, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.QuickLinkItemType', '10': 'itemType'},
+    {
+      '1': 'unread',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.Unread',
+      '10': 'unread'
+    },
+    {
+      '1': 'item_type',
+      '3': 6,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.QuickLinkItemType',
+      '10': 'itemType'
+    },
   ],
 };
 
@@ -1080,8 +1393,22 @@ final $typed_data.Uint8List quickLinkItemDescriptor = $convert.base64Decode(
 const QuickLinkUnreadItem$json = {
   '1': 'QuickLinkUnreadItem',
   '2': [
-    {'1': 'item_type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.QuickLinkItemType', '10': 'itemType'},
-    {'1': 'unread', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.Unread', '10': 'unread'},
+    {
+      '1': 'item_type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.QuickLinkItemType',
+      '10': 'itemType'
+    },
+    {
+      '1': 'unread',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.Unread',
+      '10': 'unread'
+    },
   ],
 };
 
@@ -1124,17 +1451,59 @@ final $typed_data.Uint8List selectItemDescriptor = $convert.base64Decode(
 const Session$json = {
   '1': 'Session',
   '2': [
-    {'1': 'id', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.SessionId', '10': 'id'},
-    {'1': 'session_info', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.SessionInfo', '10': 'sessionInfo'},
-    {'1': 'unread', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.Unread', '10': 'unread'},
-    {'1': 'msg_summary', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.MsgSummary', '10': 'msgSummary'},
+    {
+      '1': 'id',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.SessionId',
+      '10': 'id'
+    },
+    {
+      '1': 'session_info',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.SessionInfo',
+      '10': 'sessionInfo'
+    },
+    {
+      '1': 'unread',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.Unread',
+      '10': 'unread'
+    },
+    {
+      '1': 'msg_summary',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.MsgSummary',
+      '10': 'msgSummary'
+    },
     {'1': 'timestamp', '3': 5, '4': 1, '5': 3, '10': 'timestamp'},
     {'1': 'is_pinned', '3': 6, '4': 1, '5': 8, '10': 'isPinned'},
     {'1': 'sequence_number', '3': 7, '4': 1, '5': 3, '10': 'sequenceNumber'},
     {'1': 'is_muted', '3': 8, '4': 1, '5': 8, '10': 'isMuted'},
     {'1': 'chat_url', '3': 9, '4': 1, '5': 9, '10': 'chatUrl'},
-    {'1': 'operation', '3': 10, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.SessionOperation', '10': 'operation'},
-    {'1': 'trace_params', '3': 11, '4': 3, '5': 11, '6': '.bilibili.app.im.v1.Session.TraceParamsEntry', '10': 'traceParams'},
+    {
+      '1': 'operation',
+      '3': 10,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.SessionOperation',
+      '10': 'operation'
+    },
+    {
+      '1': 'trace_params',
+      '3': 11,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.Session.TraceParamsEntry',
+      '10': 'traceParams'
+    },
   ],
   '3': [Session_TraceParamsEntry$json],
 };
@@ -1167,11 +1536,51 @@ final $typed_data.Uint8List sessionDescriptor = $convert.base64Decode(
 const SessionId$json = {
   '1': 'SessionId',
   '2': [
-    {'1': 'private_id', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.PrivateId', '9': 0, '10': 'privateId'},
-    {'1': 'group_id', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.GroupId', '9': 0, '10': 'groupId'},
-    {'1': 'fold_id', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.FoldId', '9': 0, '10': 'foldId'},
-    {'1': 'system_id', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.SystemId', '9': 0, '10': 'systemId'},
-    {'1': 'customer_id', '3': 5, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.CustomerId', '9': 0, '10': 'customerId'},
+    {
+      '1': 'private_id',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.PrivateId',
+      '9': 0,
+      '10': 'privateId'
+    },
+    {
+      '1': 'group_id',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.GroupId',
+      '9': 0,
+      '10': 'groupId'
+    },
+    {
+      '1': 'fold_id',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.FoldId',
+      '9': 0,
+      '10': 'foldId'
+    },
+    {
+      '1': 'system_id',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.SystemId',
+      '9': 0,
+      '10': 'systemId'
+    },
+    {
+      '1': 'customer_id',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.CustomerId',
+      '9': 0,
+      '10': 'customerId'
+    },
   ],
   '8': [
     {'1': 'id'},
@@ -1192,10 +1601,31 @@ const SessionInfo$json = {
   '1': 'SessionInfo',
   '2': [
     {'1': 'session_name', '3': 1, '4': 1, '5': 9, '10': 'sessionName'},
-    {'1': 'name_render', '3': 2, '4': 1, '5': 11, '6': '.bilibili.account.service.v1.NameRender', '10': 'nameRender'},
-    {'1': 'avatar', '3': 3, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.AvatarItem', '10': 'avatar'},
+    {
+      '1': 'name_render',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.account.service.v1.NameRender',
+      '10': 'nameRender'
+    },
+    {
+      '1': 'avatar',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.AvatarItem',
+      '10': 'avatar'
+    },
     {'1': 'vip_info', '3': 4, '4': 1, '5': 9, '10': 'vipInfo'},
-    {'1': 'user_label', '3': 5, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.UserLabel', '10': 'userLabel'},
+    {
+      '1': 'user_label',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.UserLabel',
+      '10': 'userLabel'
+    },
     {'1': 'is_live', '3': 6, '4': 1, '5': 8, '10': 'isLive'},
   ],
 };
@@ -1213,10 +1643,36 @@ final $typed_data.Uint8List sessionInfoDescriptor = $convert.base64Decode(
 const SessionListExtraInfo$json = {
   '1': 'SessionListExtraInfo',
   '2': [
-    {'1': 'auto_reply_toast', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.AutoReplyToast', '10': 'autoReplyToast'},
-    {'1': 'show_anti_harassment_popup', '3': 2, '4': 1, '5': 8, '10': 'showAntiHarassmentPopup'},
-    {'1': 'customer_hint_title', '3': 3, '4': 1, '5': 9, '10': 'customerHintTitle'},
-    {'1': 'behavior_alert_toast', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.BehaviorAlertToast', '10': 'behaviorAlertToast'},
+    {
+      '1': 'auto_reply_toast',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.AutoReplyToast',
+      '10': 'autoReplyToast'
+    },
+    {
+      '1': 'show_anti_harassment_popup',
+      '3': 2,
+      '4': 1,
+      '5': 8,
+      '10': 'showAntiHarassmentPopup'
+    },
+    {
+      '1': 'customer_hint_title',
+      '3': 3,
+      '4': 1,
+      '5': 9,
+      '10': 'customerHintTitle'
+    },
+    {
+      '1': 'behavior_alert_toast',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.BehaviorAlertToast',
+      '10': 'behaviorAlertToast'
+    },
   ],
 };
 
@@ -1233,8 +1689,22 @@ final $typed_data.Uint8List sessionListExtraInfoDescriptor = $convert.base64Deco
 const SessionListUpdateReply$json = {
   '1': 'SessionListUpdateReply',
   '2': [
-    {'1': 'sessions', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.im.v1.Session', '10': 'sessions'},
-    {'1': 'update_session_params', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.UpdateSessionParams', '10': 'updateSessionParams'},
+    {
+      '1': 'sessions',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.Session',
+      '10': 'sessions'
+    },
+    {
+      '1': 'update_session_params',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.UpdateSessionParams',
+      '10': 'updateSessionParams'
+    },
   ],
 };
 
@@ -1249,10 +1719,38 @@ final $typed_data.Uint8List sessionListUpdateReplyDescriptor = $convert.base64De
 const SessionListUpdateReq$json = {
   '1': 'SessionListUpdateReq',
   '2': [
-    {'1': 'restricted_mode', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.RestrictedMode', '10': 'restrictedMode'},
-    {'1': 'update_params', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.UpdateSessionParams', '10': 'updateParams'},
-    {'1': 'page_type', '3': 3, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.SessionPageType', '10': 'pageType'},
-    {'1': 'filter_type', '3': 4, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.SessionFilterType', '10': 'filterType'},
+    {
+      '1': 'restricted_mode',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.RestrictedMode',
+      '10': 'restrictedMode'
+    },
+    {
+      '1': 'update_params',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.UpdateSessionParams',
+      '10': 'updateParams'
+    },
+    {
+      '1': 'page_type',
+      '3': 3,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.SessionPageType',
+      '10': 'pageType'
+    },
+    {
+      '1': 'filter_type',
+      '3': 4,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.SessionFilterType',
+      '10': 'filterType'
+    },
   ],
 };
 
@@ -1269,14 +1767,70 @@ final $typed_data.Uint8List sessionListUpdateReqDescriptor = $convert.base64Deco
 const SessionMainReply$json = {
   '1': 'SessionMainReply',
   '2': [
-    {'1': 'pagination_params', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.PaginationParams', '10': 'paginationParams'},
-    {'1': 'update_session_params', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.UpdateSessionParams', '10': 'updateSessionParams'},
-    {'1': 'quick_link_config', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.QuickLinkConfig', '10': 'quickLinkConfig'},
-    {'1': 'filter_config', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.FilterConfig', '10': 'filterConfig'},
-    {'1': 'sessions', '3': 5, '4': 3, '5': 11, '6': '.bilibili.app.im.v1.Session', '10': 'sessions'},
-    {'1': 'three_dot_items', '3': 6, '4': 3, '5': 11, '6': '.bilibili.app.im.v1.ThreeDotItem', '10': 'threeDotItems'},
-    {'1': 'outside_item', '3': 7, '4': 3, '5': 11, '6': '.bilibili.app.im.v1.ThreeDotItem', '10': 'outsideItem'},
-    {'1': 'extra_info', '3': 8, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.SessionListExtraInfo', '10': 'extraInfo'},
+    {
+      '1': 'pagination_params',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.PaginationParams',
+      '10': 'paginationParams'
+    },
+    {
+      '1': 'update_session_params',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.UpdateSessionParams',
+      '10': 'updateSessionParams'
+    },
+    {
+      '1': 'quick_link_config',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.QuickLinkConfig',
+      '10': 'quickLinkConfig'
+    },
+    {
+      '1': 'filter_config',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.FilterConfig',
+      '10': 'filterConfig'
+    },
+    {
+      '1': 'sessions',
+      '3': 5,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.Session',
+      '10': 'sessions'
+    },
+    {
+      '1': 'three_dot_items',
+      '3': 6,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.ThreeDotItem',
+      '10': 'threeDotItems'
+    },
+    {
+      '1': 'outside_item',
+      '3': 7,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.ThreeDotItem',
+      '10': 'outsideItem'
+    },
+    {
+      '1': 'extra_info',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.SessionListExtraInfo',
+      '10': 'extraInfo'
+    },
   ],
 };
 
@@ -1299,9 +1853,30 @@ final $typed_data.Uint8List sessionMainReplyDescriptor = $convert.base64Decode(
 const SessionMainReq$json = {
   '1': 'SessionMainReq',
   '2': [
-    {'1': 'restricted_mode', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.RestrictedMode', '10': 'restrictedMode'},
-    {'1': 'pagination_params', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.PaginationParams', '10': 'paginationParams'},
-    {'1': 'filter_type', '3': 3, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.SessionFilterType', '10': 'filterType'},
+    {
+      '1': 'restricted_mode',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.RestrictedMode',
+      '10': 'restrictedMode'
+    },
+    {
+      '1': 'pagination_params',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.PaginationParams',
+      '10': 'paginationParams'
+    },
+    {
+      '1': 'filter_type',
+      '3': 3,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.SessionFilterType',
+      '10': 'filterType'
+    },
   ],
 };
 
@@ -1317,11 +1892,46 @@ final $typed_data.Uint8List sessionMainReqDescriptor = $convert.base64Decode(
 const SessionOperation$json = {
   '1': 'SessionOperation',
   '2': [
-    {'1': 'pin', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.OperationContent', '10': 'pin'},
-    {'1': 'unpin', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.OperationContent', '10': 'unpin'},
-    {'1': 'delete', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.OperationContent', '10': 'delete'},
-    {'1': 'clear_unread', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.OperationContent', '10': 'clearUnread'},
-    {'1': 'unblock', '3': 5, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.OperationContent', '10': 'unblock'},
+    {
+      '1': 'pin',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.OperationContent',
+      '10': 'pin'
+    },
+    {
+      '1': 'unpin',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.OperationContent',
+      '10': 'unpin'
+    },
+    {
+      '1': 'delete',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.OperationContent',
+      '10': 'delete'
+    },
+    {
+      '1': 'clear_unread',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.OperationContent',
+      '10': 'clearUnread'
+    },
+    {
+      '1': 'unblock',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.OperationContent',
+      '10': 'unblock'
+    },
   ],
 };
 
@@ -1338,11 +1948,46 @@ final $typed_data.Uint8List sessionOperationDescriptor = $convert.base64Decode(
 const SessionSecondaryReply$json = {
   '1': 'SessionSecondaryReply',
   '2': [
-    {'1': 'pagination_params', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.PaginationParams', '10': 'paginationParams'},
-    {'1': 'update_session_params', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.UpdateSessionParams', '10': 'updateSessionParams'},
-    {'1': 'sessions', '3': 3, '4': 3, '5': 11, '6': '.bilibili.app.im.v1.Session', '10': 'sessions'},
-    {'1': 'three_dot_items', '3': 4, '4': 3, '5': 11, '6': '.bilibili.app.im.v1.ThreeDotItem', '10': 'threeDotItems'},
-    {'1': 'outside_item', '3': 5, '4': 3, '5': 11, '6': '.bilibili.app.im.v1.ThreeDotItem', '10': 'outsideItem'},
+    {
+      '1': 'pagination_params',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.PaginationParams',
+      '10': 'paginationParams'
+    },
+    {
+      '1': 'update_session_params',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.UpdateSessionParams',
+      '10': 'updateSessionParams'
+    },
+    {
+      '1': 'sessions',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.Session',
+      '10': 'sessions'
+    },
+    {
+      '1': 'three_dot_items',
+      '3': 4,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.ThreeDotItem',
+      '10': 'threeDotItems'
+    },
+    {
+      '1': 'outside_item',
+      '3': 5,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.ThreeDotItem',
+      '10': 'outsideItem'
+    },
   ],
 };
 
@@ -1361,9 +2006,30 @@ final $typed_data.Uint8List sessionSecondaryReplyDescriptor = $convert.base64Dec
 const SessionSecondaryReq$json = {
   '1': 'SessionSecondaryReq',
   '2': [
-    {'1': 'restricted_mode', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.RestrictedMode', '10': 'restrictedMode'},
-    {'1': 'pagination_params', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.PaginationParams', '10': 'paginationParams'},
-    {'1': 'page_type', '3': 3, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.SessionPageType', '10': 'pageType'},
+    {
+      '1': 'restricted_mode',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.RestrictedMode',
+      '10': 'restrictedMode'
+    },
+    {
+      '1': 'pagination_params',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.PaginationParams',
+      '10': 'paginationParams'
+    },
+    {
+      '1': 'page_type',
+      '3': 3,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.SessionPageType',
+      '10': 'pageType'
+    },
   ],
 };
 
@@ -1379,7 +2045,14 @@ final $typed_data.Uint8List sessionSecondaryReqDescriptor = $convert.base64Decod
 const SessionUpdateReply$json = {
   '1': 'SessionUpdateReply',
   '2': [
-    {'1': 'session', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.Session', '10': 'session'},
+    {
+      '1': 'session',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.Session',
+      '10': 'session'
+    },
   ],
 };
 
@@ -1392,8 +2065,22 @@ final $typed_data.Uint8List sessionUpdateReplyDescriptor = $convert.base64Decode
 const SessionUpdateReq$json = {
   '1': 'SessionUpdateReq',
   '2': [
-    {'1': 'session_id', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.SessionId', '10': 'sessionId'},
-    {'1': 'page_type', '3': 2, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.SessionPageType', '10': 'pageType'},
+    {
+      '1': 'session_id',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.SessionId',
+      '10': 'sessionId'
+    },
+    {
+      '1': 'page_type',
+      '3': 2,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.SessionPageType',
+      '10': 'pageType'
+    },
   ],
 };
 
@@ -1407,7 +2094,14 @@ final $typed_data.Uint8List sessionUpdateReqDescriptor = $convert.base64Decode(
 const SessionsFilter$json = {
   '1': 'SessionsFilter',
   '2': [
-    {'1': 'stype', '3': 1, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.SessionFilterType', '10': 'stype'},
+    {
+      '1': 'stype',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.SessionFilterType',
+      '10': 'stype'
+    },
     {'1': 'title', '3': 2, '4': 1, '5': 9, '10': 'title'},
   ],
 };
@@ -1426,14 +2120,21 @@ const SetImSettingsReply$json = {
 };
 
 /// Descriptor for `SetImSettingsReply`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List setImSettingsReplyDescriptor = $convert.base64Decode(
-    'ChJTZXRJbVNldHRpbmdzUmVwbHkSFAoFdG9hc3QYASABKAlSBXRvYXN0');
+final $typed_data.Uint8List setImSettingsReplyDescriptor = $convert
+    .base64Decode('ChJTZXRJbVNldHRpbmdzUmVwbHkSFAoFdG9hc3QYASABKAlSBXRvYXN0');
 
 @$core.Deprecated('Use setImSettingsReqDescriptor instead')
 const SetImSettingsReq$json = {
   '1': 'SetImSettingsReq',
   '2': [
-    {'1': 'settings', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.im.v1.SetImSettingsReq.SettingsEntry', '10': 'settings'},
+    {
+      '1': 'settings',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.SetImSettingsReq.SettingsEntry',
+      '10': 'settings'
+    },
   ],
   '3': [SetImSettingsReq_SettingsEntry$json],
 };
@@ -1443,7 +2144,14 @@ const SetImSettingsReq_SettingsEntry$json = {
   '1': 'SettingsEntry',
   '2': [
     {'1': 'key', '3': 1, '4': 1, '5': 5, '10': 'key'},
-    {'1': 'value', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.Setting', '10': 'value'},
+    {
+      '1': 'value',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.Setting',
+      '10': 'value'
+    },
   ],
   '7': {'7': true},
 };
@@ -1459,10 +2167,42 @@ final $typed_data.Uint8List setImSettingsReqDescriptor = $convert.base64Decode(
 const Setting$json = {
   '1': 'Setting',
   '2': [
-    {'1': 'switch', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.SettingSwitch', '9': 0, '10': 'switch'},
-    {'1': 'select', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.SettingSelect', '9': 0, '10': 'select'},
-    {'1': 'redirect', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.SettingRedirect', '9': 0, '10': 'redirect'},
-    {'1': 'text', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.SettingText', '9': 0, '10': 'text'},
+    {
+      '1': 'switch',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.SettingSwitch',
+      '9': 0,
+      '10': 'switch'
+    },
+    {
+      '1': 'select',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.SettingSelect',
+      '9': 0,
+      '10': 'select'
+    },
+    {
+      '1': 'redirect',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.SettingRedirect',
+      '9': 0,
+      '10': 'redirect'
+    },
+    {
+      '1': 'text',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.SettingText',
+      '9': 0,
+      '10': 'text'
+    },
   ],
   '8': [
     {'1': 'content'},
@@ -1481,10 +2221,42 @@ final $typed_data.Uint8List settingDescriptor = $convert.base64Decode(
 const SettingRedirect$json = {
   '1': 'SettingRedirect',
   '2': [
-    {'1': 'setting_page', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.redirect2SettingPage', '9': 0, '10': 'settingPage'},
-    {'1': 'other_page', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.redirect2OtherPage', '9': 0, '10': 'otherPage'},
-    {'1': 'popup', '3': 6, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.redirect2Popup', '9': 0, '10': 'popup'},
-    {'1': 'window_select', '3': 7, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.redirectWindowSelect', '9': 0, '10': 'windowSelect'},
+    {
+      '1': 'setting_page',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.redirect2SettingPage',
+      '9': 0,
+      '10': 'settingPage'
+    },
+    {
+      '1': 'other_page',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.redirect2OtherPage',
+      '9': 0,
+      '10': 'otherPage'
+    },
+    {
+      '1': 'popup',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.redirect2Popup',
+      '9': 0,
+      '10': 'popup'
+    },
+    {
+      '1': 'window_select',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.redirectWindowSelect',
+      '9': 0,
+      '10': 'windowSelect'
+    },
     {'1': 'title', '3': 3, '4': 1, '5': 9, '10': 'title'},
     {'1': 'subtitle', '3': 4, '4': 1, '5': 9, '10': 'subtitle'},
     {'1': 'selected_summary', '3': 5, '4': 1, '5': 9, '10': 'selectedSummary'},
@@ -1509,7 +2281,14 @@ final $typed_data.Uint8List settingRedirectDescriptor = $convert.base64Decode(
 const SettingSelect$json = {
   '1': 'SettingSelect',
   '2': [
-    {'1': 'item', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.im.v1.SelectItem', '10': 'item'},
+    {
+      '1': 'item',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.SelectItem',
+      '10': 'item'
+    },
   ],
 };
 
@@ -1542,14 +2321,21 @@ const SettingText$json = {
 };
 
 /// Descriptor for `SettingText`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List settingTextDescriptor = $convert.base64Decode(
-    'CgtTZXR0aW5nVGV4dBISCgR0ZXh0GAEgASgJUgR0ZXh0');
+final $typed_data.Uint8List settingTextDescriptor =
+    $convert.base64Decode('CgtTZXR0aW5nVGV4dBISCgR0ZXh0GAEgASgJUgR0ZXh0');
 
 @$core.Deprecated('Use systemIdDescriptor instead')
 const SystemId$json = {
   '1': 'SystemId',
   '2': [
-    {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.SessionType', '10': 'type'},
+    {
+      '1': 'type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.SessionType',
+      '10': 'type'
+    },
   ],
 };
 
@@ -1565,7 +2351,14 @@ const ThreeDotItem$json = {
     {'1': 'title', '3': 1, '4': 1, '5': 9, '10': 'title'},
     {'1': 'icon', '3': 2, '4': 1, '5': 9, '10': 'icon'},
     {'1': 'url', '3': 3, '4': 1, '5': 9, '10': 'url'},
-    {'1': 'type', '3': 4, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.ThreeDotItemType', '10': 'type'},
+    {
+      '1': 'type',
+      '3': 4,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.ThreeDotItemType',
+      '10': 'type'
+    },
     {'1': 'has_red_dot', '3': 5, '4': 1, '5': 8, '10': 'hasRedDot'},
   ],
 };
@@ -1593,7 +2386,14 @@ final $typed_data.Uint8List unPinSessionReplyDescriptor = $convert.base64Decode(
 const UnPinSessionReq$json = {
   '1': 'UnPinSessionReq',
   '2': [
-    {'1': 'session_id', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.SessionId', '10': 'sessionId'},
+    {
+      '1': 'session_id',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.SessionId',
+      '10': 'sessionId'
+    },
   ],
 };
 
@@ -1606,7 +2406,14 @@ final $typed_data.Uint8List unPinSessionReqDescriptor = $convert.base64Decode(
 const Unread$json = {
   '1': 'Unread',
   '2': [
-    {'1': 'style', '3': 1, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.UnreadStyle', '10': 'style'},
+    {
+      '1': 'style',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.UnreadStyle',
+      '10': 'style'
+    },
     {'1': 'number', '3': 2, '4': 1, '5': 3, '10': 'number'},
     {'1': 'number_show', '3': 3, '4': 1, '5': 9, '10': 'numberShow'},
   ],
@@ -1622,7 +2429,14 @@ final $typed_data.Uint8List unreadDescriptor = $convert.base64Decode(
 const UpdateSessionParams$json = {
   '1': 'UpdateSessionParams',
   '2': [
-    {'1': 'max_session_ts', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.im.v1.UpdateSessionParams.MaxSessionTsEntry', '10': 'maxSessionTs'},
+    {
+      '1': 'max_session_ts',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.UpdateSessionParams.MaxSessionTsEntry',
+      '10': 'maxSessionTs'
+    },
   ],
   '3': [UpdateSessionParams_MaxSessionTsEntry$json],
 };
@@ -1632,7 +2446,14 @@ const UpdateSessionParams_MaxSessionTsEntry$json = {
   '1': 'MaxSessionTsEntry',
   '2': [
     {'1': 'key', '3': 1, '4': 1, '5': 5, '10': 'key'},
-    {'1': 'value', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.Offset', '10': 'value'},
+    {
+      '1': 'value',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.Offset',
+      '10': 'value'
+    },
   ],
   '7': {'7': true},
 };
@@ -1648,8 +2469,22 @@ final $typed_data.Uint8List updateSessionParamsDescriptor = $convert.base64Decod
 const UserLabel$json = {
   '1': 'UserLabel',
   '2': [
-    {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.LabelType', '10': 'type'},
-    {'1': 'style', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.UserLabelStyle', '10': 'style'},
+    {
+      '1': 'type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.LabelType',
+      '10': 'type'
+    },
+    {
+      '1': 'style',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.UserLabelStyle',
+      '10': 'style'
+    },
   ],
 };
 
@@ -1663,10 +2498,42 @@ final $typed_data.Uint8List userLabelDescriptor = $convert.base64Decode(
 const UserLabelStyle$json = {
   '1': 'UserLabelStyle',
   '2': [
-    {'1': 'bordered_label', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.BorderedLabel', '9': 0, '10': 'borderedLabel'},
-    {'1': 'filled_label', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.FilledLabel', '9': 0, '10': 'filledLabel'},
-    {'1': 'image_label', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.ImageLabel', '9': 0, '10': 'imageLabel'},
-    {'1': 'medal_label', '3': 5, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.Medal', '9': 0, '10': 'medalLabel'},
+    {
+      '1': 'bordered_label',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.BorderedLabel',
+      '9': 0,
+      '10': 'borderedLabel'
+    },
+    {
+      '1': 'filled_label',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.FilledLabel',
+      '9': 0,
+      '10': 'filledLabel'
+    },
+    {
+      '1': 'image_label',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.ImageLabel',
+      '9': 0,
+      '10': 'imageLabel'
+    },
+    {
+      '1': 'medal_label',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.Medal',
+      '9': 0,
+      '10': 'medalLabel'
+    },
   ],
   '8': [
     {'1': 'style'},
@@ -1691,8 +2558,8 @@ const redirect2OtherPage$json = {
 };
 
 /// Descriptor for `redirect2OtherPage`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List redirect2OtherPageDescriptor = $convert.base64Decode(
-    'ChJyZWRpcmVjdDJPdGhlclBhZ2USEAoDdXJsGAEgASgJUgN1cmw=');
+final $typed_data.Uint8List redirect2OtherPageDescriptor = $convert
+    .base64Decode('ChJyZWRpcmVjdDJPdGhlclBhZ2USEAoDdXJsGAEgASgJUgN1cmw=');
 
 @$core.Deprecated('Use redirect2PopupDescriptor instead')
 const redirect2Popup$json = {
@@ -1713,10 +2580,24 @@ final $typed_data.Uint8List redirect2PopupDescriptor = $convert.base64Decode(
 const redirect2SettingPage$json = {
   '1': 'redirect2SettingPage',
   '2': [
-    {'1': 'sub_settings', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.im.v1.redirect2SettingPage.SubSettingsEntry', '10': 'subSettings'},
+    {
+      '1': 'sub_settings',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.redirect2SettingPage.SubSettingsEntry',
+      '10': 'subSettings'
+    },
     {'1': 'page_title', '3': 2, '4': 1, '5': 9, '10': 'pageTitle'},
     {'1': 'url', '3': 3, '4': 1, '5': 9, '10': 'url'},
-    {'1': 'parent_setting_type', '3': 4, '4': 1, '5': 14, '6': '.bilibili.app.im.v1.IMSettingType', '10': 'parentSettingType'},
+    {
+      '1': 'parent_setting_type',
+      '3': 4,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.im.v1.IMSettingType',
+      '10': 'parentSettingType'
+    },
   ],
   '3': [redirect2SettingPage_SubSettingsEntry$json],
 };
@@ -1726,7 +2607,14 @@ const redirect2SettingPage_SubSettingsEntry$json = {
   '1': 'SubSettingsEntry',
   '2': [
     {'1': 'key', '3': 1, '4': 1, '5': 5, '10': 'key'},
-    {'1': 'value', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.im.v1.Setting', '10': 'value'},
+    {
+      '1': 'value',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.Setting',
+      '10': 'value'
+    },
   ],
   '7': {'7': true},
 };
@@ -1746,7 +2634,14 @@ const redirectWindowSelect$json = {
   '1': 'redirectWindowSelect',
   '2': [
     {'1': 'title', '3': 1, '4': 1, '5': 9, '10': 'title'},
-    {'1': 'item', '3': 2, '4': 3, '5': 11, '6': '.bilibili.app.im.v1.SelectItem', '10': 'item'},
+    {
+      '1': 'item',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.im.v1.SelectItem',
+      '10': 'item'
+    },
   ],
 };
 
@@ -1754,4 +2649,3 @@ const redirectWindowSelect$json = {
 final $typed_data.Uint8List redirectWindowSelectDescriptor = $convert.base64Decode(
     'ChRyZWRpcmVjdFdpbmRvd1NlbGVjdBIUCgV0aXRsZRgBIAEoCVIFdGl0bGUSMgoEaXRlbRgCIA'
     'MoCzIeLmJpbGliaWxpLmFwcC5pbS52MS5TZWxlY3RJdGVtUgRpdGVt');
-

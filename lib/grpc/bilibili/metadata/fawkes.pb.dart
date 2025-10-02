@@ -1,13 +1,14 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: bilibili/metadata/fawkes.proto
-//
+// Generated from bilibili/metadata/fawkes.proto.
+
 // @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names
 
 import 'dart:core' as $core;
 
@@ -21,54 +22,56 @@ class FawkesReply extends $pb.GeneratedMessage {
     $core.String? ff,
     $core.String? dd,
   }) {
-    final $result = create();
-    if (config != null) {
-      $result.config = config;
-    }
-    if (ff != null) {
-      $result.ff = ff;
-    }
-    if (dd != null) {
-      $result.dd = dd;
-    }
-    return $result;
+    final result = create();
+    if (config != null) result.config = config;
+    if (ff != null) result.ff = ff;
+    if (dd != null) result.dd = dd;
+    return result;
   }
-  FawkesReply._() : super();
-  factory FawkesReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory FawkesReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'FawkesReply', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.metadata.fawkes'), createEmptyInstance: create)
+  FawkesReply._();
+
+  factory FawkesReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory FawkesReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'FawkesReply',
+      package: const $pb.PackageName(
+          _omitMessageNames ? '' : 'bilibili.metadata.fawkes'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'config')
     ..aOS(2, _omitFieldNames ? '' : 'ff')
     ..aOS(3, _omitFieldNames ? '' : 'dd')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  FawkesReply clone() => FawkesReply()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  FawkesReply copyWith(void Function(FawkesReply) updates) => super.copyWith((message) => updates(message as FawkesReply)) as FawkesReply;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  FawkesReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  FawkesReply copyWith(void Function(FawkesReply) updates) =>
+      super.copyWith((message) => updates(message as FawkesReply))
+          as FawkesReply;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static FawkesReply create() => FawkesReply._();
+  @$core.override
   FawkesReply createEmptyInstance() => create();
   static $pb.PbList<FawkesReply> createRepeated() => $pb.PbList<FawkesReply>();
   @$core.pragma('dart2js:noInline')
-  static FawkesReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FawkesReply>(create);
+  static FawkesReply getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<FawkesReply>(create);
   static FawkesReply? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get config => $_getSZ(0);
   @$pb.TagNumber(1)
-  set config($core.String v) { $_setString(0, v); }
+  set config($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasConfig() => $_has(0);
   @$pb.TagNumber(1)
@@ -77,7 +80,7 @@ class FawkesReply extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get ff => $_getSZ(1);
   @$pb.TagNumber(2)
-  set ff($core.String v) { $_setString(1, v); }
+  set ff($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasFf() => $_has(1);
   @$pb.TagNumber(2)
@@ -86,7 +89,7 @@ class FawkesReply extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get dd => $_getSZ(2);
   @$pb.TagNumber(3)
-  set dd($core.String v) { $_setString(2, v); }
+  set dd($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasDd() => $_has(2);
   @$pb.TagNumber(3)
@@ -99,54 +102,55 @@ class FawkesReq extends $pb.GeneratedMessage {
     $core.String? env,
     $core.String? sessionId,
   }) {
-    final $result = create();
-    if (appkey != null) {
-      $result.appkey = appkey;
-    }
-    if (env != null) {
-      $result.env = env;
-    }
-    if (sessionId != null) {
-      $result.sessionId = sessionId;
-    }
-    return $result;
+    final result = create();
+    if (appkey != null) result.appkey = appkey;
+    if (env != null) result.env = env;
+    if (sessionId != null) result.sessionId = sessionId;
+    return result;
   }
-  FawkesReq._() : super();
-  factory FawkesReq.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory FawkesReq.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'FawkesReq', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.metadata.fawkes'), createEmptyInstance: create)
+  FawkesReq._();
+
+  factory FawkesReq.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory FawkesReq.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'FawkesReq',
+      package: const $pb.PackageName(
+          _omitMessageNames ? '' : 'bilibili.metadata.fawkes'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'appkey')
     ..aOS(2, _omitFieldNames ? '' : 'env')
     ..aOS(3, _omitFieldNames ? '' : 'sessionId')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  FawkesReq clone() => FawkesReq()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  FawkesReq copyWith(void Function(FawkesReq) updates) => super.copyWith((message) => updates(message as FawkesReq)) as FawkesReq;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  FawkesReq clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  FawkesReq copyWith(void Function(FawkesReq) updates) =>
+      super.copyWith((message) => updates(message as FawkesReq)) as FawkesReq;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static FawkesReq create() => FawkesReq._();
+  @$core.override
   FawkesReq createEmptyInstance() => create();
   static $pb.PbList<FawkesReq> createRepeated() => $pb.PbList<FawkesReq>();
   @$core.pragma('dart2js:noInline')
-  static FawkesReq getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FawkesReq>(create);
+  static FawkesReq getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FawkesReq>(create);
   static FawkesReq? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get appkey => $_getSZ(0);
   @$pb.TagNumber(1)
-  set appkey($core.String v) { $_setString(0, v); }
+  set appkey($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasAppkey() => $_has(0);
   @$pb.TagNumber(1)
@@ -155,7 +159,7 @@ class FawkesReq extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get env => $_getSZ(1);
   @$pb.TagNumber(2)
-  set env($core.String v) { $_setString(1, v); }
+  set env($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasEnv() => $_has(1);
   @$pb.TagNumber(2)
@@ -164,13 +168,14 @@ class FawkesReq extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get sessionId => $_getSZ(2);
   @$pb.TagNumber(3)
-  set sessionId($core.String v) { $_setString(2, v); }
+  set sessionId($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasSessionId() => $_has(2);
   @$pb.TagNumber(3)
   void clearSessionId() => $_clearField(3);
 }
 
-
-const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
-const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');
+const $core.bool _omitFieldNames =
+    $core.bool.fromEnvironment('protobuf.omit_field_names');
+const $core.bool _omitMessageNames =
+    $core.bool.fromEnvironment('protobuf.omit_message_names');

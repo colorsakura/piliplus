@@ -1,13 +1,14 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: bilibili/playershared.proto
-//
+// Generated from bilibili/playershared.proto.
+
 // @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names, unused_import
 
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
@@ -545,10 +546,24 @@ const AIAudio$json = {
   '1': 'AIAudio',
   '2': [
     {'1': 'support_ai_audio', '3': 1, '4': 1, '5': 8, '10': 'supportAiAudio'},
-    {'1': 'ai_audio_items', '3': 2, '4': 3, '5': 11, '6': '.bilibili.playershared.AIAudioItem', '10': 'aiAudioItems'},
+    {
+      '1': 'ai_audio_items',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.AIAudioItem',
+      '10': 'aiAudioItems'
+    },
     {'1': 'ai_open_toast', '3': 3, '4': 1, '5': 9, '10': 'aiOpenToast'},
     {'1': 'ai_close_toast', '3': 4, '4': 1, '5': 9, '10': 'aiCloseToast'},
-    {'1': 'badge', '3': 5, '4': 1, '5': 11, '6': '.bilibili.playershared.Badge', '10': 'badge'},
+    {
+      '1': 'badge',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Badge',
+      '10': 'badge'
+    },
     {'1': 'default_title', '3': 6, '4': 1, '5': 9, '10': 'defaultTitle'},
     {'1': 'list_title', '3': 7, '4': 1, '5': 9, '10': 'listTitle'},
     {'1': 'list_desc', '3': 8, '4': 1, '5': 9, '10': 'listDesc'},
@@ -569,7 +584,14 @@ final $typed_data.Uint8List aIAudioDescriptor = $convert.base64Decode(
 const AIAudioItem$json = {
   '1': 'AIAudioItem',
   '2': [
-    {'1': 'audio_info', '3': 1, '4': 3, '5': 11, '6': '.bilibili.playershared.DashItem', '10': 'audioInfo'},
+    {
+      '1': 'audio_info',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.DashItem',
+      '10': 'audioInfo'
+    },
     {'1': 'title', '3': 2, '4': 1, '5': 9, '10': 'title'},
     {'1': 'button_title', '3': 3, '4': 1, '5': 9, '10': 'buttonTitle'},
     {'1': 'subtitle_lang', '3': 4, '4': 1, '5': 9, '10': 'subtitleLang'},
@@ -589,9 +611,23 @@ const ArcConf$json = {
   '2': [
     {'1': 'is_support', '3': 1, '4': 1, '5': 8, '10': 'isSupport'},
     {'1': 'disabled', '3': 2, '4': 1, '5': 8, '10': 'disabled'},
-    {'1': 'extra_content', '3': 3, '4': 1, '5': 11, '6': '.bilibili.playershared.ExtraContent', '10': 'extraContent'},
+    {
+      '1': 'extra_content',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.ExtraContent',
+      '10': 'extraContent'
+    },
     {'1': 'unsupport_scene', '3': 4, '4': 3, '5': 5, '10': 'unsupportScene'},
-    {'1': 'unsupport_state', '3': 5, '4': 1, '5': 14, '6': '.bilibili.playershared.UnsupportState', '10': 'unsupportState'},
+    {
+      '1': 'unsupport_state',
+      '3': 5,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.UnsupportState',
+      '10': 'unsupportState'
+    },
   ],
 };
 
@@ -612,8 +648,21 @@ const AutoQnCtl$json = {
     {'1': 'login_full', '3': 3, '4': 1, '5': 3, '10': 'loginFull'},
     {'1': 'nologin_full', '3': 4, '4': 1, '5': 3, '10': 'nologinFull'},
     {'1': 'mobile_login_full', '3': 5, '4': 1, '5': 3, '10': 'mobileLoginFull'},
-    {'1': 'mobile_nologin_full', '3': 6, '4': 1, '5': 3, '10': 'mobileNologinFull'},
-    {'1': 'scene_qn_range', '3': 7, '4': 3, '5': 11, '6': '.bilibili.playershared.AutoQnCtl.SceneQnRangeEntry', '10': 'sceneQnRange'},
+    {
+      '1': 'mobile_nologin_full',
+      '3': 6,
+      '4': 1,
+      '5': 3,
+      '10': 'mobileNologinFull'
+    },
+    {
+      '1': 'scene_qn_range',
+      '3': 7,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.AutoQnCtl.SceneQnRangeEntry',
+      '10': 'sceneQnRange'
+    },
   ],
   '3': [AutoQnCtl_SceneQnRangeEntry$json],
 };
@@ -623,7 +672,14 @@ const AutoQnCtl_SceneQnRangeEntry$json = {
   '1': 'SceneQnRangeEntry',
   '2': [
     {'1': 'key', '3': 1, '4': 1, '5': 9, '10': 'key'},
-    {'1': 'value', '3': 2, '4': 1, '5': 11, '6': '.bilibili.playershared.AutoQnRange', '10': 'value'},
+    {
+      '1': 'value',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.AutoQnRange',
+      '10': 'value'
+    },
   ],
   '7': {'7': true},
 };
@@ -657,8 +713,21 @@ const BackgroundInfo$json = {
   '1': 'BackgroundInfo',
   '2': [
     {'1': 'drawable_color', '3': 1, '4': 1, '5': 9, '10': 'drawableColor'},
-    {'1': 'drawable_bitmap_url', '3': 2, '4': 1, '5': 9, '10': 'drawableBitmapUrl'},
-    {'1': 'effects', '3': 3, '4': 1, '5': 14, '6': '.bilibili.playershared.Effects', '10': 'effects'},
+    {
+      '1': 'drawable_bitmap_url',
+      '3': 2,
+      '4': 1,
+      '5': 9,
+      '10': 'drawableBitmapUrl'
+    },
+    {
+      '1': 'effects',
+      '3': 3,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.Effects',
+      '10': 'effects'
+    },
   ],
 };
 
@@ -678,7 +747,13 @@ const Badge$json = {
     {'1': 'bg_color', '3': 4, '4': 1, '5': 9, '10': 'bgColor'},
     {'1': 'bg_color_night', '3': 5, '4': 1, '5': 9, '10': 'bgColorNight'},
     {'1': 'border_color', '3': 6, '4': 1, '5': 9, '10': 'borderColor'},
-    {'1': 'border_color_night', '3': 7, '4': 1, '5': 9, '10': 'borderColorNight'},
+    {
+      '1': 'border_color_night',
+      '3': 7,
+      '4': 1,
+      '5': 9,
+      '10': 'borderColorNight'
+    },
     {'1': 'bg_style', '3': 8, '4': 1, '5': 5, '10': 'bgStyle'},
   ],
 };
@@ -699,7 +774,14 @@ const BadgeInfo$json = {
     {'1': 'bg_color', '3': 2, '4': 1, '5': 9, '10': 'bgColor'},
     {'1': 'bg_color_night', '3': 3, '4': 1, '5': 9, '10': 'bgColorNight'},
     {'1': 'text_color', '3': 4, '4': 1, '5': 9, '10': 'textColor'},
-    {'1': 'bg_gradient_color', '3': 5, '4': 1, '5': 11, '6': '.bilibili.playershared.GradientColor', '10': 'bgGradientColor'},
+    {
+      '1': 'bg_gradient_color',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.GradientColor',
+      '10': 'bgGradientColor'
+    },
     {'1': 'img', '3': 6, '4': 1, '5': 9, '10': 'img'},
   ],
 };
@@ -719,7 +801,14 @@ const Banner$json = {
     {'1': 'jump_link', '3': 1, '4': 1, '5': 9, '10': 'jumpLink'},
     {'1': 'image_link', '3': 2, '4': 1, '5': 9, '10': 'imageLink'},
     {'1': 'half_image_link', '3': 3, '4': 1, '5': 9, '10': 'halfImageLink'},
-    {'1': 'report', '3': 4, '4': 1, '5': 11, '6': '.bilibili.playershared.Report', '10': 'report'},
+    {
+      '1': 'report',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Report',
+      '10': 'report'
+    },
   ],
 };
 
@@ -747,7 +836,14 @@ final $typed_data.Uint8List benefitInfoDescriptor = $convert.base64Decode(
 const BottomDisplay$json = {
   '1': 'BottomDisplay',
   '2': [
-    {'1': 'title', '3': 1, '4': 1, '5': 11, '6': '.bilibili.playershared.TextInfo', '10': 'title'},
+    {
+      '1': 'title',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.TextInfo',
+      '10': 'title'
+    },
     {'1': 'icon', '3': 2, '4': 1, '5': 9, '10': 'icon'},
   ],
 };
@@ -763,7 +859,14 @@ const Button$json = {
   '2': [
     {'1': 'text', '3': 1, '4': 1, '5': 9, '10': 'text'},
     {'1': 'link', '3': 2, '4': 1, '5': 9, '10': 'link'},
-    {'1': 'report_params', '3': 3, '4': 3, '5': 11, '6': '.bilibili.playershared.Button.ReportParamsEntry', '10': 'reportParams'},
+    {
+      '1': 'report_params',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.Button.ReportParamsEntry',
+      '10': 'reportParams'
+    },
   ],
   '3': [Button_ReportParamsEntry$json],
 };
@@ -795,16 +898,77 @@ const ButtonInfo$json = {
     {'1': 'bg_color', '3': 4, '4': 1, '5': 9, '10': 'bgColor'},
     {'1': 'bg_color_night', '3': 5, '4': 1, '5': 9, '10': 'bgColorNight'},
     {'1': 'link', '3': 6, '4': 1, '5': 9, '10': 'link'},
-    {'1': 'action_type', '3': 7, '4': 1, '5': 14, '6': '.bilibili.playershared.ButtonAction', '10': 'actionType'},
-    {'1': 'badge_info', '3': 8, '4': 1, '5': 11, '6': '.bilibili.playershared.BadgeInfo', '10': 'badgeInfo'},
-    {'1': 'report', '3': 9, '4': 1, '5': 11, '6': '.bilibili.playershared.Report', '10': 'report'},
-    {'1': 'left_strikethrough_text', '3': 10, '4': 1, '5': 9, '10': 'leftStrikethroughText'},
-    {'1': 'simple_text_info', '3': 11, '4': 1, '5': 11, '6': '.bilibili.playershared.TextInfo', '10': 'simpleTextInfo'},
+    {
+      '1': 'action_type',
+      '3': 7,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.ButtonAction',
+      '10': 'actionType'
+    },
+    {
+      '1': 'badge_info',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.BadgeInfo',
+      '10': 'badgeInfo'
+    },
+    {
+      '1': 'report',
+      '3': 9,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Report',
+      '10': 'report'
+    },
+    {
+      '1': 'left_strikethrough_text',
+      '3': 10,
+      '4': 1,
+      '5': 9,
+      '10': 'leftStrikethroughText'
+    },
+    {
+      '1': 'simple_text_info',
+      '3': 11,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.TextInfo',
+      '10': 'simpleTextInfo'
+    },
     {'1': 'simple_bg_color', '3': 12, '4': 1, '5': 9, '10': 'simpleBgColor'},
-    {'1': 'simple_bg_color_night', '3': 13, '4': 1, '5': 9, '10': 'simpleBgColorNight'},
-    {'1': 'bg_gradient_color', '3': 14, '4': 1, '5': 11, '6': '.bilibili.playershared.GradientColor', '10': 'bgGradientColor'},
-    {'1': 'order_report_params', '3': 15, '4': 3, '5': 11, '6': '.bilibili.playershared.ButtonInfo.OrderReportParamsEntry', '10': 'orderReportParams'},
-    {'1': 'task_param', '3': 16, '4': 1, '5': 11, '6': '.bilibili.playershared.TaskParam', '10': 'taskParam'},
+    {
+      '1': 'simple_bg_color_night',
+      '3': 13,
+      '4': 1,
+      '5': 9,
+      '10': 'simpleBgColorNight'
+    },
+    {
+      '1': 'bg_gradient_color',
+      '3': 14,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.GradientColor',
+      '10': 'bgGradientColor'
+    },
+    {
+      '1': 'order_report_params',
+      '3': 15,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.ButtonInfo.OrderReportParamsEntry',
+      '10': 'orderReportParams'
+    },
+    {
+      '1': 'task_param',
+      '3': 16,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.TaskParam',
+      '10': 'taskParam'
+    },
     {'1': 'frame_color', '3': 17, '4': 1, '5': 9, '10': 'frameColor'},
     {'1': 'icon', '3': 18, '4': 1, '5': 9, '10': 'icon'},
     {'1': 'font_size', '3': 19, '4': 1, '5': 5, '10': 'fontSize'},
@@ -863,13 +1027,55 @@ final $typed_data.Uint8List chargingExtDescriptor = $convert.base64Decode(
 const ComprehensiveToast$json = {
   '1': 'ComprehensiveToast',
   '2': [
-    {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.playershared.ToastType', '10': 'type'},
-    {'1': 'button', '3': 2, '4': 1, '5': 11, '6': '.bilibili.playershared.ButtonInfo', '10': 'button'},
-    {'1': 'show_style_type', '3': 3, '4': 1, '5': 14, '6': '.bilibili.playershared.ShowStyleType', '10': 'showStyleType'},
+    {
+      '1': 'type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.ToastType',
+      '10': 'type'
+    },
+    {
+      '1': 'button',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.ButtonInfo',
+      '10': 'button'
+    },
+    {
+      '1': 'show_style_type',
+      '3': 3,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.ShowStyleType',
+      '10': 'showStyleType'
+    },
     {'1': 'icon', '3': 4, '4': 1, '5': 9, '10': 'icon'},
-    {'1': 'toast_text', '3': 5, '4': 1, '5': 11, '6': '.bilibili.playershared.TextInfo', '10': 'toastText'},
-    {'1': 'report', '3': 6, '4': 1, '5': 11, '6': '.bilibili.playershared.Report', '10': 'report'},
-    {'1': 'order_report_params', '3': 7, '4': 3, '5': 11, '6': '.bilibili.playershared.ComprehensiveToast.OrderReportParamsEntry', '10': 'orderReportParams'},
+    {
+      '1': 'toast_text',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.TextInfo',
+      '10': 'toastText'
+    },
+    {
+      '1': 'report',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Report',
+      '10': 'report'
+    },
+    {
+      '1': 'order_report_params',
+      '3': 7,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.ComprehensiveToast.OrderReportParamsEntry',
+      '10': 'orderReportParams'
+    },
   ],
   '3': [ComprehensiveToast_OrderReportParamsEntry$json],
 };
@@ -919,8 +1125,22 @@ const CountDownItem$json = {
   '1': 'CountDownItem',
   '2': [
     {'1': 'fold_countdown', '3': 1, '4': 1, '5': 3, '10': 'foldCountdown'},
-    {'1': 'title', '3': 2, '4': 1, '5': 11, '6': '.bilibili.playershared.TextInfo', '10': 'title'},
-    {'1': 'subtitle', '3': 3, '4': 1, '5': 11, '6': '.bilibili.playershared.TextInfo', '10': 'subtitle'},
+    {
+      '1': 'title',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.TextInfo',
+      '10': 'title'
+    },
+    {
+      '1': 'subtitle',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.TextInfo',
+      '10': 'subtitle'
+    },
   ],
 };
 
@@ -991,7 +1211,14 @@ final $typed_data.Uint8List dashVideoDescriptor = $convert.base64Decode(
 const DeviceConf$json = {
   '1': 'DeviceConf',
   '2': [
-    {'1': 'conf_value', '3': 1, '4': 1, '5': 11, '6': '.bilibili.playershared.ConfValue', '10': 'confValue'},
+    {
+      '1': 'conf_value',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.ConfValue',
+      '10': 'confValue'
+    },
   ],
 };
 
@@ -1004,23 +1231,120 @@ final $typed_data.Uint8List deviceConfDescriptor = $convert.base64Decode(
 const Dialog$json = {
   '1': 'Dialog',
   '2': [
-    {'1': 'style_type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.playershared.GuideStyle', '10': 'styleType'},
-    {'1': 'background_info', '3': 2, '4': 1, '5': 11, '6': '.bilibili.playershared.BackgroundInfo', '10': 'backgroundInfo'},
-    {'1': 'title', '3': 3, '4': 1, '5': 11, '6': '.bilibili.playershared.TextInfo', '10': 'title'},
-    {'1': 'subtitle', '3': 4, '4': 1, '5': 11, '6': '.bilibili.playershared.TextInfo', '10': 'subtitle'},
-    {'1': 'image', '3': 5, '4': 1, '5': 11, '6': '.bilibili.playershared.ImageInfo', '10': 'image'},
-    {'1': 'button', '3': 6, '4': 3, '5': 11, '6': '.bilibili.playershared.ButtonInfo', '10': 'button'},
-    {'1': 'bottom_desc', '3': 7, '4': 1, '5': 11, '6': '.bilibili.playershared.ButtonInfo', '10': 'bottomDesc'},
-    {'1': 'report', '3': 8, '4': 1, '5': 11, '6': '.bilibili.playershared.Report', '10': 'report'},
+    {
+      '1': 'style_type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.GuideStyle',
+      '10': 'styleType'
+    },
+    {
+      '1': 'background_info',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.BackgroundInfo',
+      '10': 'backgroundInfo'
+    },
+    {
+      '1': 'title',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.TextInfo',
+      '10': 'title'
+    },
+    {
+      '1': 'subtitle',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.TextInfo',
+      '10': 'subtitle'
+    },
+    {
+      '1': 'image',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.ImageInfo',
+      '10': 'image'
+    },
+    {
+      '1': 'button',
+      '3': 6,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.ButtonInfo',
+      '10': 'button'
+    },
+    {
+      '1': 'bottom_desc',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.ButtonInfo',
+      '10': 'bottomDesc'
+    },
+    {
+      '1': 'report',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Report',
+      '10': 'report'
+    },
     {'1': 'count_down_sec', '3': 9, '4': 1, '5': 5, '10': 'countDownSec'},
-    {'1': 'right_bottom_desc', '3': 10, '4': 1, '5': 11, '6': '.bilibili.playershared.TextInfo', '10': 'rightBottomDesc'},
-    {'1': 'bottom_display', '3': 11, '4': 3, '5': 11, '6': '.bilibili.playershared.BottomDisplay', '10': 'bottomDisplay'},
-    {'1': 'ext_data', '3': 12, '4': 1, '5': 11, '6': '.bilibili.playershared.ExtData', '10': 'extData'},
-    {'1': 'limit_action_type', '3': 13, '4': 1, '5': 14, '6': '.bilibili.playershared.LimitActionType', '10': 'limitActionType'},
+    {
+      '1': 'right_bottom_desc',
+      '3': 10,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.TextInfo',
+      '10': 'rightBottomDesc'
+    },
+    {
+      '1': 'bottom_display',
+      '3': 11,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.BottomDisplay',
+      '10': 'bottomDisplay'
+    },
+    {
+      '1': 'ext_data',
+      '3': 12,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.ExtData',
+      '10': 'extData'
+    },
+    {
+      '1': 'limit_action_type',
+      '3': 13,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.LimitActionType',
+      '10': 'limitActionType'
+    },
     {'1': 'is_hide_more_btn', '3': 14, '4': 1, '5': 5, '10': 'isHideMoreBtn'},
-    {'1': 'hide_button_on_half', '3': 15, '4': 1, '5': 5, '10': 'hideButtonOnHalf'},
+    {
+      '1': 'hide_button_on_half',
+      '3': 15,
+      '4': 1,
+      '5': 5,
+      '10': 'hideButtonOnHalf'
+    },
     {'1': 'deliver_win_id', '3': 16, '4': 1, '5': 9, '10': 'deliverWinId'},
-    {'1': 'conditions', '3': 17, '4': 3, '5': 11, '6': '.bilibili.playershared.Dialog.ConditionsEntry', '10': 'conditions'},
+    {
+      '1': 'conditions',
+      '3': 17,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.Dialog.ConditionsEntry',
+      '10': 'conditions'
+    },
   ],
   '3': [Dialog_ConditionsEntry$json],
 };
@@ -1079,8 +1403,22 @@ final $typed_data.Uint8List dimensionDescriptor = $convert.base64Decode(
 const DolbyItem$json = {
   '1': 'DolbyItem',
   '2': [
-    {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.playershared.DolbyItem.Type', '10': 'type'},
-    {'1': 'audio', '3': 2, '4': 3, '5': 11, '6': '.bilibili.playershared.DashItem', '10': 'audio'},
+    {
+      '1': 'type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.DolbyItem.Type',
+      '10': 'type'
+    },
+    {
+      '1': 'audio',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.DashItem',
+      '10': 'audio'
+    },
   ],
   '4': [DolbyItem_Type$json],
 };
@@ -1121,7 +1459,14 @@ final $typed_data.Uint8List epInlineVideoDescriptor = $convert.base64Decode(
 const EpInlineVideoInfo$json = {
   '1': 'EpInlineVideoInfo',
   '2': [
-    {'1': 'ep_inline_video', '3': 1, '4': 3, '5': 11, '6': '.bilibili.playershared.EpInlineVideo', '10': 'epInlineVideo'},
+    {
+      '1': 'ep_inline_video',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.EpInlineVideo',
+      '10': 'epInlineVideo'
+    },
   ],
 };
 
@@ -1134,8 +1479,22 @@ final $typed_data.Uint8List epInlineVideoInfoDescriptor = $convert.base64Decode(
 const Event$json = {
   '1': 'Event',
   '2': [
-    {'1': 'shake', '3': 1, '4': 1, '5': 11, '6': '.bilibili.playershared.Shake', '10': 'shake'},
-    {'1': 'qn_tip', '3': 2, '4': 1, '5': 11, '6': '.bilibili.playershared.QnTip', '10': 'qnTip'},
+    {
+      '1': 'shake',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Shake',
+      '10': 'shake'
+    },
+    {
+      '1': 'qn_tip',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.QnTip',
+      '10': 'qnTip'
+    },
   ],
 };
 
@@ -1149,8 +1508,21 @@ final $typed_data.Uint8List eventDescriptor = $convert.base64Decode(
 const ExpSwitch$json = {
   '1': 'ExpSwitch',
   '2': [
-    {'1': 'hit_opti_try_watch', '3': 2, '4': 1, '5': 5, '10': 'hitOptiTryWatch'},
-    {'1': 'exp_ab', '3': 3, '4': 3, '5': 11, '6': '.bilibili.playershared.ExpSwitch.ExpAbEntry', '10': 'expAb'},
+    {
+      '1': 'hit_opti_try_watch',
+      '3': 2,
+      '4': 1,
+      '5': 5,
+      '10': 'hitOptiTryWatch'
+    },
+    {
+      '1': 'exp_ab',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.ExpSwitch.ExpAbEntry',
+      '10': 'expAb'
+    },
   ],
   '3': [ExpSwitch_ExpAbEntry$json],
 };
@@ -1176,12 +1548,59 @@ final $typed_data.Uint8List expSwitchDescriptor = $convert.base64Decode(
 const ExtData$json = {
   '1': 'ExtData',
   '2': [
-    {'1': 'play_list_info', '3': 2, '4': 1, '5': 11, '6': '.bilibili.playershared.PlayListInfo', '9': 0, '10': 'playListInfo'},
-    {'1': 'banner', '3': 3, '4': 1, '5': 11, '6': '.bilibili.playershared.Banner', '9': 0, '10': 'banner'},
-    {'1': 'ep_inline_video_info', '3': 4, '4': 1, '5': 11, '6': '.bilibili.playershared.EpInlineVideoInfo', '9': 0, '10': 'epInlineVideoInfo'},
-    {'1': 'charging_ext', '3': 5, '4': 1, '5': 11, '6': '.bilibili.playershared.ChargingExt', '9': 0, '10': 'chargingExt'},
-    {'1': 'qr_code', '3': 6, '4': 1, '5': 11, '6': '.bilibili.playershared.QrCode', '9': 0, '10': 'qrCode'},
-    {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.playershared.ExtDataType', '10': 'type'},
+    {
+      '1': 'play_list_info',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.PlayListInfo',
+      '9': 0,
+      '10': 'playListInfo'
+    },
+    {
+      '1': 'banner',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Banner',
+      '9': 0,
+      '10': 'banner'
+    },
+    {
+      '1': 'ep_inline_video_info',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.EpInlineVideoInfo',
+      '9': 0,
+      '10': 'epInlineVideoInfo'
+    },
+    {
+      '1': 'charging_ext',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.ChargingExt',
+      '9': 0,
+      '10': 'chargingExt'
+    },
+    {
+      '1': 'qr_code',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.QrCode',
+      '9': 0,
+      '10': 'qrCode'
+    },
+    {
+      '1': 'type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.ExtDataType',
+      '10': 'type'
+    },
   ],
   '8': [
     {'1': 'data'},
@@ -1217,8 +1636,23 @@ final $typed_data.Uint8List extraContentDescriptor = $convert.base64Decode(
 const FoldData$json = {
   '1': 'FoldData',
   '2': [
-    {'1': 'count_down', '3': 2, '4': 1, '5': 11, '6': '.bilibili.playershared.CountDownItem', '9': 0, '10': 'countDown'},
-    {'1': 'fold_style', '3': 1, '4': 1, '5': 14, '6': '.bilibili.playershared.FoldStyle', '10': 'foldStyle'},
+    {
+      '1': 'count_down',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.CountDownItem',
+      '9': 0,
+      '10': 'countDown'
+    },
+    {
+      '1': 'fold_style',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.FoldStyle',
+      '10': 'foldStyle'
+    },
   ],
   '8': [
     {'1': 'data'},
@@ -1235,7 +1669,14 @@ final $typed_data.Uint8List foldDataDescriptor = $convert.base64Decode(
 const Fragment$json = {
   '1': 'Fragment',
   '2': [
-    {'1': 'infos', '3': 1, '4': 3, '5': 11, '6': '.bilibili.playershared.FragmentInfo', '10': 'infos'},
+    {
+      '1': 'infos',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.FragmentInfo',
+      '10': 'infos'
+    },
   ],
 };
 
@@ -1249,12 +1690,33 @@ const FragmentInfo$json = {
   '1': 'FragmentInfo',
   '2': [
     {'1': 'index', '3': 1, '4': 1, '5': 5, '10': 'index'},
-    {'1': 'fragment_position', '3': 2, '4': 1, '5': 14, '6': '.bilibili.playershared.FragmentPosition', '10': 'fragmentPosition'},
-    {'1': 'fragment_type', '3': 3, '4': 1, '5': 14, '6': '.bilibili.playershared.FragmentType', '10': 'fragmentType'},
+    {
+      '1': 'fragment_position',
+      '3': 2,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.FragmentPosition',
+      '10': 'fragmentPosition'
+    },
+    {
+      '1': 'fragment_type',
+      '3': 3,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.FragmentType',
+      '10': 'fragmentType'
+    },
     {'1': 'aid', '3': 4, '4': 1, '5': 3, '10': 'aid'},
     {'1': 'cid', '3': 5, '4': 1, '5': 3, '10': 'cid'},
     {'1': 'start_time', '3': 6, '4': 1, '5': 3, '10': 'startTime'},
-    {'1': 'report', '3': 7, '4': 1, '5': 11, '6': '.google.protobuf.Any', '10': 'report'},
+    {
+      '1': 'report',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.google.protobuf.Any',
+      '10': 'report'
+    },
   ],
 };
 
@@ -1271,7 +1733,14 @@ final $typed_data.Uint8List fragmentInfoDescriptor = $convert.base64Decode(
 const FragmentVideo$json = {
   '1': 'FragmentVideo',
   '2': [
-    {'1': 'videos', '3': 1, '4': 3, '5': 11, '6': '.bilibili.playershared.FragmentVideoInfo', '10': 'videos'},
+    {
+      '1': 'videos',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.FragmentVideoInfo',
+      '10': 'videos'
+    },
   ],
 };
 
@@ -1284,12 +1753,47 @@ final $typed_data.Uint8List fragmentVideoDescriptor = $convert.base64Decode(
 const FragmentVideoInfo$json = {
   '1': 'FragmentVideoInfo',
   '2': [
-    {'1': 'fragment_info', '3': 1, '4': 1, '5': 11, '6': '.bilibili.playershared.FragmentInfo', '10': 'fragmentInfo'},
-    {'1': 'vod_info', '3': 2, '4': 1, '5': 11, '6': '.bilibili.playershared.VodInfo', '10': 'vodInfo'},
-    {'1': 'play_arc_conf', '3': 3, '4': 1, '5': 11, '6': '.bilibili.playershared.PlayArcConf', '10': 'playArcConf'},
-    {'1': 'dimension', '3': 4, '4': 1, '5': 11, '6': '.bilibili.playershared.Dimension', '10': 'dimension'},
+    {
+      '1': 'fragment_info',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.FragmentInfo',
+      '10': 'fragmentInfo'
+    },
+    {
+      '1': 'vod_info',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.VodInfo',
+      '10': 'vodInfo'
+    },
+    {
+      '1': 'play_arc_conf',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.PlayArcConf',
+      '10': 'playArcConf'
+    },
+    {
+      '1': 'dimension',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Dimension',
+      '10': 'dimension'
+    },
     {'1': 'timelength', '3': 5, '4': 1, '5': 3, '10': 'timelength'},
-    {'1': 'video_type', '3': 6, '4': 1, '5': 14, '6': '.bilibili.playershared.BizType', '10': 'videoType'},
+    {
+      '1': 'video_type',
+      '3': 6,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.BizType',
+      '10': 'videoType'
+    },
     {'1': 'playable_status', '3': 7, '4': 1, '5': 8, '10': 'playableStatus'},
   ],
 };
@@ -1310,13 +1814,48 @@ const FullPromptBar$json = {
   '1': 'FullPromptBar',
   '2': [
     {'1': 'icon', '3': 1, '4': 1, '5': 9, '10': 'icon'},
-    {'1': 'title', '3': 2, '4': 1, '5': 11, '6': '.bilibili.playershared.TextInfo', '10': 'title'},
+    {
+      '1': 'title',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.TextInfo',
+      '10': 'title'
+    },
     {'1': 'timer_countdown', '3': 3, '4': 1, '5': 3, '10': 'timerCountdown'},
     {'1': 'countdown_enable', '3': 4, '4': 1, '5': 8, '10': 'countdownEnable'},
-    {'1': 'subtitle', '3': 5, '4': 1, '5': 11, '6': '.bilibili.playershared.TextInfo', '10': 'subtitle'},
-    {'1': 'button', '3': 6, '4': 3, '5': 11, '6': '.bilibili.playershared.ButtonInfo', '10': 'button'},
-    {'1': 'fold_data', '3': 7, '4': 1, '5': 11, '6': '.bilibili.playershared.FoldData', '10': 'foldData'},
-    {'1': 'report', '3': 8, '4': 1, '5': 11, '6': '.bilibili.playershared.Report', '10': 'report'},
+    {
+      '1': 'subtitle',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.TextInfo',
+      '10': 'subtitle'
+    },
+    {
+      '1': 'button',
+      '3': 6,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.ButtonInfo',
+      '10': 'button'
+    },
+    {
+      '1': 'fold_data',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.FoldData',
+      '10': 'foldData'
+    },
+    {
+      '1': 'report',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Report',
+      '10': 'report'
+    },
     {'1': 'bg_image', '3': 9, '4': 1, '5': 9, '10': 'bgImage'},
     {'1': 'bar_height', '3': 10, '4': 1, '5': 5, '10': 'barHeight'},
   ],
@@ -1352,8 +1891,22 @@ final $typed_data.Uint8List gradientColorDescriptor = $convert.base64Decode(
 const History$json = {
   '1': 'History',
   '2': [
-    {'1': 'current_video', '3': 1, '4': 1, '5': 11, '6': '.bilibili.playershared.HistoryInfo', '10': 'currentVideo'},
-    {'1': 'related_video', '3': 2, '4': 1, '5': 11, '6': '.bilibili.playershared.HistoryInfo', '10': 'relatedVideo'},
+    {
+      '1': 'current_video',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.HistoryInfo',
+      '10': 'currentVideo'
+    },
+    {
+      '1': 'related_video',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.HistoryInfo',
+      '10': 'relatedVideo'
+    },
   ],
 };
 
@@ -1369,8 +1922,22 @@ const HistoryInfo$json = {
   '2': [
     {'1': 'progress', '3': 1, '4': 1, '5': 3, '10': 'progress'},
     {'1': 'last_play_cid', '3': 2, '4': 1, '5': 3, '10': 'lastPlayCid'},
-    {'1': 'toast', '3': 3, '4': 1, '5': 11, '6': '.bilibili.playershared.Toast', '10': 'toast'},
-    {'1': 'toast_without_time', '3': 4, '4': 1, '5': 11, '6': '.bilibili.playershared.Toast', '10': 'toastWithoutTime'},
+    {
+      '1': 'toast',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Toast',
+      '10': 'toast'
+    },
+    {
+      '1': 'toast_without_time',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Toast',
+      '10': 'toastWithoutTime'
+    },
     {'1': 'last_play_aid', '3': 5, '4': 1, '5': 3, '10': 'lastPlayAid'},
   ],
 };
@@ -1392,14 +1959,21 @@ const ImageInfo$json = {
 };
 
 /// Descriptor for `ImageInfo`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List imageInfoDescriptor = $convert.base64Decode(
-    'CglJbWFnZUluZm8SEAoDdXJsGAEgASgJUgN1cmw=');
+final $typed_data.Uint8List imageInfoDescriptor =
+    $convert.base64Decode('CglJbWFnZUluZm8SEAoDdXJsGAEgASgJUgN1cmw=');
 
 @$core.Deprecated('Use interactionDescriptor instead')
 const Interaction$json = {
   '1': 'Interaction',
   '2': [
-    {'1': 'history_node', '3': 1, '4': 1, '5': 11, '6': '.bilibili.playershared.Node', '10': 'historyNode'},
+    {
+      '1': 'history_node',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Node',
+      '10': 'historyNode'
+    },
     {'1': 'graph_version', '3': 2, '4': 1, '5': 3, '10': 'graphVersion'},
     {'1': 'msg', '3': 3, '4': 1, '5': 9, '10': 'msg'},
     {'1': 'mark', '3': 4, '4': 1, '5': 3, '10': 'mark'},
@@ -1417,7 +1991,14 @@ const LossLessItem$json = {
   '1': 'LossLessItem',
   '2': [
     {'1': 'is_lossless_audio', '3': 1, '4': 1, '5': 8, '10': 'isLosslessAudio'},
-    {'1': 'audio', '3': 2, '4': 1, '5': 11, '6': '.bilibili.playershared.DashItem', '10': 'audio'},
+    {
+      '1': 'audio',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.DashItem',
+      '10': 'audio'
+    },
     {'1': 'need_vip', '3': 3, '4': 1, '5': 8, '10': 'needVip'},
   ],
 };
@@ -1432,7 +2013,14 @@ final $typed_data.Uint8List lossLessItemDescriptor = $convert.base64Decode(
 const MultiDashVideo$json = {
   '1': 'MultiDashVideo',
   '2': [
-    {'1': 'dash_videos', '3': 1, '4': 3, '5': 11, '6': '.bilibili.playershared.DashVideo', '10': 'dashVideos'},
+    {
+      '1': 'dash_videos',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.DashVideo',
+      '10': 'dashVideos'
+    },
   ],
 };
 
@@ -1461,8 +2049,22 @@ const PayWallOnshowAction$json = {
   '1': 'PayWallOnshowAction',
   '2': [
     {'1': 'link', '3': 1, '4': 1, '5': 9, '10': 'link'},
-    {'1': 'order_report_params', '3': 2, '4': 3, '5': 11, '6': '.bilibili.playershared.PayWallOnshowAction.OrderReportParamsEntry', '10': 'orderReportParams'},
-    {'1': 'action_type', '3': 3, '4': 1, '5': 14, '6': '.bilibili.playershared.ButtonAction', '10': 'actionType'},
+    {
+      '1': 'order_report_params',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.PayWallOnshowAction.OrderReportParamsEntry',
+      '10': 'orderReportParams'
+    },
+    {
+      '1': 'action_type',
+      '3': 3,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.ButtonAction',
+      '10': 'actionType'
+    },
   ],
   '3': [PayWallOnshowAction_OrderReportParamsEntry$json],
 };
@@ -1490,16 +2092,57 @@ final $typed_data.Uint8List payWallOnshowActionDescriptor = $convert.base64Decod
 const PlayArc$json = {
   '1': 'PlayArc',
   '2': [
-    {'1': 'video_type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.playershared.BizType', '10': 'videoType'},
+    {
+      '1': 'video_type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.BizType',
+      '10': 'videoType'
+    },
     {'1': 'aid', '3': 2, '4': 1, '5': 3, '10': 'aid'},
     {'1': 'cid', '3': 3, '4': 1, '5': 3, '10': 'cid'},
-    {'1': 'drm_tech_type', '3': 4, '4': 1, '5': 14, '6': '.bilibili.playershared.DrmTechType', '10': 'drmTechType'},
-    {'1': 'arc_type', '3': 5, '4': 1, '5': 14, '6': '.bilibili.playershared.ArcType', '10': 'arcType'},
-    {'1': 'interaction', '3': 6, '4': 1, '5': 11, '6': '.bilibili.playershared.Interaction', '10': 'interaction'},
-    {'1': 'dimension', '3': 7, '4': 1, '5': 11, '6': '.bilibili.playershared.Dimension', '10': 'dimension'},
+    {
+      '1': 'drm_tech_type',
+      '3': 4,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.DrmTechType',
+      '10': 'drmTechType'
+    },
+    {
+      '1': 'arc_type',
+      '3': 5,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.ArcType',
+      '10': 'arcType'
+    },
+    {
+      '1': 'interaction',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Interaction',
+      '10': 'interaction'
+    },
+    {
+      '1': 'dimension',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Dimension',
+      '10': 'dimension'
+    },
     {'1': 'duration', '3': 8, '4': 1, '5': 3, '10': 'duration'},
     {'1': 'is_preview', '3': 9, '4': 1, '5': 8, '10': 'isPreview'},
-    {'1': 'watch_time_length', '3': 10, '4': 1, '5': 3, '10': 'watchTimeLength'},
+    {
+      '1': 'watch_time_length',
+      '3': 10,
+      '4': 1,
+      '5': 3,
+      '10': 'watchTimeLength'
+    },
     {'1': 'duration_ms', '3': 11, '4': 1, '5': 3, '10': 'durationMs'},
   ],
 };
@@ -1521,7 +2164,14 @@ final $typed_data.Uint8List playArcDescriptor = $convert.base64Decode(
 const PlayArcConf$json = {
   '1': 'PlayArcConf',
   '2': [
-    {'1': 'arc_confs', '3': 1, '4': 3, '5': 11, '6': '.bilibili.playershared.PlayArcConf.ArcConfsEntry', '10': 'arcConfs'},
+    {
+      '1': 'arc_confs',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.PlayArcConf.ArcConfsEntry',
+      '10': 'arcConfs'
+    },
   ],
   '3': [PlayArcConf_ArcConfsEntry$json],
 };
@@ -1531,7 +2181,14 @@ const PlayArcConf_ArcConfsEntry$json = {
   '1': 'ArcConfsEntry',
   '2': [
     {'1': 'key', '3': 1, '4': 1, '5': 5, '10': 'key'},
-    {'1': 'value', '3': 2, '4': 1, '5': 11, '6': '.bilibili.playershared.ArcConf', '10': 'value'},
+    {
+      '1': 'value',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.ArcConf',
+      '10': 'value'
+    },
   ],
   '7': {'7': true},
 };
@@ -1547,7 +2204,14 @@ final $typed_data.Uint8List playArcConfDescriptor = $convert.base64Decode(
 const PlayDeviceConf$json = {
   '1': 'PlayDeviceConf',
   '2': [
-    {'1': 'device_confs', '3': 1, '4': 3, '5': 11, '6': '.bilibili.playershared.PlayDeviceConf.DeviceConfsEntry', '10': 'deviceConfs'},
+    {
+      '1': 'device_confs',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.PlayDeviceConf.DeviceConfsEntry',
+      '10': 'deviceConfs'
+    },
   ],
   '3': [PlayDeviceConf_DeviceConfsEntry$json],
 };
@@ -1557,7 +2221,14 @@ const PlayDeviceConf_DeviceConfsEntry$json = {
   '1': 'DeviceConfsEntry',
   '2': [
     {'1': 'key', '3': 1, '4': 1, '5': 5, '10': 'key'},
-    {'1': 'value', '3': 2, '4': 1, '5': 11, '6': '.bilibili.playershared.DeviceConf', '10': 'value'},
+    {
+      '1': 'value',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.DeviceConf',
+      '10': 'value'
+    },
   ],
   '7': {'7': true},
 };
@@ -1577,7 +2248,14 @@ const PlayList$json = {
     {'1': 'title', '3': 2, '4': 1, '5': 9, '10': 'title'},
     {'1': 'cover', '3': 3, '4': 1, '5': 9, '10': 'cover'},
     {'1': 'link', '3': 4, '4': 1, '5': 9, '10': 'link'},
-    {'1': 'badge_info', '3': 5, '4': 1, '5': 11, '6': '.bilibili.playershared.BadgeInfo', '10': 'badgeInfo'},
+    {
+      '1': 'badge_info',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.BadgeInfo',
+      '10': 'badgeInfo'
+    },
   ],
 };
 
@@ -1592,7 +2270,14 @@ final $typed_data.Uint8List playListDescriptor = $convert.base64Decode(
 const PlayListInfo$json = {
   '1': 'PlayListInfo',
   '2': [
-    {'1': 'play_list', '3': 2, '4': 3, '5': 11, '6': '.bilibili.playershared.PlayList', '10': 'playList'},
+    {
+      '1': 'play_list',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.PlayList',
+      '10': 'playList'
+    },
   ],
 };
 
@@ -1605,18 +2290,87 @@ final $typed_data.Uint8List playListInfoDescriptor = $convert.base64Decode(
 const PromptBar$json = {
   '1': 'PromptBar',
   '2': [
-    {'1': 'title', '3': 1, '4': 1, '5': 11, '6': '.bilibili.playershared.TextInfo', '10': 'title'},
-    {'1': 'sub_title', '3': 2, '4': 1, '5': 11, '6': '.bilibili.playershared.TextInfo', '10': 'subTitle'},
+    {
+      '1': 'title',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.TextInfo',
+      '10': 'title'
+    },
+    {
+      '1': 'sub_title',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.TextInfo',
+      '10': 'subTitle'
+    },
     {'1': 'sub_title_icon', '3': 3, '4': 1, '5': 9, '10': 'subTitleIcon'},
     {'1': 'bg_image', '3': 4, '4': 1, '5': 9, '10': 'bgImage'},
-    {'1': 'bg_gradient_color', '3': 5, '4': 1, '5': 11, '6': '.bilibili.playershared.GradientColor', '10': 'bgGradientColor'},
-    {'1': 'button', '3': 6, '4': 3, '5': 11, '6': '.bilibili.playershared.ButtonInfo', '10': 'button'},
-    {'1': 'report', '3': 7, '4': 1, '5': 11, '6': '.bilibili.playershared.Report', '10': 'report'},
-    {'1': 'full_screen_ip_icon', '3': 8, '4': 1, '5': 9, '10': 'fullScreenIpIcon'},
-    {'1': 'full_screen_bg_gradient_color', '3': 9, '4': 1, '5': 11, '6': '.bilibili.playershared.GradientColor', '10': 'fullScreenBgGradientColor'},
-    {'1': 'prompt_bar_type', '3': 10, '4': 1, '5': 14, '6': '.bilibili.playershared.PromptBarType', '10': 'promptBarType'},
-    {'1': 'prompt_bar_style', '3': 11, '4': 1, '5': 14, '6': '.bilibili.playershared.PromptBarStyle', '10': 'promptBarStyle'},
-    {'1': 'benefit_infos', '3': 12, '4': 3, '5': 11, '6': '.bilibili.playershared.BenefitInfo', '10': 'benefitInfos'},
+    {
+      '1': 'bg_gradient_color',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.GradientColor',
+      '10': 'bgGradientColor'
+    },
+    {
+      '1': 'button',
+      '3': 6,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.ButtonInfo',
+      '10': 'button'
+    },
+    {
+      '1': 'report',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Report',
+      '10': 'report'
+    },
+    {
+      '1': 'full_screen_ip_icon',
+      '3': 8,
+      '4': 1,
+      '5': 9,
+      '10': 'fullScreenIpIcon'
+    },
+    {
+      '1': 'full_screen_bg_gradient_color',
+      '3': 9,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.GradientColor',
+      '10': 'fullScreenBgGradientColor'
+    },
+    {
+      '1': 'prompt_bar_type',
+      '3': 10,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.PromptBarType',
+      '10': 'promptBarType'
+    },
+    {
+      '1': 'prompt_bar_style',
+      '3': 11,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.PromptBarStyle',
+      '10': 'promptBarStyle'
+    },
+    {
+      '1': 'benefit_infos',
+      '3': 12,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.BenefitInfo',
+      '10': 'benefitInfos'
+    },
     {'1': 'end_time', '3': 13, '4': 1, '5': 3, '10': 'endTime'},
     {'1': 'show_on_paywall', '3': 14, '4': 1, '5': 5, '10': 'showOnPaywall'},
   ],
@@ -1664,8 +2418,8 @@ const QnTip$json = {
 };
 
 /// Descriptor for `QnTip`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List qnTipDescriptor = $convert.base64Decode(
-    'CgVRblRpcBIQCgNtc2cYASABKAlSA21zZw==');
+final $typed_data.Uint8List qnTipDescriptor =
+    $convert.base64Decode('CgVRblRpcBIQCgNtc2cYASABKAlSA21zZw==');
 
 @$core.Deprecated('Use qnTrialInfoDescriptor instead')
 const QnTrialInfo$json = {
@@ -1675,10 +2429,37 @@ const QnTrialInfo$json = {
     {'1': 'remaining_times', '3': 2, '4': 1, '5': 5, '10': 'remainingTimes'},
     {'1': 'start', '3': 3, '4': 1, '5': 5, '10': 'start'},
     {'1': 'time_length', '3': 4, '4': 1, '5': 5, '10': 'timeLength'},
-    {'1': 'start_toast', '3': 5, '4': 1, '5': 11, '6': '.bilibili.playershared.Toast', '10': 'startToast'},
-    {'1': 'end_toast', '3': 6, '4': 1, '5': 11, '6': '.bilibili.playershared.Toast', '10': 'endToast'},
-    {'1': 'quality_open_tip_btn', '3': 8, '4': 1, '5': 11, '6': '.bilibili.playershared.Button', '10': 'qualityOpenTipBtn'},
-    {'1': 'trial_quality_type', '3': 9, '4': 1, '5': 5, '10': 'trialQualityType'},
+    {
+      '1': 'start_toast',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Toast',
+      '10': 'startToast'
+    },
+    {
+      '1': 'end_toast',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Toast',
+      '10': 'endToast'
+    },
+    {
+      '1': 'quality_open_tip_btn',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Button',
+      '10': 'qualityOpenTipBtn'
+    },
+    {
+      '1': 'trial_quality_type',
+      '3': 9,
+      '4': 1,
+      '5': 5,
+      '10': 'trialQualityType'
+    },
   ],
 };
 
@@ -1727,10 +2508,31 @@ const ResidentBar$json = {
   '1': 'ResidentBar',
   '2': [
     {'1': 'icon', '3': 1, '4': 1, '5': 9, '10': 'icon'},
-    {'1': 'question_text', '3': 2, '4': 1, '5': 11, '6': '.bilibili.playershared.TextInfo', '10': 'questionText'},
-    {'1': 'button', '3': 3, '4': 1, '5': 11, '6': '.bilibili.playershared.ButtonInfo', '10': 'button'},
+    {
+      '1': 'question_text',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.TextInfo',
+      '10': 'questionText'
+    },
+    {
+      '1': 'button',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.ButtonInfo',
+      '10': 'button'
+    },
     {'1': 'link', '3': 4, '4': 1, '5': 9, '10': 'link'},
-    {'1': 'report', '3': 5, '4': 1, '5': 11, '6': '.bilibili.playershared.Report', '10': 'report'},
+    {
+      '1': 'report',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Report',
+      '10': 'report'
+    },
     {'1': 'bg_image', '3': 6, '4': 1, '5': 9, '10': 'bgImage'},
   ],
 };
@@ -1747,8 +2549,22 @@ final $typed_data.Uint8List residentBarDescriptor = $convert.base64Decode(
 const ResponseDash$json = {
   '1': 'ResponseDash',
   '2': [
-    {'1': 'video', '3': 1, '4': 3, '5': 11, '6': '.bilibili.playershared.DashItem', '10': 'video'},
-    {'1': 'audio', '3': 2, '4': 3, '5': 11, '6': '.bilibili.playershared.DashItem', '10': 'audio'},
+    {
+      '1': 'video',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.DashItem',
+      '10': 'video'
+    },
+    {
+      '1': 'audio',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.DashItem',
+      '10': 'audio'
+    },
   ],
 };
 
@@ -1781,7 +2597,14 @@ final $typed_data.Uint8List responseUrlDescriptor = $convert.base64Decode(
 const Scheme$json = {
   '1': 'Scheme',
   '2': [
-    {'1': 'action_type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.playershared.Scheme.ActionType', '10': 'actionType'},
+    {
+      '1': 'action_type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.Scheme.ActionType',
+      '10': 'actionType'
+    },
     {'1': 'toast', '3': 2, '4': 1, '5': 9, '10': 'toast'},
   ],
   '4': [Scheme_ActionType$json],
@@ -1806,7 +2629,14 @@ final $typed_data.Uint8List schemeDescriptor = $convert.base64Decode(
 const SegmentVideo$json = {
   '1': 'SegmentVideo',
   '2': [
-    {'1': 'segment', '3': 1, '4': 3, '5': 11, '6': '.bilibili.playershared.ResponseUrl', '10': 'segment'},
+    {
+      '1': 'segment',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.ResponseUrl',
+      '10': 'segment'
+    },
   ],
 };
 
@@ -1821,9 +2651,30 @@ const SettingBase$json = {
   '2': [
     {'1': 'left_icon', '3': 1, '4': 1, '5': 9, '10': 'leftIcon'},
     {'1': 'left_title', '3': 2, '4': 1, '5': 9, '10': 'leftTitle'},
-    {'1': 'type', '3': 3, '4': 1, '5': 14, '6': '.bilibili.playershared.SettingItemType', '10': 'type'},
-    {'1': 'control', '3': 4, '4': 1, '5': 11, '6': '.bilibili.playershared.SettingControl', '10': 'control'},
-    {'1': 'report', '3': 5, '4': 3, '5': 11, '6': '.bilibili.playershared.SettingBase.ReportEntry', '10': 'report'},
+    {
+      '1': 'type',
+      '3': 3,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.SettingItemType',
+      '10': 'type'
+    },
+    {
+      '1': 'control',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.SettingControl',
+      '10': 'control'
+    },
+    {
+      '1': 'report',
+      '3': 5,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.SettingBase.ReportEntry',
+      '10': 'report'
+    },
   ],
   '3': [SettingBase_ReportEntry$json],
 };
@@ -1868,8 +2719,22 @@ const SettingGroup$json = {
   '1': 'SettingGroup',
   '2': [
     {'1': 'title', '3': 1, '4': 1, '5': 9, '10': 'title'},
-    {'1': 'items', '3': 2, '4': 3, '5': 11, '6': '.bilibili.playershared.SettingItem', '10': 'items'},
-    {'1': 'group_style', '3': 3, '4': 1, '5': 14, '6': '.bilibili.playershared.GroupStyle', '10': 'groupStyle'},
+    {
+      '1': 'items',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.SettingItem',
+      '10': 'items'
+    },
+    {
+      '1': 'group_style',
+      '3': 3,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.GroupStyle',
+      '10': 'groupStyle'
+    },
   ],
 };
 
@@ -1883,11 +2748,49 @@ final $typed_data.Uint8List settingGroupDescriptor = $convert.base64Decode(
 const SettingItem$json = {
   '1': 'SettingItem',
   '2': [
-    {'1': 'more', '3': 3, '4': 1, '5': 11, '6': '.bilibili.playershared.SettingMore', '9': 0, '10': 'more'},
-    {'1': 'vertical', '3': 4, '4': 1, '5': 11, '6': '.bilibili.playershared.SettingVertical', '9': 0, '10': 'vertical'},
-    {'1': 'switch', '3': 5, '4': 1, '5': 11, '6': '.bilibili.playershared.SettingSwitch', '9': 0, '10': 'switch'},
-    {'1': 'base', '3': 1, '4': 1, '5': 11, '6': '.bilibili.playershared.SettingBase', '10': 'base'},
-    {'1': 'style', '3': 2, '4': 1, '5': 14, '6': '.bilibili.playershared.SettingItemStyle', '10': 'style'},
+    {
+      '1': 'more',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.SettingMore',
+      '9': 0,
+      '10': 'more'
+    },
+    {
+      '1': 'vertical',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.SettingVertical',
+      '9': 0,
+      '10': 'vertical'
+    },
+    {
+      '1': 'switch',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.SettingSwitch',
+      '9': 0,
+      '10': 'switch'
+    },
+    {
+      '1': 'base',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.SettingBase',
+      '10': 'base'
+    },
+    {
+      '1': 'style',
+      '3': 2,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.SettingItemStyle',
+      '10': 'style'
+    },
   ],
   '8': [
     {'1': 'value'},
@@ -1910,9 +2813,23 @@ const SettingMore$json = {
     {'1': 'url', '3': 1, '4': 1, '5': 9, '10': 'url'},
     {'1': 'right_title', '3': 2, '4': 1, '5': 9, '10': 'rightTitle'},
     {'1': 'right_icon', '3': 3, '4': 1, '5': 9, '10': 'rightIcon'},
-    {'1': 'jump_type', '3': 4, '4': 1, '5': 14, '6': '.bilibili.playershared.SettingJumpType', '10': 'jumpType'},
+    {
+      '1': 'jump_type',
+      '3': 4,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.SettingJumpType',
+      '10': 'jumpType'
+    },
     {'1': 'need_login', '3': 5, '4': 1, '5': 8, '10': 'needLogin'},
-    {'1': 'badge', '3': 6, '4': 1, '5': 11, '6': '.bilibili.playershared.Badge', '10': 'badge'},
+    {
+      '1': 'badge',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Badge',
+      '10': 'badge'
+    },
   ],
 };
 
@@ -1928,7 +2845,14 @@ final $typed_data.Uint8List settingMoreDescriptor = $convert.base64Decode(
 const SettingSwitch$json = {
   '1': 'SettingSwitch',
   '2': [
-    {'1': 'badge', '3': 1, '4': 1, '5': 11, '6': '.bilibili.playershared.Badge', '10': 'badge'},
+    {
+      '1': 'badge',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Badge',
+      '10': 'badge'
+    },
   ],
 };
 
@@ -1942,9 +2866,23 @@ const SettingVertical$json = {
   '1': 'SettingVertical',
   '2': [
     {'1': 'url', '3': 1, '4': 1, '5': 9, '10': 'url'},
-    {'1': 'jump_type', '3': 2, '4': 1, '5': 14, '6': '.bilibili.playershared.SettingJumpType', '10': 'jumpType'},
+    {
+      '1': 'jump_type',
+      '3': 2,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.SettingJumpType',
+      '10': 'jumpType'
+    },
     {'1': 'need_login', '3': 3, '4': 1, '5': 8, '10': 'needLogin'},
-    {'1': 'badge', '3': 4, '4': 1, '5': 11, '6': '.bilibili.playershared.Badge', '10': 'badge'},
+    {
+      '1': 'badge',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Badge',
+      '10': 'badge'
+    },
   ],
 };
 
@@ -1964,17 +2902,48 @@ const Shake$json = {
 };
 
 /// Descriptor for `Shake`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List shakeDescriptor = $convert.base64Decode(
-    'CgVTaGFrZRISCgRmaWxlGAEgASgJUgRmaWxl');
+final $typed_data.Uint8List shakeDescriptor =
+    $convert.base64Decode('CgVTaGFrZRISCgRmaWxlGAEgASgJUgRmaWxl');
 
 @$core.Deprecated('Use streamDescriptor instead')
 const Stream$json = {
   '1': 'Stream',
   '2': [
-    {'1': 'dash_video', '3': 2, '4': 1, '5': 11, '6': '.bilibili.playershared.DashVideo', '9': 0, '10': 'dashVideo'},
-    {'1': 'segment_video', '3': 3, '4': 1, '5': 11, '6': '.bilibili.playershared.SegmentVideo', '9': 0, '10': 'segmentVideo'},
-    {'1': 'multi_dash_video', '3': 4, '4': 1, '5': 11, '6': '.bilibili.playershared.MultiDashVideo', '9': 0, '10': 'multiDashVideo'},
-    {'1': 'stream_info', '3': 1, '4': 1, '5': 11, '6': '.bilibili.playershared.StreamInfo', '10': 'streamInfo'},
+    {
+      '1': 'dash_video',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.DashVideo',
+      '9': 0,
+      '10': 'dashVideo'
+    },
+    {
+      '1': 'segment_video',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.SegmentVideo',
+      '9': 0,
+      '10': 'segmentVideo'
+    },
+    {
+      '1': 'multi_dash_video',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.MultiDashVideo',
+      '9': 0,
+      '10': 'multiDashVideo'
+    },
+    {
+      '1': 'stream_info',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.StreamInfo',
+      '10': 'streamInfo'
+    },
   ],
   '8': [
     {'1': 'content'},
@@ -1997,8 +2966,22 @@ const StreamInfo$json = {
     {'1': 'quality', '3': 1, '4': 1, '5': 5, '10': 'quality'},
     {'1': 'format', '3': 2, '4': 1, '5': 9, '10': 'format'},
     {'1': 'description', '3': 3, '4': 1, '5': 9, '10': 'description'},
-    {'1': 'err_code', '3': 4, '4': 1, '5': 14, '6': '.bilibili.playershared.PlayErr', '10': 'errCode'},
-    {'1': 'limit', '3': 5, '4': 1, '5': 11, '6': '.bilibili.playershared.StreamLimit', '10': 'limit'},
+    {
+      '1': 'err_code',
+      '3': 4,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.PlayErr',
+      '10': 'errCode'
+    },
+    {
+      '1': 'limit',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.StreamLimit',
+      '10': 'limit'
+    },
     {'1': 'need_vip', '3': 6, '4': 1, '5': 8, '10': 'needVip'},
     {'1': 'need_login', '3': 7, '4': 1, '5': 8, '10': 'needLogin'},
     {'1': 'intact', '3': 8, '4': 1, '5': 8, '10': 'intact'},
@@ -2009,7 +2992,14 @@ const StreamInfo$json = {
     {'1': 'superscript', '3': 13, '4': 1, '5': 9, '10': 'superscript'},
     {'1': 'vip_free', '3': 14, '4': 1, '5': 8, '10': 'vipFree'},
     {'1': 'subtitle', '3': 15, '4': 1, '5': 9, '10': 'subtitle'},
-    {'1': 'scheme', '3': 16, '4': 1, '5': 11, '6': '.bilibili.playershared.Scheme', '10': 'scheme'},
+    {
+      '1': 'scheme',
+      '3': 16,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Scheme',
+      '10': 'scheme'
+    },
     {'1': 'support_drm', '3': 17, '4': 1, '5': 8, '10': 'supportDrm'},
   ],
 };
@@ -2080,7 +3070,14 @@ const Toast$json = {
   '1': 'Toast',
   '2': [
     {'1': 'text', '3': 1, '4': 1, '5': 9, '10': 'text'},
-    {'1': 'button', '3': 2, '4': 1, '5': 11, '6': '.bilibili.playershared.Button', '10': 'button'},
+    {
+      '1': 'button',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Button',
+      '10': 'button'
+    },
   ],
 };
 
@@ -2093,8 +3090,22 @@ final $typed_data.Uint8List toastDescriptor = $convert.base64Decode(
 const VideoCtrl$json = {
   '1': 'VideoCtrl',
   '2': [
-    {'1': 'auto_qn_ctl', '3': 1, '4': 1, '5': 11, '6': '.bilibili.playershared.AutoQnCtl', '10': 'autoQnCtl'},
-    {'1': 'qn_exp', '3': 2, '4': 1, '5': 11, '6': '.bilibili.playershared.QnExp', '10': 'qnExp'},
+    {
+      '1': 'auto_qn_ctl',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.AutoQnCtl',
+      '10': 'autoQnCtl'
+    },
+    {
+      '1': 'qn_exp',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.QnExp',
+      '10': 'qnExp'
+    },
   ],
 };
 
@@ -2116,10 +3127,24 @@ const VideoVod$json = {
     {'1': 'download', '3': 6, '4': 1, '5': 5, '10': 'download'},
     {'1': 'force_host', '3': 7, '4': 1, '5': 5, '10': 'forceHost'},
     {'1': 'fourk', '3': 8, '4': 1, '5': 8, '10': 'fourk'},
-    {'1': 'prefer_codec_type', '3': 9, '4': 1, '5': 14, '6': '.bilibili.playershared.CodeType', '10': 'preferCodecType'},
+    {
+      '1': 'prefer_codec_type',
+      '3': 9,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.CodeType',
+      '10': 'preferCodecType'
+    },
     {'1': 'voice_balance', '3': 10, '4': 1, '5': 3, '10': 'voiceBalance'},
     {'1': 'is_need_trial', '3': 11, '4': 1, '5': 8, '10': 'isNeedTrial'},
-    {'1': 'qn_policy', '3': 12, '4': 1, '5': 14, '6': '.bilibili.playershared.QnPolicy', '10': 'qnPolicy'},
+    {
+      '1': 'qn_policy',
+      '3': 12,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.QnPolicy',
+      '10': 'qnPolicy'
+    },
     {'1': 'soft_fnval', '3': 13, '4': 1, '5': 3, '10': 'softFnval'},
   ],
 };
@@ -2139,13 +3164,62 @@ final $typed_data.Uint8List videoVodDescriptor = $convert.base64Decode(
 const ViewInfo$json = {
   '1': 'ViewInfo',
   '2': [
-    {'1': 'dialog_map', '3': 1, '4': 3, '5': 11, '6': '.bilibili.playershared.ViewInfo.DialogMapEntry', '10': 'dialogMap'},
-    {'1': 'prompt_bar', '3': 2, '4': 1, '5': 11, '6': '.bilibili.playershared.PromptBar', '10': 'promptBar'},
-    {'1': 'toasts', '3': 3, '4': 3, '5': 11, '6': '.bilibili.playershared.ComprehensiveToast', '10': 'toasts'},
-    {'1': 'pay_wall_onshow_action', '3': 4, '4': 1, '5': 11, '6': '.bilibili.playershared.PayWallOnshowAction', '10': 'payWallOnshowAction'},
-    {'1': 'exp_switch', '3': 5, '4': 1, '5': 11, '6': '.bilibili.playershared.ExpSwitch', '10': 'expSwitch'},
-    {'1': 'full_prompt_bar', '3': 6, '4': 1, '5': 11, '6': '.bilibili.playershared.FullPromptBar', '10': 'fullPromptBar'},
-    {'1': 'resident_bar', '3': 7, '4': 1, '5': 11, '6': '.bilibili.playershared.ResidentBar', '10': 'residentBar'},
+    {
+      '1': 'dialog_map',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.ViewInfo.DialogMapEntry',
+      '10': 'dialogMap'
+    },
+    {
+      '1': 'prompt_bar',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.PromptBar',
+      '10': 'promptBar'
+    },
+    {
+      '1': 'toasts',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.ComprehensiveToast',
+      '10': 'toasts'
+    },
+    {
+      '1': 'pay_wall_onshow_action',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.PayWallOnshowAction',
+      '10': 'payWallOnshowAction'
+    },
+    {
+      '1': 'exp_switch',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.ExpSwitch',
+      '10': 'expSwitch'
+    },
+    {
+      '1': 'full_prompt_bar',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.FullPromptBar',
+      '10': 'fullPromptBar'
+    },
+    {
+      '1': 'resident_bar',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.ResidentBar',
+      '10': 'residentBar'
+    },
   ],
   '3': [ViewInfo_DialogMapEntry$json],
 };
@@ -2155,7 +3229,14 @@ const ViewInfo_DialogMapEntry$json = {
   '1': 'DialogMapEntry',
   '2': [
     {'1': 'key', '3': 1, '4': 1, '5': 9, '10': 'key'},
-    {'1': 'value', '3': 2, '4': 1, '5': 11, '6': '.bilibili.playershared.Dialog', '10': 'value'},
+    {
+      '1': 'value',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.Dialog',
+      '10': 'value'
+    },
   ],
   '7': {'7': true},
 };
@@ -2183,13 +3264,55 @@ const VodInfo$json = {
     {'1': 'format', '3': 2, '4': 1, '5': 9, '10': 'format'},
     {'1': 'timelength', '3': 3, '4': 1, '5': 3, '10': 'timelength'},
     {'1': 'video_codecid', '3': 4, '4': 1, '5': 5, '10': 'videoCodecid'},
-    {'1': 'stream_list', '3': 5, '4': 3, '5': 11, '6': '.bilibili.playershared.Stream', '10': 'streamList'},
-    {'1': 'dash_audio', '3': 6, '4': 3, '5': 11, '6': '.bilibili.playershared.DashItem', '10': 'dashAudio'},
-    {'1': 'dolby', '3': 7, '4': 1, '5': 11, '6': '.bilibili.playershared.DolbyItem', '10': 'dolby'},
-    {'1': 'volume', '3': 8, '4': 1, '5': 11, '6': '.bilibili.playershared.VolumeInfo', '10': 'volume'},
-    {'1': 'loss_less_item', '3': 9, '4': 1, '5': 11, '6': '.bilibili.playershared.LossLessItem', '10': 'lossLessItem'},
+    {
+      '1': 'stream_list',
+      '3': 5,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.Stream',
+      '10': 'streamList'
+    },
+    {
+      '1': 'dash_audio',
+      '3': 6,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.DashItem',
+      '10': 'dashAudio'
+    },
+    {
+      '1': 'dolby',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.DolbyItem',
+      '10': 'dolby'
+    },
+    {
+      '1': 'volume',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.VolumeInfo',
+      '10': 'volume'
+    },
+    {
+      '1': 'loss_less_item',
+      '3': 9,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.LossLessItem',
+      '10': 'lossLessItem'
+    },
     {'1': 'support_project', '3': 10, '4': 1, '5': 8, '10': 'supportProject'},
-    {'1': 'ai_audio', '3': 11, '4': 1, '5': 11, '6': '.bilibili.playershared.AIAudio', '10': 'aiAudio'},
+    {
+      '1': 'ai_audio',
+      '3': 11,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.playershared.AIAudio',
+      '10': 'aiAudio'
+    },
   ],
 };
 
@@ -2213,11 +3336,24 @@ const VolumeInfo$json = {
     {'1': 'measured_i', '3': 1, '4': 1, '5': 1, '10': 'measuredI'},
     {'1': 'measured_lra', '3': 2, '4': 1, '5': 1, '10': 'measuredLra'},
     {'1': 'measured_tp', '3': 3, '4': 1, '5': 1, '10': 'measuredTp'},
-    {'1': 'measured_threshold', '3': 4, '4': 1, '5': 1, '10': 'measuredThreshold'},
+    {
+      '1': 'measured_threshold',
+      '3': 4,
+      '4': 1,
+      '5': 1,
+      '10': 'measuredThreshold'
+    },
     {'1': 'target_offset', '3': 5, '4': 1, '5': 1, '10': 'targetOffset'},
     {'1': 'target_i', '3': 6, '4': 1, '5': 1, '10': 'targetI'},
     {'1': 'target_tp', '3': 7, '4': 1, '5': 1, '10': 'targetTp'},
-    {'1': 'multi_scene_args', '3': 8, '4': 3, '5': 11, '6': '.bilibili.playershared.VolumeInfo.MultiSceneArgsEntry', '10': 'multiSceneArgs'},
+    {
+      '1': 'multi_scene_args',
+      '3': 8,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.playershared.VolumeInfo.MultiSceneArgsEntry',
+      '10': 'multiSceneArgs'
+    },
   ],
   '3': [VolumeInfo_MultiSceneArgsEntry$json],
 };
@@ -2242,4 +3378,3 @@ final $typed_data.Uint8List volumeInfoDescriptor = $convert.base64Decode(
     'I1LmJpbGliaWxpLnBsYXllcnNoYXJlZC5Wb2x1bWVJbmZvLk11bHRpU2NlbmVBcmdzRW50cnlS'
     'Dm11bHRpU2NlbmVBcmdzGkEKE011bHRpU2NlbmVBcmdzRW50cnkSEAoDa2V5GAEgASgJUgNrZX'
     'kSFAoFdmFsdWUYAiABKAlSBXZhbHVlOgI4AQ==');
-

@@ -1,13 +1,14 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: bilibili/metadata.proto
-//
+// Generated from bilibili/metadata.proto.
+
 // @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names
 
 import 'dart:core' as $core;
 
@@ -25,70 +26,63 @@ class Metadata extends $pb.GeneratedMessage {
     $core.String? buvid,
     $core.String? platform,
   }) {
-    final $result = create();
-    if (accessKey != null) {
-      $result.accessKey = accessKey;
-    }
-    if (mobiApp != null) {
-      $result.mobiApp = mobiApp;
-    }
-    if (device != null) {
-      $result.device = device;
-    }
-    if (build != null) {
-      $result.build = build;
-    }
-    if (channel != null) {
-      $result.channel = channel;
-    }
-    if (buvid != null) {
-      $result.buvid = buvid;
-    }
-    if (platform != null) {
-      $result.platform = platform;
-    }
-    return $result;
+    final result = create();
+    if (accessKey != null) result.accessKey = accessKey;
+    if (mobiApp != null) result.mobiApp = mobiApp;
+    if (device != null) result.device = device;
+    if (build != null) result.build = build;
+    if (channel != null) result.channel = channel;
+    if (buvid != null) result.buvid = buvid;
+    if (platform != null) result.platform = platform;
+    return result;
   }
-  Metadata._() : super();
-  factory Metadata.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Metadata.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Metadata', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.metadata'), createEmptyInstance: create)
+  Metadata._();
+
+  factory Metadata.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory Metadata.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'Metadata',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.metadata'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'accessKey')
     ..aOS(2, _omitFieldNames ? '' : 'mobiApp')
     ..aOS(3, _omitFieldNames ? '' : 'device')
-    ..a<$core.int>(4, _omitFieldNames ? '' : 'build', $pb.PbFieldType.O3)
+    ..aI(4, _omitFieldNames ? '' : 'build')
     ..aOS(5, _omitFieldNames ? '' : 'channel')
     ..aOS(6, _omitFieldNames ? '' : 'buvid')
     ..aOS(7, _omitFieldNames ? '' : 'platform')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  Metadata clone() => Metadata()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  Metadata copyWith(void Function(Metadata) updates) => super.copyWith((message) => updates(message as Metadata)) as Metadata;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Metadata clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Metadata copyWith(void Function(Metadata) updates) =>
+      super.copyWith((message) => updates(message as Metadata)) as Metadata;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static Metadata create() => Metadata._();
+  @$core.override
   Metadata createEmptyInstance() => create();
   static $pb.PbList<Metadata> createRepeated() => $pb.PbList<Metadata>();
   @$core.pragma('dart2js:noInline')
-  static Metadata getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Metadata>(create);
+  static Metadata getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Metadata>(create);
   static Metadata? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get accessKey => $_getSZ(0);
   @$pb.TagNumber(1)
-  set accessKey($core.String v) { $_setString(0, v); }
+  set accessKey($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasAccessKey() => $_has(0);
   @$pb.TagNumber(1)
@@ -97,7 +91,7 @@ class Metadata extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get mobiApp => $_getSZ(1);
   @$pb.TagNumber(2)
-  set mobiApp($core.String v) { $_setString(1, v); }
+  set mobiApp($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasMobiApp() => $_has(1);
   @$pb.TagNumber(2)
@@ -106,7 +100,7 @@ class Metadata extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get device => $_getSZ(2);
   @$pb.TagNumber(3)
-  set device($core.String v) { $_setString(2, v); }
+  set device($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasDevice() => $_has(2);
   @$pb.TagNumber(3)
@@ -115,7 +109,7 @@ class Metadata extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.int get build => $_getIZ(3);
   @$pb.TagNumber(4)
-  set build($core.int v) { $_setSignedInt32(3, v); }
+  set build($core.int value) => $_setSignedInt32(3, value);
   @$pb.TagNumber(4)
   $core.bool hasBuild() => $_has(3);
   @$pb.TagNumber(4)
@@ -124,7 +118,7 @@ class Metadata extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $core.String get channel => $_getSZ(4);
   @$pb.TagNumber(5)
-  set channel($core.String v) { $_setString(4, v); }
+  set channel($core.String value) => $_setString(4, value);
   @$pb.TagNumber(5)
   $core.bool hasChannel() => $_has(4);
   @$pb.TagNumber(5)
@@ -133,7 +127,7 @@ class Metadata extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   $core.String get buvid => $_getSZ(5);
   @$pb.TagNumber(6)
-  set buvid($core.String v) { $_setString(5, v); }
+  set buvid($core.String value) => $_setString(5, value);
   @$pb.TagNumber(6)
   $core.bool hasBuvid() => $_has(5);
   @$pb.TagNumber(6)
@@ -142,13 +136,14 @@ class Metadata extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   $core.String get platform => $_getSZ(6);
   @$pb.TagNumber(7)
-  set platform($core.String v) { $_setString(6, v); }
+  set platform($core.String value) => $_setString(6, value);
   @$pb.TagNumber(7)
   $core.bool hasPlatform() => $_has(6);
   @$pb.TagNumber(7)
   void clearPlatform() => $_clearField(7);
 }
 
-
-const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
-const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');
+const $core.bool _omitFieldNames =
+    $core.bool.fromEnvironment('protobuf.omit_field_names');
+const $core.bool _omitMessageNames =
+    $core.bool.fromEnvironment('protobuf.omit_message_names');

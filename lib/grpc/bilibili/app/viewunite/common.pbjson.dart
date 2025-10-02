@@ -1,13 +1,14 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: bilibili/app/viewunite/common.proto
-//
+// Generated from bilibili/app/viewunite/common.proto.
+
 // @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names, unused_import
 
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
@@ -274,11 +275,12 @@ const PugvSeasonPrimarySellPointType$json = {
 };
 
 /// Descriptor for `PugvSeasonPrimarySellPointType`. Decode as a `google.protobuf.EnumDescriptorProto`.
-final $typed_data.Uint8List pugvSeasonPrimarySellPointTypeDescriptor = $convert.base64Decode(
-    'Ch5QdWd2U2Vhc29uUHJpbWFyeVNlbGxQb2ludFR5cGUSMwovUFVHVl9TRUFTT05fUFJJTUFSWV'
-    '9TRUxMX1BPSU5UX1RZUEVfVU5TUEVDSUZJRUQQABIuCipQVUdWX1NFQVNPTl9QUklNQVJZX1NF'
-    'TExfUE9JTlRfVFlQRV9NQU5VQUwQARIsCihQVUdWX1NFQVNPTl9QUklNQVJZX1NFTExfUE9JTl'
-    'RfVFlQRV9BVVRPEAI=');
+final $typed_data.Uint8List pugvSeasonPrimarySellPointTypeDescriptor =
+    $convert.base64Decode(
+        'Ch5QdWd2U2Vhc29uUHJpbWFyeVNlbGxQb2ludFR5cGUSMwovUFVHVl9TRUFTT05fUFJJTUFSWV'
+        '9TRUxMX1BPSU5UX1RZUEVfVU5TUEVDSUZJRUQQABIuCipQVUdWX1NFQVNPTl9QUklNQVJZX1NF'
+        'TExfUE9JTlRfVFlQRV9NQU5VQUwQARIsCihQVUdWX1NFQVNPTl9QUklNQVJZX1NFTExfUE9JTl'
+        'RfVFlQRV9BVVRPEAI=');
 
 @$core.Deprecated('Use pugvSeasonRecommendShowStyleDescriptor instead')
 const PugvSeasonRecommendShowStyle$json = {
@@ -399,9 +401,10 @@ const SerialSeasonCoverStyle$json = {
 };
 
 /// Descriptor for `SerialSeasonCoverStyle`. Decode as a `google.protobuf.EnumDescriptorProto`.
-final $typed_data.Uint8List serialSeasonCoverStyleDescriptor = $convert.base64Decode(
-    'ChZTZXJpYWxTZWFzb25Db3ZlclN0eWxlEgkKBVRJVExFEAASCwoHUElDVFVSRRABEi4KIVNFUk'
-    'lBTF9TRUFTT05fQ09WRVJfU1RZTEVfVU5LTk9XThD///////////8B');
+final $typed_data.Uint8List serialSeasonCoverStyleDescriptor =
+    $convert.base64Decode(
+        'ChZTZXJpYWxTZWFzb25Db3ZlclN0eWxlEgkKBVRJVExFEAASCwoHUElDVFVSRRABEi4KIVNFUk'
+        'lBTF9TRUFTT05fQ09WRVJfU1RZTEVfVU5LTk9XThD///////////8B');
 
 @$core.Deprecated('Use showStyleDescriptor instead')
 const ShowStyle$json = {
@@ -441,8 +444,22 @@ const ActBannerItem$json = {
   '2': [
     {'1': 'url', '3': 1, '4': 1, '5': 9, '10': 'url'},
     {'1': 'cover', '3': 2, '4': 1, '5': 9, '10': 'cover'},
-    {'1': 'jump_type', '3': 3, '4': 1, '5': 14, '6': '.bilibili.app.viewunite.common.JumpType', '10': 'jumpType'},
-    {'1': 'report', '3': 4, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.ActBannerItem.ReportEntry', '10': 'report'},
+    {
+      '1': 'jump_type',
+      '3': 3,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.viewunite.common.JumpType',
+      '10': 'jumpType'
+    },
+    {
+      '1': 'report',
+      '3': 4,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ActBannerItem.ReportEntry',
+      '10': 'report'
+    },
   ],
   '3': [ActBannerItem_ReportEntry$json],
 };
@@ -469,8 +486,22 @@ final $typed_data.Uint8List actBannerItemDescriptor = $convert.base64Decode(
 const ActPageItems$json = {
   '1': 'ActPageItems',
   '2': [
-    {'1': 'item', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.ActBannerItem', '10': 'item'},
-    {'1': 'show_style', '3': 2, '4': 1, '5': 14, '6': '.bilibili.app.viewunite.common.ShowStyle', '10': 'showStyle'},
+    {
+      '1': 'item',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ActBannerItem',
+      '10': 'item'
+    },
+    {
+      '1': 'show_style',
+      '3': 2,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.viewunite.common.ShowStyle',
+      '10': 'showStyle'
+    },
     {'1': 'title', '3': 3, '4': 1, '5': 9, '10': 'title'},
   ],
 };
@@ -497,7 +528,14 @@ const Activity$json = {
     {'1': 'picurl_selected', '3': 9, '4': 1, '5': 9, '10': 'picurlSelected'},
     {'1': 'h5_link', '3': 10, '4': 1, '5': 9, '10': 'h5Link'},
     {'1': 'jump_mode', '3': 11, '4': 1, '5': 9, '10': 'jumpMode'},
-    {'1': 'items', '3': 12, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.Item', '10': 'items'},
+    {
+      '1': 'items',
+      '3': 12,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Item',
+      '10': 'items'
+    },
   ],
 };
 
@@ -517,16 +555,47 @@ const ActivityEntrance$json = {
     {'1': 'activity_cover', '3': 1, '4': 1, '5': 9, '10': 'activityCover'},
     {'1': 'activity_title', '3': 2, '4': 1, '5': 9, '10': 'activityTitle'},
     {'1': 'word_tag', '3': 3, '4': 1, '5': 9, '10': 'wordTag'},
-    {'1': 'activity_subtitle', '3': 4, '4': 1, '5': 9, '10': 'activitySubtitle'},
+    {
+      '1': 'activity_subtitle',
+      '3': 4,
+      '4': 1,
+      '5': 9,
+      '10': 'activitySubtitle'
+    },
     {'1': 'activity_link', '3': 5, '4': 1, '5': 9, '10': 'activityLink'},
     {'1': 'activity_type', '3': 6, '4': 1, '5': 5, '10': 'activityType'},
     {'1': 'reserve_id', '3': 7, '4': 1, '5': 5, '10': 'reserveId'},
     {'1': 'status', '3': 8, '4': 1, '5': 5, '10': 'status'},
-    {'1': 'upper_list', '3': 9, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.User', '10': 'upperList'},
-    {'1': 'report', '3': 10, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.ActivityEntrance.ReportEntry', '10': 'report'},
-    {'1': 'order_report_params', '3': 11, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.ActivityEntrance.OrderReportParamsEntry', '10': 'orderReportParams'},
+    {
+      '1': 'upper_list',
+      '3': 9,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.User',
+      '10': 'upperList'
+    },
+    {
+      '1': 'report',
+      '3': 10,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ActivityEntrance.ReportEntry',
+      '10': 'report'
+    },
+    {
+      '1': 'order_report_params',
+      '3': 11,
+      '4': 3,
+      '5': 11,
+      '6':
+          '.bilibili.app.viewunite.common.ActivityEntrance.OrderReportParamsEntry',
+      '10': 'orderReportParams'
+    },
   ],
-  '3': [ActivityEntrance_ReportEntry$json, ActivityEntrance_OrderReportParamsEntry$json],
+  '3': [
+    ActivityEntrance_ReportEntry$json,
+    ActivityEntrance_OrderReportParamsEntry$json
+  ],
 };
 
 @$core.Deprecated('Use activityEntranceDescriptor instead')
@@ -569,7 +638,14 @@ final $typed_data.Uint8List activityEntranceDescriptor = $convert.base64Decode(
 const ActivityEntranceModule$json = {
   '1': 'ActivityEntranceModule',
   '2': [
-    {'1': 'activity_entrance', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.ActivityEntrance', '10': 'activityEntrance'},
+    {
+      '1': 'activity_entrance',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ActivityEntrance',
+      '10': 'activityEntrance'
+    },
   ],
 };
 
@@ -589,11 +665,46 @@ const ActivityGuidanceBar$json = {
     {'1': 'action', '3': 4, '4': 1, '5': 9, '10': 'action'},
     {'1': 'url', '3': 5, '4': 1, '5': 9, '10': 'url'},
     {'1': 'close_type', '3': 6, '4': 1, '5': 9, '10': 'closeType'},
-    {'1': 'images', '3': 7, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.ImagesWidget', '10': 'images'},
-    {'1': 'title', '3': 8, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.TextWidget', '10': 'title'},
-    {'1': 'sub_title', '3': 9, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.TextWidget', '10': 'subTitle'},
-    {'1': 'button', '3': 10, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.ButtonWidget', '10': 'button'},
-    {'1': 'report', '3': 11, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.ActivityGuidanceBar.ReportEntry', '10': 'report'},
+    {
+      '1': 'images',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ImagesWidget',
+      '10': 'images'
+    },
+    {
+      '1': 'title',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.TextWidget',
+      '10': 'title'
+    },
+    {
+      '1': 'sub_title',
+      '3': 9,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.TextWidget',
+      '10': 'subTitle'
+    },
+    {
+      '1': 'button',
+      '3': 10,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ButtonWidget',
+      '10': 'button'
+    },
+    {
+      '1': 'report',
+      '3': 11,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ActivityGuidanceBar.ReportEntry',
+      '10': 'report'
+    },
   ],
   '3': [ActivityGuidanceBar_ReportEntry$json],
 };
@@ -641,9 +752,30 @@ const ActivityReserve$json = {
   '1': 'ActivityReserve',
   '2': [
     {'1': 'title', '3': 1, '4': 1, '5': 9, '10': 'title'},
-    {'1': 'vt', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.StatInfo', '10': 'vt'},
-    {'1': 'danmaku', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.StatInfo', '10': 'danmaku'},
-    {'1': 'button', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.ReserveButton', '10': 'button'},
+    {
+      '1': 'vt',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.StatInfo',
+      '10': 'vt'
+    },
+    {
+      '1': 'danmaku',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.StatInfo',
+      '10': 'danmaku'
+    },
+    {
+      '1': 'button',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ReserveButton',
+      '10': 'button'
+    },
   ],
 };
 
@@ -674,7 +806,14 @@ const ActivityStarRail$json = {
   '1': 'ActivityStarRail',
   '2': [
     {'1': 'pic', '3': 1, '4': 1, '5': 9, '10': 'pic'},
-    {'1': 'pic_gallery', '3': 2, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.StarRail', '10': 'picGallery'},
+    {
+      '1': 'pic_gallery',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.StarRail',
+      '10': 'picGallery'
+    },
   ],
 };
 
@@ -699,7 +838,14 @@ const ActivityTab$json = {
     {'1': 'biz_key', '3': 10, '4': 1, '5': 3, '10': 'bizKey'},
     {'1': 'desc', '3': 11, '4': 1, '5': 9, '10': 'desc'},
     {'1': 'act_ext', '3': 12, '4': 1, '5': 9, '10': 'actExt'},
-    {'1': 'report', '3': 13, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.ActivityTab.ReportEntry', '10': 'report'},
+    {
+      '1': 'report',
+      '3': 13,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ActivityTab.ReportEntry',
+      '10': 'report'
+    },
   ],
   '3': [ActivityTab_ReportEntry$json],
 };
@@ -748,7 +894,14 @@ final $typed_data.Uint8List aggEpCardDescriptor = $convert.base64Decode(
 const AggEps$json = {
   '1': 'AggEps',
   '2': [
-    {'1': 'agg_ep_cards', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.AggEpCard', '10': 'aggEpCards'},
+    {
+      '1': 'agg_ep_cards',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.AggEpCard',
+      '10': 'aggEpCards'
+    },
     {'1': 'place_index', '3': 2, '4': 1, '5': 5, '10': 'placeIndex'},
   ],
 };
@@ -777,14 +930,21 @@ const AttentionRecommend$json = {
 };
 
 /// Descriptor for `AttentionRecommend`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List attentionRecommendDescriptor = $convert.base64Decode(
-    'ChJBdHRlbnRpb25SZWNvbW1lbmQ=');
+final $typed_data.Uint8List attentionRecommendDescriptor =
+    $convert.base64Decode('ChJBdHRlbnRpb25SZWNvbW1lbmQ=');
 
 @$core.Deprecated('Use audioDescriptor instead')
 const Audio$json = {
   '1': 'Audio',
   '2': [
-    {'1': 'audio_info', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.Audio.AudioInfoEntry', '10': 'audioInfo'},
+    {
+      '1': 'audio_info',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Audio.AudioInfoEntry',
+      '10': 'audioInfo'
+    },
   ],
   '3': [Audio_AudioInfoEntry$json],
 };
@@ -794,7 +954,14 @@ const Audio_AudioInfoEntry$json = {
   '1': 'AudioInfoEntry',
   '2': [
     {'1': 'key', '3': 1, '4': 1, '5': 3, '10': 'key'},
-    {'1': 'value', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.AudioInfo', '10': 'value'},
+    {
+      '1': 'value',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.AudioInfo',
+      '10': 'value'
+    },
   ],
   '7': {'7': true},
 };
@@ -852,7 +1019,13 @@ const BadgeInfo$json = {
     {'1': 'bg_color', '3': 4, '4': 1, '5': 9, '10': 'bgColor'},
     {'1': 'bg_color_night', '3': 5, '4': 1, '5': 9, '10': 'bgColorNight'},
     {'1': 'border_color', '3': 6, '4': 1, '5': 9, '10': 'borderColor'},
-    {'1': 'border_color_night', '3': 7, '4': 1, '5': 9, '10': 'borderColorNight'},
+    {
+      '1': 'border_color_night',
+      '3': 7,
+      '4': 1,
+      '5': 9,
+      '10': 'borderColorNight'
+    },
     {'1': 'bg_style', '3': 8, '4': 1, '5': 5, '10': 'bgStyle'},
     {'1': 'img', '3': 9, '4': 1, '5': 9, '10': 'img'},
     {'1': 'type', '3': 10, '4': 1, '5': 5, '10': 'type'},
@@ -873,7 +1046,14 @@ const Banner$json = {
   '1': 'Banner',
   '2': [
     {'1': 'title', '3': 1, '4': 1, '5': 9, '10': 'title'},
-    {'1': 'relate_item', '3': 2, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.RelateItem', '10': 'relateItem'},
+    {
+      '1': 'relate_item',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.RelateItem',
+      '10': 'relateItem'
+    },
   ],
 };
 
@@ -908,8 +1088,8 @@ const BizFavParam$json = {
 };
 
 /// Descriptor for `BizFavParam`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List bizFavParamDescriptor = $convert.base64Decode(
-    'CgtCaXpGYXZQYXJhbRIbCglzZWFzb25faWQYASABKANSCHNlYXNvbklk');
+final $typed_data.Uint8List bizFavParamDescriptor = $convert
+    .base64Decode('CgtCaXpGYXZQYXJhbRIbCglzZWFzb25faWQYASABKANSCHNlYXNvbklk');
 
 @$core.Deprecated('Use bizReserveActivityParamDescriptor instead')
 const BizReserveActivityParam$json = {
@@ -934,10 +1114,23 @@ const Button$json = {
   '1': 'Button',
   '2': [
     {'1': 'title', '3': 1, '4': 1, '5': 9, '10': 'title'},
-    {'1': 'left_strikethrough_text', '3': 2, '4': 1, '5': 9, '10': 'leftStrikethroughText'},
+    {
+      '1': 'left_strikethrough_text',
+      '3': 2,
+      '4': 1,
+      '5': 9,
+      '10': 'leftStrikethroughText'
+    },
     {'1': 'type', '3': 3, '4': 1, '5': 9, '10': 'type'},
     {'1': 'link', '3': 4, '4': 1, '5': 9, '10': 'link'},
-    {'1': 'badge_info', '3': 5, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.BadgeInfo', '10': 'badgeInfo'},
+    {
+      '1': 'badge_info',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.BadgeInfo',
+      '10': 'badgeInfo'
+    },
     {'1': 'sub_title', '3': 6, '4': 1, '5': 9, '10': 'subTitle'},
   ],
 };
@@ -955,7 +1148,14 @@ const ButtonWidget$json = {
   '1': 'ButtonWidget',
   '2': [
     {'1': 'code', '3': 1, '4': 1, '5': 9, '10': 'code'},
-    {'1': 'text', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.TextWidget', '10': 'text'},
+    {
+      '1': 'text',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.TextWidget',
+      '10': 'text'
+    },
     {'1': 'bg_color', '3': 3, '4': 1, '5': 9, '10': 'bgColor'},
     {'1': 'action', '3': 4, '4': 1, '5': 9, '10': 'action'},
     {'1': 'link', '3': 5, '4': 1, '5': 9, '10': 'link'},
@@ -983,13 +1183,33 @@ const CardBasicInfo$json = {
     {'1': 'from_source_id', '3': 8, '4': 1, '5': 9, '10': 'fromSourceId'},
     {'1': 'material_id', '3': 9, '4': 1, '5': 3, '10': 'materialId'},
     {'1': 'cover_gif', '3': 10, '4': 1, '5': 9, '10': 'coverGif'},
-    {'1': 'author', '3': 11, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Owner', '10': 'author'},
+    {
+      '1': 'author',
+      '3': 11,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Owner',
+      '10': 'author'
+    },
     {'1': 'id', '3': 12, '4': 1, '5': 3, '10': 'id'},
     {'1': 'from', '3': 13, '4': 1, '5': 9, '10': 'from'},
-    {'1': 'from_spmid_suffix', '3': 14, '4': 1, '5': 9, '10': 'fromSpmidSuffix'},
+    {
+      '1': 'from_spmid_suffix',
+      '3': 14,
+      '4': 1,
+      '5': 9,
+      '10': 'fromSpmidSuffix'
+    },
     {'1': 'report_flow_data', '3': 15, '4': 1, '5': 9, '10': 'reportFlowData'},
     {'1': 'cover_right_text', '3': 16, '4': 1, '5': 9, '10': 'coverRightText'},
-    {'1': 'dimension', '3': 17, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.CoverDimension', '10': 'dimension'},
+    {
+      '1': 'dimension',
+      '3': 17,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.CoverDimension',
+      '10': 'dimension'
+    },
   ],
 };
 
@@ -1029,8 +1249,8 @@ const CatalogTab$json = {
 };
 
 /// Descriptor for `CatalogTab`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List catalogTabDescriptor = $convert.base64Decode(
-    'CgpDYXRhbG9nVGFiEhQKBXRpdGxlGAEgASgJUgV0aXRsZQ==');
+final $typed_data.Uint8List catalogTabDescriptor =
+    $convert.base64Decode('CgpDYXRhbG9nVGFiEhQKBXRpdGxlGAEgASgJUgV0aXRsZQ==');
 
 @$core.Deprecated('Use celebrityDescriptor instead')
 const Celebrity$json = {
@@ -1047,11 +1267,32 @@ const Celebrity$json = {
     {'1': 'mid', '3': 9, '4': 1, '5': 3, '10': 'mid'},
     {'1': 'is_follow', '3': 10, '4': 1, '5': 5, '10': 'isFollow'},
     {'1': 'occupation_name', '3': 11, '4': 1, '5': 9, '10': 'occupationName'},
-    {'1': 'occupation_type', '3': 12, '4': 1, '5': 14, '6': '.bilibili.app.viewunite.common.OccupationType', '10': 'occupationType'},
+    {
+      '1': 'occupation_type',
+      '3': 12,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.viewunite.common.OccupationType',
+      '10': 'occupationType'
+    },
     {'1': 'relate_attr', '3': 13, '4': 1, '5': 5, '10': 'relateAttr'},
     {'1': 'small_avatar', '3': 14, '4': 1, '5': 9, '10': 'smallAvatar'},
-    {'1': 'report', '3': 15, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.Celebrity.ReportEntry', '10': 'report'},
-    {'1': 'official', '3': 16, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.OfficialVerify', '10': 'official'},
+    {
+      '1': 'report',
+      '3': 15,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Celebrity.ReportEntry',
+      '10': 'report'
+    },
+    {
+      '1': 'official',
+      '3': 16,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.OfficialVerify',
+      '10': 'official'
+    },
   ],
   '3': [Celebrity_ReportEntry$json],
 };
@@ -1102,7 +1343,14 @@ const CharacterGroup$json = {
   '1': 'CharacterGroup',
   '2': [
     {'1': 'title', '3': 1, '4': 1, '5': 9, '10': 'title'},
-    {'1': 'characters', '3': 2, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.Celebrity', '10': 'characters'},
+    {
+      '1': 'characters',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Celebrity',
+      '10': 'characters'
+    },
   ],
 };
 
@@ -1116,7 +1364,14 @@ final $typed_data.Uint8List characterGroupDescriptor = $convert.base64Decode(
 const Characters$json = {
   '1': 'Characters',
   '2': [
-    {'1': 'groups', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.CharacterGroup', '10': 'groups'},
+    {
+      '1': 'groups',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.CharacterGroup',
+      '10': 'groups'
+    },
   ],
 };
 
@@ -1154,11 +1409,39 @@ const CombinationEp$json = {
     {'1': 'can_ord_desc', '3': 4, '4': 1, '5': 5, '10': 'canOrdDesc'},
     {'1': 'more', '3': 5, '4': 1, '5': 9, '10': 'more'},
     {'1': 'episode_ids', '3': 6, '4': 3, '5': 5, '10': 'episodeIds'},
-    {'1': 'episodes', '3': 7, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.ViewEpisode', '10': 'episodes'},
+    {
+      '1': 'episodes',
+      '3': 7,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ViewEpisode',
+      '10': 'episodes'
+    },
     {'1': 'split_text', '3': 8, '4': 1, '5': 9, '10': 'splitText'},
-    {'1': 'module_style', '3': 9, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Style', '10': 'moduleStyle'},
-    {'1': 'serial_season', '3': 10, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.SerialSeason', '10': 'serialSeason'},
-    {'1': 'section_data', '3': 11, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.SectionData', '10': 'sectionData'},
+    {
+      '1': 'module_style',
+      '3': 9,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Style',
+      '10': 'moduleStyle'
+    },
+    {
+      '1': 'serial_season',
+      '3': 10,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.SerialSeason',
+      '10': 'serialSeason'
+    },
+    {
+      '1': 'section_data',
+      '3': 11,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.SectionData',
+      '10': 'sectionData'
+    },
   ],
 };
 
@@ -1194,8 +1477,21 @@ const Covenanter$json = {
   '1': 'Covenanter',
   '2': [
     {'1': 'is_follow_display', '3': 1, '4': 1, '5': 5, '10': 'isFollowDisplay'},
-    {'1': 'text', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.ContractText', '10': 'text'},
-    {'1': 'is_interact_display', '3': 3, '4': 1, '5': 5, '10': 'isInteractDisplay'},
+    {
+      '1': 'text',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ContractText',
+      '10': 'text'
+    },
+    {
+      '1': 'is_interact_display',
+      '3': 3,
+      '4': 1,
+      '5': 5,
+      '10': 'isInteractDisplay'
+    },
   ],
 };
 
@@ -1224,16 +1520,70 @@ final $typed_data.Uint8List coverDimensionDescriptor = $convert.base64Decode(
 const DeliveryData$json = {
   '1': 'DeliveryData',
   '2': [
-    {'1': 'activity', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Activity', '9': 0, '10': 'activity'},
-    {'1': 'characters', '3': 5, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Characters', '9': 0, '10': 'characters'},
-    {'1': 'theatre_hot_topic', '3': 6, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.TheatreHotTopic', '9': 0, '10': 'theatreHotTopic'},
-    {'1': 'agg_eps', '3': 7, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.AggEps', '9': 0, '10': 'aggEps'},
-    {'1': 'act_page_items', '3': 10, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.ActPageItems', '9': 0, '10': 'actPageItems'},
+    {
+      '1': 'activity',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Activity',
+      '9': 0,
+      '10': 'activity'
+    },
+    {
+      '1': 'characters',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Characters',
+      '9': 0,
+      '10': 'characters'
+    },
+    {
+      '1': 'theatre_hot_topic',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.TheatreHotTopic',
+      '9': 0,
+      '10': 'theatreHotTopic'
+    },
+    {
+      '1': 'agg_eps',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.AggEps',
+      '9': 0,
+      '10': 'aggEps'
+    },
+    {
+      '1': 'act_page_items',
+      '3': 10,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ActPageItems',
+      '9': 0,
+      '10': 'actPageItems'
+    },
     {'1': 'title', '3': 1, '4': 1, '5': 9, '10': 'title'},
-    {'1': 'module_style', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Style', '10': 'moduleStyle'},
+    {
+      '1': 'module_style',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Style',
+      '10': 'moduleStyle'
+    },
     {'1': 'more', '3': 3, '4': 1, '5': 9, '10': 'more'},
     {'1': 'id', '3': 8, '4': 1, '5': 5, '10': 'id'},
-    {'1': 'report', '3': 9, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.DeliveryData.ReportEntry', '10': 'report'},
+    {
+      '1': 'report',
+      '3': 9,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.DeliveryData.ReportEntry',
+      '10': 'report'
+    },
   ],
   '3': [DeliveryData_ReportEntry$json],
   '8': [
@@ -1285,7 +1635,14 @@ const DescV2$json = {
   '1': 'DescV2',
   '2': [
     {'1': 'text', '3': 1, '4': 1, '5': 9, '10': 'text'},
-    {'1': 'type', '3': 2, '4': 1, '5': 14, '6': '.bilibili.app.viewunite.common.DescType', '10': 'type'},
+    {
+      '1': 'type',
+      '3': 2,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.viewunite.common.DescType',
+      '10': 'type'
+    },
     {'1': 'uri', '3': 3, '4': 1, '5': 9, '10': 'uri'},
     {'1': 'rid', '3': 4, '4': 1, '5': 3, '10': 'rid'},
   ],
@@ -1333,8 +1690,22 @@ final $typed_data.Uint8List dislikeReasonsDescriptor = $convert.base64Decode(
 const EpBgInfo$json = {
   '1': 'EpBgInfo',
   '2': [
-    {'1': 'float_layer', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.BgInfo', '10': 'floatLayer'},
-    {'1': 'no_float_layer', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.BgInfo', '10': 'noFloatLayer'},
+    {
+      '1': 'float_layer',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.BgInfo',
+      '10': 'floatLayer'
+    },
+    {
+      '1': 'no_float_layer',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.BgInfo',
+      '10': 'noFloatLayer'
+    },
   ],
 };
 
@@ -1348,7 +1719,14 @@ final $typed_data.Uint8List epBgInfoDescriptor = $convert.base64Decode(
 const ExtTab$json = {
   '1': 'ExtTab',
   '2': [
-    {'1': 'ext_type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.app.viewunite.common.ExtType', '10': 'extType'},
+    {
+      '1': 'ext_type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.viewunite.common.ExtType',
+      '10': 'extType'
+    },
     {'1': 'data', '3': 2, '4': 1, '5': 9, '10': 'data'},
   ],
 };
@@ -1362,9 +1740,30 @@ final $typed_data.Uint8List extTabDescriptor = $convert.base64Decode(
 const FollowLayer$json = {
   '1': 'FollowLayer',
   '2': [
-    {'1': 'staff', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Staff', '10': 'staff'},
-    {'1': 'desc', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Desc', '10': 'desc'},
-    {'1': 'report', '3': 3, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.FollowLayer.ReportEntry', '10': 'report'},
+    {
+      '1': 'staff',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Staff',
+      '10': 'staff'
+    },
+    {
+      '1': 'desc',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Desc',
+      '10': 'desc'
+    },
+    {
+      '1': 'report',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.FollowLayer.ReportEntry',
+      '10': 'report'
+    },
   ],
   '3': [FollowLayer_ReportEntry$json],
 };
@@ -1391,7 +1790,14 @@ final $typed_data.Uint8List followLayerDescriptor = $convert.base64Decode(
 const Headline$json = {
   '1': 'Headline',
   '2': [
-    {'1': 'label', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Label', '10': 'label'},
+    {
+      '1': 'label',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Label',
+      '10': 'label'
+    },
     {'1': 'content', '3': 2, '4': 1, '5': 9, '10': 'content'},
   ],
 };
@@ -1420,7 +1826,15 @@ final $typed_data.Uint8List historyNodeDescriptor = $convert.base64Decode(
 const Honor$json = {
   '1': 'Honor',
   '2': [
-    {'1': 'profession_ext', '3': 15, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.ProfessionHonorExtend', '9': 0, '10': 'professionExt'},
+    {
+      '1': 'profession_ext',
+      '3': 15,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ProfessionHonorExtend',
+      '9': 0,
+      '10': 'professionExt'
+    },
     {'1': 'icon', '3': 1, '4': 1, '5': 9, '10': 'icon'},
     {'1': 'icon_night', '3': 2, '4': 1, '5': 9, '10': 'iconNight'},
     {'1': 'text', '3': 3, '4': 1, '5': 9, '10': 'text'},
@@ -1431,9 +1845,30 @@ const Honor$json = {
     {'1': 'bg_color_night', '3': 8, '4': 1, '5': 9, '10': 'bgColorNight'},
     {'1': 'url', '3': 9, '4': 1, '5': 9, '10': 'url'},
     {'1': 'url_text', '3': 10, '4': 1, '5': 9, '10': 'urlText'},
-    {'1': 'type', '3': 11, '4': 1, '5': 14, '6': '.bilibili.app.viewunite.common.HonorType', '10': 'type'},
-    {'1': 'honor_jump_type', '3': 12, '4': 1, '5': 14, '6': '.bilibili.app.viewunite.common.HonorJumpType', '10': 'honorJumpType'},
-    {'1': 'report', '3': 13, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.Honor.ReportEntry', '10': 'report'},
+    {
+      '1': 'type',
+      '3': 11,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.viewunite.common.HonorType',
+      '10': 'type'
+    },
+    {
+      '1': 'honor_jump_type',
+      '3': 12,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.viewunite.common.HonorJumpType',
+      '10': 'honorJumpType'
+    },
+    {
+      '1': 'report',
+      '3': 13,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Honor.ReportEntry',
+      '10': 'report'
+    },
     {'1': 'end_icon', '3': 14, '4': 1, '5': 9, '10': 'endIcon'},
   ],
   '3': [Honor_ReportEntry$json],
@@ -1499,7 +1934,14 @@ const Interaction$json = {
   '1': 'Interaction',
   '2': [
     {'1': 'ep_id', '3': 1, '4': 1, '5': 3, '10': 'epId'},
-    {'1': 'history_node', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.HistoryNode', '10': 'historyNode'},
+    {
+      '1': 'history_node',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.HistoryNode',
+      '10': 'historyNode'
+    },
     {'1': 'graph_version', '3': 3, '4': 1, '5': 3, '10': 'graphVersion'},
     {'1': 'msg', '3': 4, '4': 1, '5': 9, '10': 'msg'},
     {'1': 'is_interaction', '3': 5, '4': 1, '5': 8, '10': 'isInteraction'},
@@ -1530,11 +1972,34 @@ final $typed_data.Uint8List itemDescriptor = $convert.base64Decode(
 const KingPos$json = {
   '1': 'KingPos',
   '2': [
-    {'1': 'like', '3': 6, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.LikeExtend', '9': 0, '10': 'like'},
-    {'1': 'coin', '3': 7, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.CoinExtend', '9': 0, '10': 'coin'},
+    {
+      '1': 'like',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.LikeExtend',
+      '9': 0,
+      '10': 'like'
+    },
+    {
+      '1': 'coin',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.CoinExtend',
+      '9': 0,
+      '10': 'coin'
+    },
     {'1': 'disable', '3': 1, '4': 1, '5': 8, '10': 'disable'},
     {'1': 'icon', '3': 2, '4': 1, '5': 9, '10': 'icon'},
-    {'1': 'type', '3': 3, '4': 1, '5': 14, '6': '.bilibili.app.viewunite.common.KingPositionType', '10': 'type'},
+    {
+      '1': 'type',
+      '3': 3,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.viewunite.common.KingPositionType',
+      '10': 'type'
+    },
     {'1': 'disable_toast', '3': 4, '4': 1, '5': 9, '10': 'disableToast'},
     {'1': 'checked_toast', '3': 5, '4': 1, '5': 9, '10': 'checkedToast'},
   ],
@@ -1557,8 +2022,22 @@ final $typed_data.Uint8List kingPosDescriptor = $convert.base64Decode(
 const KingPosition$json = {
   '1': 'KingPosition',
   '2': [
-    {'1': 'king_pos', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.KingPos', '10': 'kingPos'},
-    {'1': 'extend', '3': 2, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.KingPos', '10': 'extend'},
+    {
+      '1': 'king_pos',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.KingPos',
+      '10': 'kingPos'
+    },
+    {
+      '1': 'extend',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.KingPos',
+      '10': 'extend'
+    },
   ],
 };
 
@@ -1580,7 +2059,14 @@ const Label$json = {
     {'1': 'icon_height', '3': 6, '4': 1, '5': 3, '10': 'iconHeight'},
     {'1': 'lottie', '3': 7, '4': 1, '5': 9, '10': 'lottie'},
     {'1': 'lottie_night', '3': 8, '4': 1, '5': 9, '10': 'lottieNight'},
-    {'1': 'report', '3': 9, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.Label.ReportEntry', '10': 'report'},
+    {
+      '1': 'report',
+      '3': 9,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Label.ReportEntry',
+      '10': 'report'
+    },
   ],
   '3': [Label_ReportEntry$json],
 };
@@ -1623,10 +2109,31 @@ final $typed_data.Uint8List likeCommentDescriptor = $convert.base64Decode(
 const LikeExtend$json = {
   '1': 'LikeExtend',
   '2': [
-    {'1': 'triple_like', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.UpLikeImg', '10': 'tripleLike'},
+    {
+      '1': 'triple_like',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.UpLikeImg',
+      '10': 'tripleLike'
+    },
     {'1': 'like_animation', '3': 2, '4': 1, '5': 9, '10': 'likeAnimation'},
-    {'1': 'player_animation', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PlayerAnimation', '10': 'playerAnimation'},
-    {'1': 'resource', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.ActivityResource', '10': 'resource'},
+    {
+      '1': 'player_animation',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PlayerAnimation',
+      '10': 'playerAnimation'
+    },
+    {
+      '1': 'resource',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ActivityResource',
+      '10': 'resource'
+    },
   ],
 };
 
@@ -1661,10 +2168,23 @@ const LiveOrder$json = {
   '2': [
     {'1': 'sid', '3': 1, '4': 1, '5': 3, '10': 'sid'},
     {'1': 'text', '3': 2, '4': 1, '5': 9, '10': 'text'},
-    {'1': 'live_plan_start_time', '3': 3, '4': 1, '5': 3, '10': 'livePlanStartTime'},
+    {
+      '1': 'live_plan_start_time',
+      '3': 3,
+      '4': 1,
+      '5': 3,
+      '10': 'livePlanStartTime'
+    },
     {'1': 'is_follow', '3': 4, '4': 1, '5': 8, '10': 'isFollow'},
     {'1': 'follow_count', '3': 5, '4': 1, '5': 3, '10': 'followCount'},
-    {'1': 'reserve_calendar_info', '3': 6, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.ReserveCalendarInfo', '10': 'reserveCalendarInfo'},
+    {
+      '1': 'reserve_calendar_info',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ReserveCalendarInfo',
+      '10': 'reserveCalendarInfo'
+    },
   ],
 };
 
@@ -1681,8 +2201,22 @@ const Merchandise$json = {
   '1': 'Merchandise',
   '2': [
     {'1': 'title', '3': 1, '4': 1, '5': 9, '10': 'title'},
-    {'1': 'button', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.MerchandiseButton', '10': 'button'},
-    {'1': 'card', '3': 3, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.MerchandiseCard', '10': 'card'},
+    {
+      '1': 'button',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.MerchandiseButton',
+      '10': 'button'
+    },
+    {
+      '1': 'card',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.MerchandiseCard',
+      '10': 'card'
+    },
   ],
 };
 
@@ -1715,9 +2249,30 @@ const MerchandiseCard$json = {
   '2': [
     {'1': 'cover', '3': 1, '4': 1, '5': 9, '10': 'cover'},
     {'1': 'title', '3': 2, '4': 1, '5': 9, '10': 'title'},
-    {'1': 'sub_title', '3': 3, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.MerchandiseTitle', '10': 'subTitle'},
-    {'1': 'button', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.MerchandiseButton', '10': 'button'},
-    {'1': 'source_content', '3': 5, '4': 1, '5': 11, '6': '.google.protobuf.Any', '10': 'sourceContent'},
+    {
+      '1': 'sub_title',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.MerchandiseTitle',
+      '10': 'subTitle'
+    },
+    {
+      '1': 'button',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.MerchandiseButton',
+      '10': 'button'
+    },
+    {
+      '1': 'source_content',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.google.protobuf.Any',
+      '10': 'sourceContent'
+    },
   ],
 };
 
@@ -1767,53 +2322,428 @@ final $typed_data.Uint8List mineDescriptor = $convert.base64Decode(
 const Module$json = {
   '1': 'Module',
   '2': [
-    {'1': 'ogv_introduction', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.OgvIntroduction', '9': 0, '10': 'ogvIntroduction'},
-    {'1': 'ugc_introduction', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.UgcIntroduction', '9': 0, '10': 'ugcIntroduction'},
-    {'1': 'king_position', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.KingPosition', '9': 0, '10': 'kingPosition'},
-    {'1': 'head_line', '3': 5, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Headline', '9': 0, '10': 'headLine'},
-    {'1': 'ogv_title', '3': 6, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.OgvTitle', '9': 0, '10': 'ogvTitle'},
-    {'1': 'honor', '3': 7, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Honor', '9': 0, '10': 'honor'},
-    {'1': 'list', '3': 8, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.UserList', '9': 0, '10': 'list'},
-    {'1': 'staffs', '3': 9, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Staffs', '9': 0, '10': 'staffs'},
-    {'1': 'activity_reserve', '3': 10, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.ActivityReserve', '9': 0, '10': 'activityReserve'},
-    {'1': 'live_order', '3': 11, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.LiveOrder', '9': 0, '10': 'liveOrder'},
-    {'1': 'section_data', '3': 12, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.SectionData', '9': 0, '10': 'sectionData'},
-    {'1': 'delivery_data', '3': 13, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.DeliveryData', '9': 0, '10': 'deliveryData'},
-    {'1': 'follow_layer', '3': 14, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.FollowLayer', '9': 0, '10': 'followLayer'},
-    {'1': 'ogv_seasons', '3': 15, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.OgvSeasons', '9': 0, '10': 'ogvSeasons'},
-    {'1': 'ugc_season', '3': 16, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.UgcSeasons', '9': 0, '10': 'ugcSeason'},
-    {'1': 'ogv_live_reserve', '3': 17, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.OgvLiveReserve', '9': 0, '10': 'ogvLiveReserve'},
-    {'1': 'combination_ep', '3': 18, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.CombinationEp', '9': 0, '10': 'combinationEp'},
-    {'1': 'sponsor', '3': 19, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Sponsor', '9': 0, '10': 'sponsor'},
-    {'1': 'activity_entrance_module', '3': 20, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.ActivityEntranceModule', '9': 0, '10': 'activityEntranceModule'},
-    {'1': 'serial_season', '3': 21, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.SerialSeason', '9': 0, '10': 'serialSeason'},
-    {'1': 'relates', '3': 22, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Relates', '9': 0, '10': 'relates'},
-    {'1': 'banner', '3': 23, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Banner', '9': 0, '10': 'banner'},
-    {'1': 'audio', '3': 24, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Audio', '9': 0, '10': 'audio'},
-    {'1': 'like_comment', '3': 25, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.LikeComment', '9': 0, '10': 'likeComment'},
-    {'1': 'attention_recommend', '3': 26, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.AttentionRecommend', '9': 0, '10': 'attentionRecommend'},
-    {'1': 'covenanter', '3': 27, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Covenanter', '9': 0, '10': 'covenanter'},
-    {'1': 'special_tag', '3': 28, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.SpecialTag', '9': 0, '10': 'specialTag'},
-    {'1': 'up_data_module', '3': 29, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.UpDataModule', '9': 0, '10': 'upDataModule'},
-    {'1': 'profession_approval', '3': 30, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.ProfessionApproval', '9': 0, '10': 'professionApproval'},
-    {'1': 'pugv_shopping_notice', '3': 31, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvShoppingNotice', '9': 0, '10': 'pugvShoppingNotice'},
-    {'1': 'pugv_faq', '3': 32, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvFaq', '9': 0, '10': 'pugvFaq'},
-    {'1': 'pugv_season_description', '3': 33, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonDescription', '9': 0, '10': 'pugvSeasonDescription'},
-    {'1': 'pugv_season_recommend', '3': 34, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonRecommend', '9': 0, '10': 'pugvSeasonRecommend'},
-    {'1': 'pugv_season_publisher', '3': 35, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonPublisher', '9': 0, '10': 'pugvSeasonPublisher'},
-    {'1': 'pugv_season_selection', '3': 36, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonSelection', '9': 0, '10': 'pugvSeasonSelection'},
-    {'1': 'pugv_season_primary_info', '3': 37, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonPrimaryInfo', '9': 0, '10': 'pugvSeasonPrimaryInfo'},
-    {'1': 'pugv_cooperation_application', '3': 38, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvCooperationApplication', '9': 0, '10': 'pugvCooperationApplication'},
-    {'1': 'up_video_tool', '3': 39, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.UpVideoTool', '9': 0, '10': 'upVideoTool'},
-    {'1': 'pugv_zone', '3': 40, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvZone', '9': 0, '10': 'pugvZone'},
-    {'1': 'pugv_series', '3': 41, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeries', '9': 0, '10': 'pugvSeries'},
-    {'1': 'pugv_package', '3': 42, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvPackage', '9': 0, '10': 'pugvPackage'},
-    {'1': 'activity_star_rail', '3': 43, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.ActivityStarRail', '9': 0, '10': 'activityStarRail'},
-    {'1': 'activity_iframe', '3': 44, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.ActivityIFrame', '9': 0, '10': 'activityIframe'},
-    {'1': 'play_list', '3': 45, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PlayList', '9': 0, '10': 'playList'},
-    {'1': 'merchandise', '3': 46, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Merchandise', '9': 0, '10': 'merchandise'},
-    {'1': 'activity_guidance_bar', '3': 47, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.ActivityGuidanceBar', '9': 0, '10': 'activityGuidanceBar'},
-    {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.app.viewunite.common.ModuleType', '10': 'type'},
+    {
+      '1': 'ogv_introduction',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.OgvIntroduction',
+      '9': 0,
+      '10': 'ogvIntroduction'
+    },
+    {
+      '1': 'ugc_introduction',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.UgcIntroduction',
+      '9': 0,
+      '10': 'ugcIntroduction'
+    },
+    {
+      '1': 'king_position',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.KingPosition',
+      '9': 0,
+      '10': 'kingPosition'
+    },
+    {
+      '1': 'head_line',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Headline',
+      '9': 0,
+      '10': 'headLine'
+    },
+    {
+      '1': 'ogv_title',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.OgvTitle',
+      '9': 0,
+      '10': 'ogvTitle'
+    },
+    {
+      '1': 'honor',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Honor',
+      '9': 0,
+      '10': 'honor'
+    },
+    {
+      '1': 'list',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.UserList',
+      '9': 0,
+      '10': 'list'
+    },
+    {
+      '1': 'staffs',
+      '3': 9,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Staffs',
+      '9': 0,
+      '10': 'staffs'
+    },
+    {
+      '1': 'activity_reserve',
+      '3': 10,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ActivityReserve',
+      '9': 0,
+      '10': 'activityReserve'
+    },
+    {
+      '1': 'live_order',
+      '3': 11,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.LiveOrder',
+      '9': 0,
+      '10': 'liveOrder'
+    },
+    {
+      '1': 'section_data',
+      '3': 12,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.SectionData',
+      '9': 0,
+      '10': 'sectionData'
+    },
+    {
+      '1': 'delivery_data',
+      '3': 13,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.DeliveryData',
+      '9': 0,
+      '10': 'deliveryData'
+    },
+    {
+      '1': 'follow_layer',
+      '3': 14,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.FollowLayer',
+      '9': 0,
+      '10': 'followLayer'
+    },
+    {
+      '1': 'ogv_seasons',
+      '3': 15,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.OgvSeasons',
+      '9': 0,
+      '10': 'ogvSeasons'
+    },
+    {
+      '1': 'ugc_season',
+      '3': 16,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.UgcSeasons',
+      '9': 0,
+      '10': 'ugcSeason'
+    },
+    {
+      '1': 'ogv_live_reserve',
+      '3': 17,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.OgvLiveReserve',
+      '9': 0,
+      '10': 'ogvLiveReserve'
+    },
+    {
+      '1': 'combination_ep',
+      '3': 18,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.CombinationEp',
+      '9': 0,
+      '10': 'combinationEp'
+    },
+    {
+      '1': 'sponsor',
+      '3': 19,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Sponsor',
+      '9': 0,
+      '10': 'sponsor'
+    },
+    {
+      '1': 'activity_entrance_module',
+      '3': 20,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ActivityEntranceModule',
+      '9': 0,
+      '10': 'activityEntranceModule'
+    },
+    {
+      '1': 'serial_season',
+      '3': 21,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.SerialSeason',
+      '9': 0,
+      '10': 'serialSeason'
+    },
+    {
+      '1': 'relates',
+      '3': 22,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Relates',
+      '9': 0,
+      '10': 'relates'
+    },
+    {
+      '1': 'banner',
+      '3': 23,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Banner',
+      '9': 0,
+      '10': 'banner'
+    },
+    {
+      '1': 'audio',
+      '3': 24,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Audio',
+      '9': 0,
+      '10': 'audio'
+    },
+    {
+      '1': 'like_comment',
+      '3': 25,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.LikeComment',
+      '9': 0,
+      '10': 'likeComment'
+    },
+    {
+      '1': 'attention_recommend',
+      '3': 26,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.AttentionRecommend',
+      '9': 0,
+      '10': 'attentionRecommend'
+    },
+    {
+      '1': 'covenanter',
+      '3': 27,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Covenanter',
+      '9': 0,
+      '10': 'covenanter'
+    },
+    {
+      '1': 'special_tag',
+      '3': 28,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.SpecialTag',
+      '9': 0,
+      '10': 'specialTag'
+    },
+    {
+      '1': 'up_data_module',
+      '3': 29,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.UpDataModule',
+      '9': 0,
+      '10': 'upDataModule'
+    },
+    {
+      '1': 'profession_approval',
+      '3': 30,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ProfessionApproval',
+      '9': 0,
+      '10': 'professionApproval'
+    },
+    {
+      '1': 'pugv_shopping_notice',
+      '3': 31,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvShoppingNotice',
+      '9': 0,
+      '10': 'pugvShoppingNotice'
+    },
+    {
+      '1': 'pugv_faq',
+      '3': 32,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvFaq',
+      '9': 0,
+      '10': 'pugvFaq'
+    },
+    {
+      '1': 'pugv_season_description',
+      '3': 33,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonDescription',
+      '9': 0,
+      '10': 'pugvSeasonDescription'
+    },
+    {
+      '1': 'pugv_season_recommend',
+      '3': 34,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonRecommend',
+      '9': 0,
+      '10': 'pugvSeasonRecommend'
+    },
+    {
+      '1': 'pugv_season_publisher',
+      '3': 35,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonPublisher',
+      '9': 0,
+      '10': 'pugvSeasonPublisher'
+    },
+    {
+      '1': 'pugv_season_selection',
+      '3': 36,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonSelection',
+      '9': 0,
+      '10': 'pugvSeasonSelection'
+    },
+    {
+      '1': 'pugv_season_primary_info',
+      '3': 37,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonPrimaryInfo',
+      '9': 0,
+      '10': 'pugvSeasonPrimaryInfo'
+    },
+    {
+      '1': 'pugv_cooperation_application',
+      '3': 38,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvCooperationApplication',
+      '9': 0,
+      '10': 'pugvCooperationApplication'
+    },
+    {
+      '1': 'up_video_tool',
+      '3': 39,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.UpVideoTool',
+      '9': 0,
+      '10': 'upVideoTool'
+    },
+    {
+      '1': 'pugv_zone',
+      '3': 40,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvZone',
+      '9': 0,
+      '10': 'pugvZone'
+    },
+    {
+      '1': 'pugv_series',
+      '3': 41,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeries',
+      '9': 0,
+      '10': 'pugvSeries'
+    },
+    {
+      '1': 'pugv_package',
+      '3': 42,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvPackage',
+      '9': 0,
+      '10': 'pugvPackage'
+    },
+    {
+      '1': 'activity_star_rail',
+      '3': 43,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ActivityStarRail',
+      '9': 0,
+      '10': 'activityStarRail'
+    },
+    {
+      '1': 'activity_iframe',
+      '3': 44,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ActivityIFrame',
+      '9': 0,
+      '10': 'activityIframe'
+    },
+    {
+      '1': 'play_list',
+      '3': 45,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PlayList',
+      '9': 0,
+      '10': 'playList'
+    },
+    {
+      '1': 'merchandise',
+      '3': 46,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Merchandise',
+      '9': 0,
+      '10': 'merchandise'
+    },
+    {
+      '1': 'activity_guidance_bar',
+      '3': 47,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ActivityGuidanceBar',
+      '9': 0,
+      '10': 'activityGuidanceBar'
+    },
+    {
+      '1': 'type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.viewunite.common.ModuleType',
+      '10': 'type'
+    },
   ],
   '8': [
     {'1': 'data'},
@@ -1905,8 +2835,8 @@ const MultiViewEp$json = {
 };
 
 /// Descriptor for `MultiViewEp`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List multiViewEpDescriptor = $convert.base64Decode(
-    'CgtNdWx0aVZpZXdFcBITCgVlcF9pZBgBIAEoA1IEZXBJZA==');
+final $typed_data.Uint8List multiViewEpDescriptor =
+    $convert.base64Decode('CgtNdWx0aVZpZXdFcBITCgVlcF9pZBgBIAEoA1IEZXBJZA==');
 
 @$core.Deprecated('Use neutralDescriptor instead')
 const Neutral$json = {
@@ -1961,7 +2891,14 @@ const OgvIntroduction$json = {
   '2': [
     {'1': 'followers', '3': 1, '4': 1, '5': 9, '10': 'followers'},
     {'1': 'score', '3': 2, '4': 1, '5': 9, '10': 'score'},
-    {'1': 'play_data', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.StatInfo', '10': 'playData'},
+    {
+      '1': 'play_data',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.StatInfo',
+      '10': 'playData'
+    },
     {'1': 'score_color', '3': 4, '4': 1, '5': 9, '10': 'scoreColor'},
     {'1': 'score_night_color', '3': 5, '4': 1, '5': 9, '10': 'scoreNightColor'},
     {'1': 'text_color', '3': 6, '4': 1, '5': 9, '10': 'textColor'},
@@ -1988,7 +2925,13 @@ const OgvLiveReserve$json = {
     {'1': 'night_icon', '3': 4, '4': 1, '5': 9, '10': 'nightIcon'},
     {'1': 'click_button', '3': 5, '4': 1, '5': 9, '10': 'clickButton'},
     {'1': 'link', '3': 6, '4': 1, '5': 9, '10': 'link'},
-    {'1': 'follow_video_is_reserve_live', '3': 7, '4': 1, '5': 5, '10': 'followVideoIsReserveLive'},
+    {
+      '1': 'follow_video_is_reserve_live',
+      '3': 7,
+      '4': 1,
+      '5': 5,
+      '10': 'followVideoIsReserveLive'
+    },
     {'1': 'bg_color', '3': 8, '4': 1, '5': 9, '10': 'bgColor'},
     {'1': 'night_bg_color', '3': 9, '4': 1, '5': 9, '10': 'nightBgColor'},
     {'1': 'text_color', '3': 10, '4': 1, '5': 9, '10': 'textColor'},
@@ -1996,12 +2939,31 @@ const OgvLiveReserve$json = {
     {'1': 'bt_bg_color', '3': 12, '4': 1, '5': 9, '10': 'btBgColor'},
     {'1': 'bt_frame_color', '3': 13, '4': 1, '5': 9, '10': 'btFrameColor'},
     {'1': 'night_bt_bg_color', '3': 14, '4': 1, '5': 9, '10': 'nightBtBgColor'},
-    {'1': 'night_bt_frame_color', '3': 15, '4': 1, '5': 9, '10': 'nightBtFrameColor'},
+    {
+      '1': 'night_bt_frame_color',
+      '3': 15,
+      '4': 1,
+      '5': 9,
+      '10': 'nightBtFrameColor'
+    },
     {'1': 'active_type', '3': 16, '4': 1, '5': 5, '10': 'activeType'},
     {'1': 'reserve_status', '3': 17, '4': 1, '5': 5, '10': 'reserveStatus'},
     {'1': 'bt_text_color', '3': 18, '4': 1, '5': 9, '10': 'btTextColor'},
-    {'1': 'night_bt_text_color', '3': 19, '4': 1, '5': 9, '10': 'nightBtTextColor'},
-    {'1': 'report', '3': 20, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.OgvLiveReserve.ReportEntry', '10': 'report'},
+    {
+      '1': 'night_bt_text_color',
+      '3': 19,
+      '4': 1,
+      '5': 9,
+      '10': 'nightBtTextColor'
+    },
+    {
+      '1': 'report',
+      '3': 20,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.OgvLiveReserve.ReportEntry',
+      '10': 'report'
+    },
     {'1': 'live_status', '3': 21, '4': 1, '5': 5, '10': 'liveStatus'},
   ],
   '3': [OgvLiveReserve_ReportEntry$json],
@@ -2041,8 +3003,22 @@ const OgvSeasons$json = {
   '1': 'OgvSeasons',
   '2': [
     {'1': 'title', '3': 1, '4': 1, '5': 9, '10': 'title'},
-    {'1': 'serial_season', '3': 2, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.SerialSeason', '10': 'serialSeason'},
-    {'1': 'style', '3': 3, '4': 1, '5': 14, '6': '.bilibili.app.viewunite.common.SerialSeasonCoverStyle', '10': 'style'},
+    {
+      '1': 'serial_season',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.SerialSeason',
+      '10': 'serialSeason'
+    },
+    {
+      '1': 'style',
+      '3': 3,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.viewunite.common.SerialSeasonCoverStyle',
+      '10': 'style'
+    },
   ],
 };
 
@@ -2058,15 +3034,54 @@ const OgvTitle$json = {
   '1': 'OgvTitle',
   '2': [
     {'1': 'title', '3': 1, '4': 1, '5': 9, '10': 'title'},
-    {'1': 'badge_info', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.BadgeInfo', '10': 'badgeInfo'},
-    {'1': 'is_show_btn_animation', '3': 3, '4': 1, '5': 5, '10': 'isShowBtnAnimation'},
-    {'1': 'follow_video_is_reserve_live', '3': 4, '4': 1, '5': 5, '10': 'followVideoIsReserveLive'},
+    {
+      '1': 'badge_info',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.BadgeInfo',
+      '10': 'badgeInfo'
+    },
+    {
+      '1': 'is_show_btn_animation',
+      '3': 3,
+      '4': 1,
+      '5': 5,
+      '10': 'isShowBtnAnimation'
+    },
+    {
+      '1': 'follow_video_is_reserve_live',
+      '3': 4,
+      '4': 1,
+      '5': 5,
+      '10': 'followVideoIsReserveLive'
+    },
     {'1': 'reserve_id', '3': 5, '4': 1, '5': 3, '10': 'reserveId'},
-    {'1': 'title_delivery_button', '3': 6, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.TitleDeliveryButton', '10': 'titleDeliveryButton'},
-    {'1': 'channel_redirect_entry_button', '3': 7, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.TitleDeliveryButton', '10': 'channelRedirectEntryButton'},
+    {
+      '1': 'title_delivery_button',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.TitleDeliveryButton',
+      '10': 'titleDeliveryButton'
+    },
+    {
+      '1': 'channel_redirect_entry_button',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.TitleDeliveryButton',
+      '10': 'channelRedirectEntryButton'
+    },
     {'1': 'title_img', '3': 8, '4': 1, '5': 9, '10': 'titleImg'},
     {'1': 'title_img_night', '3': 9, '4': 1, '5': 9, '10': 'titleImgNight'},
-    {'1': 'webp_dynamic_pic_title_cycle_num', '3': 10, '4': 1, '5': 5, '10': 'webpDynamicPicTitleCycleNum'},
+    {
+      '1': 'webp_dynamic_pic_title_cycle_num',
+      '3': 10,
+      '4': 1,
+      '5': 5,
+      '10': 'webpDynamicPicTitleCycleNum'
+    },
   ],
 };
 
@@ -2103,24 +3118,73 @@ final $typed_data.Uint8List operateActionDescriptor = $convert.base64Decode(
 const Owner$json = {
   '1': 'Owner',
   '2': [
-    {'1': 'avatar', '3': 1, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.AvatarItem', '10': 'avatar'},
+    {
+      '1': 'avatar',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.AvatarItem',
+      '10': 'avatar'
+    },
     {'1': 'url', '3': 2, '4': 1, '5': 9, '10': 'url'},
     {'1': 'title', '3': 3, '4': 1, '5': 9, '10': 'title'},
     {'1': 'fans', '3': 4, '4': 1, '5': 9, '10': 'fans'},
     {'1': 'arc_count', '3': 5, '4': 1, '5': 9, '10': 'arcCount'},
-    {'1': 'attention', '3': 6, '4': 1, '5': 14, '6': '.bilibili.app.viewunite.common.AttentionRelationStatus', '10': 'attention'},
-    {'1': 'attention_relation', '3': 7, '4': 1, '5': 14, '6': '.bilibili.app.viewunite.common.AttentionRelationStatus', '10': 'attentionRelation'},
+    {
+      '1': 'attention',
+      '3': 6,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.viewunite.common.AttentionRelationStatus',
+      '10': 'attention'
+    },
+    {
+      '1': 'attention_relation',
+      '3': 7,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.viewunite.common.AttentionRelationStatus',
+      '10': 'attentionRelation'
+    },
     {'1': 'pub_location', '3': 8, '4': 1, '5': 9, '10': 'pubLocation'},
-    {'1': 'vip', '3': 9, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Vip', '10': 'vip'},
+    {
+      '1': 'vip',
+      '3': 9,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Vip',
+      '10': 'vip'
+    },
     {'1': 'title_url', '3': 10, '4': 1, '5': 9, '10': 'titleUrl'},
     {'1': 'face', '3': 11, '4': 1, '5': 9, '10': 'face'},
     {'1': 'mid', '3': 12, '4': 1, '5': 3, '10': 'mid'},
-    {'1': 'official_verify', '3': 13, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.OfficialVerify', '10': 'officialVerify'},
-    {'1': 'live', '3': 14, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Live', '10': 'live'},
+    {
+      '1': 'official_verify',
+      '3': 13,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.OfficialVerify',
+      '10': 'officialVerify'
+    },
+    {
+      '1': 'live',
+      '3': 14,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Live',
+      '10': 'live'
+    },
     {'1': 'fans_num', '3': 15, '4': 1, '5': 3, '10': 'fansNum'},
     {'1': 'assists', '3': 16, '4': 3, '5': 3, '10': 'assists'},
     {'1': 'season_count', '3': 17, '4': 1, '5': 9, '10': 'seasonCount'},
-    {'1': 'name_render', '3': 18, '4': 1, '5': 11, '6': '.bilibili.account.service.v1.NameRender', '10': 'nameRender'},
+    {
+      '1': 'name_render',
+      '3': 18,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.account.service.v1.NameRender',
+      '10': 'nameRender'
+    },
   ],
 };
 
@@ -2150,7 +3214,14 @@ const Page$json = {
     {'1': 'part', '3': 2, '4': 1, '5': 9, '10': 'part'},
     {'1': 'duration', '3': 3, '4': 1, '5': 3, '10': 'duration'},
     {'1': 'desc', '3': 4, '4': 1, '5': 9, '10': 'desc'},
-    {'1': 'dimension', '3': 5, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Dimension', '10': 'dimension'},
+    {
+      '1': 'dimension',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Dimension',
+      '10': 'dimension'
+    },
     {'1': 'dl_title', '3': 6, '4': 1, '5': 9, '10': 'dlTitle'},
     {'1': 'dl_subtitle', '3': 7, '4': 1, '5': 9, '10': 'dlSubtitle'},
   ],
@@ -2185,12 +3256,33 @@ const PlayList$json = {
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 5, '10': 'id'},
     {'1': 'title', '3': 2, '4': 1, '5': 9, '10': 'title'},
-    {'1': 'upper', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Owner', '10': 'upper'},
+    {
+      '1': 'upper',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Owner',
+      '10': 'upper'
+    },
     {'1': 'desc', '3': 4, '4': 1, '5': 9, '10': 'desc'},
     {'1': 'more_title', '3': 5, '4': 1, '5': 9, '10': 'moreTitle'},
-    {'1': 'seasons', '3': 6, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.PlayListSeason', '10': 'seasons'},
+    {
+      '1': 'seasons',
+      '3': 6,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PlayListSeason',
+      '10': 'seasons'
+    },
     {'1': 'more_playlist', '3': 7, '4': 1, '5': 8, '10': 'morePlaylist'},
-    {'1': 'report', '3': 8, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.PlayList.ReportEntry', '10': 'report'},
+    {
+      '1': 'report',
+      '3': 8,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PlayList.ReportEntry',
+      '10': 'report'
+    },
     {'1': 'more_playlist_url', '3': 9, '4': 1, '5': 9, '10': 'morePlaylistUrl'},
   ],
   '3': [PlayList_ReportEntry$json],
@@ -2228,7 +3320,14 @@ const PlayListSeason$json = {
     {'1': 'cover', '3': 4, '4': 1, '5': 9, '10': 'cover'},
     {'1': 'link', '3': 5, '4': 1, '5': 9, '10': 'link'},
     {'1': 'score', '3': 6, '4': 1, '5': 9, '10': 'score'},
-    {'1': 'report', '3': 7, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.PlayListSeason.ReportEntry', '10': 'report'},
+    {
+      '1': 'report',
+      '3': 7,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PlayListSeason.ReportEntry',
+      '10': 'report'
+    },
   ],
   '3': [PlayListSeason_ReportEntry$json],
 };
@@ -2257,7 +3356,13 @@ const PlayerAnimation$json = {
   '1': 'PlayerAnimation',
   '2': [
     {'1': 'player_icon', '3': 1, '4': 1, '5': 9, '10': 'playerIcon'},
-    {'1': 'player_triple_icon', '3': 2, '4': 1, '5': 9, '10': 'playerTripleIcon'},
+    {
+      '1': 'player_triple_icon',
+      '3': 2,
+      '4': 1,
+      '5': 9,
+      '10': 'playerTripleIcon'
+    },
   ],
 };
 
@@ -2319,7 +3424,14 @@ const ProfessionHonorExtend$json = {
   '2': [
     {'1': 'count', '3': 1, '4': 1, '5': 3, '10': 'count'},
     {'1': 'self_grant', '3': 2, '4': 1, '5': 8, '10': 'selfGrant'},
-    {'1': 'popup', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.ProfessionPopup', '10': 'popup'},
+    {
+      '1': 'popup',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ProfessionPopup',
+      '10': 'popup'
+    },
   ],
 };
 
@@ -2356,17 +3468,32 @@ const PugvCooperationApplication$json = {
 };
 
 /// Descriptor for `PugvCooperationApplication`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List pugvCooperationApplicationDescriptor = $convert.base64Decode(
-    'ChpQdWd2Q29vcGVyYXRpb25BcHBsaWNhdGlvbhISCgRsaW5rGAEgASgJUgRsaW5rEhQKBXRpdG'
-    'xlGAIgASgJUgV0aXRsZRIaCghzdWJ0aXRsZRgDIAEoCVIIc3VidGl0bGUSHwoLYnV0dG9uX3Rl'
-    'eHQYBCABKAlSCmJ1dHRvblRleHQSEgoEaWNvbhgFIAEoCVIEaWNvbg==');
+final $typed_data.Uint8List pugvCooperationApplicationDescriptor =
+    $convert.base64Decode(
+        'ChpQdWd2Q29vcGVyYXRpb25BcHBsaWNhdGlvbhISCgRsaW5rGAEgASgJUgRsaW5rEhQKBXRpdG'
+        'xlGAIgASgJUgV0aXRsZRIaCghzdWJ0aXRsZRgDIAEoCVIIc3VidGl0bGUSHwoLYnV0dG9uX3Rl'
+        'eHQYBCABKAlSCmJ1dHRvblRleHQSEgoEaWNvbhgFIAEoCVIEaWNvbg==');
 
 @$core.Deprecated('Use pugvFaqDescriptor instead')
 const PugvFaq$json = {
   '1': 'PugvFaq',
   '2': [
-    {'1': 'nav', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonNav', '10': 'nav'},
-    {'1': 'contents', '3': 2, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.PugvFaqContent', '10': 'contents'},
+    {
+      '1': 'nav',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonNav',
+      '10': 'nav'
+    },
+    {
+      '1': 'contents',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvFaqContent',
+      '10': 'contents'
+    },
   ],
 };
 
@@ -2395,8 +3522,22 @@ final $typed_data.Uint8List pugvFaqContentDescriptor = $convert.base64Decode(
 const PugvPackage$json = {
   '1': 'PugvPackage',
   '2': [
-    {'1': 'nav', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonNav', '10': 'nav'},
-    {'1': 'contents', '3': 2, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.PugvPackageItem', '10': 'contents'},
+    {
+      '1': 'nav',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonNav',
+      '10': 'nav'
+    },
+    {
+      '1': 'contents',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvPackageItem',
+      '10': 'contents'
+    },
   ],
 };
 
@@ -2413,12 +3554,31 @@ const PugvPackageItem$json = {
     {'1': 'product_id', '3': 1, '4': 1, '5': 3, '10': 'productId'},
     {'1': 'cover', '3': 2, '4': 1, '5': 9, '10': 'cover'},
     {'1': 'title', '3': 3, '4': 1, '5': 9, '10': 'title'},
-    {'1': 'discount_price_desc', '3': 4, '4': 1, '5': 9, '10': 'discountPriceDesc'},
-    {'1': 'original_price_desc', '3': 5, '4': 1, '5': 9, '10': 'originalPriceDesc'},
+    {
+      '1': 'discount_price_desc',
+      '3': 4,
+      '4': 1,
+      '5': 9,
+      '10': 'discountPriceDesc'
+    },
+    {
+      '1': 'original_price_desc',
+      '3': 5,
+      '4': 1,
+      '5': 9,
+      '10': 'originalPriceDesc'
+    },
     {'1': 'desc', '3': 6, '4': 1, '5': 9, '10': 'desc'},
     {'1': 'link', '3': 7, '4': 1, '5': 9, '10': 'link'},
     {'1': 'season_count', '3': 8, '4': 1, '5': 3, '10': 'seasonCount'},
-    {'1': 'sale_info', '3': 9, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvPackageSaleInfo', '10': 'saleInfo'},
+    {
+      '1': 'sale_info',
+      '3': 9,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvPackageSaleInfo',
+      '10': 'saleInfo'
+    },
   ],
 };
 
@@ -2471,10 +3631,40 @@ final $typed_data.Uint8List pugvSeasonCooperatorDescriptor = $convert.base64Deco
 const PugvSeasonDescription$json = {
   '1': 'PugvSeasonDescription',
   '2': [
-    {'1': 'text', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonDescriptionText', '9': 0, '10': 'text'},
-    {'1': 'image', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonDescriptionImage', '9': 0, '10': 'image'},
-    {'1': 'nav', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonNav', '10': 'nav'},
-    {'1': 'type', '3': 2, '4': 1, '5': 14, '6': '.bilibili.app.viewunite.common.PugvSeasonDescriptionType', '10': 'type'},
+    {
+      '1': 'text',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonDescriptionText',
+      '9': 0,
+      '10': 'text'
+    },
+    {
+      '1': 'image',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonDescriptionImage',
+      '9': 0,
+      '10': 'image'
+    },
+    {
+      '1': 'nav',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonNav',
+      '10': 'nav'
+    },
+    {
+      '1': 'type',
+      '3': 2,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonDescriptionType',
+      '10': 'type'
+    },
   ],
   '8': [
     {'1': 'content'},
@@ -2495,7 +3685,14 @@ final $typed_data.Uint8List pugvSeasonDescriptionDescriptor = $convert.base64Dec
 const PugvSeasonDescriptionImage$json = {
   '1': 'PugvSeasonDescriptionImage',
   '2': [
-    {'1': 'images', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonDescriptionImageItem', '10': 'images'},
+    {
+      '1': 'images',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonDescriptionImageItem',
+      '10': 'images'
+    },
     {'1': 'folded', '3': 2, '4': 1, '5': 8, '10': 'folded'},
     {'1': 'fold_ratio', '3': 3, '4': 1, '5': 1, '10': 'foldRatio'},
   ],
@@ -2518,9 +3715,10 @@ const PugvSeasonDescriptionImageItem$json = {
 };
 
 /// Descriptor for `PugvSeasonDescriptionImageItem`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List pugvSeasonDescriptionImageItemDescriptor = $convert.base64Decode(
-    'Ch5QdWd2U2Vhc29uRGVzY3JpcHRpb25JbWFnZUl0ZW0SGwoJaW1hZ2VfdXJsGAEgASgJUghpbW'
-    'FnZVVybBIhCgxhc3BlY3RfcmF0aW8YAiABKAFSC2FzcGVjdFJhdGlv');
+final $typed_data.Uint8List pugvSeasonDescriptionImageItemDescriptor =
+    $convert.base64Decode(
+        'Ch5QdWd2U2Vhc29uRGVzY3JpcHRpb25JbWFnZUl0ZW0SGwoJaW1hZ2VfdXJsGAEgASgJUghpbW'
+        'FnZVVybBIhCgxhc3BlY3RfcmF0aW8YAiABKAFSC2FzcGVjdFJhdGlv');
 
 @$core.Deprecated('Use pugvSeasonDescriptionTextDescriptor instead')
 const PugvSeasonDescriptionText$json = {
@@ -2531,8 +3729,9 @@ const PugvSeasonDescriptionText$json = {
 };
 
 /// Descriptor for `PugvSeasonDescriptionText`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List pugvSeasonDescriptionTextDescriptor = $convert.base64Decode(
-    'ChlQdWd2U2Vhc29uRGVzY3JpcHRpb25UZXh0EhIKBHRleHQYASABKAlSBHRleHQ=');
+final $typed_data.Uint8List pugvSeasonDescriptionTextDescriptor =
+    $convert.base64Decode(
+        'ChlQdWd2U2Vhc29uRGVzY3JpcHRpb25UZXh0EhIKBHRleHQYASABKAlSBHRleHQ=');
 
 @$core.Deprecated('Use pugvSeasonNavDescriptor instead')
 const PugvSeasonNav$json = {
@@ -2560,9 +3759,10 @@ const PugvSeasonPrimaryBadge$json = {
 };
 
 /// Descriptor for `PugvSeasonPrimaryBadge`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List pugvSeasonPrimaryBadgeDescriptor = $convert.base64Decode(
-    'ChZQdWd2U2Vhc29uUHJpbWFyeUJhZGdlEhIKBGljb24YASABKAlSBGljb24SEgoEbGluaxgCIA'
-    'EoCVIEbGluaxIdCgpuaWdodF9pY29uGAMgASgJUgluaWdodEljb24=');
+final $typed_data.Uint8List pugvSeasonPrimaryBadgeDescriptor =
+    $convert.base64Decode(
+        'ChZQdWd2U2Vhc29uUHJpbWFyeUJhZGdlEhIKBGljb24YASABKAlSBGljb24SEgoEbGluaxgCIA'
+        'EoCVIEbGluaxIdCgpuaWdodF9pY29uGAMgASgJUgluaWdodEljb24=');
 
 @$core.Deprecated('Use pugvSeasonPrimaryCustomInfoDescriptor instead')
 const PugvSeasonPrimaryCustomInfo$json = {
@@ -2573,9 +3773,10 @@ const PugvSeasonPrimaryCustomInfo$json = {
 };
 
 /// Descriptor for `PugvSeasonPrimaryCustomInfo`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List pugvSeasonPrimaryCustomInfoDescriptor = $convert.base64Decode(
-    'ChtQdWd2U2Vhc29uUHJpbWFyeUN1c3RvbUluZm8SHwoLZXhwaXJ5X2luZm8YASABKAlSCmV4cG'
-    'lyeUluZm8=');
+final $typed_data.Uint8List pugvSeasonPrimaryCustomInfoDescriptor =
+    $convert.base64Decode(
+        'ChtQdWd2U2Vhc29uUHJpbWFyeUN1c3RvbUluZm8SHwoLZXhwaXJ5X2luZm8YASABKAlSCmV4cG'
+        'lyeUluZm8=');
 
 @$core.Deprecated('Use pugvSeasonPrimaryHotRankDescriptor instead')
 const PugvSeasonPrimaryHotRank$json = {
@@ -2587,9 +3788,10 @@ const PugvSeasonPrimaryHotRank$json = {
 };
 
 /// Descriptor for `PugvSeasonPrimaryHotRank`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List pugvSeasonPrimaryHotRankDescriptor = $convert.base64Decode(
-    'ChhQdWd2U2Vhc29uUHJpbWFyeUhvdFJhbmsSEgoEdGV4dBgBIAEoCVIEdGV4dBISCgRsaW5rGA'
-    'IgASgJUgRsaW5r');
+final $typed_data.Uint8List pugvSeasonPrimaryHotRankDescriptor =
+    $convert.base64Decode(
+        'ChhQdWd2U2Vhc29uUHJpbWFyeUhvdFJhbmsSEgoEdGV4dBgBIAEoCVIEdGV4dBISCgRsaW5rGA'
+        'IgASgJUgRsaW5r');
 
 @$core.Deprecated('Use pugvSeasonPrimaryInfoDescriptor instead')
 const PugvSeasonPrimaryInfo$json = {
@@ -2597,12 +3799,47 @@ const PugvSeasonPrimaryInfo$json = {
   '2': [
     {'1': 'title', '3': 1, '4': 1, '5': 9, '10': 'title'},
     {'1': 'subtitle', '3': 2, '4': 1, '5': 9, '10': 'subtitle'},
-    {'1': 'stat_info', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.StatInfo', '10': 'statInfo'},
-    {'1': 'rank_info', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonPrimaryRankInfo', '10': 'rankInfo'},
-    {'1': 'sell_point_info', '3': 5, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonPrimarySellPointInfo', '10': 'sellPointInfo'},
-    {'1': 'custom_info', '3': 6, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonPrimaryCustomInfo', '10': 'customInfo'},
+    {
+      '1': 'stat_info',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.StatInfo',
+      '10': 'statInfo'
+    },
+    {
+      '1': 'rank_info',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonPrimaryRankInfo',
+      '10': 'rankInfo'
+    },
+    {
+      '1': 'sell_point_info',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonPrimarySellPointInfo',
+      '10': 'sellPointInfo'
+    },
+    {
+      '1': 'custom_info',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonPrimaryCustomInfo',
+      '10': 'customInfo'
+    },
     {'1': 'show_payment', '3': 7, '4': 1, '5': 8, '10': 'showPayment'},
-    {'1': 'badge', '3': 8, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonPrimaryBadge', '10': 'badge'},
+    {
+      '1': 'badge',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonPrimaryBadge',
+      '10': 'badge'
+    },
   ],
 };
 
@@ -2623,7 +3860,14 @@ final $typed_data.Uint8List pugvSeasonPrimaryInfoDescriptor = $convert.base64Dec
 const PugvSeasonPrimaryRankInfo$json = {
   '1': 'PugvSeasonPrimaryRankInfo',
   '2': [
-    {'1': 'hot_rank', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonPrimaryHotRank', '10': 'hotRank'},
+    {
+      '1': 'hot_rank',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonPrimaryHotRank',
+      '10': 'hotRank'
+    },
   ],
 };
 
@@ -2642,34 +3886,71 @@ const PugvSeasonPrimarySellPoint$json = {
 };
 
 /// Descriptor for `PugvSeasonPrimarySellPoint`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List pugvSeasonPrimarySellPointDescriptor = $convert.base64Decode(
-    'ChpQdWd2U2Vhc29uUHJpbWFyeVNlbGxQb2ludBIUCgV0aXRsZRgBIAEoCVIFdGl0bGUSFgoGZG'
-    'V0YWlsGAIgASgJUgZkZXRhaWw=');
+final $typed_data.Uint8List pugvSeasonPrimarySellPointDescriptor =
+    $convert.base64Decode(
+        'ChpQdWd2U2Vhc29uUHJpbWFyeVNlbGxQb2ludBIUCgV0aXRsZRgBIAEoCVIFdGl0bGUSFgoGZG'
+        'V0YWlsGAIgASgJUgZkZXRhaWw=');
 
 @$core.Deprecated('Use pugvSeasonPrimarySellPointInfoDescriptor instead')
 const PugvSeasonPrimarySellPointInfo$json = {
   '1': 'PugvSeasonPrimarySellPointInfo',
   '2': [
-    {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.app.viewunite.common.PugvSeasonPrimarySellPointType', '10': 'type'},
-    {'1': 'sell_points', '3': 2, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonPrimarySellPoint', '10': 'sellPoints'},
+    {
+      '1': 'type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonPrimarySellPointType',
+      '10': 'type'
+    },
+    {
+      '1': 'sell_points',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonPrimarySellPoint',
+      '10': 'sellPoints'
+    },
   ],
 };
 
 /// Descriptor for `PugvSeasonPrimarySellPointInfo`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List pugvSeasonPrimarySellPointInfoDescriptor = $convert.base64Decode(
-    'Ch5QdWd2U2Vhc29uUHJpbWFyeVNlbGxQb2ludEluZm8SUQoEdHlwZRgBIAEoDjI9LmJpbGliaW'
-    'xpLmFwcC52aWV3dW5pdGUuY29tbW9uLlB1Z3ZTZWFzb25QcmltYXJ5U2VsbFBvaW50VHlwZVIE'
-    'dHlwZRJaCgtzZWxsX3BvaW50cxgCIAMoCzI5LmJpbGliaWxpLmFwcC52aWV3dW5pdGUuY29tbW'
-    '9uLlB1Z3ZTZWFzb25QcmltYXJ5U2VsbFBvaW50UgpzZWxsUG9pbnRz');
+final $typed_data.Uint8List pugvSeasonPrimarySellPointInfoDescriptor =
+    $convert.base64Decode(
+        'Ch5QdWd2U2Vhc29uUHJpbWFyeVNlbGxQb2ludEluZm8SUQoEdHlwZRgBIAEoDjI9LmJpbGliaW'
+        'xpLmFwcC52aWV3dW5pdGUuY29tbW9uLlB1Z3ZTZWFzb25QcmltYXJ5U2VsbFBvaW50VHlwZVIE'
+        'dHlwZRJaCgtzZWxsX3BvaW50cxgCIAMoCzI5LmJpbGliaWxpLmFwcC52aWV3dW5pdGUuY29tbW'
+        '9uLlB1Z3ZTZWFzb25QcmltYXJ5U2VsbFBvaW50UgpzZWxsUG9pbnRz');
 
 @$core.Deprecated('Use pugvSeasonPublisherDescriptor instead')
 const PugvSeasonPublisher$json = {
   '1': 'PugvSeasonPublisher',
   '2': [
-    {'1': 'nav', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonNav', '10': 'nav'},
+    {
+      '1': 'nav',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonNav',
+      '10': 'nav'
+    },
     {'1': 'publisher_desc', '3': 2, '4': 1, '5': 9, '10': 'publisherDesc'},
-    {'1': 'cooperators', '3': 3, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonCooperator', '10': 'cooperators'},
-    {'1': 'sku_content', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonPublisherSkuContent', '10': 'skuContent'},
+    {
+      '1': 'cooperators',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonCooperator',
+      '10': 'cooperators'
+    },
+    {
+      '1': 'sku_content',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonPublisherSkuContent',
+      '10': 'skuContent'
+    },
   ],
 };
 
@@ -2687,15 +3968,23 @@ const PugvSeasonPublisherSkuContent$json = {
   '1': 'PugvSeasonPublisherSkuContent',
   '2': [
     {'1': 'title', '3': 1, '4': 1, '5': 9, '10': 'title'},
-    {'1': 'items', '3': 2, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonPublisherSkuContentItem', '10': 'items'},
+    {
+      '1': 'items',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonPublisherSkuContentItem',
+      '10': 'items'
+    },
   ],
 };
 
 /// Descriptor for `PugvSeasonPublisherSkuContent`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List pugvSeasonPublisherSkuContentDescriptor = $convert.base64Decode(
-    'Ch1QdWd2U2Vhc29uUHVibGlzaGVyU2t1Q29udGVudBIUCgV0aXRsZRgBIAEoCVIFdGl0bGUSVg'
-    'oFaXRlbXMYAiADKAsyQC5iaWxpYmlsaS5hcHAudmlld3VuaXRlLmNvbW1vbi5QdWd2U2Vhc29u'
-    'UHVibGlzaGVyU2t1Q29udGVudEl0ZW1SBWl0ZW1z');
+final $typed_data.Uint8List pugvSeasonPublisherSkuContentDescriptor =
+    $convert.base64Decode(
+        'Ch1QdWd2U2Vhc29uUHVibGlzaGVyU2t1Q29udGVudBIUCgV0aXRsZRgBIAEoCVIFdGl0bGUSVg'
+        'oFaXRlbXMYAiADKAsyQC5iaWxpYmlsaS5hcHAudmlld3VuaXRlLmNvbW1vbi5QdWd2U2Vhc29u'
+        'UHVibGlzaGVyU2t1Q29udGVudEl0ZW1SBWl0ZW1z');
 
 @$core.Deprecated('Use pugvSeasonPublisherSkuContentItemDescriptor instead')
 const PugvSeasonPublisherSkuContentItem$json = {
@@ -2708,19 +3997,48 @@ const PugvSeasonPublisherSkuContentItem$json = {
 };
 
 /// Descriptor for `PugvSeasonPublisherSkuContentItem`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List pugvSeasonPublisherSkuContentItemDescriptor = $convert.base64Decode(
-    'CiFQdWd2U2Vhc29uUHVibGlzaGVyU2t1Q29udGVudEl0ZW0SFAoFdGl0bGUYASABKAlSBXRpdG'
-    'xlEhsKCXNlYXNvbl9pZBgCIAEoA1IIc2Vhc29uSWQSGgoIc2VsZWN0ZWQYAyABKAhSCHNlbGVj'
-    'dGVk');
+final $typed_data.Uint8List pugvSeasonPublisherSkuContentItemDescriptor =
+    $convert.base64Decode(
+        'CiFQdWd2U2Vhc29uUHVibGlzaGVyU2t1Q29udGVudEl0ZW0SFAoFdGl0bGUYASABKAlSBXRpdG'
+        'xlEhsKCXNlYXNvbl9pZBgCIAEoA1IIc2Vhc29uSWQSGgoIc2VsZWN0ZWQYAyABKAhSCHNlbGVj'
+        'dGVk');
 
 @$core.Deprecated('Use pugvSeasonRecommendDescriptor instead')
 const PugvSeasonRecommend$json = {
   '1': 'PugvSeasonRecommend',
   '2': [
-    {'1': 'nav', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonNav', '10': 'nav'},
-    {'1': 'contents', '3': 2, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonRecommendContent', '10': 'contents'},
-    {'1': 'more_info', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonRecommendMore', '10': 'moreInfo'},
-    {'1': 'show_style', '3': 4, '4': 1, '5': 14, '6': '.bilibili.app.viewunite.common.PugvSeasonRecommendShowStyle', '10': 'showStyle'},
+    {
+      '1': 'nav',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonNav',
+      '10': 'nav'
+    },
+    {
+      '1': 'contents',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonRecommendContent',
+      '10': 'contents'
+    },
+    {
+      '1': 'more_info',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonRecommendMore',
+      '10': 'moreInfo'
+    },
+    {
+      '1': 'show_style',
+      '3': 4,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonRecommendShowStyle',
+      '10': 'showStyle'
+    },
   ],
 };
 
@@ -2745,8 +4063,22 @@ const PugvSeasonRecommendContent$json = {
     {'1': 'desc', '3': 5, '4': 1, '5': 9, '10': 'desc'},
     {'1': 'season_id', '3': 6, '4': 1, '5': 3, '10': 'seasonId'},
     {'1': 'author', '3': 7, '4': 1, '5': 9, '10': 'author'},
-    {'1': 'view', '3': 8, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.StatInfo', '10': 'view'},
-    {'1': 'rcmd_reason', '3': 9, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.BadgeInfo', '10': 'rcmdReason'},
+    {
+      '1': 'view',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.StatInfo',
+      '10': 'view'
+    },
+    {
+      '1': 'rcmd_reason',
+      '3': 9,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.BadgeInfo',
+      '10': 'rcmdReason'
+    },
   ],
 };
 
@@ -2771,15 +4103,23 @@ const PugvSeasonRecommendMore$json = {
 };
 
 /// Descriptor for `PugvSeasonRecommendMore`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List pugvSeasonRecommendMoreDescriptor = $convert.base64Decode(
-    'ChdQdWd2U2Vhc29uUmVjb21tZW5kTW9yZRIUCgV0aXRsZRgBIAEoCVIFdGl0bGUSEgoEbGluax'
-    'gCIAEoCVIEbGluaxIbCglsaW5rX3RleHQYAyABKAlSCGxpbmtUZXh0');
+final $typed_data.Uint8List pugvSeasonRecommendMoreDescriptor =
+    $convert.base64Decode(
+        'ChdQdWd2U2Vhc29uUmVjb21tZW5kTW9yZRIUCgV0aXRsZRgBIAEoCVIFdGl0bGUSEgoEbGluax'
+        'gCIAEoCVIEbGluaxIbCglsaW5rX3RleHQYAyABKAlSCGxpbmtUZXh0');
 
 @$core.Deprecated('Use pugvSeasonSelectionDescriptor instead')
 const PugvSeasonSelection$json = {
   '1': 'PugvSeasonSelection',
   '2': [
-    {'1': 'nav', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonNav', '10': 'nav'},
+    {
+      '1': 'nav',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonNav',
+      '10': 'nav'
+    },
   ],
 };
 
@@ -2792,8 +4132,22 @@ final $typed_data.Uint8List pugvSeasonSelectionDescriptor = $convert.base64Decod
 const PugvSeries$json = {
   '1': 'PugvSeries',
   '2': [
-    {'1': 'nav', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonNav', '10': 'nav'},
-    {'1': 'contents', '3': 2, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeriesItem', '10': 'contents'},
+    {
+      '1': 'nav',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonNav',
+      '10': 'nav'
+    },
+    {
+      '1': 'contents',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeriesItem',
+      '10': 'contents'
+    },
   ],
 };
 
@@ -2812,7 +4166,14 @@ const PugvSeriesItem$json = {
     {'1': 'gray', '3': 3, '4': 1, '5': 8, '10': 'gray'},
     {'1': 'content', '3': 4, '4': 1, '5': 9, '10': 'content'},
     {'1': 'label', '3': 5, '4': 1, '5': 9, '10': 'label'},
-    {'1': 'state', '3': 6, '4': 1, '5': 14, '6': '.bilibili.app.viewunite.common.PugvSeriesItemState', '10': 'state'},
+    {
+      '1': 'state',
+      '3': 6,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.viewunite.common.PugvSeriesItemState',
+      '10': 'state'
+    },
   ],
 };
 
@@ -2827,8 +4188,22 @@ final $typed_data.Uint8List pugvSeriesItemDescriptor = $convert.base64Decode(
 const PugvShoppingNotice$json = {
   '1': 'PugvShoppingNotice',
   '2': [
-    {'1': 'nav', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PugvSeasonNav', '10': 'nav'},
-    {'1': 'contents', '3': 2, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.PugvShoppingNoticeContent', '10': 'contents'},
+    {
+      '1': 'nav',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvSeasonNav',
+      '10': 'nav'
+    },
+    {
+      '1': 'contents',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvShoppingNoticeContent',
+      '10': 'contents'
+    },
     {'1': 'link', '3': 3, '4': 1, '5': 9, '10': 'link'},
   ],
 };
@@ -2851,15 +4226,23 @@ const PugvShoppingNoticeContent$json = {
 };
 
 /// Descriptor for `PugvShoppingNoticeContent`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List pugvShoppingNoticeContentDescriptor = $convert.base64Decode(
-    'ChlQdWd2U2hvcHBpbmdOb3RpY2VDb250ZW50EhYKBm51bWJlchgBIAEoCVIGbnVtYmVyEhgKB2'
-    'NvbnRlbnQYAiABKAlSB2NvbnRlbnQSFwoHaXNfYm9sZBgDIAEoCFIGaXNCb2xk');
+final $typed_data.Uint8List pugvShoppingNoticeContentDescriptor =
+    $convert.base64Decode(
+        'ChlQdWd2U2hvcHBpbmdOb3RpY2VDb250ZW50EhYKBm51bWJlchgBIAEoCVIGbnVtYmVyEhgKB2'
+        'NvbnRlbnQYAiABKAlSB2NvbnRlbnQSFwoHaXNfYm9sZBgDIAEoCFIGaXNCb2xk');
 
 @$core.Deprecated('Use pugvZoneDescriptor instead')
 const PugvZone$json = {
   '1': 'PugvZone',
   '2': [
-    {'1': 'contents', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.PugvZoneItem', '10': 'contents'},
+    {
+      '1': 'contents',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PugvZoneItem',
+      '10': 'contents'
+    },
   ],
 };
 
@@ -2876,7 +4259,14 @@ const PugvZoneItem$json = {
     {'1': 'link', '3': 2, '4': 1, '5': 9, '10': 'link'},
     {'1': 'title', '3': 3, '4': 1, '5': 9, '10': 'title'},
     {'1': 'subtitle', '3': 4, '4': 1, '5': 9, '10': 'subtitle'},
-    {'1': 'type', '3': 5, '4': 1, '5': 14, '6': '.bilibili.app.viewunite.common.PugvZoneItemType', '10': 'type'},
+    {
+      '1': 'type',
+      '3': 5,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.viewunite.common.PugvZoneItemType',
+      '10': 'type'
+    },
   ],
 };
 
@@ -2945,11 +4335,32 @@ const RelateAVCard$json = {
   '2': [
     {'1': 'duration', '3': 1, '4': 1, '5': 3, '10': 'duration'},
     {'1': 'cid', '3': 2, '4': 1, '5': 3, '10': 'cid'},
-    {'1': 'dimension', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Dimension', '10': 'dimension'},
-    {'1': 'stat', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Stat', '10': 'stat'},
+    {
+      '1': 'dimension',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Dimension',
+      '10': 'dimension'
+    },
+    {
+      '1': 'stat',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Stat',
+      '10': 'stat'
+    },
     {'1': 'jump_url', '3': 5, '4': 1, '5': 9, '10': 'jumpUrl'},
     {'1': 'show_up_name', '3': 6, '4': 1, '5': 8, '10': 'showUpName'},
-    {'1': 'rcmd_reason', '3': 7, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.BadgeInfo', '10': 'rcmdReason'},
+    {
+      '1': 'rcmd_reason',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.BadgeInfo',
+      '10': 'rcmdReason'
+    },
     {'1': 'duration_text', '3': 8, '4': 1, '5': 9, '10': 'durationText'},
     {'1': 'show_rcmd_style', '3': 9, '4': 1, '5': 8, '10': 'showRcmdStyle'},
   ],
@@ -2970,9 +4381,30 @@ final $typed_data.Uint8List relateAVCardDescriptor = $convert.base64Decode(
 const RelateBangumiAvCard$json = {
   '1': 'RelateBangumiAvCard',
   '2': [
-    {'1': 'badge', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.BadgeInfo', '10': 'badge'},
-    {'1': 'stat', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Stat', '10': 'stat'},
-    {'1': 'rating', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Rating', '10': 'rating'},
+    {
+      '1': 'badge',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.BadgeInfo',
+      '10': 'badge'
+    },
+    {
+      '1': 'stat',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Stat',
+      '10': 'stat'
+    },
+    {
+      '1': 'rating',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Rating',
+      '10': 'rating'
+    },
     {'1': 'cover_right_text', '3': 4, '4': 1, '5': 9, '10': 'coverRightText'},
     {'1': 'show_rcmd_style', '3': 5, '4': 1, '5': 8, '10': 'showRcmdStyle'},
   ],
@@ -2993,13 +4425,48 @@ const RelateBangumiCard$json = {
   '2': [
     {'1': 'season_id', '3': 1, '4': 1, '5': 5, '10': 'seasonId'},
     {'1': 'season_type', '3': 2, '4': 1, '5': 5, '10': 'seasonType'},
-    {'1': 'new_ep', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.NewEp', '10': 'newEp'},
-    {'1': 'stat', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Stat', '10': 'stat'},
-    {'1': 'rating', '3': 5, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Rating', '10': 'rating'},
+    {
+      '1': 'new_ep',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.NewEp',
+      '10': 'newEp'
+    },
+    {
+      '1': 'stat',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Stat',
+      '10': 'stat'
+    },
+    {
+      '1': 'rating',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Rating',
+      '10': 'rating'
+    },
     {'1': 'rcmd_reason', '3': 6, '4': 1, '5': 9, '10': 'rcmdReason'},
-    {'1': 'badge_info', '3': 7, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.BadgeInfo', '10': 'badgeInfo'},
+    {
+      '1': 'badge_info',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.BadgeInfo',
+      '10': 'badgeInfo'
+    },
     {'1': 'goto_type', '3': 8, '4': 1, '5': 9, '10': 'gotoType'},
-    {'1': 'report', '3': 9, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.RelateBangumiCard.ReportEntry', '10': 'report'},
+    {
+      '1': 'report',
+      '3': 9,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.RelateBangumiCard.ReportEntry',
+      '10': 'report'
+    },
   ],
   '3': [RelateBangumiCard_ReportEntry$json],
 };
@@ -3041,7 +4508,15 @@ const RelateBangumiResourceCard$json = {
     {'1': 'position', '3': 8, '4': 1, '5': 5, '10': 'position'},
     {'1': 'rcmd_reason', '3': 9, '4': 1, '5': 9, '10': 'rcmdReason'},
     {'1': 'label', '3': 10, '4': 1, '5': 9, '10': 'label'},
-    {'1': 'report', '3': 11, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.RelateBangumiResourceCard.ReportEntry', '10': 'report'},
+    {
+      '1': 'report',
+      '3': 11,
+      '4': 3,
+      '5': 11,
+      '6':
+          '.bilibili.app.viewunite.common.RelateBangumiResourceCard.ReportEntry',
+      '10': 'report'
+    },
     {'1': 'goto_type', '3': 12, '4': 1, '5': 9, '10': 'gotoType'},
   ],
   '3': [RelateBangumiResourceCard_ReportEntry$json],
@@ -3073,9 +4548,30 @@ final $typed_data.Uint8List relateBangumiResourceCardDescriptor = $convert.base6
 const RelateBangumiUGCCard$json = {
   '1': 'RelateBangumiUGCCard',
   '2': [
-    {'1': 'badge', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.BadgeInfo', '10': 'badge'},
-    {'1': 'stat', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Stat', '10': 'stat'},
-    {'1': 'rating', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Rating', '10': 'rating'},
+    {
+      '1': 'badge',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.BadgeInfo',
+      '10': 'badge'
+    },
+    {
+      '1': 'stat',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Stat',
+      '10': 'stat'
+    },
+    {
+      '1': 'rating',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Rating',
+      '10': 'rating'
+    },
   ],
 };
 
@@ -3091,9 +4587,23 @@ const RelateCMCard$json = {
   '1': 'RelateCMCard',
   '2': [
     {'1': 'aid', '3': 1, '4': 1, '5': 3, '10': 'aid'},
-    {'1': 'source_content', '3': 2, '4': 1, '5': 11, '6': '.google.protobuf.Any', '10': 'sourceContent'},
+    {
+      '1': 'source_content',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.google.protobuf.Any',
+      '10': 'sourceContent'
+    },
     {'1': 'duration', '3': 3, '4': 1, '5': 3, '10': 'duration'},
-    {'1': 'stat', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Stat', '10': 'stat'},
+    {
+      '1': 'stat',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Stat',
+      '10': 'stat'
+    },
     {'1': 'nature_ad', '3': 5, '4': 1, '5': 5, '10': 'natureAd'},
   ],
 };
@@ -3109,23 +4619,155 @@ final $typed_data.Uint8List relateCMCardDescriptor = $convert.base64Decode(
 const RelateCard$json = {
   '1': 'RelateCard',
   '2': [
-    {'1': 'av', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.RelateAVCard', '9': 0, '10': 'av'},
-    {'1': 'bangumi', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.RelateBangumiCard', '9': 0, '10': 'bangumi'},
-    {'1': 'resource', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.RelateBangumiResourceCard', '9': 0, '10': 'resource'},
-    {'1': 'game', '3': 5, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.RelateGameCard', '9': 0, '10': 'game'},
-    {'1': 'cm', '3': 6, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.RelateCMCard', '9': 0, '10': 'cm'},
-    {'1': 'live', '3': 7, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.RelateLiveCard', '9': 0, '10': 'live'},
-    {'1': 'bangumi_av', '3': 8, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.RelateBangumiAvCard', '9': 0, '10': 'bangumiAv'},
-    {'1': 'ai_card', '3': 9, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.RelatedAICard', '9': 0, '10': 'aiCard'},
-    {'1': 'bangumi_ugc', '3': 13, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.RelateBangumiUGCCard', '9': 0, '10': 'bangumiUgc'},
-    {'1': 'special', '3': 14, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.RelateSpecial', '9': 0, '10': 'special'},
-    {'1': 'course', '3': 15, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.RelateCourseCard', '9': 0, '10': 'course'},
-    {'1': 'mini_program', '3': 16, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.RelateMiniProgramCard', '9': 0, '10': 'miniProgram'},
-    {'1': 'history_av', '3': 17, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.RelateHistoryAVCard', '9': 0, '10': 'historyAv'},
-    {'1': 'relate_card_type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.app.viewunite.common.RelateCardType', '10': 'relateCardType'},
-    {'1': 'three_point', '3': 10, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.RelateThreePoint', '10': 'threePoint'},
-    {'1': 'cm_stock', '3': 11, '4': 1, '5': 11, '6': '.google.protobuf.Any', '10': 'cmStock'},
-    {'1': 'basic_info', '3': 12, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.CardBasicInfo', '10': 'basicInfo'},
+    {
+      '1': 'av',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.RelateAVCard',
+      '9': 0,
+      '10': 'av'
+    },
+    {
+      '1': 'bangumi',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.RelateBangumiCard',
+      '9': 0,
+      '10': 'bangumi'
+    },
+    {
+      '1': 'resource',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.RelateBangumiResourceCard',
+      '9': 0,
+      '10': 'resource'
+    },
+    {
+      '1': 'game',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.RelateGameCard',
+      '9': 0,
+      '10': 'game'
+    },
+    {
+      '1': 'cm',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.RelateCMCard',
+      '9': 0,
+      '10': 'cm'
+    },
+    {
+      '1': 'live',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.RelateLiveCard',
+      '9': 0,
+      '10': 'live'
+    },
+    {
+      '1': 'bangumi_av',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.RelateBangumiAvCard',
+      '9': 0,
+      '10': 'bangumiAv'
+    },
+    {
+      '1': 'ai_card',
+      '3': 9,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.RelatedAICard',
+      '9': 0,
+      '10': 'aiCard'
+    },
+    {
+      '1': 'bangumi_ugc',
+      '3': 13,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.RelateBangumiUGCCard',
+      '9': 0,
+      '10': 'bangumiUgc'
+    },
+    {
+      '1': 'special',
+      '3': 14,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.RelateSpecial',
+      '9': 0,
+      '10': 'special'
+    },
+    {
+      '1': 'course',
+      '3': 15,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.RelateCourseCard',
+      '9': 0,
+      '10': 'course'
+    },
+    {
+      '1': 'mini_program',
+      '3': 16,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.RelateMiniProgramCard',
+      '9': 0,
+      '10': 'miniProgram'
+    },
+    {
+      '1': 'history_av',
+      '3': 17,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.RelateHistoryAVCard',
+      '9': 0,
+      '10': 'historyAv'
+    },
+    {
+      '1': 'relate_card_type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.viewunite.common.RelateCardType',
+      '10': 'relateCardType'
+    },
+    {
+      '1': 'three_point',
+      '3': 10,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.RelateThreePoint',
+      '10': 'threePoint'
+    },
+    {
+      '1': 'cm_stock',
+      '3': 11,
+      '4': 1,
+      '5': 11,
+      '6': '.google.protobuf.Any',
+      '10': 'cmStock'
+    },
+    {
+      '1': 'basic_info',
+      '3': 12,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.CardBasicInfo',
+      '10': 'basicInfo'
+    },
   ],
   '8': [
     {'1': 'card'},
@@ -3165,9 +4807,23 @@ const RelateConfig$json = {
   '2': [
     {'1': 'valid_show_m', '3': 1, '4': 1, '5': 3, '10': 'validShowM'},
     {'1': 'valid_show_n', '3': 2, '4': 1, '5': 3, '10': 'validShowN'},
-    {'1': 'pagination', '3': 3, '4': 1, '5': 11, '6': '.bilibili.pagination.Pagination', '10': 'pagination'},
+    {
+      '1': 'pagination',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.pagination.Pagination',
+      '10': 'pagination'
+    },
     {'1': 'can_load_more', '3': 4, '4': 1, '5': 8, '10': 'canLoadMore'},
-    {'1': 'dimension', '3': 5, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.CoverDimension', '10': 'dimension'},
+    {
+      '1': 'dimension',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.CoverDimension',
+      '10': 'dimension'
+    },
   ],
 };
 
@@ -3184,9 +4840,30 @@ const RelateCourseCard$json = {
   '1': 'RelateCourseCard',
   '2': [
     {'1': 'duration', '3': 1, '4': 1, '5': 3, '10': 'duration'},
-    {'1': 'stat', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Stat', '10': 'stat'},
-    {'1': 'rcmd_reason', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.BadgeInfo', '10': 'rcmdReason'},
-    {'1': 'badge_info', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.BadgeInfo', '10': 'badgeInfo'},
+    {
+      '1': 'stat',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Stat',
+      '10': 'stat'
+    },
+    {
+      '1': 'rcmd_reason',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.BadgeInfo',
+      '10': 'rcmdReason'
+    },
+    {
+      '1': 'badge_info',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.BadgeInfo',
+      '10': 'badgeInfo'
+    },
     {'1': 'style', '3': 5, '4': 1, '5': 5, '10': 'style'},
     {'1': 'show_rcmd_style', '3': 6, '4': 1, '5': 8, '10': 'showRcmdStyle'},
   ],
@@ -3210,7 +4887,14 @@ const RelateDislike$json = {
     {'1': 'closed_sub_title', '3': 3, '4': 1, '5': 9, '10': 'closedSubTitle'},
     {'1': 'paste_text', '3': 4, '4': 1, '5': 9, '10': 'pasteText'},
     {'1': 'closed_paste_text', '3': 5, '4': 1, '5': 9, '10': 'closedPasteText'},
-    {'1': 'dislike_reason', '3': 6, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.DislikeReasons', '10': 'dislikeReason'},
+    {
+      '1': 'dislike_reason',
+      '3': 6,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.DislikeReasons',
+      '10': 'dislikeReason'
+    },
     {'1': 'toast', '3': 7, '4': 1, '5': 9, '10': 'toast'},
     {'1': 'closed_toast', '3': 8, '4': 1, '5': 9, '10': 'closedToast'},
   ],
@@ -3230,17 +4914,65 @@ const RelateGameCard$json = {
   '1': 'RelateGameCard',
   '2': [
     {'1': 'reserve_status', '3': 1, '4': 1, '5': 3, '10': 'reserveStatus'},
-    {'1': 'reserve_status_text', '3': 2, '4': 1, '5': 9, '10': 'reserveStatusText'},
+    {
+      '1': 'reserve_status_text',
+      '3': 2,
+      '4': 1,
+      '5': 9,
+      '10': 'reserveStatusText'
+    },
     {'1': 'reserve', '3': 3, '4': 1, '5': 9, '10': 'reserve'},
     {'1': 'rating', '3': 4, '4': 1, '5': 2, '10': 'rating'},
     {'1': 'tag_name', '3': 5, '4': 1, '5': 9, '10': 'tagName'},
-    {'1': 'rank_info', '3': 6, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.RankInfo', '10': 'rankInfo'},
-    {'1': 'pack_info', '3': 7, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Button', '10': 'packInfo'},
-    {'1': 'notice', '3': 8, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Button', '10': 'notice'},
-    {'1': 'power_icon_style', '3': 9, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PowerIconStyle', '10': 'powerIconStyle'},
+    {
+      '1': 'rank_info',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.RankInfo',
+      '10': 'rankInfo'
+    },
+    {
+      '1': 'pack_info',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Button',
+      '10': 'packInfo'
+    },
+    {
+      '1': 'notice',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Button',
+      '10': 'notice'
+    },
+    {
+      '1': 'power_icon_style',
+      '3': 9,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PowerIconStyle',
+      '10': 'powerIconStyle'
+    },
     {'1': 'game_rcmd_reason', '3': 10, '4': 1, '5': 9, '10': 'gameRcmdReason'},
-    {'1': 'wiki_info', '3': 11, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.WikiInfo', '10': 'wikiInfo'},
-    {'1': 'badge', '3': 12, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.BadgeInfo', '10': 'badge'},
+    {
+      '1': 'wiki_info',
+      '3': 11,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.WikiInfo',
+      '10': 'wikiInfo'
+    },
+    {
+      '1': 'badge',
+      '3': 12,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.BadgeInfo',
+      '10': 'badge'
+    },
   ],
 };
 
@@ -3282,7 +5014,13 @@ const RelateItem$json = {
   '2': [
     {'1': 'url', '3': 1, '4': 1, '5': 9, '10': 'url'},
     {'1': 'cover', '3': 2, '4': 1, '5': 9, '10': 'cover'},
-    {'1': 'use_default_browser', '3': 3, '4': 1, '5': 8, '10': 'useDefaultBrowser'},
+    {
+      '1': 'use_default_browser',
+      '3': 3,
+      '4': 1,
+      '5': 8,
+      '10': 'useDefaultBrowser'
+    },
   ],
 };
 
@@ -3299,9 +5037,23 @@ const RelateLiveCard$json = {
     {'1': 'area_name', '3': 2, '4': 1, '5': 9, '10': 'areaName'},
     {'1': 'watched_show', '3': 3, '4': 1, '5': 3, '10': 'watchedShow'},
     {'1': 'live_status', '3': 4, '4': 1, '5': 3, '10': 'liveStatus'},
-    {'1': 'rcmd_reason', '3': 5, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.BadgeInfo', '10': 'rcmdReason'},
+    {
+      '1': 'rcmd_reason',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.BadgeInfo',
+      '10': 'rcmdReason'
+    },
     {'1': 'live_new_style', '3': 6, '4': 1, '5': 9, '10': 'liveNewStyle'},
-    {'1': 'stat_info', '3': 7, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.StatInfo', '10': 'statInfo'},
+    {
+      '1': 'stat_info',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.StatInfo',
+      '10': 'statInfo'
+    },
     {'1': 'show_rcmd_style', '3': 8, '4': 1, '5': 8, '10': 'showRcmdStyle'},
   ],
 };
@@ -3320,7 +5072,14 @@ final $typed_data.Uint8List relateLiveCardDescriptor = $convert.base64Decode(
 const RelateMiniProgramCard$json = {
   '1': 'RelateMiniProgramCard',
   '2': [
-    {'1': 'stat', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Stat', '10': 'stat'},
+    {
+      '1': 'stat',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Stat',
+      '10': 'stat'
+    },
   ],
 };
 
@@ -3333,8 +5092,22 @@ final $typed_data.Uint8List relateMiniProgramCardDescriptor = $convert.base64Dec
 const RelateSpecial$json = {
   '1': 'RelateSpecial',
   '2': [
-    {'1': 'badge', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.BadgeInfo', '10': 'badge'},
-    {'1': 'rcmd_reason', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.BadgeInfo', '10': 'rcmdReason'},
+    {
+      '1': 'badge',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.BadgeInfo',
+      '10': 'badge'
+    },
+    {
+      '1': 'rcmd_reason',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.BadgeInfo',
+      '10': 'rcmdReason'
+    },
     {'1': 'show_rcmd_style', '3': 3, '4': 1, '5': 8, '10': 'showRcmdStyle'},
   ],
 };
@@ -3364,10 +5137,30 @@ final $typed_data.Uint8List relateTabDescriptor = $convert.base64Decode(
 const RelateThreePoint$json = {
   '1': 'RelateThreePoint',
   '2': [
-    {'1': 'dislike', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.RelateDislike', '10': 'dislike'},
-    {'1': 'feedback', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.RelateDislike', '10': 'feedback'},
+    {
+      '1': 'dislike',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.RelateDislike',
+      '10': 'dislike'
+    },
+    {
+      '1': 'feedback',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.RelateDislike',
+      '10': 'feedback'
+    },
     {'1': 'watch_later', '3': 3, '4': 1, '5': 8, '10': 'watchLater'},
-    {'1': 'dislike_report_data', '3': 4, '4': 1, '5': 9, '10': 'dislikeReportData'},
+    {
+      '1': 'dislike_report_data',
+      '3': 4,
+      '4': 1,
+      '5': 9,
+      '10': 'dislikeReportData'
+    },
   ],
 };
 
@@ -3385,9 +5178,30 @@ const RelatedAICard$json = {
   '2': [
     {'1': 'aid', '3': 1, '4': 1, '5': 3, '10': 'aid'},
     {'1': 'duration', '3': 2, '4': 1, '5': 3, '10': 'duration'},
-    {'1': 'up_info', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Staff', '10': 'upInfo'},
-    {'1': 'stat', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Stat', '10': 'stat'},
-    {'1': 'report', '3': 5, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.RelatedAICard.ReportEntry', '10': 'report'},
+    {
+      '1': 'up_info',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Staff',
+      '10': 'upInfo'
+    },
+    {
+      '1': 'stat',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Stat',
+      '10': 'stat'
+    },
+    {
+      '1': 'report',
+      '3': 5,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.RelatedAICard.ReportEntry',
+      '10': 'report'
+    },
     {'1': 'goto_type', '3': 6, '4': 1, '5': 9, '10': 'gotoType'},
   ],
   '3': [RelatedAICard_ReportEntry$json],
@@ -3417,9 +5231,30 @@ final $typed_data.Uint8List relatedAICardDescriptor = $convert.base64Decode(
 const Relates$json = {
   '1': 'Relates',
   '2': [
-    {'1': 'cards', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.RelateCard', '10': 'cards'},
-    {'1': 'config', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.RelateConfig', '10': 'config'},
-    {'1': 'tab', '3': 3, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.RelateTab', '10': 'tab'},
+    {
+      '1': 'cards',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.RelateCard',
+      '10': 'cards'
+    },
+    {
+      '1': 'config',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.RelateConfig',
+      '10': 'config'
+    },
+    {
+      '1': 'tab',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.RelateTab',
+      '10': 'tab'
+    },
   ],
 };
 
@@ -3434,12 +5269,35 @@ final $typed_data.Uint8List relatesDescriptor = $convert.base64Decode(
 const ReserveButton$json = {
   '1': 'ReserveButton',
   '2': [
-    {'1': 'reserve', '3': 8, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.BizReserveActivityParam', '9': 0, '10': 'reserve'},
-    {'1': 'fav', '3': 9, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.BizFavParam', '9': 0, '10': 'fav'},
+    {
+      '1': 'reserve',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.BizReserveActivityParam',
+      '9': 0,
+      '10': 'reserve'
+    },
+    {
+      '1': 'fav',
+      '3': 9,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.BizFavParam',
+      '9': 0,
+      '10': 'fav'
+    },
     {'1': 'status', '3': 1, '4': 1, '5': 8, '10': 'status'},
     {'1': 'text', '3': 3, '4': 1, '5': 9, '10': 'text'},
     {'1': 'selected_text', '3': 4, '4': 1, '5': 9, '10': 'selectedText'},
-    {'1': 'order_type', '3': 7, '4': 1, '5': 14, '6': '.bilibili.app.viewunite.common.ReserveBizType', '10': 'orderType'},
+    {
+      '1': 'order_type',
+      '3': 7,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.viewunite.common.ReserveBizType',
+      '10': 'orderType'
+    },
   ],
   '8': [
     {'1': 'order_param'},
@@ -3502,8 +5360,22 @@ const SeasonHead$json = {
   '2': [
     {'1': 'title', '3': 1, '4': 1, '5': 9, '10': 'title'},
     {'1': 'intro', '3': 2, '4': 1, '5': 9, '10': 'intro'},
-    {'1': 'vt', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.StatInfo', '10': 'vt'},
-    {'1': 'danmaku', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.StatInfo', '10': 'danmaku'},
+    {
+      '1': 'vt',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.StatInfo',
+      '10': 'vt'
+    },
+    {
+      '1': 'danmaku',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.StatInfo',
+      '10': 'danmaku'
+    },
   ],
 };
 
@@ -3543,15 +5415,57 @@ const SectionData$json = {
     {'1': 'can_ord_desc', '3': 4, '4': 1, '5': 5, '10': 'canOrdDesc'},
     {'1': 'more', '3': 5, '4': 1, '5': 9, '10': 'more'},
     {'1': 'episode_ids', '3': 6, '4': 3, '5': 5, '10': 'episodeIds'},
-    {'1': 'episodes', '3': 7, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.ViewEpisode', '10': 'episodes'},
+    {
+      '1': 'episodes',
+      '3': 7,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ViewEpisode',
+      '10': 'episodes'
+    },
     {'1': 'split_text', '3': 8, '4': 1, '5': 9, '10': 'splitText'},
-    {'1': 'module_style', '3': 9, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Style', '10': 'moduleStyle'},
+    {
+      '1': 'module_style',
+      '3': 9,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Style',
+      '10': 'moduleStyle'
+    },
     {'1': 'more_bottom_desc', '3': 10, '4': 1, '5': 9, '10': 'moreBottomDesc'},
-    {'1': 'seasons', '3': 11, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.SerialSeason', '10': 'seasons'},
-    {'1': 'more_left', '3': 12, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Button', '10': 'moreLeft'},
+    {
+      '1': 'seasons',
+      '3': 11,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.SerialSeason',
+      '10': 'seasons'
+    },
+    {
+      '1': 'more_left',
+      '3': 12,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Button',
+      '10': 'moreLeft'
+    },
     {'1': 'type', '3': 13, '4': 1, '5': 5, '10': 'type'},
-    {'1': 'report', '3': 14, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.SectionData.ReportEntry', '10': 'report'},
-    {'1': 'bg_info', '3': 15, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.EpBgInfo', '10': 'bgInfo'},
+    {
+      '1': 'report',
+      '3': 14,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.SectionData.ReportEntry',
+      '10': 'report'
+    },
+    {
+      '1': 'bg_info',
+      '3': 15,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.EpBgInfo',
+      '10': 'bgInfo'
+    },
   ],
   '3': [SectionData_ReportEntry$json],
 };
@@ -3594,11 +5508,32 @@ const SerialSeason$json = {
     {'1': 'cover', '3': 5, '4': 1, '5': 9, '10': 'cover'},
     {'1': 'badge', '3': 6, '4': 1, '5': 9, '10': 'badge'},
     {'1': 'badge_type', '3': 7, '4': 1, '5': 5, '10': 'badgeType'},
-    {'1': 'badge_info', '3': 8, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.BadgeInfo', '10': 'badgeInfo'},
+    {
+      '1': 'badge_info',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.BadgeInfo',
+      '10': 'badgeInfo'
+    },
     {'1': 'link', '3': 9, '4': 1, '5': 9, '10': 'link'},
     {'1': 'resource', '3': 10, '4': 1, '5': 9, '10': 'resource'},
-    {'1': 'new_ep', '3': 11, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.NewEp', '10': 'newEp'},
-    {'1': 'report', '3': 12, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.SerialSeason.ReportEntry', '10': 'report'},
+    {
+      '1': 'new_ep',
+      '3': 11,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.NewEp',
+      '10': 'newEp'
+    },
+    {
+      '1': 'report',
+      '3': 12,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.SerialSeason.ReportEntry',
+      '10': 'report'
+    },
   ],
   '3': [SerialSeason_ReportEntry$json],
 };
@@ -3651,14 +5586,34 @@ const SpecialCell$json = {
     {'1': 'jump_url', '3': 6, '4': 1, '5': 9, '10': 'jumpUrl'},
     {'1': 'cell_type', '3': 7, '4': 1, '5': 9, '10': 'cellType'},
     {'1': 'cell_bgcolor', '3': 8, '4': 1, '5': 9, '10': 'cellBgcolor'},
-    {'1': 'cell_bgcolor_night', '3': 9, '4': 1, '5': 9, '10': 'cellBgcolorNight'},
+    {
+      '1': 'cell_bgcolor_night',
+      '3': 9,
+      '4': 1,
+      '5': 9,
+      '10': 'cellBgcolorNight'
+    },
     {'1': 'param', '3': 10, '4': 1, '5': 9, '10': 'param'},
     {'1': 'page_title', '3': 11, '4': 1, '5': 9, '10': 'pageTitle'},
     {'1': 'jump_type', '3': 12, '4': 1, '5': 9, '10': 'jumpType'},
     {'1': 'end_icon', '3': 13, '4': 1, '5': 9, '10': 'endIcon'},
     {'1': 'end_icon_night', '3': 14, '4': 1, '5': 9, '10': 'endIconNight'},
-    {'1': 'cell_fluid', '3': 15, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.CellFluid', '10': 'cellFluid'},
-    {'1': 'report', '3': 16, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.SpecialCell.ReportEntry', '10': 'report'},
+    {
+      '1': 'cell_fluid',
+      '3': 15,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.CellFluid',
+      '10': 'cellFluid'
+    },
+    {
+      '1': 'report',
+      '3': 16,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.SpecialCell.ReportEntry',
+      '10': 'report'
+    },
   ],
   '3': [SpecialCell_ReportEntry$json],
 };
@@ -3692,7 +5647,14 @@ final $typed_data.Uint8List specialCellDescriptor = $convert.base64Decode(
 const SpecialTag$json = {
   '1': 'SpecialTag',
   '2': [
-    {'1': 'special_cell', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.SpecialCell', '10': 'specialCell'},
+    {
+      '1': 'special_cell',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.SpecialCell',
+      '10': 'specialCell'
+    },
     {'1': 'refresh', '3': 2, '4': 1, '5': 8, '10': 'refresh'},
   ],
 };
@@ -3709,11 +5671,46 @@ const Sponsor$json = {
   '2': [
     {'1': 'total', '3': 1, '4': 1, '5': 3, '10': 'total'},
     {'1': 'week', '3': 2, '4': 1, '5': 3, '10': 'week'},
-    {'1': 'rank_list', '3': 3, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.SponsorRank', '10': 'rankList'},
-    {'1': 'mine', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Mine', '10': 'mine'},
-    {'1': 'point_activity', '3': 5, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.PointActivity', '10': 'pointActivity'},
-    {'1': 'pendants', '3': 6, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.Pendant', '10': 'pendants'},
-    {'1': 'threshold', '3': 7, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.Threshold', '10': 'threshold'},
+    {
+      '1': 'rank_list',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.SponsorRank',
+      '10': 'rankList'
+    },
+    {
+      '1': 'mine',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Mine',
+      '10': 'mine'
+    },
+    {
+      '1': 'point_activity',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.PointActivity',
+      '10': 'pointActivity'
+    },
+    {
+      '1': 'pendants',
+      '3': 6,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Pendant',
+      '10': 'pendants'
+    },
+    {
+      '1': 'threshold',
+      '3': 7,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Threshold',
+      '10': 'threshold'
+    },
   ],
 };
 
@@ -3736,7 +5733,14 @@ const SponsorRank$json = {
     {'1': 'msg', '3': 2, '4': 1, '5': 9, '10': 'msg'},
     {'1': 'uname', '3': 3, '4': 1, '5': 9, '10': 'uname'},
     {'1': 'face', '3': 4, '4': 1, '5': 9, '10': 'face'},
-    {'1': 'vip', '3': 5, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Vip', '10': 'vip'},
+    {
+      '1': 'vip',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Vip',
+      '10': 'vip'
+    },
   ],
 };
 
@@ -3755,11 +5759,32 @@ const Staff$json = {
     {'1': 'title', '3': 3, '4': 1, '5': 9, '10': 'title'},
     {'1': 'name', '3': 4, '4': 1, '5': 9, '10': 'name'},
     {'1': 'face', '3': 5, '4': 1, '5': 9, '10': 'face'},
-    {'1': 'official', '3': 6, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.OfficialVerify', '10': 'official'},
-    {'1': 'vip', '3': 7, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Vip', '10': 'vip'},
+    {
+      '1': 'official',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.OfficialVerify',
+      '10': 'official'
+    },
+    {
+      '1': 'vip',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Vip',
+      '10': 'vip'
+    },
     {'1': 'label_style', '3': 8, '4': 1, '5': 5, '10': 'labelStyle'},
     {'1': 'fans', '3': 9, '4': 1, '5': 9, '10': 'fans'},
-    {'1': 'name_render', '3': 10, '4': 1, '5': 11, '6': '.bilibili.account.service.v1.NameRender', '10': 'nameRender'},
+    {
+      '1': 'name_render',
+      '3': 10,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.account.service.v1.NameRender',
+      '10': 'nameRender'
+    },
   ],
 };
 
@@ -3777,7 +5802,14 @@ final $typed_data.Uint8List staffDescriptor = $convert.base64Decode(
 const Staffs$json = {
   '1': 'Staffs',
   '2': [
-    {'1': 'staff', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.Staff', '10': 'staff'},
+    {
+      '1': 'staff',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Staff',
+      '10': 'staff'
+    },
     {'1': 'title', '3': 2, '4': 1, '5': 9, '10': 'title'},
   ],
 };
@@ -3816,8 +5848,22 @@ final $typed_data.Uint8List starRailDescriptor = $convert.base64Decode(
 const Stat$json = {
   '1': 'Stat',
   '2': [
-    {'1': 'vt', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.StatInfo', '10': 'vt'},
-    {'1': 'danmaku', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.StatInfo', '10': 'danmaku'},
+    {
+      '1': 'vt',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.StatInfo',
+      '10': 'vt'
+    },
+    {
+      '1': 'danmaku',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.StatInfo',
+      '10': 'danmaku'
+    },
     {'1': 'reply', '3': 3, '4': 1, '5': 3, '10': 'reply'},
     {'1': 'fav', '3': 4, '4': 1, '5': 3, '10': 'fav'},
     {'1': 'coin', '3': 5, '4': 1, '5': 3, '10': 'coin'},
@@ -3905,14 +5951,27 @@ const TheatreHotTopic$json = {
     {'1': 'theatre_id', '3': 1, '4': 1, '5': 3, '10': 'theatreId'},
     {'1': 'theatre_set_id', '3': 2, '4': 1, '5': 3, '10': 'theatreSetId'},
     {'1': 'theatre_title', '3': 3, '4': 1, '5': 9, '10': 'theatreTitle'},
-    {'1': 'background_image_url', '3': 4, '4': 1, '5': 9, '10': 'backgroundImageUrl'},
+    {
+      '1': 'background_image_url',
+      '3': 4,
+      '4': 1,
+      '5': 9,
+      '10': 'backgroundImageUrl'
+    },
     {'1': 'theatre_url', '3': 5, '4': 1, '5': 9, '10': 'theatreUrl'},
     {'1': 'hot_topic_id', '3': 6, '4': 1, '5': 3, '10': 'hotTopicId'},
     {'1': 'hot_topic_set_id', '3': 7, '4': 1, '5': 3, '10': 'hotTopicSetId'},
     {'1': 'hot_topic_title', '3': 8, '4': 1, '5': 9, '10': 'hotTopicTitle'},
     {'1': 'hot_topic_url', '3': 9, '4': 1, '5': 9, '10': 'hotTopicUrl'},
     {'1': 'is_subscribe', '3': 10, '4': 1, '5': 5, '10': 'isSubscribe'},
-    {'1': 'report', '3': 11, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.TheatreHotTopic.ReportEntry', '10': 'report'},
+    {
+      '1': 'report',
+      '3': 11,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.TheatreHotTopic.ReportEntry',
+      '10': 'report'
+    },
   ],
   '3': [TheatreHotTopic_ReportEntry$json],
 };
@@ -3962,7 +6021,14 @@ const TitleDeliveryButton$json = {
     {'1': 'icon', '3': 1, '4': 1, '5': 9, '10': 'icon'},
     {'1': 'title', '3': 2, '4': 1, '5': 9, '10': 'title'},
     {'1': 'link', '3': 3, '4': 1, '5': 9, '10': 'link'},
-    {'1': 'report', '3': 4, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.TitleDeliveryButton.ReportEntry', '10': 'report'},
+    {
+      '1': 'report',
+      '3': 4,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.TitleDeliveryButton.ReportEntry',
+      '10': 'report'
+    },
     {'1': 'bubble', '3': 5, '4': 1, '5': 9, '10': 'bubble'},
   ],
   '3': [TitleDeliveryButton_ReportEntry$json],
@@ -3996,15 +6062,64 @@ const UgcEpisode$json = {
     {'1': 'title', '3': 4, '4': 1, '5': 9, '10': 'title'},
     {'1': 'cover', '3': 5, '4': 1, '5': 9, '10': 'cover'},
     {'1': 'cover_right_text', '3': 6, '4': 1, '5': 9, '10': 'coverRightText'},
-    {'1': 'page', '3': 7, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Page', '10': 'page'},
-    {'1': 'vt', '3': 8, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.StatInfo', '10': 'vt'},
-    {'1': 'danmaku', '3': 9, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.StatInfo', '10': 'danmaku'},
-    {'1': 'badge', '3': 10, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.BadgeInfo', '10': 'badge'},
-    {'1': 'pages', '3': 11, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.Page', '10': 'pages'},
+    {
+      '1': 'page',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Page',
+      '10': 'page'
+    },
+    {
+      '1': 'vt',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.StatInfo',
+      '10': 'vt'
+    },
+    {
+      '1': 'danmaku',
+      '3': 9,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.StatInfo',
+      '10': 'danmaku'
+    },
+    {
+      '1': 'badge',
+      '3': 10,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.BadgeInfo',
+      '10': 'badge'
+    },
+    {
+      '1': 'pages',
+      '3': 11,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Page',
+      '10': 'pages'
+    },
     {'1': 'progress_percent', '3': 12, '4': 1, '5': 1, '10': 'progressPercent'},
     {'1': 'duration', '3': 13, '4': 1, '5': 3, '10': 'duration'},
-    {'1': 'author', '3': 14, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Author', '10': 'author'},
-    {'1': 'biz_type', '3': 15, '4': 1, '5': 14, '6': '.bilibili.playershared.BizType', '10': 'bizType'},
+    {
+      '1': 'author',
+      '3': 14,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Author',
+      '10': 'author'
+    },
+    {
+      '1': 'biz_type',
+      '3': 15,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.playershared.BizType',
+      '10': 'bizType'
+    },
   ],
 };
 
@@ -4027,15 +6142,71 @@ final $typed_data.Uint8List ugcEpisodeDescriptor = $convert.base64Decode(
 const UgcIntroduction$json = {
   '1': 'UgcIntroduction',
   '2': [
-    {'1': 'tags', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.Tag', '10': 'tags'},
-    {'1': 'rating', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Rating', '10': 'rating'},
-    {'1': 'rank', '3': 3, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Rank', '10': 'rank'},
-    {'1': 'bgm', '3': 4, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.ViewMaterial', '10': 'bgm'},
-    {'1': 'sticker', '3': 5, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.ViewMaterial', '10': 'sticker'},
-    {'1': 'video_source', '3': 6, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.ViewMaterial', '10': 'videoSource'},
+    {
+      '1': 'tags',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Tag',
+      '10': 'tags'
+    },
+    {
+      '1': 'rating',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Rating',
+      '10': 'rating'
+    },
+    {
+      '1': 'rank',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Rank',
+      '10': 'rank'
+    },
+    {
+      '1': 'bgm',
+      '3': 4,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ViewMaterial',
+      '10': 'bgm'
+    },
+    {
+      '1': 'sticker',
+      '3': 5,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ViewMaterial',
+      '10': 'sticker'
+    },
+    {
+      '1': 'video_source',
+      '3': 6,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ViewMaterial',
+      '10': 'videoSource'
+    },
     {'1': 'pubdate', '3': 7, '4': 1, '5': 3, '10': 'pubdate'},
-    {'1': 'desc', '3': 8, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.DescV2', '10': 'desc'},
-    {'1': 'neutral', '3': 9, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Neutral', '10': 'neutral'},
+    {
+      '1': 'desc',
+      '3': 8,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.DescV2',
+      '10': 'desc'
+    },
+    {
+      '1': 'neutral',
+      '3': 9,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Neutral',
+      '10': 'neutral'
+    },
   ],
 };
 
@@ -4065,11 +6236,37 @@ const UgcSeasonActivity$json = {
     {'1': 'day_count', '3': 6, '4': 1, '5': 5, '10': 'dayCount'},
     {'1': 'user_count', '3': 7, '4': 1, '5': 5, '10': 'userCount'},
     {'1': 'join_deadline', '3': 8, '4': 1, '5': 3, '10': 'joinDeadline'},
-    {'1': 'activity_deadline', '3': 9, '4': 1, '5': 3, '10': 'activityDeadline'},
-    {'1': 'checkin_view_time', '3': 10, '4': 1, '5': 5, '10': 'checkinViewTime'},
+    {
+      '1': 'activity_deadline',
+      '3': 9,
+      '4': 1,
+      '5': 3,
+      '10': 'activityDeadline'
+    },
+    {
+      '1': 'checkin_view_time',
+      '3': 10,
+      '4': 1,
+      '5': 5,
+      '10': 'checkinViewTime'
+    },
     {'1': 'new_activity', '3': 11, '4': 1, '5': 8, '10': 'newActivity'},
-    {'1': 'user_activity', '3': 12, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.UserActivity', '10': 'userActivity'},
-    {'1': 'season_show', '3': 13, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.SeasonShow', '10': 'seasonShow'},
+    {
+      '1': 'user_activity',
+      '3': 12,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.UserActivity',
+      '10': 'userActivity'
+    },
+    {
+      '1': 'season_show',
+      '3': 13,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.SeasonShow',
+      '10': 'seasonShow'
+    },
   ],
 };
 
@@ -4093,13 +6290,47 @@ const UgcSeasons$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 3, '10': 'id'},
     {'1': 'title', '3': 2, '4': 1, '5': 9, '10': 'title'},
     {'1': 'cover', '3': 3, '4': 1, '5': 9, '10': 'cover'},
-    {'1': 'supernatant_title', '3': 4, '4': 1, '5': 9, '10': 'supernatantTitle'},
-    {'1': 'section', '3': 5, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.UgcSection', '10': 'section'},
+    {
+      '1': 'supernatant_title',
+      '3': 4,
+      '4': 1,
+      '5': 9,
+      '10': 'supernatantTitle'
+    },
+    {
+      '1': 'section',
+      '3': 5,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.UgcSection',
+      '10': 'section'
+    },
     {'1': 'union_title', '3': 6, '4': 1, '5': 9, '10': 'unionTitle'},
-    {'1': 'head', '3': 7, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.SeasonHead', '10': 'head'},
+    {
+      '1': 'head',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.SeasonHead',
+      '10': 'head'
+    },
     {'1': 'ep_count', '3': 8, '4': 1, '5': 3, '10': 'epCount'},
-    {'1': 'season_type', '3': 9, '4': 1, '5': 14, '6': '.bilibili.app.viewunite.common.SeasonType', '10': 'seasonType'},
-    {'1': 'activity', '3': 10, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.UgcSeasonActivity', '10': 'activity'},
+    {
+      '1': 'season_type',
+      '3': 9,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.viewunite.common.SeasonType',
+      '10': 'seasonType'
+    },
+    {
+      '1': 'activity',
+      '3': 10,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.UgcSeasonActivity',
+      '10': 'activity'
+    },
     {'1': 'season_ability', '3': 11, '4': 3, '5': 9, '10': 'seasonAbility'},
     {'1': 'season_title', '3': 12, '4': 1, '5': 9, '10': 'seasonTitle'},
   ],
@@ -4125,7 +6356,14 @@ const UgcSection$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 3, '10': 'id'},
     {'1': 'title', '3': 2, '4': 1, '5': 9, '10': 'title'},
     {'1': 'type', '3': 3, '4': 1, '5': 3, '10': 'type'},
-    {'1': 'episodes', '3': 4, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.UgcEpisode', '10': 'episodes'},
+    {
+      '1': 'episodes',
+      '3': 4,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.UgcEpisode',
+      '10': 'episodes'
+    },
   ],
 };
 
@@ -4139,7 +6377,14 @@ final $typed_data.Uint8List ugcSectionDescriptor = $convert.base64Decode(
 const UpDataModule$json = {
   '1': 'UpDataModule',
   '2': [
-    {'1': 'ext_tabs', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.ExtTab', '10': 'extTabs'},
+    {
+      '1': 'ext_tabs',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ExtTab',
+      '10': 'extTabs'
+    },
     {'1': 'idx', '3': 2, '4': 1, '5': 5, '10': 'idx'},
     {'1': 'protocol_url', '3': 3, '4': 1, '5': 9, '10': 'protocolUrl'},
     {'1': 'height', '3': 4, '4': 1, '5': 5, '10': 'height'},
@@ -4172,11 +6417,25 @@ final $typed_data.Uint8List upLikeImgDescriptor = $convert.base64Decode(
 const UpTool$json = {
   '1': 'UpTool',
   '2': [
-    {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.app.viewunite.common.ToolType', '10': 'type'},
+    {
+      '1': 'type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.viewunite.common.ToolType',
+      '10': 'type'
+    },
     {'1': 'text', '3': 2, '4': 1, '5': 9, '10': 'text'},
     {'1': 'icon', '3': 3, '4': 1, '5': 9, '10': 'icon'},
     {'1': 'url', '3': 4, '4': 1, '5': 9, '10': 'url'},
-    {'1': 'badge', '3': 5, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.BadgeInfo', '10': 'badge'},
+    {
+      '1': 'badge',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.BadgeInfo',
+      '10': 'badge'
+    },
   ],
 };
 
@@ -4192,7 +6451,14 @@ const UpVideoTool$json = {
   '1': 'UpVideoTool',
   '2': [
     {'1': 'title', '3': 1, '4': 1, '5': 9, '10': 'title'},
-    {'1': 'tools', '3': 2, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.UpTool', '10': 'tools'},
+    {
+      '1': 'tools',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.UpTool',
+      '10': 'tools'
+    },
   ],
 };
 
@@ -4242,7 +6508,14 @@ final $typed_data.Uint8List userActivityDescriptor = $convert.base64Decode(
 const UserList$json = {
   '1': 'UserList',
   '2': [
-    {'1': 'list', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.User', '10': 'list'},
+    {
+      '1': 'list',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.User',
+      '10': 'list'
+    },
     {'1': 'title', '3': 2, '4': 1, '5': 9, '10': 'title'},
   ],
 };
@@ -4273,7 +6546,14 @@ const ViewEpisode$json = {
     {'1': 'ep_id', '3': 1, '4': 1, '5': 3, '10': 'epId'},
     {'1': 'badge', '3': 2, '4': 1, '5': 9, '10': 'badge'},
     {'1': 'badge_type', '3': 3, '4': 1, '5': 5, '10': 'badgeType'},
-    {'1': 'badge_info', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.BadgeInfo', '10': 'badgeInfo'},
+    {
+      '1': 'badge_info',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.BadgeInfo',
+      '10': 'badgeInfo'
+    },
     {'1': 'duration', '3': 5, '4': 1, '5': 5, '10': 'duration'},
     {'1': 'status', '3': 6, '4': 1, '5': 5, '10': 'status'},
     {'1': 'cover', '3': 7, '4': 1, '5': 9, '10': 'cover'},
@@ -4290,9 +6570,30 @@ const ViewEpisode$json = {
     {'1': 'short_link', '3': 18, '4': 1, '5': 9, '10': 'shortLink'},
     {'1': 'vid', '3': 19, '4': 1, '5': 9, '10': 'vid'},
     {'1': 'release_date', '3': 20, '4': 1, '5': 9, '10': 'releaseDate'},
-    {'1': 'dimension', '3': 21, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Dimension', '10': 'dimension'},
-    {'1': 'rights', '3': 22, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Rights', '10': 'rights'},
-    {'1': 'interaction', '3': 23, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Interaction', '10': 'interaction'},
+    {
+      '1': 'dimension',
+      '3': 21,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Dimension',
+      '10': 'dimension'
+    },
+    {
+      '1': 'rights',
+      '3': 22,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Rights',
+      '10': 'rights'
+    },
+    {
+      '1': 'interaction',
+      '3': 23,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Interaction',
+      '10': 'interaction'
+    },
     {'1': 'bvid', '3': 24, '4': 1, '5': 9, '10': 'bvid'},
     {'1': 'archive_attr', '3': 25, '4': 1, '5': 5, '10': 'archiveAttr'},
     {'1': 'link', '3': 26, '4': 1, '5': 9, '10': 'link'},
@@ -4302,16 +6603,51 @@ const ViewEpisode$json = {
     {'1': 'pv', '3': 30, '4': 1, '5': 5, '10': 'pv'},
     {'1': 'ep_index', '3': 31, '4': 1, '5': 5, '10': 'epIndex'},
     {'1': 'section_index', '3': 32, '4': 1, '5': 5, '10': 'sectionIndex'},
-    {'1': 'up_infos', '3': 33, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.Staff', '10': 'upInfos'},
-    {'1': 'up_info', '3': 34, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Staff', '10': 'upInfo'},
+    {
+      '1': 'up_infos',
+      '3': 33,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Staff',
+      '10': 'upInfos'
+    },
+    {
+      '1': 'up_info',
+      '3': 34,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Staff',
+      '10': 'upInfo'
+    },
     {'1': 'dialog_type', '3': 35, '4': 1, '5': 9, '10': 'dialogType'},
     {'1': 'toast_type', '3': 36, '4': 1, '5': 9, '10': 'toastType'},
-    {'1': 'multi_view_eps', '3': 37, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.MultiViewEp', '10': 'multiViewEps'},
+    {
+      '1': 'multi_view_eps',
+      '3': 37,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.MultiViewEp',
+      '10': 'multiViewEps'
+    },
     {'1': 'is_sub_view', '3': 38, '4': 1, '5': 8, '10': 'isSubView'},
     {'1': 'is_view_hide', '3': 39, '4': 1, '5': 8, '10': 'isViewHide'},
     {'1': 'jump_link', '3': 40, '4': 1, '5': 9, '10': 'jumpLink'},
-    {'1': 'stat_for_unity', '3': 41, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Stat', '10': 'statForUnity'},
-    {'1': 'report', '3': 42, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.ViewEpisode.ReportEntry', '10': 'report'},
+    {
+      '1': 'stat_for_unity',
+      '3': 41,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Stat',
+      '10': 'statForUnity'
+    },
+    {
+      '1': 'report',
+      '3': 42,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ViewEpisode.ReportEntry',
+      '10': 'report'
+    },
     {'1': 'section_type', '3': 43, '4': 1, '5': 5, '10': 'sectionType'},
     {'1': 'show_title', '3': 44, '4': 1, '5': 9, '10': 'showTitle'},
   ],
@@ -4387,7 +6723,14 @@ const Vip$json = {
     {'1': 'type', '3': 1, '4': 1, '5': 5, '10': 'type'},
     {'1': 'vip_status', '3': 2, '4': 1, '5': 5, '10': 'vipStatus'},
     {'1': 'theme_type', '3': 3, '4': 1, '5': 5, '10': 'themeType'},
-    {'1': 'label', '3': 4, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.VipLabel', '10': 'label'},
+    {
+      '1': 'label',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.VipLabel',
+      '10': 'label'
+    },
     {'1': 'is_vip', '3': 5, '4': 1, '5': 5, '10': 'isVip'},
   ],
 };
@@ -4441,4 +6784,3 @@ const WinShowCondition$json = {
 final $typed_data.Uint8List winShowConditionDescriptor = $convert.base64Decode(
     'ChBXaW5TaG93Q29uZGl0aW9uEhIKBHR5cGUYASABKAlSBHR5cGUSFAoFdmFsdWUYAiABKAlSBX'
     'ZhbHVl');
-

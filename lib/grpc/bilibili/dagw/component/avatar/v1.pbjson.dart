@@ -1,13 +1,14 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: bilibili/dagw/component/avatar/v1.proto
-//
+// Generated from bilibili/dagw/component/avatar/v1.proto.
+
 // @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names, unused_import
 
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
@@ -17,9 +18,30 @@ import 'dart:typed_data' as $typed_data;
 const AvatarItem$json = {
   '1': 'AvatarItem',
   '2': [
-    {'1': 'container_size', '3': 1, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.SizeSpec', '10': 'containerSize'},
-    {'1': 'layers', '3': 2, '4': 3, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.LayerGroup', '10': 'layers'},
-    {'1': 'fallback_layers', '3': 3, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.LayerGroup', '10': 'fallbackLayers'},
+    {
+      '1': 'container_size',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.SizeSpec',
+      '10': 'containerSize'
+    },
+    {
+      '1': 'layers',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.LayerGroup',
+      '10': 'layers'
+    },
+    {
+      '1': 'fallback_layers',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.LayerGroup',
+      '10': 'fallbackLayers'
+    },
     {'1': 'mid', '3': 4, '4': 1, '5': 3, '10': 'mid'},
   ],
 };
@@ -37,10 +59,41 @@ final $typed_data.Uint8List avatarItemDescriptor = $convert.base64Decode(
 const BasicLayerResource$json = {
   '1': 'BasicLayerResource',
   '2': [
-    {'1': 'res_image', '3': 2, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.ResImage', '9': 0, '10': 'resImage'},
-    {'1': 'res_animation', '3': 3, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.ResAnimation', '9': 0, '10': 'resAnimation'},
-    {'1': 'res_native_draw', '3': 4, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.ResNativeDraw', '9': 0, '10': 'resNativeDraw'},
-    {'1': 'res_type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.dagw.component.avatar.v1.BasicLayerResource.ResType', '10': 'resType'},
+    {
+      '1': 'res_image',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.ResImage',
+      '9': 0,
+      '10': 'resImage'
+    },
+    {
+      '1': 'res_animation',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.ResAnimation',
+      '9': 0,
+      '10': 'resAnimation'
+    },
+    {
+      '1': 'res_native_draw',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.ResNativeDraw',
+      '9': 0,
+      '10': 'resNativeDraw'
+    },
+    {
+      '1': 'res_type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.dagw.component.avatar.v1.BasicLayerResource.ResType',
+      '10': 'resType'
+    },
   ],
   '4': [BasicLayerResource_ResType$json],
   '8': [
@@ -78,7 +131,14 @@ final $typed_data.Uint8List basicLayerResourceDescriptor = $convert.base64Decode
 const GeneralConfig$json = {
   '1': 'GeneralConfig',
   '2': [
-    {'1': 'web_css_style', '3': 1, '4': 3, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.GeneralConfig.WebCssStyleEntry', '10': 'webCssStyle'},
+    {
+      '1': 'web_css_style',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.GeneralConfig.WebCssStyleEntry',
+      '10': 'webCssStyle'
+    },
   ],
   '3': [GeneralConfig_WebCssStyleEntry$json],
 };
@@ -106,9 +166,30 @@ const Layer$json = {
   '2': [
     {'1': 'layer_id', '3': 1, '4': 1, '5': 9, '10': 'layerId'},
     {'1': 'visible', '3': 2, '4': 1, '5': 8, '10': 'visible'},
-    {'1': 'general_spec', '3': 3, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.LayerGeneralSpec', '10': 'generalSpec'},
-    {'1': 'layer_config', '3': 4, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.LayerConfig', '10': 'layerConfig'},
-    {'1': 'resource', '3': 5, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.BasicLayerResource', '10': 'resource'},
+    {
+      '1': 'general_spec',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.LayerGeneralSpec',
+      '10': 'generalSpec'
+    },
+    {
+      '1': 'layer_config',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.LayerConfig',
+      '10': 'layerConfig'
+    },
+    {
+      '1': 'resource',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.BasicLayerResource',
+      '10': 'resource'
+    },
   ],
 };
 
@@ -125,10 +206,24 @@ final $typed_data.Uint8List layerDescriptor = $convert.base64Decode(
 const LayerConfig$json = {
   '1': 'LayerConfig',
   '2': [
-    {'1': 'tags', '3': 1, '4': 3, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.LayerConfig.TagsEntry', '10': 'tags'},
+    {
+      '1': 'tags',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.LayerConfig.TagsEntry',
+      '10': 'tags'
+    },
     {'1': 'is_critical', '3': 2, '4': 1, '5': 8, '10': 'isCritical'},
     {'1': 'allow_over_paint', '3': 3, '4': 1, '5': 8, '10': 'allowOverPaint'},
-    {'1': 'layer_mask', '3': 4, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.MaskProperty', '10': 'layerMask'},
+    {
+      '1': 'layer_mask',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.MaskProperty',
+      '10': 'layerMask'
+    },
   ],
   '3': [LayerConfig_TagsEntry$json],
 };
@@ -138,7 +233,14 @@ const LayerConfig_TagsEntry$json = {
   '1': 'TagsEntry',
   '2': [
     {'1': 'key', '3': 1, '4': 1, '5': 9, '10': 'key'},
-    {'1': 'value', '3': 2, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.LayerTagConfig', '10': 'value'},
+    {
+      '1': 'value',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.LayerTagConfig',
+      '10': 'value'
+    },
   ],
   '7': {'7': true},
 };
@@ -158,8 +260,22 @@ const LayerGroup$json = {
   '1': 'LayerGroup',
   '2': [
     {'1': 'group_id', '3': 1, '4': 1, '5': 9, '10': 'groupId'},
-    {'1': 'layers', '3': 2, '4': 3, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.Layer', '10': 'layers'},
-    {'1': 'group_mask', '3': 3, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.MaskProperty', '10': 'groupMask'},
+    {
+      '1': 'layers',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.Layer',
+      '10': 'layers'
+    },
+    {
+      '1': 'group_mask',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.MaskProperty',
+      '10': 'groupMask'
+    },
     {'1': 'is_critical_group', '3': 4, '4': 1, '5': 8, '10': 'isCriticalGroup'},
   ],
 };
@@ -176,14 +292,77 @@ final $typed_data.Uint8List layerGroupDescriptor = $convert.base64Decode(
 const LayerTagConfig$json = {
   '1': 'LayerTagConfig',
   '2': [
-    {'1': 'general_config', '3': 2, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.GeneralConfig', '9': 0, '10': 'generalConfig'},
-    {'1': 'gyro_config', '3': 3, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.plugin.GyroConfig', '9': 0, '10': 'gyroConfig'},
-    {'1': 'comment_double_click_config', '3': 4, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.plugin.CommentDoubleClickConfig', '9': 0, '10': 'commentDoubleClickConfig'},
-    {'1': 'live_anime_config', '3': 5, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.plugin.LiveAnimeConfig', '9': 0, '10': 'liveAnimeConfig'},
-    {'1': 'web_live_anime_config', '3': 6, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.plugin.WebLiveAnimeConfig', '9': 0, '10': 'webLiveAnimeConfig'},
-    {'1': 'follow_icon_config', '3': 7, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.plugin.FollowIconConfig', '9': 0, '10': 'followIconConfig'},
-    {'1': 'follow_action_config', '3': 8, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.plugin.FollowActionConfig', '9': 0, '10': 'followActionConfig'},
-    {'1': 'config_type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.dagw.component.avatar.v1.LayerTagConfig.TagConfigType', '10': 'configType'},
+    {
+      '1': 'general_config',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.GeneralConfig',
+      '9': 0,
+      '10': 'generalConfig'
+    },
+    {
+      '1': 'gyro_config',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.plugin.GyroConfig',
+      '9': 0,
+      '10': 'gyroConfig'
+    },
+    {
+      '1': 'comment_double_click_config',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.plugin.CommentDoubleClickConfig',
+      '9': 0,
+      '10': 'commentDoubleClickConfig'
+    },
+    {
+      '1': 'live_anime_config',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.plugin.LiveAnimeConfig',
+      '9': 0,
+      '10': 'liveAnimeConfig'
+    },
+    {
+      '1': 'web_live_anime_config',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.plugin.WebLiveAnimeConfig',
+      '9': 0,
+      '10': 'webLiveAnimeConfig'
+    },
+    {
+      '1': 'follow_icon_config',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.plugin.FollowIconConfig',
+      '9': 0,
+      '10': 'followIconConfig'
+    },
+    {
+      '1': 'follow_action_config',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.plugin.FollowActionConfig',
+      '9': 0,
+      '10': 'followActionConfig'
+    },
+    {
+      '1': 'config_type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.dagw.component.avatar.v1.LayerTagConfig.TagConfigType',
+      '10': 'configType'
+    },
   ],
   '4': [LayerTagConfig_TagConfigType$json],
   '8': [
@@ -233,7 +412,14 @@ final $typed_data.Uint8List layerTagConfigDescriptor = $convert.base64Decode(
 const ResAnimation$json = {
   '1': 'ResAnimation',
   '2': [
-    {'1': 'webp_src', '3': 1, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.ResourceSource', '10': 'webpSrc'},
+    {
+      '1': 'webp_src',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.ResourceSource',
+      '10': 'webpSrc'
+    },
   ],
 };
 
@@ -246,7 +432,14 @@ final $typed_data.Uint8List resAnimationDescriptor = $convert.base64Decode(
 const ResImage$json = {
   '1': 'ResImage',
   '2': [
-    {'1': 'image_src', '3': 1, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.ResourceSource', '10': 'imageSrc'},
+    {
+      '1': 'image_src',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.ResourceSource',
+      '10': 'imageSrc'
+    },
   ],
 };
 
@@ -259,7 +452,14 @@ final $typed_data.Uint8List resImageDescriptor = $convert.base64Decode(
 const ResNativeDraw$json = {
   '1': 'ResNativeDraw',
   '2': [
-    {'1': 'draw_src', '3': 1, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.ResourceSource', '10': 'drawSrc'},
+    {
+      '1': 'draw_src',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.ResourceSource',
+      '10': 'drawSrc'
+    },
   ],
 };
 
@@ -267,4 +467,3 @@ const ResNativeDraw$json = {
 final $typed_data.Uint8List resNativeDrawDescriptor = $convert.base64Decode(
     'Cg1SZXNOYXRpdmVEcmF3ElAKCGRyYXdfc3JjGAEgASgLMjUuYmlsaWJpbGkuZGFndy5jb21wb2'
     '5lbnQuYXZhdGFyLmNvbW1vbi5SZXNvdXJjZVNvdXJjZVIHZHJhd1NyYw==');
-

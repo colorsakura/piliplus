@@ -1,13 +1,14 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: bilibili/app/viewunite/pgcanymodel.proto
-//
+// Generated from bilibili/app/viewunite/pgcanymodel.proto.
+
 // @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names, unused_import
 
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
@@ -35,7 +36,14 @@ final $typed_data.Uint8List earphoneDescriptor = $convert.base64Decode(
 const EarphoneConf$json = {
   '1': 'EarphoneConf',
   '2': [
-    {'1': 'sp_phones', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.pgcanymodel.Earphone', '10': 'spPhones'},
+    {
+      '1': 'sp_phones',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.pgcanymodel.Earphone',
+      '10': 'spPhones'
+    },
   ],
 };
 
@@ -48,7 +56,13 @@ final $typed_data.Uint8List earphoneConfDescriptor = $convert.base64Decode(
 const MultiViewInfo$json = {
   '1': 'MultiViewInfo',
   '2': [
-    {'1': 'is_multi_view_season', '3': 1, '4': 1, '5': 8, '10': 'isMultiViewSeason'},
+    {
+      '1': 'is_multi_view_season',
+      '3': 1,
+      '4': 1,
+      '5': 8,
+      '10': 'isMultiViewSeason'
+    },
     {'1': 'changing_dance', '3': 2, '4': 1, '5': 9, '10': 'changingDance'},
   ],
 };
@@ -66,30 +80,126 @@ const OgvData$json = {
     {'1': 'season_id', '3': 2, '4': 1, '5': 3, '10': 'seasonId'},
     {'1': 'season_type', '3': 3, '4': 1, '5': 5, '10': 'seasonType'},
     {'1': 'show_season_type', '3': 4, '4': 1, '5': 5, '10': 'showSeasonType'},
-    {'1': 'rights', '3': 5, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.pgcanymodel.Rights', '10': 'rights'},
-    {'1': 'user_status', '3': 6, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.pgcanymodel.UserStatus', '10': 'userStatus'},
+    {
+      '1': 'rights',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.pgcanymodel.Rights',
+      '10': 'rights'
+    },
+    {
+      '1': 'user_status',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.pgcanymodel.UserStatus',
+      '10': 'userStatus'
+    },
     {'1': 'aid', '3': 7, '4': 1, '5': 3, '10': 'aid'},
-    {'1': 'stat', '3': 8, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.pgcanymodel.Stat', '10': 'stat'},
+    {
+      '1': 'stat',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.pgcanymodel.Stat',
+      '10': 'stat'
+    },
     {'1': 'mode', '3': 9, '4': 1, '5': 5, '10': 'mode'},
-    {'1': 'publish', '3': 10, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.pgcanymodel.Publish', '10': 'publish'},
-    {'1': 'play_strategy', '3': 11, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.pgcanymodel.PlayStrategy', '10': 'playStrategy'},
-    {'1': 'multi_view_info', '3': 12, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.pgcanymodel.MultiViewInfo', '10': 'multiViewInfo'},
-    {'1': 'ogv_switch', '3': 13, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.pgcanymodel.OgvSwitch', '10': 'ogvSwitch'},
+    {
+      '1': 'publish',
+      '3': 10,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.pgcanymodel.Publish',
+      '10': 'publish'
+    },
+    {
+      '1': 'play_strategy',
+      '3': 11,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.pgcanymodel.PlayStrategy',
+      '10': 'playStrategy'
+    },
+    {
+      '1': 'multi_view_info',
+      '3': 12,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.pgcanymodel.MultiViewInfo',
+      '10': 'multiViewInfo'
+    },
+    {
+      '1': 'ogv_switch',
+      '3': 13,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.pgcanymodel.OgvSwitch',
+      '10': 'ogvSwitch'
+    },
     {'1': 'total_ep', '3': 14, '4': 1, '5': 5, '10': 'totalEp'},
-    {'1': 'new_ep', '3': 15, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.NewEp', '10': 'newEp'},
-    {'1': 'reserve', '3': 16, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.pgcanymodel.Reserve', '10': 'reserve'},
+    {
+      '1': 'new_ep',
+      '3': 15,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.NewEp',
+      '10': 'newEp'
+    },
+    {
+      '1': 'reserve',
+      '3': 16,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.pgcanymodel.Reserve',
+      '10': 'reserve'
+    },
     {'1': 'status', '3': 17, '4': 1, '5': 5, '10': 'status'},
-    {'1': 'activity_float_layer', '3': 18, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.pgcanymodel.PlayFloatLayerActivity', '10': 'activityFloatLayer'},
-    {'1': 'earphone_conf', '3': 19, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.pgcanymodel.EarphoneConf', '10': 'earphoneConf'},
+    {
+      '1': 'activity_float_layer',
+      '3': 18,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.pgcanymodel.PlayFloatLayerActivity',
+      '10': 'activityFloatLayer'
+    },
+    {
+      '1': 'earphone_conf',
+      '3': 19,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.pgcanymodel.EarphoneConf',
+      '10': 'earphoneConf'
+    },
     {'1': 'cover', '3': 20, '4': 1, '5': 9, '10': 'cover'},
     {'1': 'square_cover', '3': 21, '4': 1, '5': 9, '10': 'squareCover'},
     {'1': 'share_url', '3': 22, '4': 1, '5': 9, '10': 'shareUrl'},
     {'1': 'short_link', '3': 23, '4': 1, '5': 9, '10': 'shortLink'},
     {'1': 'title', '3': 24, '4': 1, '5': 9, '10': 'title'},
-    {'1': 'horizontal_cover169', '3': 25, '4': 1, '5': 9, '10': 'horizontalCover169'},
-    {'1': 'horizontal_cover1610', '3': 26, '4': 1, '5': 9, '10': 'horizontalCover1610'},
+    {
+      '1': 'horizontal_cover169',
+      '3': 25,
+      '4': 1,
+      '5': 9,
+      '10': 'horizontalCover169'
+    },
+    {
+      '1': 'horizontal_cover1610',
+      '3': 26,
+      '4': 1,
+      '5': 9,
+      '10': 'horizontalCover1610'
+    },
     {'1': 'has_can_play_ep', '3': 27, '4': 1, '5': 5, '10': 'hasCanPlayEp'},
-    {'1': 'skin', '3': 28, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.pgcanymodel.Skin', '10': 'skin'},
+    {
+      '1': 'skin',
+      '3': 28,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.pgcanymodel.Skin',
+      '10': 'skin'
+    },
   ],
 };
 
@@ -126,10 +236,34 @@ final $typed_data.Uint8List ogvDataDescriptor = $convert.base64Decode(
 const OgvSwitch$json = {
   '1': 'OgvSwitch',
   '2': [
-    {'1': 'reduce_short_title_spacing', '3': 1, '4': 1, '5': 5, '10': 'reduceShortTitleSpacing'},
-    {'1': 'merge_position_section_for_cinema', '3': 2, '4': 1, '5': 5, '10': 'mergePositionSectionForCinema'},
-    {'1': 'merge_preview_section', '3': 3, '4': 1, '5': 5, '10': 'mergePreviewSection'},
-    {'1': 'enable_show_vt_info', '3': 4, '4': 1, '5': 5, '10': 'enableShowVtInfo'},
+    {
+      '1': 'reduce_short_title_spacing',
+      '3': 1,
+      '4': 1,
+      '5': 5,
+      '10': 'reduceShortTitleSpacing'
+    },
+    {
+      '1': 'merge_position_section_for_cinema',
+      '3': 2,
+      '4': 1,
+      '5': 5,
+      '10': 'mergePositionSectionForCinema'
+    },
+    {
+      '1': 'merge_preview_section',
+      '3': 3,
+      '4': 1,
+      '5': 5,
+      '10': 'mergePreviewSection'
+    },
+    {
+      '1': 'enable_show_vt_info',
+      '3': 4,
+      '4': 1,
+      '5': 5,
+      '10': 'enableShowVtInfo'
+    },
     {'1': 'hide_ep_vv_vt_dm', '3': 5, '4': 1, '5': 5, '10': 'hideEpVvVtDm'},
     {'1': 'follow_guide', '3': 6, '4': 1, '5': 5, '10': 'followGuide'},
   ],
@@ -155,7 +289,14 @@ const PlayFloatLayerActivity$json = {
     {'1': 'link', '3': 5, '4': 1, '5': 9, '10': 'link'},
     {'1': 'pic_url', '3': 6, '4': 1, '5': 9, '10': 'picUrl'},
     {'1': 'pic_anima_url', '3': 7, '4': 1, '5': 9, '10': 'picAnimaUrl'},
-    {'1': 'badge', '3': 8, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.BadgeInfo', '10': 'badge'},
+    {
+      '1': 'badge',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.BadgeInfo',
+      '10': 'badge'
+    },
     {'1': 'show_rate_time', '3': 9, '4': 1, '5': 3, '10': 'showRateTime'},
   ],
 };
@@ -174,7 +315,13 @@ const PlayStrategy$json = {
   '1': 'PlayStrategy',
   '2': [
     {'1': 'strategies', '3': 1, '4': 3, '5': 9, '10': 'strategies'},
-    {'1': 'recommend_show_strategy', '3': 2, '4': 1, '5': 5, '10': 'recommendShowStrategy'},
+    {
+      '1': 'recommend_show_strategy',
+      '3': 2,
+      '4': 1,
+      '5': 5,
+      '10': 'recommendShowStrategy'
+    },
     {'1': 'auto_play_toast', '3': 3, '4': 1, '5': 9, '10': 'autoPlayToast'},
   ],
 };
@@ -214,7 +361,14 @@ final $typed_data.Uint8List publishDescriptor = $convert.base64Decode(
 const Reserve$json = {
   '1': 'Reserve',
   '2': [
-    {'1': 'episodes', '3': 1, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.common.ViewEpisode', '10': 'episodes'},
+    {
+      '1': 'episodes',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.ViewEpisode',
+      '10': 'episodes'
+    },
     {'1': 'tip', '3': 2, '4': 1, '5': 9, '10': 'tip'},
   ],
 };
@@ -242,8 +396,20 @@ const Rights$json = {
     {'1': 'allow_bp_rank', '3': 12, '4': 1, '5': 5, '10': 'allowBpRank'},
     {'1': 'resource', '3': 13, '4': 1, '5': 9, '10': 'resource'},
     {'1': 'forbid_pre', '3': 14, '4': 1, '5': 5, '10': 'forbidPre'},
-    {'1': 'only_vip_download', '3': 15, '4': 1, '5': 5, '10': 'onlyVipDownload'},
-    {'1': 'new_allow_download', '3': 16, '4': 1, '5': 5, '10': 'newAllowDownload'},
+    {
+      '1': 'only_vip_download',
+      '3': 15,
+      '4': 1,
+      '5': 5,
+      '10': 'onlyVipDownload'
+    },
+    {
+      '1': 'new_allow_download',
+      '3': 16,
+      '4': 1,
+      '5': 5,
+      '10': 'newAllowDownload'
+    },
   ],
 };
 
@@ -266,19 +432,73 @@ const Skin$json = {
   '1': 'Skin',
   '2': [
     {'1': 'tab_text_color', '3': 1, '4': 1, '5': 9, '10': 'tabTextColor'},
-    {'1': 'tab_text_night_color', '3': 2, '4': 1, '5': 9, '10': 'tabTextNightColor'},
+    {
+      '1': 'tab_text_night_color',
+      '3': 2,
+      '4': 1,
+      '5': 9,
+      '10': 'tabTextNightColor'
+    },
     {'1': 'bg_img', '3': 3, '4': 1, '5': 9, '10': 'bgImg'},
     {'1': 'bg_img_night', '3': 4, '4': 1, '5': 9, '10': 'bgImgNight'},
-    {'1': 'dm_input_frame_bg_color', '3': 5, '4': 1, '5': 9, '10': 'dmInputFrameBgColor'},
-    {'1': 'dm_input_frame_bg_night_color', '3': 6, '4': 1, '5': 9, '10': 'dmInputFrameBgNightColor'},
-    {'1': 'dm_input_frame_color', '3': 7, '4': 1, '5': 9, '10': 'dmInputFrameColor'},
-    {'1': 'dm_input_frame_night_color', '3': 8, '4': 1, '5': 9, '10': 'dmInputFrameNightColor'},
+    {
+      '1': 'dm_input_frame_bg_color',
+      '3': 5,
+      '4': 1,
+      '5': 9,
+      '10': 'dmInputFrameBgColor'
+    },
+    {
+      '1': 'dm_input_frame_bg_night_color',
+      '3': 6,
+      '4': 1,
+      '5': 9,
+      '10': 'dmInputFrameBgNightColor'
+    },
+    {
+      '1': 'dm_input_frame_color',
+      '3': 7,
+      '4': 1,
+      '5': 9,
+      '10': 'dmInputFrameColor'
+    },
+    {
+      '1': 'dm_input_frame_night_color',
+      '3': 8,
+      '4': 1,
+      '5': 9,
+      '10': 'dmInputFrameNightColor'
+    },
     {'1': 'dm_btn_bg_color', '3': 9, '4': 1, '5': 9, '10': 'dmBtnBgColor'},
-    {'1': 'dm_btn_bg_night_color', '3': 10, '4': 1, '5': 9, '10': 'dmBtnBgNightColor'},
+    {
+      '1': 'dm_btn_bg_night_color',
+      '3': 10,
+      '4': 1,
+      '5': 9,
+      '10': 'dmBtnBgNightColor'
+    },
     {'1': 'dm_btn_icon_color', '3': 11, '4': 1, '5': 9, '10': 'dmBtnIconColor'},
-    {'1': 'dm_btn_icon_night_color', '3': 12, '4': 1, '5': 9, '10': 'dmBtnIconNightColor'},
-    {'1': 'dm_input_text_color', '3': 13, '4': 1, '5': 9, '10': 'dmInputTextColor'},
-    {'1': 'dm_input_text_night_color', '3': 14, '4': 1, '5': 9, '10': 'dmInputTextNightColor'},
+    {
+      '1': 'dm_btn_icon_night_color',
+      '3': 12,
+      '4': 1,
+      '5': 9,
+      '10': 'dmBtnIconNightColor'
+    },
+    {
+      '1': 'dm_input_text_color',
+      '3': 13,
+      '4': 1,
+      '5': 9,
+      '10': 'dmInputTextColor'
+    },
+    {
+      '1': 'dm_input_text_night_color',
+      '3': 14,
+      '4': 1,
+      '5': 9,
+      '10': 'dmInputTextNightColor'
+    },
   ],
 };
 
@@ -303,7 +523,14 @@ const Stat$json = {
   '1': 'Stat',
   '2': [
     {'1': 'followers', '3': 1, '4': 1, '5': 9, '10': 'followers'},
-    {'1': 'play_data', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.StatInfo', '10': 'playData'},
+    {
+      '1': 'play_data',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.StatInfo',
+      '10': 'playData'
+    },
   ],
 };
 
@@ -323,7 +550,14 @@ const UserStatus$json = {
     {'1': 'sponsor', '3': 5, '4': 1, '5': 5, '10': 'sponsor'},
     {'1': 'vip', '3': 6, '4': 1, '5': 5, '10': 'vip'},
     {'1': 'vip_frozen', '3': 7, '4': 1, '5': 5, '10': 'vipFrozen'},
-    {'1': 'watch_progress', '3': 8, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.pgcanymodel.WatchProgress', '10': 'watchProgress'},
+    {
+      '1': 'watch_progress',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.pgcanymodel.WatchProgress',
+      '10': 'watchProgress'
+    },
   ],
 };
 
@@ -339,8 +573,22 @@ final $typed_data.Uint8List userStatusDescriptor = $convert.base64Decode(
 const ViewPgcAny$json = {
   '1': 'ViewPgcAny',
   '2': [
-    {'1': 'ogv_data', '3': 1, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.pgcanymodel.OgvData', '10': 'ogvData'},
-    {'1': 'all_up_info', '3': 2, '4': 3, '5': 11, '6': '.bilibili.app.viewunite.pgcanymodel.ViewPgcAny.AllUpInfoEntry', '10': 'allUpInfo'},
+    {
+      '1': 'ogv_data',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.pgcanymodel.OgvData',
+      '10': 'ogvData'
+    },
+    {
+      '1': 'all_up_info',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.pgcanymodel.ViewPgcAny.AllUpInfoEntry',
+      '10': 'allUpInfo'
+    },
   ],
   '3': [ViewPgcAny_AllUpInfoEntry$json],
 };
@@ -350,7 +598,14 @@ const ViewPgcAny_AllUpInfoEntry$json = {
   '1': 'AllUpInfoEntry',
   '2': [
     {'1': 'key', '3': 1, '4': 1, '5': 3, '10': 'key'},
-    {'1': 'value', '3': 2, '4': 1, '5': 11, '6': '.bilibili.app.viewunite.common.Staff', '10': 'value'},
+    {
+      '1': 'value',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.app.viewunite.common.Staff',
+      '10': 'value'
+    },
   ],
   '7': {'7': true},
 };
@@ -378,4 +633,3 @@ const WatchProgress$json = {
 final $typed_data.Uint8List watchProgressDescriptor = $convert.base64Decode(
     'Cg1XYXRjaFByb2dyZXNzEhwKCmxhc3RfZXBfaWQYASABKANSCGxhc3RFcElkEiIKDWxhc3RfZX'
     'BfaW5kZXgYAiABKAlSC2xhc3RFcEluZGV4EhsKCWxhc3RfdGltZRgDIAEoA1IIbGFzdFRpbWU=');
-

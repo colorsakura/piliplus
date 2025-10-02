@@ -7,7 +7,7 @@ import 'package:PiliPlus/grpc/bilibili/metadata/device.pb.dart';
 import 'package:PiliPlus/grpc/bilibili/metadata/fawkes.pb.dart';
 import 'package:PiliPlus/grpc/bilibili/metadata/locale.pb.dart';
 import 'package:PiliPlus/grpc/bilibili/metadata/network.pb.dart' as network;
-import 'package:PiliPlus/grpc/google/rpc/status.pb.dart';
+import 'package:PiliPlus/grpc/bilibili/rpc.pb.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -171,13 +171,15 @@ class GrpcReq {
           final msgBytes = base64Decode(msg);
           try {
             final grpcMsg = Status.fromBuffer(msgBytes);
-            code = grpcMsg.details.firstOrNull?.status.code;
+            final details = grpcMsg.details.map(
+              (e) => Status.fromBuffer(e.value),
+            );
+            code = details.firstOrNull?.code;
             // UNKNOWN : -400 : msg
-            final errMsg = grpcMsg.details
-                .map((e) => e.status.message)
-                .join('\n');
+            final errMsg = details.map((e) => e.message).join('\n');
             msg = kDebugMode
-                ? 'CODE: ${grpcMsg.code}(${grpcMsg.message})\nMSG: $errMsg'
+                ? 'CODE: ${grpcMsg.code}(${grpcMsg.message})'
+                      'MSG: $errMsg'
                 : errMsg;
           } catch (e) {
             msg = utf8.decode(msgBytes, allowMalformed: true);

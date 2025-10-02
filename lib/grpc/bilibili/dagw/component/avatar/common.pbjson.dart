@@ -1,13 +1,14 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: bilibili/dagw/component/avatar/common.proto
-//
+// Generated from bilibili/dagw/component/avatar/common.proto.
+
 // @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names, unused_import
 
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
@@ -29,9 +30,29 @@ final $typed_data.Uint8List basicRenderSpecDescriptor = $convert.base64Decode(
 const ColorConfig$json = {
   '1': 'ColorConfig',
   '2': [
-    {'1': 'is_dark_mode_aware', '3': 1, '4': 1, '5': 8, '10': 'isDarkModeAware'},
-    {'1': 'day', '3': 2, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.ColorSpec', '10': 'day'},
-    {'1': 'night', '3': 3, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.ColorSpec', '10': 'night'},
+    {
+      '1': 'is_dark_mode_aware',
+      '3': 1,
+      '4': 1,
+      '5': 8,
+      '10': 'isDarkModeAware'
+    },
+    {
+      '1': 'day',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.ColorSpec',
+      '10': 'day'
+    },
+    {
+      '1': 'night',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.ColorSpec',
+      '10': 'night'
+    },
   ],
 };
 
@@ -51,16 +72,37 @@ const ColorSpec$json = {
 };
 
 /// Descriptor for `ColorSpec`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List colorSpecDescriptor = $convert.base64Decode(
-    'CglDb2xvclNwZWMSEgoEYXJnYhgBIAEoCVIEYXJnYg==');
+final $typed_data.Uint8List colorSpecDescriptor =
+    $convert.base64Decode('CglDb2xvclNwZWMSEgoEYXJnYhgBIAEoCVIEYXJnYg==');
 
 @$core.Deprecated('Use layerGeneralSpecDescriptor instead')
 const LayerGeneralSpec$json = {
   '1': 'LayerGeneralSpec',
   '2': [
-    {'1': 'pos_spec', '3': 1, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.PositionSpec', '10': 'posSpec'},
-    {'1': 'size_spec', '3': 2, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.SizeSpec', '10': 'sizeSpec'},
-    {'1': 'render_spec', '3': 3, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.BasicRenderSpec', '10': 'renderSpec'},
+    {
+      '1': 'pos_spec',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.PositionSpec',
+      '10': 'posSpec'
+    },
+    {
+      '1': 'size_spec',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.SizeSpec',
+      '10': 'sizeSpec'
+    },
+    {
+      '1': 'render_spec',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.BasicRenderSpec',
+      '10': 'renderSpec'
+    },
   ],
 };
 
@@ -76,8 +118,22 @@ final $typed_data.Uint8List layerGeneralSpecDescriptor = $convert.base64Decode(
 const MaskProperty$json = {
   '1': 'MaskProperty',
   '2': [
-    {'1': 'general_spec', '3': 1, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.LayerGeneralSpec', '10': 'generalSpec'},
-    {'1': 'mask_src', '3': 2, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.ResourceSource', '10': 'maskSrc'},
+    {
+      '1': 'general_spec',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.LayerGeneralSpec',
+      '10': 'generalSpec'
+    },
+    {
+      '1': 'mask_src',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.ResourceSource',
+      '10': 'maskSrc'
+    },
   ],
 };
 
@@ -92,9 +148,30 @@ final $typed_data.Uint8List maskPropertyDescriptor = $convert.base64Decode(
 const NativeDrawRes$json = {
   '1': 'NativeDrawRes',
   '2': [
-    {'1': 'draw_type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.dagw.component.avatar.common.NativeDrawRes.NativeDraw', '10': 'drawType'},
-    {'1': 'fill_mode', '3': 2, '4': 1, '5': 14, '6': '.bilibili.dagw.component.avatar.common.NativeDrawRes.FillMode', '10': 'fillMode'},
-    {'1': 'color_config', '3': 3, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.ColorConfig', '10': 'colorConfig'},
+    {
+      '1': 'draw_type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.dagw.component.avatar.common.NativeDrawRes.NativeDraw',
+      '10': 'drawType'
+    },
+    {
+      '1': 'fill_mode',
+      '3': 2,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.dagw.component.avatar.common.NativeDrawRes.FillMode',
+      '10': 'fillMode'
+    },
+    {
+      '1': 'color_config',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.ColorConfig',
+      '10': 'colorConfig'
+    },
     {'1': 'edge_weight', '3': 4, '4': 1, '5': 1, '10': 'edgeWeight'},
   ],
   '4': [NativeDrawRes_FillMode$json, NativeDrawRes_NativeDraw$json],
@@ -136,7 +213,14 @@ final $typed_data.Uint8List nativeDrawResDescriptor = $convert.base64Decode(
 const PositionSpec$json = {
   '1': 'PositionSpec',
   '2': [
-    {'1': 'coordinate_pos', '3': 1, '4': 1, '5': 14, '6': '.bilibili.dagw.component.avatar.common.PositionSpec.CoordinatePos', '10': 'coordinatePos'},
+    {
+      '1': 'coordinate_pos',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.dagw.component.avatar.common.PositionSpec.CoordinatePos',
+      '10': 'coordinatePos'
+    },
     {'1': 'axis_x', '3': 2, '4': 1, '5': 1, '10': 'axisX'},
     {'1': 'axis_y', '3': 3, '4': 1, '5': 1, '10': 'axisY'},
   ],
@@ -179,11 +263,41 @@ final $typed_data.Uint8List remoteResDescriptor = $convert.base64Decode(
 const ResourceSource$json = {
   '1': 'ResourceSource',
   '2': [
-    {'1': 'remote', '3': 3, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.RemoteRes', '9': 0, '10': 'remote'},
+    {
+      '1': 'remote',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.RemoteRes',
+      '9': 0,
+      '10': 'remote'
+    },
     {'1': 'local_value', '3': 4, '4': 1, '5': 5, '9': 0, '10': 'localValue'},
-    {'1': 'draw', '3': 5, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.NativeDrawRes', '9': 0, '10': 'draw'},
-    {'1': 'src_type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.dagw.component.avatar.common.ResourceSource.SourceType', '10': 'srcType'},
-    {'1': 'placeholder', '3': 2, '4': 1, '5': 14, '6': '.bilibili.dagw.component.avatar.common.ResourceSource.LocalRes', '10': 'placeholder'},
+    {
+      '1': 'draw',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.NativeDrawRes',
+      '9': 0,
+      '10': 'draw'
+    },
+    {
+      '1': 'src_type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.dagw.component.avatar.common.ResourceSource.SourceType',
+      '10': 'srcType'
+    },
+    {
+      '1': 'placeholder',
+      '3': 2,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.dagw.component.avatar.common.ResourceSource.LocalRes',
+      '10': 'placeholder'
+    },
   ],
   '4': [ResourceSource_LocalRes$json, ResourceSource_SourceType$json],
   '8': [
@@ -248,4 +362,3 @@ const SizeSpec$json = {
 final $typed_data.Uint8List sizeSpecDescriptor = $convert.base64Decode(
     'CghTaXplU3BlYxIUCgV3aWR0aBgBIAEoAVIFd2lkdGgSFgoGaGVpZ2h0GAIgASgBUgZoZWlnaH'
     'Q=');
-

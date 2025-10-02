@@ -1,13 +1,14 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: bilibili/community/service/dm/v1.proto
-//
+// Generated from bilibili/community/service/dm/v1.proto.
+
 // @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names, unused_import
 
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
@@ -237,8 +238,8 @@ const SubtitleType$json = {
 };
 
 /// Descriptor for `SubtitleType`. Decode as a `google.protobuf.EnumDescriptorProto`.
-final $typed_data.Uint8List subtitleTypeDescriptor = $convert.base64Decode(
-    'CgxTdWJ0aXRsZVR5cGUSBgoCQ0MQABIGCgJBSRAB');
+final $typed_data.Uint8List subtitleTypeDescriptor =
+    $convert.base64Decode('CgxTdWJ0aXRsZVR5cGUSBgoCQ0MQABIGCgJBSRAB');
 
 @$core.Deprecated('Use toastFunctionTypeDescriptor instead')
 const ToastFunctionType$json = {
@@ -260,7 +261,14 @@ const Avatar$json = {
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'url', '3': 2, '4': 1, '5': 9, '10': 'url'},
-    {'1': 'avatar_type', '3': 3, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.AvatarType', '10': 'avatarType'},
+    {
+      '1': 'avatar_type',
+      '3': 3,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.AvatarType',
+      '10': 'avatarType'
+    },
   ],
 };
 
@@ -289,9 +297,23 @@ const BubbleV2$json = {
   '2': [
     {'1': 'text', '3': 1, '4': 1, '5': 9, '10': 'text'},
     {'1': 'url', '3': 2, '4': 1, '5': 9, '10': 'url'},
-    {'1': 'bubble_type', '3': 3, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.BubbleType', '10': 'bubbleType'},
+    {
+      '1': 'bubble_type',
+      '3': 3,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.BubbleType',
+      '10': 'bubbleType'
+    },
     {'1': 'exposure_once', '3': 4, '4': 1, '5': 8, '10': 'exposureOnce'},
-    {'1': 'exposure_type', '3': 5, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.ExposureType', '10': 'exposureType'},
+    {
+      '1': 'exposure_type',
+      '3': 5,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.ExposureType',
+      '10': 'exposureType'
+    },
   ],
 };
 
@@ -308,7 +330,14 @@ const Button$json = {
   '1': 'Button',
   '2': [
     {'1': 'text', '3': 1, '4': 1, '5': 9, '10': 'text'},
-    {'1': 'action', '3': 2, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.ToastFunctionType', '10': 'action'},
+    {
+      '1': 'action',
+      '3': 2,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.ToastFunctionType',
+      '10': 'action'
+    },
   ],
 };
 
@@ -321,7 +350,14 @@ final $typed_data.Uint8List buttonDescriptor = $convert.base64Decode(
 const BuzzwordConfig$json = {
   '1': 'BuzzwordConfig',
   '2': [
-    {'1': 'keywords', '3': 1, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.BuzzwordShowConfig', '10': 'keywords'},
+    {
+      '1': 'keywords',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.BuzzwordShowConfig',
+      '10': 'keywords'
+    },
   ],
 };
 
@@ -355,7 +391,14 @@ const CheckBox$json = {
   '1': 'CheckBox',
   '2': [
     {'1': 'text', '3': 1, '4': 1, '5': 9, '10': 'text'},
-    {'1': 'type', '3': 2, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.CheckboxType', '10': 'type'},
+    {
+      '1': 'type',
+      '3': 2,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.CheckboxType',
+      '10': 'type'
+    },
     {'1': 'default_value', '3': 3, '4': 1, '5': 8, '10': 'defaultValue'},
     {'1': 'show', '3': 4, '4': 1, '5': 8, '10': 'show'},
   ],
@@ -372,7 +415,14 @@ const CheckBoxV2$json = {
   '1': 'CheckBoxV2',
   '2': [
     {'1': 'text', '3': 1, '4': 1, '5': 9, '10': 'text'},
-    {'1': 'type', '3': 2, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.CheckboxType', '10': 'type'},
+    {
+      '1': 'type',
+      '3': 2,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.CheckboxType',
+      '10': 'type'
+    },
     {'1': 'default_value', '3': 3, '4': 1, '5': 8, '10': 'defaultValue'},
   ],
 };
@@ -389,11 +439,37 @@ const ClickButton$json = {
   '2': [
     {'1': 'portrait_text', '3': 1, '4': 3, '5': 9, '10': 'portraitText'},
     {'1': 'landscape_text', '3': 2, '4': 3, '5': 9, '10': 'landscapeText'},
-    {'1': 'portrait_text_focus', '3': 3, '4': 3, '5': 9, '10': 'portraitTextFocus'},
-    {'1': 'landscape_text_focus', '3': 4, '4': 3, '5': 9, '10': 'landscapeTextFocus'},
-    {'1': 'render_type', '3': 5, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.RenderType', '10': 'renderType'},
+    {
+      '1': 'portrait_text_focus',
+      '3': 3,
+      '4': 3,
+      '5': 9,
+      '10': 'portraitTextFocus'
+    },
+    {
+      '1': 'landscape_text_focus',
+      '3': 4,
+      '4': 3,
+      '5': 9,
+      '10': 'landscapeTextFocus'
+    },
+    {
+      '1': 'render_type',
+      '3': 5,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.RenderType',
+      '10': 'renderType'
+    },
     {'1': 'show', '3': 6, '4': 1, '5': 8, '10': 'show'},
-    {'1': 'bubble', '3': 7, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.Bubble', '10': 'bubble'},
+    {
+      '1': 'bubble',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.Bubble',
+      '10': 'bubble'
+    },
   ],
 };
 
@@ -413,12 +489,38 @@ const ClickButtonV2$json = {
   '2': [
     {'1': 'portrait_text', '3': 1, '4': 3, '5': 9, '10': 'portraitText'},
     {'1': 'landscape_text', '3': 2, '4': 3, '5': 9, '10': 'landscapeText'},
-    {'1': 'portrait_text_focus', '3': 3, '4': 3, '5': 9, '10': 'portraitTextFocus'},
-    {'1': 'landscape_text_focus', '3': 4, '4': 3, '5': 9, '10': 'landscapeTextFocus'},
-    {'1': 'render_type', '3': 5, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.RenderType', '10': 'renderType'},
+    {
+      '1': 'portrait_text_focus',
+      '3': 3,
+      '4': 3,
+      '5': 9,
+      '10': 'portraitTextFocus'
+    },
+    {
+      '1': 'landscape_text_focus',
+      '3': 4,
+      '4': 3,
+      '5': 9,
+      '10': 'landscapeTextFocus'
+    },
+    {
+      '1': 'render_type',
+      '3': 5,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.RenderType',
+      '10': 'renderType'
+    },
     {'1': 'text_input_post', '3': 6, '4': 1, '5': 8, '10': 'textInputPost'},
     {'1': 'exposure_once', '3': 7, '4': 1, '5': 8, '10': 'exposureOnce'},
-    {'1': 'exposure_type', '3': 8, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.ExposureType', '10': 'exposureType'},
+    {
+      '1': 'exposure_type',
+      '3': 8,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.ExposureType',
+      '10': 'exposureType'
+    },
   ],
 };
 
@@ -437,7 +539,14 @@ final $typed_data.Uint8List clickButtonV2Descriptor = $convert.base64Decode(
 const Command$json = {
   '1': 'Command',
   '2': [
-    {'1': 'command_dms', '3': 1, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.CommandDm', '10': 'commandDms'},
+    {
+      '1': 'command_dms',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.CommandDm',
+      '10': 'commandDms'
+    },
   ],
 };
 
@@ -481,7 +590,14 @@ final $typed_data.Uint8List commandDmDescriptor = $convert.base64Decode(
 const DanmakuAIFlag$json = {
   '1': 'DanmakuAIFlag',
   '2': [
-    {'1': 'dm_flags', '3': 1, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.DanmakuFlag', '10': 'dmFlags'},
+    {
+      '1': 'dm_flags',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.DanmakuFlag',
+      '10': 'dmFlags'
+    },
   ],
 };
 
@@ -509,16 +625,58 @@ const DanmakuElem$json = {
     {'1': 'attr', '3': 13, '4': 1, '5': 5, '10': 'attr'},
     {'1': 'animation', '3': 22, '4': 1, '5': 9, '10': 'animation'},
     {'1': 'extra', '3': 23, '4': 1, '5': 9, '10': 'extra'},
-    {'1': 'colorful', '3': 24, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.DmColorfulType', '10': 'colorful'},
+    {
+      '1': 'colorful',
+      '3': 24,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.DmColorfulType',
+      '10': 'colorful'
+    },
     {'1': 'type', '3': 25, '4': 1, '5': 5, '10': 'type'},
     {'1': 'oid', '3': 26, '4': 1, '5': 3, '10': 'oid'},
-    {'1': 'dm_from', '3': 27, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.DmFromType', '10': 'dmFrom'},
+    {
+      '1': 'dm_from',
+      '3': 27,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.DmFromType',
+      '10': 'dmFrom'
+    },
     {'1': 'count', '3': 28, '4': 1, '5': 5, '9': 0, '10': 'count', '17': true},
-    {'1': 'isSelf', '3': 29, '4': 1, '5': 8, '9': 1, '10': 'isSelf', '17': true},
+    {
+      '1': 'isSelf',
+      '3': 29,
+      '4': 1,
+      '5': 8,
+      '9': 1,
+      '10': 'isSelf',
+      '17': true
+    },
+    {
+      '1': 'filterVer',
+      '3': 30,
+      '4': 1,
+      '5': 5,
+      '9': 2,
+      '10': 'filterVer',
+      '17': true
+    },
+    {
+      '1': 'shouldRemove',
+      '3': 31,
+      '4': 1,
+      '5': 8,
+      '9': 3,
+      '10': 'shouldRemove',
+      '17': true
+    },
   ],
   '8': [
     {'1': '_count'},
     {'1': '_isSelf'},
+    {'1': '_filterVer'},
+    {'1': '_shouldRemove'},
   ],
 };
 
@@ -534,8 +692,10 @@ final $typed_data.Uint8List danmakuElemDescriptor = $convert.base64Decode(
     'xpYmlsaS5jb21tdW5pdHkuc2VydmljZS5kbS52MS5EbUNvbG9yZnVsVHlwZVIIY29sb3JmdWwS'
     'EgoEdHlwZRgZIAEoBVIEdHlwZRIQCgNvaWQYGiABKANSA29pZBJFCgdkbV9mcm9tGBsgASgOMi'
     'wuYmlsaWJpbGkuY29tbXVuaXR5LnNlcnZpY2UuZG0udjEuRG1Gcm9tVHlwZVIGZG1Gcm9tEhkK'
-    'BWNvdW50GBwgASgFSABSBWNvdW50iAEBEhsKBmlzU2VsZhgdIAEoCEgBUgZpc1NlbGaIAQFCCA'
-    'oGX2NvdW50QgkKB19pc1NlbGY=');
+    'BWNvdW50GBwgASgFSABSBWNvdW50iAEBEhsKBmlzU2VsZhgdIAEoCEgBUgZpc1NlbGaIAQESIQ'
+    'oJZmlsdGVyVmVyGB4gASgFSAJSCWZpbHRlclZlcogBARInCgxzaG91bGRSZW1vdmUYHyABKAhI'
+    'A1IMc2hvdWxkUmVtb3ZliAEBQggKBl9jb3VudEIJCgdfaXNTZWxmQgwKCl9maWx0ZXJWZXJCDw'
+    'oNX3Nob3VsZFJlbW92ZQ==');
 
 @$core.Deprecated('Use danmakuFlagDescriptor instead')
 const DanmakuFlag$json = {
@@ -569,30 +729,143 @@ final $typed_data.Uint8List danmakuFlagConfigDescriptor = $convert.base64Decode(
 const DanmuDefaultPlayerConfig$json = {
   '1': 'DanmuDefaultPlayerConfig',
   '2': [
-    {'1': 'player_danmaku_use_default_config', '3': 1, '4': 1, '5': 8, '10': 'playerDanmakuUseDefaultConfig'},
-    {'1': 'player_danmaku_ai_recommended_switch', '3': 4, '4': 1, '5': 8, '10': 'playerDanmakuAiRecommendedSwitch'},
-    {'1': 'player_danmaku_ai_recommended_level', '3': 5, '4': 1, '5': 5, '10': 'playerDanmakuAiRecommendedLevel'},
-    {'1': 'player_danmaku_blocktop', '3': 6, '4': 1, '5': 8, '10': 'playerDanmakuBlocktop'},
-    {'1': 'player_danmaku_blockscroll', '3': 7, '4': 1, '5': 8, '10': 'playerDanmakuBlockscroll'},
-    {'1': 'player_danmaku_blockbottom', '3': 8, '4': 1, '5': 8, '10': 'playerDanmakuBlockbottom'},
-    {'1': 'player_danmaku_blockcolorful', '3': 9, '4': 1, '5': 8, '10': 'playerDanmakuBlockcolorful'},
-    {'1': 'player_danmaku_blockrepeat', '3': 10, '4': 1, '5': 8, '10': 'playerDanmakuBlockrepeat'},
-    {'1': 'player_danmaku_blockspecial', '3': 11, '4': 1, '5': 8, '10': 'playerDanmakuBlockspecial'},
-    {'1': 'player_danmaku_opacity', '3': 12, '4': 1, '5': 2, '10': 'playerDanmakuOpacity'},
-    {'1': 'player_danmaku_scalingfactor', '3': 13, '4': 1, '5': 2, '10': 'playerDanmakuScalingfactor'},
-    {'1': 'player_danmaku_domain', '3': 14, '4': 1, '5': 2, '10': 'playerDanmakuDomain'},
-    {'1': 'player_danmaku_speed', '3': 15, '4': 1, '5': 5, '10': 'playerDanmakuSpeed'},
-    {'1': 'inline_player_danmaku_switch', '3': 16, '4': 1, '5': 8, '10': 'inlinePlayerDanmakuSwitch'},
-    {'1': 'player_danmaku_senior_mode_switch', '3': 17, '4': 1, '5': 5, '10': 'playerDanmakuSeniorModeSwitch'},
-    {'1': 'player_danmaku_ai_recommended_level_v2', '3': 18, '4': 1, '5': 5, '10': 'playerDanmakuAiRecommendedLevelV2'},
-    {'1': 'player_danmaku_ai_recommended_level_v2_map', '3': 19, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.DanmuDefaultPlayerConfig.PlayerDanmakuAiRecommendedLevelV2MapEntry', '10': 'playerDanmakuAiRecommendedLevelV2Map'},
-    {'1': 'player_danmaku_enable_herd_dm', '3': 20, '4': 1, '5': 8, '10': 'playerDanmakuEnableHerdDm'},
+    {
+      '1': 'player_danmaku_use_default_config',
+      '3': 1,
+      '4': 1,
+      '5': 8,
+      '10': 'playerDanmakuUseDefaultConfig'
+    },
+    {
+      '1': 'player_danmaku_ai_recommended_switch',
+      '3': 4,
+      '4': 1,
+      '5': 8,
+      '10': 'playerDanmakuAiRecommendedSwitch'
+    },
+    {
+      '1': 'player_danmaku_ai_recommended_level',
+      '3': 5,
+      '4': 1,
+      '5': 5,
+      '10': 'playerDanmakuAiRecommendedLevel'
+    },
+    {
+      '1': 'player_danmaku_blocktop',
+      '3': 6,
+      '4': 1,
+      '5': 8,
+      '10': 'playerDanmakuBlocktop'
+    },
+    {
+      '1': 'player_danmaku_blockscroll',
+      '3': 7,
+      '4': 1,
+      '5': 8,
+      '10': 'playerDanmakuBlockscroll'
+    },
+    {
+      '1': 'player_danmaku_blockbottom',
+      '3': 8,
+      '4': 1,
+      '5': 8,
+      '10': 'playerDanmakuBlockbottom'
+    },
+    {
+      '1': 'player_danmaku_blockcolorful',
+      '3': 9,
+      '4': 1,
+      '5': 8,
+      '10': 'playerDanmakuBlockcolorful'
+    },
+    {
+      '1': 'player_danmaku_blockrepeat',
+      '3': 10,
+      '4': 1,
+      '5': 8,
+      '10': 'playerDanmakuBlockrepeat'
+    },
+    {
+      '1': 'player_danmaku_blockspecial',
+      '3': 11,
+      '4': 1,
+      '5': 8,
+      '10': 'playerDanmakuBlockspecial'
+    },
+    {
+      '1': 'player_danmaku_opacity',
+      '3': 12,
+      '4': 1,
+      '5': 2,
+      '10': 'playerDanmakuOpacity'
+    },
+    {
+      '1': 'player_danmaku_scalingfactor',
+      '3': 13,
+      '4': 1,
+      '5': 2,
+      '10': 'playerDanmakuScalingfactor'
+    },
+    {
+      '1': 'player_danmaku_domain',
+      '3': 14,
+      '4': 1,
+      '5': 2,
+      '10': 'playerDanmakuDomain'
+    },
+    {
+      '1': 'player_danmaku_speed',
+      '3': 15,
+      '4': 1,
+      '5': 5,
+      '10': 'playerDanmakuSpeed'
+    },
+    {
+      '1': 'inline_player_danmaku_switch',
+      '3': 16,
+      '4': 1,
+      '5': 8,
+      '10': 'inlinePlayerDanmakuSwitch'
+    },
+    {
+      '1': 'player_danmaku_senior_mode_switch',
+      '3': 17,
+      '4': 1,
+      '5': 5,
+      '10': 'playerDanmakuSeniorModeSwitch'
+    },
+    {
+      '1': 'player_danmaku_ai_recommended_level_v2',
+      '3': 18,
+      '4': 1,
+      '5': 5,
+      '10': 'playerDanmakuAiRecommendedLevelV2'
+    },
+    {
+      '1': 'player_danmaku_ai_recommended_level_v2_map',
+      '3': 19,
+      '4': 3,
+      '5': 11,
+      '6':
+          '.bilibili.community.service.dm.v1.DanmuDefaultPlayerConfig.PlayerDanmakuAiRecommendedLevelV2MapEntry',
+      '10': 'playerDanmakuAiRecommendedLevelV2Map'
+    },
+    {
+      '1': 'player_danmaku_enable_herd_dm',
+      '3': 20,
+      '4': 1,
+      '5': 8,
+      '10': 'playerDanmakuEnableHerdDm'
+    },
   ],
-  '3': [DanmuDefaultPlayerConfig_PlayerDanmakuAiRecommendedLevelV2MapEntry$json],
+  '3': [
+    DanmuDefaultPlayerConfig_PlayerDanmakuAiRecommendedLevelV2MapEntry$json
+  ],
 };
 
 @$core.Deprecated('Use danmuDefaultPlayerConfigDescriptor instead')
-const DanmuDefaultPlayerConfig_PlayerDanmakuAiRecommendedLevelV2MapEntry$json = {
+const DanmuDefaultPlayerConfig_PlayerDanmakuAiRecommendedLevelV2MapEntry$json =
+    {
   '1': 'PlayerDanmakuAiRecommendedLevelV2MapEntry',
   '2': [
     {'1': 'key', '3': 1, '4': 1, '5': 5, '10': 'key'},
@@ -634,34 +907,204 @@ final $typed_data.Uint8List danmuDefaultPlayerConfigDescriptor = $convert.base64
 const DanmuPlayerConfig$json = {
   '1': 'DanmuPlayerConfig',
   '2': [
-    {'1': 'player_danmaku_switch', '3': 1, '4': 1, '5': 8, '10': 'playerDanmakuSwitch'},
-    {'1': 'player_danmaku_switch_save', '3': 2, '4': 1, '5': 8, '10': 'playerDanmakuSwitchSave'},
-    {'1': 'player_danmaku_use_default_config', '3': 3, '4': 1, '5': 8, '10': 'playerDanmakuUseDefaultConfig'},
-    {'1': 'player_danmaku_ai_recommended_switch', '3': 4, '4': 1, '5': 8, '10': 'playerDanmakuAiRecommendedSwitch'},
-    {'1': 'player_danmaku_ai_recommended_level', '3': 5, '4': 1, '5': 5, '10': 'playerDanmakuAiRecommendedLevel'},
-    {'1': 'player_danmaku_blocktop', '3': 6, '4': 1, '5': 8, '10': 'playerDanmakuBlocktop'},
-    {'1': 'player_danmaku_blockscroll', '3': 7, '4': 1, '5': 8, '10': 'playerDanmakuBlockscroll'},
-    {'1': 'player_danmaku_blockbottom', '3': 8, '4': 1, '5': 8, '10': 'playerDanmakuBlockbottom'},
-    {'1': 'player_danmaku_blockcolorful', '3': 9, '4': 1, '5': 8, '10': 'playerDanmakuBlockcolorful'},
-    {'1': 'player_danmaku_blockrepeat', '3': 10, '4': 1, '5': 8, '10': 'playerDanmakuBlockrepeat'},
-    {'1': 'player_danmaku_blockspecial', '3': 11, '4': 1, '5': 8, '10': 'playerDanmakuBlockspecial'},
-    {'1': 'player_danmaku_opacity', '3': 12, '4': 1, '5': 2, '10': 'playerDanmakuOpacity'},
-    {'1': 'player_danmaku_scalingfactor', '3': 13, '4': 1, '5': 2, '10': 'playerDanmakuScalingfactor'},
-    {'1': 'player_danmaku_domain', '3': 14, '4': 1, '5': 2, '10': 'playerDanmakuDomain'},
-    {'1': 'player_danmaku_speed', '3': 15, '4': 1, '5': 5, '10': 'playerDanmakuSpeed'},
-    {'1': 'player_danmaku_enableblocklist', '3': 16, '4': 1, '5': 8, '10': 'playerDanmakuEnableblocklist'},
-    {'1': 'inline_player_danmaku_switch', '3': 17, '4': 1, '5': 8, '10': 'inlinePlayerDanmakuSwitch'},
-    {'1': 'inline_player_danmaku_config', '3': 18, '4': 1, '5': 5, '10': 'inlinePlayerDanmakuConfig'},
-    {'1': 'player_danmaku_ios_switch_save', '3': 19, '4': 1, '5': 5, '10': 'playerDanmakuIosSwitchSave'},
-    {'1': 'player_danmaku_senior_mode_switch', '3': 20, '4': 1, '5': 5, '10': 'playerDanmakuSeniorModeSwitch'},
-    {'1': 'player_danmaku_ai_recommended_level_v2', '3': 21, '4': 1, '5': 5, '10': 'playerDanmakuAiRecommendedLevelV2'},
-    {'1': 'player_danmaku_ai_recommended_level_v2_map', '3': 22, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.DanmuPlayerConfig.PlayerDanmakuAiRecommendedLevelV2MapEntry', '10': 'playerDanmakuAiRecommendedLevelV2Map'},
-    {'1': 'player_danmaku_enable_herd_dm', '3': 23, '4': 1, '5': 8, '10': 'playerDanmakuEnableHerdDm'},
-    {'1': 'player_danmaku_blocktop_bottom', '3': 24, '4': 1, '5': 8, '10': 'playerDanmakuBlocktopBottom'},
-    {'1': 'player_danmaku_domain_v2', '3': 25, '4': 1, '5': 5, '10': 'playerDanmakuDomainV2'},
-    {'1': 'player_danmaku_density', '3': 26, '4': 1, '5': 5, '10': 'playerDanmakuDensity'},
-    {'1': 'player_danmaku_subtitle_proof', '3': 27, '4': 1, '5': 8, '10': 'playerDanmakuSubtitleProof'},
-    {'1': 'player_danmaku_people_proof', '3': 28, '4': 1, '5': 8, '10': 'playerDanmakuPeopleProof'},
+    {
+      '1': 'player_danmaku_switch',
+      '3': 1,
+      '4': 1,
+      '5': 8,
+      '10': 'playerDanmakuSwitch'
+    },
+    {
+      '1': 'player_danmaku_switch_save',
+      '3': 2,
+      '4': 1,
+      '5': 8,
+      '10': 'playerDanmakuSwitchSave'
+    },
+    {
+      '1': 'player_danmaku_use_default_config',
+      '3': 3,
+      '4': 1,
+      '5': 8,
+      '10': 'playerDanmakuUseDefaultConfig'
+    },
+    {
+      '1': 'player_danmaku_ai_recommended_switch',
+      '3': 4,
+      '4': 1,
+      '5': 8,
+      '10': 'playerDanmakuAiRecommendedSwitch'
+    },
+    {
+      '1': 'player_danmaku_ai_recommended_level',
+      '3': 5,
+      '4': 1,
+      '5': 5,
+      '10': 'playerDanmakuAiRecommendedLevel'
+    },
+    {
+      '1': 'player_danmaku_blocktop',
+      '3': 6,
+      '4': 1,
+      '5': 8,
+      '10': 'playerDanmakuBlocktop'
+    },
+    {
+      '1': 'player_danmaku_blockscroll',
+      '3': 7,
+      '4': 1,
+      '5': 8,
+      '10': 'playerDanmakuBlockscroll'
+    },
+    {
+      '1': 'player_danmaku_blockbottom',
+      '3': 8,
+      '4': 1,
+      '5': 8,
+      '10': 'playerDanmakuBlockbottom'
+    },
+    {
+      '1': 'player_danmaku_blockcolorful',
+      '3': 9,
+      '4': 1,
+      '5': 8,
+      '10': 'playerDanmakuBlockcolorful'
+    },
+    {
+      '1': 'player_danmaku_blockrepeat',
+      '3': 10,
+      '4': 1,
+      '5': 8,
+      '10': 'playerDanmakuBlockrepeat'
+    },
+    {
+      '1': 'player_danmaku_blockspecial',
+      '3': 11,
+      '4': 1,
+      '5': 8,
+      '10': 'playerDanmakuBlockspecial'
+    },
+    {
+      '1': 'player_danmaku_opacity',
+      '3': 12,
+      '4': 1,
+      '5': 2,
+      '10': 'playerDanmakuOpacity'
+    },
+    {
+      '1': 'player_danmaku_scalingfactor',
+      '3': 13,
+      '4': 1,
+      '5': 2,
+      '10': 'playerDanmakuScalingfactor'
+    },
+    {
+      '1': 'player_danmaku_domain',
+      '3': 14,
+      '4': 1,
+      '5': 2,
+      '10': 'playerDanmakuDomain'
+    },
+    {
+      '1': 'player_danmaku_speed',
+      '3': 15,
+      '4': 1,
+      '5': 5,
+      '10': 'playerDanmakuSpeed'
+    },
+    {
+      '1': 'player_danmaku_enableblocklist',
+      '3': 16,
+      '4': 1,
+      '5': 8,
+      '10': 'playerDanmakuEnableblocklist'
+    },
+    {
+      '1': 'inline_player_danmaku_switch',
+      '3': 17,
+      '4': 1,
+      '5': 8,
+      '10': 'inlinePlayerDanmakuSwitch'
+    },
+    {
+      '1': 'inline_player_danmaku_config',
+      '3': 18,
+      '4': 1,
+      '5': 5,
+      '10': 'inlinePlayerDanmakuConfig'
+    },
+    {
+      '1': 'player_danmaku_ios_switch_save',
+      '3': 19,
+      '4': 1,
+      '5': 5,
+      '10': 'playerDanmakuIosSwitchSave'
+    },
+    {
+      '1': 'player_danmaku_senior_mode_switch',
+      '3': 20,
+      '4': 1,
+      '5': 5,
+      '10': 'playerDanmakuSeniorModeSwitch'
+    },
+    {
+      '1': 'player_danmaku_ai_recommended_level_v2',
+      '3': 21,
+      '4': 1,
+      '5': 5,
+      '10': 'playerDanmakuAiRecommendedLevelV2'
+    },
+    {
+      '1': 'player_danmaku_ai_recommended_level_v2_map',
+      '3': 22,
+      '4': 3,
+      '5': 11,
+      '6':
+          '.bilibili.community.service.dm.v1.DanmuPlayerConfig.PlayerDanmakuAiRecommendedLevelV2MapEntry',
+      '10': 'playerDanmakuAiRecommendedLevelV2Map'
+    },
+    {
+      '1': 'player_danmaku_enable_herd_dm',
+      '3': 23,
+      '4': 1,
+      '5': 8,
+      '10': 'playerDanmakuEnableHerdDm'
+    },
+    {
+      '1': 'player_danmaku_blocktop_bottom',
+      '3': 24,
+      '4': 1,
+      '5': 8,
+      '10': 'playerDanmakuBlocktopBottom'
+    },
+    {
+      '1': 'player_danmaku_domain_v2',
+      '3': 25,
+      '4': 1,
+      '5': 5,
+      '10': 'playerDanmakuDomainV2'
+    },
+    {
+      '1': 'player_danmaku_density',
+      '3': 26,
+      '4': 1,
+      '5': 5,
+      '10': 'playerDanmakuDensity'
+    },
+    {
+      '1': 'player_danmaku_subtitle_proof',
+      '3': 27,
+      '4': 1,
+      '5': 8,
+      '10': 'playerDanmakuSubtitleProof'
+    },
+    {
+      '1': 'player_danmaku_people_proof',
+      '3': 28,
+      '4': 1,
+      '5': 8,
+      '10': 'playerDanmakuPeopleProof'
+    },
   ],
   '3': [DanmuPlayerConfig_PlayerDanmakuAiRecommendedLevelV2MapEntry$json],
 };
@@ -725,32 +1168,68 @@ const DanmuPlayerConfigPanel$json = {
 };
 
 /// Descriptor for `DanmuPlayerConfigPanel`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List danmuPlayerConfigPanelDescriptor = $convert.base64Decode(
-    'ChZEYW5tdVBsYXllckNvbmZpZ1BhbmVsEiUKDnNlbGVjdGlvbl90ZXh0GAEgASgJUg1zZWxlY3'
-    'Rpb25UZXh0');
+final $typed_data.Uint8List danmuPlayerConfigPanelDescriptor =
+    $convert.base64Decode(
+        'ChZEYW5tdVBsYXllckNvbmZpZ1BhbmVsEiUKDnNlbGVjdGlvbl90ZXh0GAEgASgJUg1zZWxlY3'
+        'Rpb25UZXh0');
 
 @$core.Deprecated('Use danmuPlayerDynamicConfigDescriptor instead')
 const DanmuPlayerDynamicConfig$json = {
   '1': 'DanmuPlayerDynamicConfig',
   '2': [
     {'1': 'progress', '3': 1, '4': 1, '5': 5, '10': 'progress'},
-    {'1': 'player_danmaku_domain', '3': 14, '4': 1, '5': 2, '10': 'playerDanmakuDomain'},
+    {
+      '1': 'player_danmaku_domain',
+      '3': 14,
+      '4': 1,
+      '5': 2,
+      '10': 'playerDanmakuDomain'
+    },
   ],
 };
 
 /// Descriptor for `DanmuPlayerDynamicConfig`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List danmuPlayerDynamicConfigDescriptor = $convert.base64Decode(
-    'ChhEYW5tdVBsYXllckR5bmFtaWNDb25maWcSGgoIcHJvZ3Jlc3MYASABKAVSCHByb2dyZXNzEj'
-    'IKFXBsYXllcl9kYW5tYWt1X2RvbWFpbhgOIAEoAlITcGxheWVyRGFubWFrdURvbWFpbg==');
+final $typed_data.Uint8List danmuPlayerDynamicConfigDescriptor =
+    $convert.base64Decode(
+        'ChhEYW5tdVBsYXllckR5bmFtaWNDb25maWcSGgoIcHJvZ3Jlc3MYASABKAVSCHByb2dyZXNzEj'
+        'IKFXBsYXllcl9kYW5tYWt1X2RvbWFpbhgOIAEoAlITcGxheWVyRGFubWFrdURvbWFpbg==');
 
 @$core.Deprecated('Use danmuPlayerViewConfigDescriptor instead')
 const DanmuPlayerViewConfig$json = {
   '1': 'DanmuPlayerViewConfig',
   '2': [
-    {'1': 'danmuku_default_player_config', '3': 1, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.DanmuDefaultPlayerConfig', '10': 'danmukuDefaultPlayerConfig'},
-    {'1': 'danmuku_player_config', '3': 2, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.DanmuPlayerConfig', '10': 'danmukuPlayerConfig'},
-    {'1': 'danmuku_player_dynamic_config', '3': 3, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.DanmuPlayerDynamicConfig', '10': 'danmukuPlayerDynamicConfig'},
-    {'1': 'danmuku_player_config_panel', '3': 4, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.DanmuPlayerConfigPanel', '10': 'danmukuPlayerConfigPanel'},
+    {
+      '1': 'danmuku_default_player_config',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.DanmuDefaultPlayerConfig',
+      '10': 'danmukuDefaultPlayerConfig'
+    },
+    {
+      '1': 'danmuku_player_config',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.DanmuPlayerConfig',
+      '10': 'danmukuPlayerConfig'
+    },
+    {
+      '1': 'danmuku_player_dynamic_config',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.DanmuPlayerDynamicConfig',
+      '10': 'danmukuPlayerDynamicConfig'
+    },
+    {
+      '1': 'danmuku_player_config_panel',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.DanmuPlayerConfigPanel',
+      '10': 'danmukuPlayerConfigPanel'
+    },
   ],
 };
 
@@ -791,9 +1270,23 @@ const DanmuWebPlayerConfig$json = {
     {'1': 'bold', '3': 18, '4': 1, '5': 8, '10': 'bold'},
     {'1': 'fontborder', '3': 19, '4': 1, '5': 5, '10': 'fontborder'},
     {'1': 'draw_type', '3': 20, '4': 1, '5': 9, '10': 'drawType'},
-    {'1': 'senior_mode_switch', '3': 21, '4': 1, '5': 5, '10': 'seniorModeSwitch'},
+    {
+      '1': 'senior_mode_switch',
+      '3': 21,
+      '4': 1,
+      '5': 5,
+      '10': 'seniorModeSwitch'
+    },
     {'1': 'ai_level_v2', '3': 22, '4': 1, '5': 5, '10': 'aiLevelV2'},
-    {'1': 'ai_level_v2_map', '3': 23, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.DanmuWebPlayerConfig.AiLevelV2MapEntry', '10': 'aiLevelV2Map'},
+    {
+      '1': 'ai_level_v2_map',
+      '3': 23,
+      '4': 3,
+      '5': 11,
+      '6':
+          '.bilibili.community.service.dm.v1.DanmuWebPlayerConfig.AiLevelV2MapEntry',
+      '10': 'aiLevelV2Map'
+    },
     {'1': 'blocktop_bottom', '3': 24, '4': 1, '5': 8, '10': 'blocktopBottom'},
     {'1': 'dm_area_v2', '3': 25, '4': 1, '5': 5, '10': 'dmAreaV2'},
     {'1': 'dm_density', '3': 26, '4': 1, '5': 5, '10': 'dmDensity'},
@@ -836,7 +1329,14 @@ final $typed_data.Uint8List danmuWebPlayerConfigDescriptor = $convert.base64Deco
 const DmColorful$json = {
   '1': 'DmColorful',
   '2': [
-    {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.DmColorfulType', '10': 'type'},
+    {
+      '1': 'type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.DmColorfulType',
+      '10': 'type'
+    },
     {'1': 'src', '3': 2, '4': 1, '5': 9, '10': 'src'},
   ],
 };
@@ -868,15 +1368,28 @@ const DmExpoReportRes$json = {
 };
 
 /// Descriptor for `DmExpoReportRes`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List dmExpoReportResDescriptor = $convert.base64Decode(
-    'Cg9EbUV4cG9SZXBvcnRSZXM=');
+final $typed_data.Uint8List dmExpoReportResDescriptor =
+    $convert.base64Decode('Cg9EbUV4cG9SZXBvcnRSZXM=');
 
 @$core.Deprecated('Use dmHerdViewDescriptor instead')
 const DmHerdView$json = {
   '1': 'DmHerdView',
   '2': [
-    {'1': 'display_herd_dm_num', '3': 1, '4': 1, '5': 5, '10': 'displayHerdDmNum'},
-    {'1': 'herd_dms', '3': 2, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.ViewHerdDmElem', '10': 'herdDms'},
+    {
+      '1': 'display_herd_dm_num',
+      '3': 1,
+      '4': 1,
+      '5': 5,
+      '10': 'displayHerdDmNum'
+    },
+    {
+      '1': 'herd_dms',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.ViewHerdDmElem',
+      '10': 'herdDms'
+    },
   ],
 };
 
@@ -893,9 +1406,30 @@ const DmMaskWall$json = {
     {'1': 'start', '3': 1, '4': 1, '5': 3, '10': 'start'},
     {'1': 'end', '3': 2, '4': 1, '5': 3, '10': 'end'},
     {'1': 'content', '3': 3, '4': 1, '5': 9, '10': 'content'},
-    {'1': 'content_type', '3': 4, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.DmMaskWallContentType', '10': 'contentType'},
-    {'1': 'biz_type', '3': 5, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.DmMaskWallBizType', '10': 'bizType'},
-    {'1': 'contents', '3': 6, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.DmMaskWallContent', '10': 'contents'},
+    {
+      '1': 'content_type',
+      '3': 4,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.DmMaskWallContentType',
+      '10': 'contentType'
+    },
+    {
+      '1': 'biz_type',
+      '3': 5,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.DmMaskWallBizType',
+      '10': 'bizType'
+    },
+    {
+      '1': 'contents',
+      '3': 6,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.DmMaskWallContent',
+      '10': 'contents'
+    },
   ],
 };
 
@@ -912,7 +1446,14 @@ final $typed_data.Uint8List dmMaskWallDescriptor = $convert.base64Decode(
 const DmMaskWallContent$json = {
   '1': 'DmMaskWallContent',
   '2': [
-    {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.DmMaskWallContentType', '10': 'type'},
+    {
+      '1': 'type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.DmMaskWallContentType',
+      '10': 'type'
+    },
     {'1': 'content', '3': 2, '4': 1, '5': 9, '10': 'content'},
   ],
 };
@@ -928,31 +1469,207 @@ const DmPlayerConfigReq$json = {
   '1': 'DmPlayerConfigReq',
   '2': [
     {'1': 'ts', '3': 1, '4': 1, '5': 3, '10': 'ts'},
-    {'1': 'switch', '3': 2, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.PlayerDanmakuSwitch', '10': 'switch'},
-    {'1': 'switch_save', '3': 3, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.PlayerDanmakuSwitchSave', '10': 'switchSave'},
-    {'1': 'use_default_config', '3': 4, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.PlayerDanmakuUseDefaultConfig', '10': 'useDefaultConfig'},
-    {'1': 'ai_recommended_switch', '3': 5, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.PlayerDanmakuAiRecommendedSwitch', '10': 'aiRecommendedSwitch'},
-    {'1': 'ai_recommended_level', '3': 6, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.PlayerDanmakuAiRecommendedLevel', '10': 'aiRecommendedLevel'},
-    {'1': 'blocktop', '3': 7, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.PlayerDanmakuBlocktop', '10': 'blocktop'},
-    {'1': 'blockscroll', '3': 8, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.PlayerDanmakuBlockscroll', '10': 'blockscroll'},
-    {'1': 'blockbottom', '3': 9, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.PlayerDanmakuBlockbottom', '10': 'blockbottom'},
-    {'1': 'blockcolorful', '3': 10, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.PlayerDanmakuBlockcolorful', '10': 'blockcolorful'},
-    {'1': 'blockrepeat', '3': 11, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.PlayerDanmakuBlockrepeat', '10': 'blockrepeat'},
-    {'1': 'blockspecial', '3': 12, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.PlayerDanmakuBlockspecial', '10': 'blockspecial'},
-    {'1': 'opacity', '3': 13, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.PlayerDanmakuOpacity', '10': 'opacity'},
-    {'1': 'scalingfactor', '3': 14, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.PlayerDanmakuScalingfactor', '10': 'scalingfactor'},
-    {'1': 'domain', '3': 15, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.PlayerDanmakuDomain', '10': 'domain'},
-    {'1': 'speed', '3': 16, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.PlayerDanmakuSpeed', '10': 'speed'},
-    {'1': 'enableblocklist', '3': 17, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.PlayerDanmakuEnableblocklist', '10': 'enableblocklist'},
-    {'1': 'inline_player_danmaku_switch', '3': 18, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.InlinePlayerDanmakuSwitch', '10': 'inlinePlayerDanmakuSwitch'},
-    {'1': 'senior_mode_switch', '3': 19, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.PlayerDanmakuSeniorModeSwitch', '10': 'seniorModeSwitch'},
-    {'1': 'ai_recommended_level_v2', '3': 20, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.PlayerDanmakuAiRecommendedLevelV2', '10': 'aiRecommendedLevelV2'},
-    {'1': 'enable_herd_dm', '3': 21, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.PlayerDanmakuEnableHerdDm', '10': 'enableHerdDm'},
-    {'1': 'blocktop_bottom', '3': 22, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.PlayerDanmakuBlocktopBottom', '10': 'blocktopBottom'},
-    {'1': 'domain_v2', '3': 23, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.PlayerDanmakuDomainV2', '10': 'domainV2'},
-    {'1': 'density', '3': 24, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.PlayerDanmakuDensity', '10': 'density'},
-    {'1': 'subtitle_proof', '3': 25, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.PlayerDanmakuSubtitleProof', '10': 'subtitleProof'},
-    {'1': 'people_proof', '3': 26, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.PlayerDanmakuPeopleProof', '10': 'peopleProof'},
+    {
+      '1': 'switch',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PlayerDanmakuSwitch',
+      '10': 'switch'
+    },
+    {
+      '1': 'switch_save',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PlayerDanmakuSwitchSave',
+      '10': 'switchSave'
+    },
+    {
+      '1': 'use_default_config',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PlayerDanmakuUseDefaultConfig',
+      '10': 'useDefaultConfig'
+    },
+    {
+      '1': 'ai_recommended_switch',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PlayerDanmakuAiRecommendedSwitch',
+      '10': 'aiRecommendedSwitch'
+    },
+    {
+      '1': 'ai_recommended_level',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PlayerDanmakuAiRecommendedLevel',
+      '10': 'aiRecommendedLevel'
+    },
+    {
+      '1': 'blocktop',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PlayerDanmakuBlocktop',
+      '10': 'blocktop'
+    },
+    {
+      '1': 'blockscroll',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PlayerDanmakuBlockscroll',
+      '10': 'blockscroll'
+    },
+    {
+      '1': 'blockbottom',
+      '3': 9,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PlayerDanmakuBlockbottom',
+      '10': 'blockbottom'
+    },
+    {
+      '1': 'blockcolorful',
+      '3': 10,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PlayerDanmakuBlockcolorful',
+      '10': 'blockcolorful'
+    },
+    {
+      '1': 'blockrepeat',
+      '3': 11,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PlayerDanmakuBlockrepeat',
+      '10': 'blockrepeat'
+    },
+    {
+      '1': 'blockspecial',
+      '3': 12,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PlayerDanmakuBlockspecial',
+      '10': 'blockspecial'
+    },
+    {
+      '1': 'opacity',
+      '3': 13,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PlayerDanmakuOpacity',
+      '10': 'opacity'
+    },
+    {
+      '1': 'scalingfactor',
+      '3': 14,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PlayerDanmakuScalingfactor',
+      '10': 'scalingfactor'
+    },
+    {
+      '1': 'domain',
+      '3': 15,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PlayerDanmakuDomain',
+      '10': 'domain'
+    },
+    {
+      '1': 'speed',
+      '3': 16,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PlayerDanmakuSpeed',
+      '10': 'speed'
+    },
+    {
+      '1': 'enableblocklist',
+      '3': 17,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PlayerDanmakuEnableblocklist',
+      '10': 'enableblocklist'
+    },
+    {
+      '1': 'inline_player_danmaku_switch',
+      '3': 18,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.InlinePlayerDanmakuSwitch',
+      '10': 'inlinePlayerDanmakuSwitch'
+    },
+    {
+      '1': 'senior_mode_switch',
+      '3': 19,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PlayerDanmakuSeniorModeSwitch',
+      '10': 'seniorModeSwitch'
+    },
+    {
+      '1': 'ai_recommended_level_v2',
+      '3': 20,
+      '4': 1,
+      '5': 11,
+      '6':
+          '.bilibili.community.service.dm.v1.PlayerDanmakuAiRecommendedLevelV2',
+      '10': 'aiRecommendedLevelV2'
+    },
+    {
+      '1': 'enable_herd_dm',
+      '3': 21,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PlayerDanmakuEnableHerdDm',
+      '10': 'enableHerdDm'
+    },
+    {
+      '1': 'blocktop_bottom',
+      '3': 22,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PlayerDanmakuBlocktopBottom',
+      '10': 'blocktopBottom'
+    },
+    {
+      '1': 'domain_v2',
+      '3': 23,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PlayerDanmakuDomainV2',
+      '10': 'domainV2'
+    },
+    {
+      '1': 'density',
+      '3': 24,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PlayerDanmakuDensity',
+      '10': 'density'
+    },
+    {
+      '1': 'subtitle_proof',
+      '3': 25,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PlayerDanmakuSubtitleProof',
+      '10': 'subtitleProof'
+    },
+    {
+      '1': 'people_proof',
+      '3': 26,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PlayerDanmakuPeopleProof',
+      '10': 'peopleProof'
+    },
   ],
 };
 
@@ -1037,11 +1754,32 @@ final $typed_data.Uint8List dmSegConfigDescriptor = $convert.base64Decode(
 const DmSegMobileReply$json = {
   '1': 'DmSegMobileReply',
   '2': [
-    {'1': 'elems', '3': 1, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.DanmakuElem', '10': 'elems'},
+    {
+      '1': 'elems',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.DanmakuElem',
+      '10': 'elems'
+    },
     {'1': 'state', '3': 2, '4': 1, '5': 5, '10': 'state'},
-    {'1': 'ai_flag', '3': 3, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.DanmakuAIFlag', '10': 'aiFlag'},
+    {
+      '1': 'ai_flag',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.DanmakuAIFlag',
+      '10': 'aiFlag'
+    },
     {'1': 'segment_rules', '3': 4, '4': 3, '5': 3, '10': 'segmentRules'},
-    {'1': 'colorful_src', '3': 5, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.DmColorful', '10': 'colorfulSrc'},
+    {
+      '1': 'colorful_src',
+      '3': 5,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.DmColorful',
+      '10': 'colorfulSrc'
+    },
     {'1': 'context_src', '3': 6, '4': 1, '5': 9, '10': 'contextSrc'},
   ],
 };
@@ -1087,7 +1825,14 @@ final $typed_data.Uint8List dmSegMobileReqDescriptor = $convert.base64Decode(
 const DmSegOttReply$json = {
   '1': 'DmSegOttReply',
   '2': [
-    {'1': 'elems', '3': 1, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.DanmakuElem', '10': 'elems'},
+    {
+      '1': 'elems',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.DanmakuElem',
+      '10': 'elems'
+    },
     {'1': 'state', '3': 2, '4': 1, '5': 5, '10': 'state'},
   ],
 };
@@ -1118,7 +1863,14 @@ const DmSegSDKReply$json = {
   '1': 'DmSegSDKReply',
   '2': [
     {'1': 'closed', '3': 1, '4': 1, '5': 8, '10': 'closed'},
-    {'1': 'elems', '3': 2, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.DanmakuElem', '10': 'elems'},
+    {
+      '1': 'elems',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.DanmakuElem',
+      '10': 'elems'
+    },
   ],
 };
 
@@ -1150,7 +1902,14 @@ const DmSubView$json = {
     {'1': 'type', '3': 1, '4': 1, '5': 5, '10': 'type'},
     {'1': 'oid', '3': 2, '4': 1, '5': 3, '10': 'oid'},
     {'1': 'pid', '3': 3, '4': 1, '5': 3, '10': 'pid'},
-    {'1': 'post_panel2', '3': 4, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.PostPanelV2', '10': 'postPanel2'},
+    {
+      '1': 'post_panel2',
+      '3': 4,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PostPanelV2',
+      '10': 'postPanel2'
+    },
   ],
 };
 
@@ -1165,30 +1924,146 @@ const DmViewReply$json = {
   '1': 'DmViewReply',
   '2': [
     {'1': 'closed', '3': 1, '4': 1, '5': 8, '10': 'closed'},
-    {'1': 'mask', '3': 2, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.VideoMask', '10': 'mask'},
-    {'1': 'subtitle', '3': 3, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.VideoSubtitle', '10': 'subtitle'},
+    {
+      '1': 'mask',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.VideoMask',
+      '10': 'mask'
+    },
+    {
+      '1': 'subtitle',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.VideoSubtitle',
+      '10': 'subtitle'
+    },
     {'1': 'special_dms', '3': 4, '4': 3, '5': 9, '10': 'specialDms'},
-    {'1': 'ai_flag', '3': 5, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.DanmakuFlagConfig', '10': 'aiFlag'},
-    {'1': 'player_config', '3': 6, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.DanmuPlayerViewConfig', '10': 'playerConfig'},
+    {
+      '1': 'ai_flag',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.DanmakuFlagConfig',
+      '10': 'aiFlag'
+    },
+    {
+      '1': 'player_config',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.DanmuPlayerViewConfig',
+      '10': 'playerConfig'
+    },
     {'1': 'send_box_style', '3': 7, '4': 1, '5': 5, '10': 'sendBoxStyle'},
     {'1': 'allow', '3': 8, '4': 1, '5': 8, '10': 'allow'},
     {'1': 'check_box', '3': 9, '4': 1, '5': 8, '10': 'checkBox'},
-    {'1': 'check_box_show_msg', '3': 10, '4': 1, '5': 9, '10': 'checkBoxShowMsg'},
+    {
+      '1': 'check_box_show_msg',
+      '3': 10,
+      '4': 1,
+      '5': 9,
+      '10': 'checkBoxShowMsg'
+    },
     {'1': 'text_placeholder', '3': 11, '4': 1, '5': 9, '10': 'textPlaceholder'},
-    {'1': 'input_placeholder', '3': 12, '4': 1, '5': 9, '10': 'inputPlaceholder'},
-    {'1': 'report_filter_content', '3': 13, '4': 3, '5': 9, '10': 'reportFilterContent'},
-    {'1': 'expo_report', '3': 14, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.ExpoReport', '10': 'expoReport'},
-    {'1': 'buzzword_config', '3': 15, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.BuzzwordConfig', '10': 'buzzwordConfig'},
-    {'1': 'expressions', '3': 16, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.Expressions', '10': 'expressions'},
-    {'1': 'post_panel', '3': 17, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.PostPanel', '10': 'postPanel'},
+    {
+      '1': 'input_placeholder',
+      '3': 12,
+      '4': 1,
+      '5': 9,
+      '10': 'inputPlaceholder'
+    },
+    {
+      '1': 'report_filter_content',
+      '3': 13,
+      '4': 3,
+      '5': 9,
+      '10': 'reportFilterContent'
+    },
+    {
+      '1': 'expo_report',
+      '3': 14,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.ExpoReport',
+      '10': 'expoReport'
+    },
+    {
+      '1': 'buzzword_config',
+      '3': 15,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.BuzzwordConfig',
+      '10': 'buzzwordConfig'
+    },
+    {
+      '1': 'expressions',
+      '3': 16,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.Expressions',
+      '10': 'expressions'
+    },
+    {
+      '1': 'post_panel',
+      '3': 17,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PostPanel',
+      '10': 'postPanel'
+    },
     {'1': 'activity_meta', '3': 18, '4': 3, '5': 9, '10': 'activityMeta'},
-    {'1': 'post_panel2', '3': 19, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.PostPanelV2', '10': 'postPanel2'},
-    {'1': 'dm_mask_wall', '3': 20, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.DmMaskWall', '10': 'dmMaskWall'},
-    {'1': 'dm_herd', '3': 21, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.DmHerdView', '10': 'dmHerd'},
-    {'1': 'command', '3': 22, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.Command', '10': 'command'},
+    {
+      '1': 'post_panel2',
+      '3': 19,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PostPanelV2',
+      '10': 'postPanel2'
+    },
+    {
+      '1': 'dm_mask_wall',
+      '3': 20,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.DmMaskWall',
+      '10': 'dmMaskWall'
+    },
+    {
+      '1': 'dm_herd',
+      '3': 21,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.DmHerdView',
+      '10': 'dmHerd'
+    },
+    {
+      '1': 'command',
+      '3': 22,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.Command',
+      '10': 'command'
+    },
     {'1': 'kv', '3': 23, '4': 1, '5': 9, '10': 'kv'},
-    {'1': 'sub_views', '3': 24, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.DmSubView', '10': 'subViews'},
-    {'1': 'qoe', '3': 25, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.QoeInfo', '10': 'qoe'},
+    {
+      '1': 'sub_views',
+      '3': 24,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.DmSubView',
+      '10': 'subViews'
+    },
+    {
+      '1': 'qoe',
+      '3': 25,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.QoeInfo',
+      '10': 'qoe'
+    },
   ],
 };
 
@@ -1248,20 +2123,89 @@ const DmWebViewReply$json = {
     {'1': 'state', '3': 1, '4': 1, '5': 5, '10': 'state'},
     {'1': 'text', '3': 2, '4': 1, '5': 9, '10': 'text'},
     {'1': 'text_side', '3': 3, '4': 1, '5': 9, '10': 'textSide'},
-    {'1': 'dm_sge', '3': 4, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.DmSegConfig', '10': 'dmSge'},
-    {'1': 'flag', '3': 5, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.DanmakuFlagConfig', '10': 'flag'},
+    {
+      '1': 'dm_sge',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.DmSegConfig',
+      '10': 'dmSge'
+    },
+    {
+      '1': 'flag',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.DanmakuFlagConfig',
+      '10': 'flag'
+    },
     {'1': 'special_dms', '3': 6, '4': 3, '5': 9, '10': 'specialDms'},
     {'1': 'check_box', '3': 7, '4': 1, '5': 8, '10': 'checkBox'},
     {'1': 'count', '3': 8, '4': 1, '5': 3, '10': 'count'},
-    {'1': 'command_dms', '3': 9, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.CommandDm', '10': 'commandDms'},
-    {'1': 'player_config', '3': 10, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.DanmuWebPlayerConfig', '10': 'playerConfig'},
-    {'1': 'report_filter_content', '3': 11, '4': 3, '5': 9, '10': 'reportFilterContent'},
-    {'1': 'expressions', '3': 12, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.Expressions', '10': 'expressions'},
-    {'1': 'post_panel', '3': 13, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.PostPanel', '10': 'postPanel'},
+    {
+      '1': 'command_dms',
+      '3': 9,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.CommandDm',
+      '10': 'commandDms'
+    },
+    {
+      '1': 'player_config',
+      '3': 10,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.DanmuWebPlayerConfig',
+      '10': 'playerConfig'
+    },
+    {
+      '1': 'report_filter_content',
+      '3': 11,
+      '4': 3,
+      '5': 9,
+      '10': 'reportFilterContent'
+    },
+    {
+      '1': 'expressions',
+      '3': 12,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.Expressions',
+      '10': 'expressions'
+    },
+    {
+      '1': 'post_panel',
+      '3': 13,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PostPanel',
+      '10': 'postPanel'
+    },
     {'1': 'activity_meta', '3': 14, '4': 3, '5': 9, '10': 'activityMeta'},
-    {'1': 'post_panel2', '3': 15, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.PostPanelV2', '10': 'postPanel2'},
-    {'1': 'sub_views', '3': 16, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.DmSubView', '10': 'subViews'},
-    {'1': 'qoe', '3': 17, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.QoeInfo', '10': 'qoe'},
+    {
+      '1': 'post_panel2',
+      '3': 15,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.PostPanelV2',
+      '10': 'postPanel2'
+    },
+    {
+      '1': 'sub_views',
+      '3': 16,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.DmSubView',
+      '10': 'subViews'
+    },
+    {
+      '1': 'qoe',
+      '3': 17,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.QoeInfo',
+      '10': 'qoe'
+    },
   ],
 };
 
@@ -1290,9 +2234,22 @@ final $typed_data.Uint8List dmWebViewReplyDescriptor = $convert.base64Decode(
 const ExpoReport$json = {
   '1': 'ExpoReport',
   '2': [
-    {'1': 'should_report_at_end', '3': 1, '4': 1, '5': 8, '10': 'shouldReportAtEnd'},
+    {
+      '1': 'should_report_at_end',
+      '3': 1,
+      '4': 1,
+      '5': 8,
+      '10': 'shouldReportAtEnd'
+    },
     {'1': 'player_sample', '3': 2, '4': 1, '5': 1, '10': 'playerSample'},
-    {'1': 'durations', '3': 3, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.ReportDuration', '10': 'durations'},
+    {
+      '1': 'durations',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.ReportDuration',
+      '10': 'durations'
+    },
     {'1': 'max_size', '3': 4, '4': 1, '5': 5, '10': 'maxSize'},
   ],
 };
@@ -1310,7 +2267,14 @@ const Expression$json = {
   '2': [
     {'1': 'keyword', '3': 1, '4': 3, '5': 9, '10': 'keyword'},
     {'1': 'url', '3': 2, '4': 1, '5': 9, '10': 'url'},
-    {'1': 'period', '3': 3, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.Period', '10': 'period'},
+    {
+      '1': 'period',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.Period',
+      '10': 'period'
+    },
   ],
 };
 
@@ -1324,7 +2288,14 @@ final $typed_data.Uint8List expressionDescriptor = $convert.base64Decode(
 const Expressions$json = {
   '1': 'Expressions',
   '2': [
-    {'1': 'data', '3': 1, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.Expression', '10': 'data'},
+    {
+      '1': 'data',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.Expression',
+      '10': 'data'
+    },
   ],
 };
 
@@ -1342,8 +2313,9 @@ const InlinePlayerDanmakuSwitch$json = {
 };
 
 /// Descriptor for `InlinePlayerDanmakuSwitch`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List inlinePlayerDanmakuSwitchDescriptor = $convert.base64Decode(
-    'ChlJbmxpbmVQbGF5ZXJEYW5tYWt1U3dpdGNoEhQKBXZhbHVlGAEgASgIUgV2YWx1ZQ==');
+final $typed_data.Uint8List inlinePlayerDanmakuSwitchDescriptor =
+    $convert.base64Decode(
+        'ChlJbmxpbmVQbGF5ZXJEYW5tYWt1U3dpdGNoEhQKBXZhbHVlGAEgASgIUgV2YWx1ZQ==');
 
 @$core.Deprecated('Use labelDescriptor instead')
 const Label$json = {
@@ -1366,7 +2338,14 @@ const LabelV2$json = {
     {'1': 'title', '3': 1, '4': 1, '5': 9, '10': 'title'},
     {'1': 'content', '3': 2, '4': 3, '5': 9, '10': 'content'},
     {'1': 'exposure_once', '3': 3, '4': 1, '5': 8, '10': 'exposureOnce'},
-    {'1': 'exposure_type', '3': 4, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.ExposureType', '10': 'exposureType'},
+    {
+      '1': 'exposure_type',
+      '3': 4,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.ExposureType',
+      '10': 'exposureType'
+    },
   ],
 };
 
@@ -1399,9 +2378,10 @@ const PlayerDanmakuAiRecommendedLevel$json = {
 };
 
 /// Descriptor for `PlayerDanmakuAiRecommendedLevel`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List playerDanmakuAiRecommendedLevelDescriptor = $convert.base64Decode(
-    'Ch9QbGF5ZXJEYW5tYWt1QWlSZWNvbW1lbmRlZExldmVsEhQKBXZhbHVlGAEgASgFUgV2YWx1ZQ'
-    '==');
+final $typed_data.Uint8List playerDanmakuAiRecommendedLevelDescriptor =
+    $convert.base64Decode(
+        'Ch9QbGF5ZXJEYW5tYWt1QWlSZWNvbW1lbmRlZExldmVsEhQKBXZhbHVlGAEgASgFUgV2YWx1ZQ'
+        '==');
 
 @$core.Deprecated('Use playerDanmakuAiRecommendedLevelV2Descriptor instead')
 const PlayerDanmakuAiRecommendedLevelV2$json = {
@@ -1412,9 +2392,10 @@ const PlayerDanmakuAiRecommendedLevelV2$json = {
 };
 
 /// Descriptor for `PlayerDanmakuAiRecommendedLevelV2`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List playerDanmakuAiRecommendedLevelV2Descriptor = $convert.base64Decode(
-    'CiFQbGF5ZXJEYW5tYWt1QWlSZWNvbW1lbmRlZExldmVsVjISFAoFdmFsdWUYASABKAVSBXZhbH'
-    'Vl');
+final $typed_data.Uint8List playerDanmakuAiRecommendedLevelV2Descriptor =
+    $convert.base64Decode(
+        'CiFQbGF5ZXJEYW5tYWt1QWlSZWNvbW1lbmRlZExldmVsVjISFAoFdmFsdWUYASABKAVSBXZhbH'
+        'Vl');
 
 @$core.Deprecated('Use playerDanmakuAiRecommendedSwitchDescriptor instead')
 const PlayerDanmakuAiRecommendedSwitch$json = {
@@ -1425,9 +2406,10 @@ const PlayerDanmakuAiRecommendedSwitch$json = {
 };
 
 /// Descriptor for `PlayerDanmakuAiRecommendedSwitch`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List playerDanmakuAiRecommendedSwitchDescriptor = $convert.base64Decode(
-    'CiBQbGF5ZXJEYW5tYWt1QWlSZWNvbW1lbmRlZFN3aXRjaBIUCgV2YWx1ZRgBIAEoCFIFdmFsdW'
-    'U=');
+final $typed_data.Uint8List playerDanmakuAiRecommendedSwitchDescriptor =
+    $convert.base64Decode(
+        'CiBQbGF5ZXJEYW5tYWt1QWlSZWNvbW1lbmRlZFN3aXRjaBIUCgV2YWx1ZRgBIAEoCFIFdmFsdW'
+        'U=');
 
 @$core.Deprecated('Use playerDanmakuBlockbottomDescriptor instead')
 const PlayerDanmakuBlockbottom$json = {
@@ -1438,8 +2420,9 @@ const PlayerDanmakuBlockbottom$json = {
 };
 
 /// Descriptor for `PlayerDanmakuBlockbottom`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List playerDanmakuBlockbottomDescriptor = $convert.base64Decode(
-    'ChhQbGF5ZXJEYW5tYWt1QmxvY2tib3R0b20SFAoFdmFsdWUYASABKAhSBXZhbHVl');
+final $typed_data.Uint8List playerDanmakuBlockbottomDescriptor =
+    $convert.base64Decode(
+        'ChhQbGF5ZXJEYW5tYWt1QmxvY2tib3R0b20SFAoFdmFsdWUYASABKAhSBXZhbHVl');
 
 @$core.Deprecated('Use playerDanmakuBlockcolorfulDescriptor instead')
 const PlayerDanmakuBlockcolorful$json = {
@@ -1450,8 +2433,9 @@ const PlayerDanmakuBlockcolorful$json = {
 };
 
 /// Descriptor for `PlayerDanmakuBlockcolorful`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List playerDanmakuBlockcolorfulDescriptor = $convert.base64Decode(
-    'ChpQbGF5ZXJEYW5tYWt1QmxvY2tjb2xvcmZ1bBIUCgV2YWx1ZRgBIAEoCFIFdmFsdWU=');
+final $typed_data.Uint8List playerDanmakuBlockcolorfulDescriptor =
+    $convert.base64Decode(
+        'ChpQbGF5ZXJEYW5tYWt1QmxvY2tjb2xvcmZ1bBIUCgV2YWx1ZRgBIAEoCFIFdmFsdWU=');
 
 @$core.Deprecated('Use playerDanmakuBlockrepeatDescriptor instead')
 const PlayerDanmakuBlockrepeat$json = {
@@ -1462,8 +2446,9 @@ const PlayerDanmakuBlockrepeat$json = {
 };
 
 /// Descriptor for `PlayerDanmakuBlockrepeat`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List playerDanmakuBlockrepeatDescriptor = $convert.base64Decode(
-    'ChhQbGF5ZXJEYW5tYWt1QmxvY2tyZXBlYXQSFAoFdmFsdWUYASABKAhSBXZhbHVl');
+final $typed_data.Uint8List playerDanmakuBlockrepeatDescriptor =
+    $convert.base64Decode(
+        'ChhQbGF5ZXJEYW5tYWt1QmxvY2tyZXBlYXQSFAoFdmFsdWUYASABKAhSBXZhbHVl');
 
 @$core.Deprecated('Use playerDanmakuBlockscrollDescriptor instead')
 const PlayerDanmakuBlockscroll$json = {
@@ -1474,8 +2459,9 @@ const PlayerDanmakuBlockscroll$json = {
 };
 
 /// Descriptor for `PlayerDanmakuBlockscroll`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List playerDanmakuBlockscrollDescriptor = $convert.base64Decode(
-    'ChhQbGF5ZXJEYW5tYWt1QmxvY2tzY3JvbGwSFAoFdmFsdWUYASABKAhSBXZhbHVl');
+final $typed_data.Uint8List playerDanmakuBlockscrollDescriptor =
+    $convert.base64Decode(
+        'ChhQbGF5ZXJEYW5tYWt1QmxvY2tzY3JvbGwSFAoFdmFsdWUYASABKAhSBXZhbHVl');
 
 @$core.Deprecated('Use playerDanmakuBlockspecialDescriptor instead')
 const PlayerDanmakuBlockspecial$json = {
@@ -1486,8 +2472,9 @@ const PlayerDanmakuBlockspecial$json = {
 };
 
 /// Descriptor for `PlayerDanmakuBlockspecial`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List playerDanmakuBlockspecialDescriptor = $convert.base64Decode(
-    'ChlQbGF5ZXJEYW5tYWt1QmxvY2tzcGVjaWFsEhQKBXZhbHVlGAEgASgIUgV2YWx1ZQ==');
+final $typed_data.Uint8List playerDanmakuBlockspecialDescriptor =
+    $convert.base64Decode(
+        'ChlQbGF5ZXJEYW5tYWt1QmxvY2tzcGVjaWFsEhQKBXZhbHVlGAEgASgIUgV2YWx1ZQ==');
 
 @$core.Deprecated('Use playerDanmakuBlocktopDescriptor instead')
 const PlayerDanmakuBlocktop$json = {
@@ -1498,8 +2485,9 @@ const PlayerDanmakuBlocktop$json = {
 };
 
 /// Descriptor for `PlayerDanmakuBlocktop`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List playerDanmakuBlocktopDescriptor = $convert.base64Decode(
-    'ChVQbGF5ZXJEYW5tYWt1QmxvY2t0b3ASFAoFdmFsdWUYASABKAhSBXZhbHVl');
+final $typed_data.Uint8List playerDanmakuBlocktopDescriptor =
+    $convert.base64Decode(
+        'ChVQbGF5ZXJEYW5tYWt1QmxvY2t0b3ASFAoFdmFsdWUYASABKAhSBXZhbHVl');
 
 @$core.Deprecated('Use playerDanmakuBlocktopBottomDescriptor instead')
 const PlayerDanmakuBlocktopBottom$json = {
@@ -1510,8 +2498,9 @@ const PlayerDanmakuBlocktopBottom$json = {
 };
 
 /// Descriptor for `PlayerDanmakuBlocktopBottom`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List playerDanmakuBlocktopBottomDescriptor = $convert.base64Decode(
-    'ChtQbGF5ZXJEYW5tYWt1QmxvY2t0b3BCb3R0b20SFAoFdmFsdWUYASABKAhSBXZhbHVl');
+final $typed_data.Uint8List playerDanmakuBlocktopBottomDescriptor =
+    $convert.base64Decode(
+        'ChtQbGF5ZXJEYW5tYWt1QmxvY2t0b3BCb3R0b20SFAoFdmFsdWUYASABKAhSBXZhbHVl');
 
 @$core.Deprecated('Use playerDanmakuDensityDescriptor instead')
 const PlayerDanmakuDensity$json = {
@@ -1522,8 +2511,9 @@ const PlayerDanmakuDensity$json = {
 };
 
 /// Descriptor for `PlayerDanmakuDensity`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List playerDanmakuDensityDescriptor = $convert.base64Decode(
-    'ChRQbGF5ZXJEYW5tYWt1RGVuc2l0eRIUCgV2YWx1ZRgBIAEoBVIFdmFsdWU=');
+final $typed_data.Uint8List playerDanmakuDensityDescriptor =
+    $convert.base64Decode(
+        'ChRQbGF5ZXJEYW5tYWt1RGVuc2l0eRIUCgV2YWx1ZRgBIAEoBVIFdmFsdWU=');
 
 @$core.Deprecated('Use playerDanmakuDomainDescriptor instead')
 const PlayerDanmakuDomain$json = {
@@ -1534,8 +2524,9 @@ const PlayerDanmakuDomain$json = {
 };
 
 /// Descriptor for `PlayerDanmakuDomain`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List playerDanmakuDomainDescriptor = $convert.base64Decode(
-    'ChNQbGF5ZXJEYW5tYWt1RG9tYWluEhQKBXZhbHVlGAEgASgCUgV2YWx1ZQ==');
+final $typed_data.Uint8List playerDanmakuDomainDescriptor =
+    $convert.base64Decode(
+        'ChNQbGF5ZXJEYW5tYWt1RG9tYWluEhQKBXZhbHVlGAEgASgCUgV2YWx1ZQ==');
 
 @$core.Deprecated('Use playerDanmakuDomainV2Descriptor instead')
 const PlayerDanmakuDomainV2$json = {
@@ -1546,8 +2537,9 @@ const PlayerDanmakuDomainV2$json = {
 };
 
 /// Descriptor for `PlayerDanmakuDomainV2`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List playerDanmakuDomainV2Descriptor = $convert.base64Decode(
-    'ChVQbGF5ZXJEYW5tYWt1RG9tYWluVjISFAoFdmFsdWUYASABKAVSBXZhbHVl');
+final $typed_data.Uint8List playerDanmakuDomainV2Descriptor =
+    $convert.base64Decode(
+        'ChVQbGF5ZXJEYW5tYWt1RG9tYWluVjISFAoFdmFsdWUYASABKAVSBXZhbHVl');
 
 @$core.Deprecated('Use playerDanmakuEnableHerdDmDescriptor instead')
 const PlayerDanmakuEnableHerdDm$json = {
@@ -1558,8 +2550,9 @@ const PlayerDanmakuEnableHerdDm$json = {
 };
 
 /// Descriptor for `PlayerDanmakuEnableHerdDm`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List playerDanmakuEnableHerdDmDescriptor = $convert.base64Decode(
-    'ChlQbGF5ZXJEYW5tYWt1RW5hYmxlSGVyZERtEhQKBXZhbHVlGAEgASgIUgV2YWx1ZQ==');
+final $typed_data.Uint8List playerDanmakuEnableHerdDmDescriptor =
+    $convert.base64Decode(
+        'ChlQbGF5ZXJEYW5tYWt1RW5hYmxlSGVyZERtEhQKBXZhbHVlGAEgASgIUgV2YWx1ZQ==');
 
 @$core.Deprecated('Use playerDanmakuEnableblocklistDescriptor instead')
 const PlayerDanmakuEnableblocklist$json = {
@@ -1570,8 +2563,9 @@ const PlayerDanmakuEnableblocklist$json = {
 };
 
 /// Descriptor for `PlayerDanmakuEnableblocklist`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List playerDanmakuEnableblocklistDescriptor = $convert.base64Decode(
-    'ChxQbGF5ZXJEYW5tYWt1RW5hYmxlYmxvY2tsaXN0EhQKBXZhbHVlGAEgASgIUgV2YWx1ZQ==');
+final $typed_data.Uint8List playerDanmakuEnableblocklistDescriptor =
+    $convert.base64Decode(
+        'ChxQbGF5ZXJEYW5tYWt1RW5hYmxlYmxvY2tsaXN0EhQKBXZhbHVlGAEgASgIUgV2YWx1ZQ==');
 
 @$core.Deprecated('Use playerDanmakuOpacityDescriptor instead')
 const PlayerDanmakuOpacity$json = {
@@ -1582,8 +2576,9 @@ const PlayerDanmakuOpacity$json = {
 };
 
 /// Descriptor for `PlayerDanmakuOpacity`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List playerDanmakuOpacityDescriptor = $convert.base64Decode(
-    'ChRQbGF5ZXJEYW5tYWt1T3BhY2l0eRIUCgV2YWx1ZRgBIAEoAlIFdmFsdWU=');
+final $typed_data.Uint8List playerDanmakuOpacityDescriptor =
+    $convert.base64Decode(
+        'ChRQbGF5ZXJEYW5tYWt1T3BhY2l0eRIUCgV2YWx1ZRgBIAEoAlIFdmFsdWU=');
 
 @$core.Deprecated('Use playerDanmakuPeopleProofDescriptor instead')
 const PlayerDanmakuPeopleProof$json = {
@@ -1594,8 +2589,9 @@ const PlayerDanmakuPeopleProof$json = {
 };
 
 /// Descriptor for `PlayerDanmakuPeopleProof`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List playerDanmakuPeopleProofDescriptor = $convert.base64Decode(
-    'ChhQbGF5ZXJEYW5tYWt1UGVvcGxlUHJvb2YSFAoFdmFsdWUYASABKAhSBXZhbHVl');
+final $typed_data.Uint8List playerDanmakuPeopleProofDescriptor =
+    $convert.base64Decode(
+        'ChhQbGF5ZXJEYW5tYWt1UGVvcGxlUHJvb2YSFAoFdmFsdWUYASABKAhSBXZhbHVl');
 
 @$core.Deprecated('Use playerDanmakuScalingfactorDescriptor instead')
 const PlayerDanmakuScalingfactor$json = {
@@ -1606,8 +2602,9 @@ const PlayerDanmakuScalingfactor$json = {
 };
 
 /// Descriptor for `PlayerDanmakuScalingfactor`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List playerDanmakuScalingfactorDescriptor = $convert.base64Decode(
-    'ChpQbGF5ZXJEYW5tYWt1U2NhbGluZ2ZhY3RvchIUCgV2YWx1ZRgBIAEoAlIFdmFsdWU=');
+final $typed_data.Uint8List playerDanmakuScalingfactorDescriptor =
+    $convert.base64Decode(
+        'ChpQbGF5ZXJEYW5tYWt1U2NhbGluZ2ZhY3RvchIUCgV2YWx1ZRgBIAEoAlIFdmFsdWU=');
 
 @$core.Deprecated('Use playerDanmakuSeniorModeSwitchDescriptor instead')
 const PlayerDanmakuSeniorModeSwitch$json = {
@@ -1618,8 +2615,9 @@ const PlayerDanmakuSeniorModeSwitch$json = {
 };
 
 /// Descriptor for `PlayerDanmakuSeniorModeSwitch`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List playerDanmakuSeniorModeSwitchDescriptor = $convert.base64Decode(
-    'Ch1QbGF5ZXJEYW5tYWt1U2VuaW9yTW9kZVN3aXRjaBIUCgV2YWx1ZRgBIAEoBVIFdmFsdWU=');
+final $typed_data.Uint8List playerDanmakuSeniorModeSwitchDescriptor =
+    $convert.base64Decode(
+        'Ch1QbGF5ZXJEYW5tYWt1U2VuaW9yTW9kZVN3aXRjaBIUCgV2YWx1ZRgBIAEoBVIFdmFsdWU=');
 
 @$core.Deprecated('Use playerDanmakuSpeedDescriptor instead')
 const PlayerDanmakuSpeed$json = {
@@ -1630,8 +2628,8 @@ const PlayerDanmakuSpeed$json = {
 };
 
 /// Descriptor for `PlayerDanmakuSpeed`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List playerDanmakuSpeedDescriptor = $convert.base64Decode(
-    'ChJQbGF5ZXJEYW5tYWt1U3BlZWQSFAoFdmFsdWUYASABKAVSBXZhbHVl');
+final $typed_data.Uint8List playerDanmakuSpeedDescriptor = $convert
+    .base64Decode('ChJQbGF5ZXJEYW5tYWt1U3BlZWQSFAoFdmFsdWUYASABKAVSBXZhbHVl');
 
 @$core.Deprecated('Use playerDanmakuSubtitleProofDescriptor instead')
 const PlayerDanmakuSubtitleProof$json = {
@@ -1642,8 +2640,9 @@ const PlayerDanmakuSubtitleProof$json = {
 };
 
 /// Descriptor for `PlayerDanmakuSubtitleProof`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List playerDanmakuSubtitleProofDescriptor = $convert.base64Decode(
-    'ChpQbGF5ZXJEYW5tYWt1U3VidGl0bGVQcm9vZhIUCgV2YWx1ZRgBIAEoCFIFdmFsdWU=');
+final $typed_data.Uint8List playerDanmakuSubtitleProofDescriptor =
+    $convert.base64Decode(
+        'ChpQbGF5ZXJEYW5tYWt1U3VidGl0bGVQcm9vZhIUCgV2YWx1ZRgBIAEoCFIFdmFsdWU=');
 
 @$core.Deprecated('Use playerDanmakuSwitchDescriptor instead')
 const PlayerDanmakuSwitch$json = {
@@ -1668,8 +2667,9 @@ const PlayerDanmakuSwitchSave$json = {
 };
 
 /// Descriptor for `PlayerDanmakuSwitchSave`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List playerDanmakuSwitchSaveDescriptor = $convert.base64Decode(
-    'ChdQbGF5ZXJEYW5tYWt1U3dpdGNoU2F2ZRIUCgV2YWx1ZRgBIAEoCFIFdmFsdWU=');
+final $typed_data.Uint8List playerDanmakuSwitchSaveDescriptor =
+    $convert.base64Decode(
+        'ChdQbGF5ZXJEYW5tYWt1U3dpdGNoU2F2ZRIUCgV2YWx1ZRgBIAEoCFIFdmFsdWU=');
 
 @$core.Deprecated('Use playerDanmakuUseDefaultConfigDescriptor instead')
 const PlayerDanmakuUseDefaultConfig$json = {
@@ -1680,8 +2680,9 @@ const PlayerDanmakuUseDefaultConfig$json = {
 };
 
 /// Descriptor for `PlayerDanmakuUseDefaultConfig`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List playerDanmakuUseDefaultConfigDescriptor = $convert.base64Decode(
-    'Ch1QbGF5ZXJEYW5tYWt1VXNlRGVmYXVsdENvbmZpZxIUCgV2YWx1ZRgBIAEoCFIFdmFsdWU=');
+final $typed_data.Uint8List playerDanmakuUseDefaultConfigDescriptor =
+    $convert.base64Decode(
+        'Ch1QbGF5ZXJEYW5tYWt1VXNlRGVmYXVsdENvbmZpZxIUCgV2YWx1ZRgBIAEoCFIFdmFsdWU=');
 
 @$core.Deprecated('Use postPanelDescriptor instead')
 const PostPanel$json = {
@@ -1691,11 +2692,46 @@ const PostPanel$json = {
     {'1': 'end', '3': 2, '4': 1, '5': 3, '10': 'end'},
     {'1': 'priority', '3': 3, '4': 1, '5': 3, '10': 'priority'},
     {'1': 'biz_id', '3': 4, '4': 1, '5': 3, '10': 'bizId'},
-    {'1': 'biz_type', '3': 5, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.PostPanelBizType', '10': 'bizType'},
-    {'1': 'click_button', '3': 6, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.ClickButton', '10': 'clickButton'},
-    {'1': 'text_input', '3': 7, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.TextInput', '10': 'textInput'},
-    {'1': 'check_box', '3': 8, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.CheckBox', '10': 'checkBox'},
-    {'1': 'toast', '3': 9, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.Toast', '10': 'toast'},
+    {
+      '1': 'biz_type',
+      '3': 5,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.PostPanelBizType',
+      '10': 'bizType'
+    },
+    {
+      '1': 'click_button',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.ClickButton',
+      '10': 'clickButton'
+    },
+    {
+      '1': 'text_input',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.TextInput',
+      '10': 'textInput'
+    },
+    {
+      '1': 'check_box',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.CheckBox',
+      '10': 'checkBox'
+    },
+    {
+      '1': 'toast',
+      '3': 9,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.Toast',
+      '10': 'toast'
+    },
   ],
 };
 
@@ -1717,14 +2753,70 @@ const PostPanelV2$json = {
   '2': [
     {'1': 'start', '3': 1, '4': 1, '5': 3, '10': 'start'},
     {'1': 'end', '3': 2, '4': 1, '5': 3, '10': 'end'},
-    {'1': 'biz_type', '3': 3, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.PostPanelBizType', '10': 'bizType'},
-    {'1': 'click_button', '3': 4, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.ClickButtonV2', '10': 'clickButton'},
-    {'1': 'text_input', '3': 5, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.TextInputV2', '10': 'textInput'},
-    {'1': 'check_box', '3': 6, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.CheckBoxV2', '10': 'checkBox'},
-    {'1': 'toast', '3': 7, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.ToastV2', '10': 'toast'},
-    {'1': 'bubble', '3': 8, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.BubbleV2', '10': 'bubble'},
-    {'1': 'label', '3': 9, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.LabelV2', '10': 'label'},
-    {'1': 'post_status', '3': 10, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.PostStatus', '10': 'postStatus'},
+    {
+      '1': 'biz_type',
+      '3': 3,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.PostPanelBizType',
+      '10': 'bizType'
+    },
+    {
+      '1': 'click_button',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.ClickButtonV2',
+      '10': 'clickButton'
+    },
+    {
+      '1': 'text_input',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.TextInputV2',
+      '10': 'textInput'
+    },
+    {
+      '1': 'check_box',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.CheckBoxV2',
+      '10': 'checkBox'
+    },
+    {
+      '1': 'toast',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.ToastV2',
+      '10': 'toast'
+    },
+    {
+      '1': 'bubble',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.BubbleV2',
+      '10': 'bubble'
+    },
+    {
+      '1': 'label',
+      '3': 9,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.LabelV2',
+      '10': 'label'
+    },
+    {
+      '1': 'post_status',
+      '3': 10,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.PostStatus',
+      '10': 'postStatus'
+    },
   ],
 };
 
@@ -1752,8 +2844,8 @@ const QoeInfo$json = {
 };
 
 /// Descriptor for `QoeInfo`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List qoeInfoDescriptor = $convert.base64Decode(
-    'CgdRb2VJbmZvEhIKBGluZm8YASABKAlSBGluZm8=');
+final $typed_data.Uint8List qoeInfoDescriptor =
+    $convert.base64Decode('CgdRb2VJbmZvEhIKBGluZm8YASABKAlSBGluZm8=');
 
 @$core.Deprecated('Use reportDurationDescriptor instead')
 const ReportDuration$json = {
@@ -1792,12 +2884,47 @@ const SubtitleItem$json = {
     {'1': 'lan', '3': 3, '4': 1, '5': 9, '10': 'lan'},
     {'1': 'lan_doc', '3': 4, '4': 1, '5': 9, '10': 'lanDoc'},
     {'1': 'subtitle_url', '3': 5, '4': 1, '5': 9, '10': 'subtitleUrl'},
-    {'1': 'author', '3': 6, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.UserInfo', '10': 'author'},
-    {'1': 'type', '3': 7, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.SubtitleType', '10': 'type'},
+    {
+      '1': 'author',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.UserInfo',
+      '10': 'author'
+    },
+    {
+      '1': 'type',
+      '3': 7,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.SubtitleType',
+      '10': 'type'
+    },
     {'1': 'lan_doc_brief', '3': 8, '4': 1, '5': 9, '10': 'lanDocBrief'},
-    {'1': 'ai_type', '3': 9, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.SubtitleAiType', '10': 'aiType'},
-    {'1': 'ai_status', '3': 10, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.SubtitleAiStatus', '10': 'aiStatus'},
-    {'1': 'role', '3': 11, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.SubtitleRole', '10': 'role'},
+    {
+      '1': 'ai_type',
+      '3': 9,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.SubtitleAiType',
+      '10': 'aiType'
+    },
+    {
+      '1': 'ai_status',
+      '3': 10,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.SubtitleAiStatus',
+      '10': 'aiStatus'
+    },
+    {
+      '1': 'role',
+      '3': 11,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.SubtitleRole',
+      '10': 'role'
+    },
   ],
 };
 
@@ -1818,14 +2945,54 @@ final $typed_data.Uint8List subtitleItemDescriptor = $convert.base64Decode(
 const TextInput$json = {
   '1': 'TextInput',
   '2': [
-    {'1': 'portrait_placeholder', '3': 1, '4': 3, '5': 9, '10': 'portraitPlaceholder'},
-    {'1': 'landscape_placeholder', '3': 2, '4': 3, '5': 9, '10': 'landscapePlaceholder'},
-    {'1': 'render_type', '3': 3, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.RenderType', '10': 'renderType'},
+    {
+      '1': 'portrait_placeholder',
+      '3': 1,
+      '4': 3,
+      '5': 9,
+      '10': 'portraitPlaceholder'
+    },
+    {
+      '1': 'landscape_placeholder',
+      '3': 2,
+      '4': 3,
+      '5': 9,
+      '10': 'landscapePlaceholder'
+    },
+    {
+      '1': 'render_type',
+      '3': 3,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.RenderType',
+      '10': 'renderType'
+    },
     {'1': 'placeholder_post', '3': 4, '4': 1, '5': 8, '10': 'placeholderPost'},
     {'1': 'show', '3': 5, '4': 1, '5': 8, '10': 'show'},
-    {'1': 'avatar', '3': 6, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.Avatar', '10': 'avatar'},
-    {'1': 'post_status', '3': 7, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.PostStatus', '10': 'postStatus'},
-    {'1': 'label', '3': 8, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.Label', '10': 'label'},
+    {
+      '1': 'avatar',
+      '3': 6,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.Avatar',
+      '10': 'avatar'
+    },
+    {
+      '1': 'post_status',
+      '3': 7,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.PostStatus',
+      '10': 'postStatus'
+    },
+    {
+      '1': 'label',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.Label',
+      '10': 'label'
+    },
   ],
 };
 
@@ -1845,11 +3012,37 @@ final $typed_data.Uint8List textInputDescriptor = $convert.base64Decode(
 const TextInputV2$json = {
   '1': 'TextInputV2',
   '2': [
-    {'1': 'portrait_placeholder', '3': 1, '4': 3, '5': 9, '10': 'portraitPlaceholder'},
-    {'1': 'landscape_placeholder', '3': 2, '4': 3, '5': 9, '10': 'landscapePlaceholder'},
-    {'1': 'render_type', '3': 3, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.RenderType', '10': 'renderType'},
+    {
+      '1': 'portrait_placeholder',
+      '3': 1,
+      '4': 3,
+      '5': 9,
+      '10': 'portraitPlaceholder'
+    },
+    {
+      '1': 'landscape_placeholder',
+      '3': 2,
+      '4': 3,
+      '5': 9,
+      '10': 'landscapePlaceholder'
+    },
+    {
+      '1': 'render_type',
+      '3': 3,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.RenderType',
+      '10': 'renderType'
+    },
     {'1': 'placeholder_post', '3': 4, '4': 1, '5': 8, '10': 'placeholderPost'},
-    {'1': 'avatar', '3': 5, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.Avatar', '10': 'avatar'},
+    {
+      '1': 'avatar',
+      '3': 5,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.Avatar',
+      '10': 'avatar'
+    },
     {'1': 'text_input_limit', '3': 6, '4': 1, '5': 5, '10': 'textInputLimit'},
   ],
 };
@@ -1871,7 +3064,14 @@ const Toast$json = {
     {'1': 'text', '3': 1, '4': 1, '5': 9, '10': 'text'},
     {'1': 'duration', '3': 2, '4': 1, '5': 5, '10': 'duration'},
     {'1': 'show', '3': 3, '4': 1, '5': 8, '10': 'show'},
-    {'1': 'button', '3': 4, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.Button', '10': 'button'},
+    {
+      '1': 'button',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.Button',
+      '10': 'button'
+    },
   ],
 };
 
@@ -1886,7 +3086,14 @@ const ToastButtonV2$json = {
   '1': 'ToastButtonV2',
   '2': [
     {'1': 'text', '3': 1, '4': 1, '5': 9, '10': 'text'},
-    {'1': 'action', '3': 2, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.ToastFunctionType', '10': 'action'},
+    {
+      '1': 'action',
+      '3': 2,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.community.service.dm.v1.ToastFunctionType',
+      '10': 'action'
+    },
   ],
 };
 
@@ -1902,7 +3109,14 @@ const ToastV2$json = {
   '2': [
     {'1': 'text', '3': 1, '4': 1, '5': 9, '10': 'text'},
     {'1': 'duration', '3': 2, '4': 1, '5': 5, '10': 'duration'},
-    {'1': 'toast_button_v2', '3': 3, '4': 1, '5': 11, '6': '.bilibili.community.service.dm.v1.ToastButtonV2', '10': 'toastButtonV2'},
+    {
+      '1': 'toast_button_v2',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.ToastButtonV2',
+      '10': 'toastButtonV2'
+    },
   ],
 };
 
@@ -1955,7 +3169,14 @@ const VideoSubtitle$json = {
   '2': [
     {'1': 'lan', '3': 1, '4': 1, '5': 9, '10': 'lan'},
     {'1': 'lan_doc', '3': 2, '4': 1, '5': 9, '10': 'lanDoc'},
-    {'1': 'subtitles', '3': 3, '4': 3, '5': 11, '6': '.bilibili.community.service.dm.v1.SubtitleItem', '10': 'subtitles'},
+    {
+      '1': 'subtitles',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.community.service.dm.v1.SubtitleItem',
+      '10': 'subtitles'
+    },
   ],
 };
 
@@ -1984,4 +3205,3 @@ final $typed_data.Uint8List viewHerdDmElemDescriptor = $convert.base64Decode(
     'J0X2NudBgCIAEoBVIMaGVyZFN0YXJ0Q250EiAKDGhlcmRfZW5kX2NudBgDIAEoBVIKaGVyZEVu'
     'ZENudBIdCgpyZWdleF9ydWxlGAQgASgJUglyZWdleFJ1bGUSJQoOc3RhcnRfcHJvZ3Jlc3MYBS'
     'ABKAVSDXN0YXJ0UHJvZ3Jlc3MSIQoMZW5kX3Byb2dyZXNzGAYgASgFUgtlbmRQcm9ncmVzcw==');
-

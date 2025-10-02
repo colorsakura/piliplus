@@ -1,13 +1,14 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: bilibili/dagw/component/avatar/v1/plugin.proto
-//
+// Generated from bilibili/dagw/component/avatar/v1/plugin.proto.
+
 // @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names, unused_import
 
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
@@ -17,7 +18,14 @@ import 'dart:typed_data' as $typed_data;
 const BorderConfig$json = {
   '1': 'BorderConfig',
   '2': [
-    {'1': 'color', '3': 1, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.ColorConfig', '10': 'color'},
+    {
+      '1': 'color',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.ColorConfig',
+      '10': 'color'
+    },
     {'1': 'border_width', '3': 2, '4': 1, '5': 1, '10': 'borderWidth'},
     {'1': 'ratio', '3': 3, '4': 1, '5': 1, '10': 'ratio'},
   ],
@@ -33,7 +41,14 @@ final $typed_data.Uint8List borderConfigDescriptor = $convert.base64Decode(
 const CommentDoubleClickConfig$json = {
   '1': 'CommentDoubleClickConfig',
   '2': [
-    {'1': 'interaction', '3': 1, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.plugin.Interaction', '10': 'interaction'},
+    {
+      '1': 'interaction',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.plugin.Interaction',
+      '10': 'interaction'
+    },
     {'1': 'animation_scale', '3': 2, '4': 1, '5': 1, '10': 'animationScale'},
   ],
 };
@@ -49,9 +64,23 @@ const FollowActionConfig$json = {
   '1': 'FollowActionConfig',
   '2': [
     {'1': 'has_follow', '3': 1, '4': 1, '5': 8, '10': 'hasFollow'},
-    {'1': 'icon_res', '3': 2, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.ResourceSource', '10': 'iconRes'},
+    {
+      '1': 'icon_res',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.ResourceSource',
+      '10': 'iconRes'
+    },
     {'1': 'border_width', '3': 3, '4': 1, '5': 1, '10': 'borderWidth'},
-    {'1': 'border_color', '3': 4, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.ColorConfig', '10': 'borderColor'},
+    {
+      '1': 'border_color',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.ColorConfig',
+      '10': 'borderColor'
+    },
     {'1': 'mid', '3': 5, '4': 1, '5': 3, '10': 'mid'},
     {'1': 'icon_width_ratio', '3': 6, '4': 1, '5': 1, '10': 'iconWidthRatio'},
     {'1': 'icon_size_offset', '3': 7, '4': 1, '5': 1, '10': 'iconSizeOffset'},
@@ -73,9 +102,23 @@ const FollowIconConfig$json = {
   '1': 'FollowIconConfig',
   '2': [
     {'1': 'has_follow', '3': 1, '4': 1, '5': 8, '10': 'hasFollow'},
-    {'1': 'icon_res', '3': 2, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.ResourceSource', '10': 'iconRes'},
+    {
+      '1': 'icon_res',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.ResourceSource',
+      '10': 'iconRes'
+    },
     {'1': 'border_width', '3': 3, '4': 1, '5': 1, '10': 'borderWidth'},
-    {'1': 'border_color', '3': 4, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.ColorConfig', '10': 'borderColor'},
+    {
+      '1': 'border_color',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.ColorConfig',
+      '10': 'borderColor'
+    },
     {'1': 'mid', '3': 5, '4': 1, '5': 3, '10': 'mid'},
   ],
 };
@@ -92,7 +135,14 @@ final $typed_data.Uint8List followIconConfigDescriptor = $convert.base64Decode(
 const GyroConfig$json = {
   '1': 'GyroConfig',
   '2': [
-    {'1': 'gyroscope', '3': 1, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.plugin.NFTImageV2', '10': 'gyroscope'},
+    {
+      '1': 'gyroscope',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.plugin.NFTImageV2',
+      '10': 'gyroscope'
+    },
   ],
 };
 
@@ -107,7 +157,14 @@ const GyroscopeContentV2$json = {
   '2': [
     {'1': 'file_url', '3': 1, '4': 1, '5': 9, '10': 'fileUrl'},
     {'1': 'scale', '3': 2, '4': 1, '5': 2, '10': 'scale'},
-    {'1': 'physical_orientation', '3': 3, '4': 3, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.plugin.PhysicalOrientationV2', '10': 'physicalOrientation'},
+    {
+      '1': 'physical_orientation',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.plugin.PhysicalOrientationV2',
+      '10': 'physicalOrientation'
+    },
   ],
 };
 
@@ -123,7 +180,14 @@ const GyroscopeEntityV2$json = {
   '1': 'GyroscopeEntityV2',
   '2': [
     {'1': 'display_type', '3': 1, '4': 1, '5': 9, '10': 'displayType'},
-    {'1': 'contents', '3': 2, '4': 3, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.plugin.GyroscopeContentV2', '10': 'contents'},
+    {
+      '1': 'contents',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.plugin.GyroscopeContentV2',
+      '10': 'contents'
+    },
   ],
 };
 
@@ -155,9 +219,30 @@ const LiveAnimeConfig$json = {
   '1': 'LiveAnimeConfig',
   '2': [
     {'1': 'is_live', '3': 1, '4': 1, '5': 8, '10': 'isLive'},
-    {'1': 'config', '3': 2, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.plugin.LiveTextConfig', '10': 'config'},
-    {'1': 'items', '3': 3, '4': 3, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.plugin.LiveAnimeItem', '10': 'items'},
-    {'1': 'border_config', '3': 4, '4': 3, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.plugin.BorderConfig', '10': 'borderConfig'},
+    {
+      '1': 'config',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.plugin.LiveTextConfig',
+      '10': 'config'
+    },
+    {
+      '1': 'items',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.plugin.LiveAnimeItem',
+      '10': 'items'
+    },
+    {
+      '1': 'border_config',
+      '3': 4,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.plugin.BorderConfig',
+      '10': 'borderConfig'
+    },
   ],
 };
 
@@ -174,7 +259,14 @@ final $typed_data.Uint8List liveAnimeConfigDescriptor = $convert.base64Decode(
 const LiveAnimeItem$json = {
   '1': 'LiveAnimeItem',
   '2': [
-    {'1': 'color', '3': 1, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.ColorConfig', '10': 'color'},
+    {
+      '1': 'color',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.ColorConfig',
+      '10': 'color'
+    },
     {'1': 'start_ratio', '3': 2, '4': 1, '5': 1, '10': 'startRatio'},
     {'1': 'end_ratio', '3': 3, '4': 1, '5': 1, '10': 'endRatio'},
     {'1': 'start_stroke', '3': 4, '4': 1, '5': 1, '10': 'startStroke'},
@@ -200,8 +292,22 @@ const LiveTextConfig$json = {
     {'1': 'offset_y', '3': 3, '4': 1, '5': 1, '10': 'offsetY'},
     {'1': 'border_width', '3': 4, '4': 1, '5': 1, '10': 'borderWidth'},
     {'1': 'text_size', '3': 5, '4': 1, '5': 1, '10': 'textSize'},
-    {'1': 'border_color', '3': 7, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.ColorConfig', '10': 'borderColor'},
-    {'1': 'background', '3': 8, '4': 1, '5': 11, '6': '.bilibili.dagw.component.avatar.common.ColorConfig', '10': 'background'},
+    {
+      '1': 'border_color',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.ColorConfig',
+      '10': 'borderColor'
+    },
+    {
+      '1': 'background',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.common.ColorConfig',
+      '10': 'background'
+    },
   ],
 };
 
@@ -218,7 +324,14 @@ final $typed_data.Uint8List liveTextConfigDescriptor = $convert.base64Decode(
 const NFTImageV2$json = {
   '1': 'NFTImageV2',
   '2': [
-    {'1': 'gyroscope', '3': 1, '4': 3, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.plugin.GyroscopeEntityV2', '10': 'gyroscope'},
+    {
+      '1': 'gyroscope',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.bilibili.dagw.component.avatar.v1.plugin.GyroscopeEntityV2',
+      '10': 'gyroscope'
+    },
   ],
 };
 
@@ -238,9 +351,10 @@ const PhysicalOrientationAnimation$json = {
 };
 
 /// Descriptor for `PhysicalOrientationAnimation`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List physicalOrientationAnimationDescriptor = $convert.base64Decode(
-    'ChxQaHlzaWNhbE9yaWVudGF0aW9uQW5pbWF0aW9uEhIKBHR5cGUYASABKAlSBHR5cGUSFAoFdm'
-    'FsdWUYAiADKAJSBXZhbHVlEhYKBmJlemllchgDIAEoCVIGYmV6aWVy');
+final $typed_data.Uint8List physicalOrientationAnimationDescriptor =
+    $convert.base64Decode(
+        'ChxQaHlzaWNhbE9yaWVudGF0aW9uQW5pbWF0aW9uEhIKBHR5cGUYASABKAlSBHR5cGUSFAoFdm'
+        'FsdWUYAiADKAJSBXZhbHVlEhYKBmJlemllchgDIAEoCVIGYmV6aWVy');
 
 @$core.Deprecated('Use physicalOrientationV2Descriptor instead')
 const PhysicalOrientationV2$json = {
@@ -248,7 +362,15 @@ const PhysicalOrientationV2$json = {
   '2': [
     {'1': 'type', '3': 1, '4': 1, '5': 9, '10': 'type'},
     {'1': 'angle', '3': 2, '4': 3, '5': 2, '10': 'angle'},
-    {'1': 'animations', '3': 3, '4': 3, '5': 11, '6': '.bilibili.dagw.component.avatar.v1.plugin.PhysicalOrientationAnimation', '10': 'animations'},
+    {
+      '1': 'animations',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6':
+          '.bilibili.dagw.component.avatar.v1.plugin.PhysicalOrientationAnimation',
+      '10': 'animations'
+    },
   ],
 };
 
@@ -267,8 +389,20 @@ const WebLiveAnimeConfig$json = {
     {'1': 'pink_circle_width', '3': 2, '4': 1, '5': 1, '10': 'pinkCircleWidth'},
     {'1': 'live_label_width', '3': 3, '4': 1, '5': 1, '10': 'liveLabelWidth'},
     {'1': 'live_label_height', '3': 4, '4': 1, '5': 1, '10': 'liveLabelHeight'},
-    {'1': 'live_label_offset_y', '3': 5, '4': 1, '5': 1, '10': 'liveLabelOffsetY'},
-    {'1': 'live_label_border_width', '3': 6, '4': 1, '5': 1, '10': 'liveLabelBorderWidth'},
+    {
+      '1': 'live_label_offset_y',
+      '3': 5,
+      '4': 1,
+      '5': 1,
+      '10': 'liveLabelOffsetY'
+    },
+    {
+      '1': 'live_label_border_width',
+      '3': 6,
+      '4': 1,
+      '5': 1,
+      '10': 'liveLabelBorderWidth'
+    },
   ],
 };
 
@@ -280,4 +414,3 @@ final $typed_data.Uint8List webLiveAnimeConfigDescriptor = $convert.base64Decode
     'dodBgEIAEoAVIPbGl2ZUxhYmVsSGVpZ2h0Ei0KE2xpdmVfbGFiZWxfb2Zmc2V0X3kYBSABKAFS'
     'EGxpdmVMYWJlbE9mZnNldFkSNQoXbGl2ZV9sYWJlbF9ib3JkZXJfd2lkdGgYBiABKAFSFGxpdm'
     'VMYWJlbEJvcmRlcldpZHRo');
-

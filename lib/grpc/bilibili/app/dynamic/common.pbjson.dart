@@ -1,13 +1,14 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: bilibili/app/dynamic/common.proto
-//
+// Generated from bilibili/app/dynamic/common.proto.
+
 // @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names, unused_import
 
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
@@ -33,7 +34,14 @@ final $typed_data.Uint8List wHRatioDescriptor = $convert.base64Decode(
 const ItemWHRatio$json = {
   '1': 'ItemWHRatio',
   '2': [
-    {'1': 'ratio', '3': 1, '4': 1, '5': 14, '6': '.bilibili.app.dynamic.common.WHRatio', '10': 'ratio'},
+    {
+      '1': 'ratio',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.bilibili.app.dynamic.common.WHRatio',
+      '10': 'ratio'
+    },
     {'1': 'width', '3': 2, '4': 1, '5': 5, '10': 'width'},
     {'1': 'height', '3': 3, '4': 1, '5': 5, '10': 'height'},
   ],
@@ -44,4 +52,3 @@ final $typed_data.Uint8List itemWHRatioDescriptor = $convert.base64Decode(
     'CgtJdGVtV0hSYXRpbxI6CgVyYXRpbxgBIAEoDjIkLmJpbGliaWxpLmFwcC5keW5hbWljLmNvbW'
     '1vbi5XSFJhdGlvUgVyYXRpbxIUCgV3aWR0aBgCIAEoBVIFd2lkdGgSFgoGaGVpZ2h0GAMgASgF'
     'UgZoZWlnaHQ=');
-

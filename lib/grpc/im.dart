@@ -67,7 +67,7 @@ class ImGrpc {
     return GrpcReq.request(
       GrpcUrl.sessionMain,
       SessionMainReq(
-        paginationParams: PaginationParams(offsets: offset),
+        paginationParams: PaginationParams(offsets: offset?.entries),
       ),
       SessionMainReply.fromBuffer,
     );
@@ -80,7 +80,7 @@ class ImGrpc {
     return GrpcReq.request(
       GrpcUrl.sessionSecondary,
       SessionSecondaryReq(
-        paginationParams: PaginationParams(offsets: offset),
+        paginationParams: PaginationParams(offsets: offset?.entries),
         pageType: pageType,
       ),
       SessionSecondaryReply.fromBuffer,
@@ -171,7 +171,7 @@ class ImGrpc {
     return GrpcReq.request(
       GrpcUrl.setImSettings,
       SetImSettingsReq(
-        settings: settings,
+        settings: settings?.entries,
       ),
       SetImSettingsReply.fromBuffer,
     );

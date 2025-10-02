@@ -1,13 +1,14 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: bilibili/app/im/v1.proto
-//
+// Generated from bilibili/app/im/v1.proto.
+
 // @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names
 
 import 'dart:core' as $core;
 
@@ -29,58 +30,59 @@ class AirDropShareUserInfo extends $pb.GeneratedMessage {
     $core.String? url,
     $core.String? name,
   }) {
-    final $result = create();
-    if (mid != null) {
-      $result.mid = mid;
-    }
-    if (face != null) {
-      $result.face = face;
-    }
-    if (url != null) {
-      $result.url = url;
-    }
-    if (name != null) {
-      $result.name = name;
-    }
-    return $result;
+    final result = create();
+    if (mid != null) result.mid = mid;
+    if (face != null) result.face = face;
+    if (url != null) result.url = url;
+    if (name != null) result.name = name;
+    return result;
   }
-  AirDropShareUserInfo._() : super();
-  factory AirDropShareUserInfo.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory AirDropShareUserInfo.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AirDropShareUserInfo', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  AirDropShareUserInfo._();
+
+  factory AirDropShareUserInfo.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory AirDropShareUserInfo.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'AirDropShareUserInfo',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aInt64(1, _omitFieldNames ? '' : 'mid')
     ..aOS(2, _omitFieldNames ? '' : 'face')
     ..aOS(3, _omitFieldNames ? '' : 'url')
     ..aOS(4, _omitFieldNames ? '' : 'name')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  AirDropShareUserInfo clone() => AirDropShareUserInfo()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  AirDropShareUserInfo copyWith(void Function(AirDropShareUserInfo) updates) => super.copyWith((message) => updates(message as AirDropShareUserInfo)) as AirDropShareUserInfo;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  AirDropShareUserInfo clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  AirDropShareUserInfo copyWith(void Function(AirDropShareUserInfo) updates) =>
+      super.copyWith((message) => updates(message as AirDropShareUserInfo))
+          as AirDropShareUserInfo;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static AirDropShareUserInfo create() => AirDropShareUserInfo._();
+  @$core.override
   AirDropShareUserInfo createEmptyInstance() => create();
-  static $pb.PbList<AirDropShareUserInfo> createRepeated() => $pb.PbList<AirDropShareUserInfo>();
+  static $pb.PbList<AirDropShareUserInfo> createRepeated() =>
+      $pb.PbList<AirDropShareUserInfo>();
   @$core.pragma('dart2js:noInline')
-  static AirDropShareUserInfo getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AirDropShareUserInfo>(create);
+  static AirDropShareUserInfo getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<AirDropShareUserInfo>(create);
   static AirDropShareUserInfo? _defaultInstance;
 
   @$pb.TagNumber(1)
   $fixnum.Int64 get mid => $_getI64(0);
   @$pb.TagNumber(1)
-  set mid($fixnum.Int64 v) { $_setInt64(0, v); }
+  set mid($fixnum.Int64 value) => $_setInt64(0, value);
   @$pb.TagNumber(1)
   $core.bool hasMid() => $_has(0);
   @$pb.TagNumber(1)
@@ -89,7 +91,7 @@ class AirDropShareUserInfo extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get face => $_getSZ(1);
   @$pb.TagNumber(2)
-  set face($core.String v) { $_setString(1, v); }
+  set face($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasFace() => $_has(1);
   @$pb.TagNumber(2)
@@ -98,7 +100,7 @@ class AirDropShareUserInfo extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get url => $_getSZ(2);
   @$pb.TagNumber(3)
-  set url($core.String v) { $_setString(2, v); }
+  set url($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasUrl() => $_has(2);
   @$pb.TagNumber(3)
@@ -107,7 +109,7 @@ class AirDropShareUserInfo extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.String get name => $_getSZ(3);
   @$pb.TagNumber(4)
-  set name($core.String v) { $_setString(3, v); }
+  set name($core.String value) => $_setString(3, value);
   @$pb.TagNumber(4)
   $core.bool hasName() => $_has(3);
   @$pb.TagNumber(4)
@@ -118,40 +120,48 @@ class AirDropToImReply extends $pb.GeneratedMessage {
   factory AirDropToImReply({
     $core.Iterable<AirDropShareUserInfo>? userInfos,
   }) {
-    final $result = create();
-    if (userInfos != null) {
-      $result.userInfos.addAll(userInfos);
-    }
-    return $result;
+    final result = create();
+    if (userInfos != null) result.userInfos.addAll(userInfos);
+    return result;
   }
-  AirDropToImReply._() : super();
-  factory AirDropToImReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory AirDropToImReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AirDropToImReply', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..pc<AirDropShareUserInfo>(1, _omitFieldNames ? '' : 'userInfos', $pb.PbFieldType.PM, subBuilder: AirDropShareUserInfo.create)
-    ..hasRequiredFields = false
-  ;
+  AirDropToImReply._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  AirDropToImReply clone() => AirDropToImReply()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  AirDropToImReply copyWith(void Function(AirDropToImReply) updates) => super.copyWith((message) => updates(message as AirDropToImReply)) as AirDropToImReply;
+  factory AirDropToImReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory AirDropToImReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'AirDropToImReply',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..pPM<AirDropShareUserInfo>(1, _omitFieldNames ? '' : 'userInfos',
+        subBuilder: AirDropShareUserInfo.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  AirDropToImReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  AirDropToImReply copyWith(void Function(AirDropToImReply) updates) =>
+      super.copyWith((message) => updates(message as AirDropToImReply))
+          as AirDropToImReply;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static AirDropToImReply create() => AirDropToImReply._();
+  @$core.override
   AirDropToImReply createEmptyInstance() => create();
-  static $pb.PbList<AirDropToImReply> createRepeated() => $pb.PbList<AirDropToImReply>();
+  static $pb.PbList<AirDropToImReply> createRepeated() =>
+      $pb.PbList<AirDropToImReply>();
   @$core.pragma('dart2js:noInline')
-  static AirDropToImReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AirDropToImReply>(create);
+  static AirDropToImReply getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<AirDropToImReply>(create);
   static AirDropToImReply? _defaultInstance;
 
   @$pb.TagNumber(1)
@@ -162,46 +172,54 @@ class AirDropToImReq extends $pb.GeneratedMessage {
   factory AirDropToImReq({
     AirDropFrom? adf,
   }) {
-    final $result = create();
-    if (adf != null) {
-      $result.adf = adf;
-    }
-    return $result;
+    final result = create();
+    if (adf != null) result.adf = adf;
+    return result;
   }
-  AirDropToImReq._() : super();
-  factory AirDropToImReq.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory AirDropToImReq.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AirDropToImReq', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..e<AirDropFrom>(1, _omitFieldNames ? '' : 'adf', $pb.PbFieldType.OE, defaultOrMaker: AirDropFrom.ADF_UNKNOWN, valueOf: AirDropFrom.valueOf, enumValues: AirDropFrom.values)
-    ..hasRequiredFields = false
-  ;
+  AirDropToImReq._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  AirDropToImReq clone() => AirDropToImReq()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  AirDropToImReq copyWith(void Function(AirDropToImReq) updates) => super.copyWith((message) => updates(message as AirDropToImReq)) as AirDropToImReq;
+  factory AirDropToImReq.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory AirDropToImReq.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'AirDropToImReq',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aE<AirDropFrom>(1, _omitFieldNames ? '' : 'adf',
+        enumValues: AirDropFrom.values)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  AirDropToImReq clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  AirDropToImReq copyWith(void Function(AirDropToImReq) updates) =>
+      super.copyWith((message) => updates(message as AirDropToImReq))
+          as AirDropToImReq;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static AirDropToImReq create() => AirDropToImReq._();
+  @$core.override
   AirDropToImReq createEmptyInstance() => create();
-  static $pb.PbList<AirDropToImReq> createRepeated() => $pb.PbList<AirDropToImReq>();
+  static $pb.PbList<AirDropToImReq> createRepeated() =>
+      $pb.PbList<AirDropToImReq>();
   @$core.pragma('dart2js:noInline')
-  static AirDropToImReq getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AirDropToImReq>(create);
+  static AirDropToImReq getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<AirDropToImReq>(create);
   static AirDropToImReq? _defaultInstance;
 
   @$pb.TagNumber(1)
   AirDropFrom get adf => $_getN(0);
   @$pb.TagNumber(1)
-  set adf(AirDropFrom v) { $_setField(1, v); }
+  set adf(AirDropFrom value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasAdf() => $_has(0);
   @$pb.TagNumber(1)
@@ -213,50 +231,55 @@ class AutoReplyToast extends $pb.GeneratedMessage {
     $core.String? title,
     $core.String? url,
   }) {
-    final $result = create();
-    if (title != null) {
-      $result.title = title;
-    }
-    if (url != null) {
-      $result.url = url;
-    }
-    return $result;
+    final result = create();
+    if (title != null) result.title = title;
+    if (url != null) result.url = url;
+    return result;
   }
-  AutoReplyToast._() : super();
-  factory AutoReplyToast.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory AutoReplyToast.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AutoReplyToast', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  AutoReplyToast._();
+
+  factory AutoReplyToast.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory AutoReplyToast.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'AutoReplyToast',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'title')
     ..aOS(2, _omitFieldNames ? '' : 'url')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  AutoReplyToast clone() => AutoReplyToast()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  AutoReplyToast copyWith(void Function(AutoReplyToast) updates) => super.copyWith((message) => updates(message as AutoReplyToast)) as AutoReplyToast;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  AutoReplyToast clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  AutoReplyToast copyWith(void Function(AutoReplyToast) updates) =>
+      super.copyWith((message) => updates(message as AutoReplyToast))
+          as AutoReplyToast;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static AutoReplyToast create() => AutoReplyToast._();
+  @$core.override
   AutoReplyToast createEmptyInstance() => create();
-  static $pb.PbList<AutoReplyToast> createRepeated() => $pb.PbList<AutoReplyToast>();
+  static $pb.PbList<AutoReplyToast> createRepeated() =>
+      $pb.PbList<AutoReplyToast>();
   @$core.pragma('dart2js:noInline')
-  static AutoReplyToast getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AutoReplyToast>(create);
+  static AutoReplyToast getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<AutoReplyToast>(create);
   static AutoReplyToast? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get title => $_getSZ(0);
   @$pb.TagNumber(1)
-  set title($core.String v) { $_setString(0, v); }
+  set title($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasTitle() => $_has(0);
   @$pb.TagNumber(1)
@@ -265,7 +288,7 @@ class AutoReplyToast extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get url => $_getSZ(1);
   @$pb.TagNumber(2)
-  set url($core.String v) { $_setString(1, v); }
+  set url($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasUrl() => $_has(1);
   @$pb.TagNumber(2)
@@ -279,58 +302,60 @@ class BehaviorAlertToast extends $pb.GeneratedMessage {
     $core.String? typeStr,
     AlertToastType? type,
   }) {
-    final $result = create();
-    if (title != null) {
-      $result.title = title;
-    }
-    if (content != null) {
-      $result.content = content;
-    }
-    if (typeStr != null) {
-      $result.typeStr = typeStr;
-    }
-    if (type != null) {
-      $result.type = type;
-    }
-    return $result;
+    final result = create();
+    if (title != null) result.title = title;
+    if (content != null) result.content = content;
+    if (typeStr != null) result.typeStr = typeStr;
+    if (type != null) result.type = type;
+    return result;
   }
-  BehaviorAlertToast._() : super();
-  factory BehaviorAlertToast.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory BehaviorAlertToast.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'BehaviorAlertToast', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  BehaviorAlertToast._();
+
+  factory BehaviorAlertToast.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory BehaviorAlertToast.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'BehaviorAlertToast',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'title')
     ..aOS(2, _omitFieldNames ? '' : 'content')
     ..aOS(3, _omitFieldNames ? '' : 'typeStr')
-    ..e<AlertToastType>(4, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: AlertToastType.ALERT_TOAST_TYPE_UNSPECIFIED, valueOf: AlertToastType.valueOf, enumValues: AlertToastType.values)
-    ..hasRequiredFields = false
-  ;
+    ..aE<AlertToastType>(4, _omitFieldNames ? '' : 'type',
+        enumValues: AlertToastType.values)
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  BehaviorAlertToast clone() => BehaviorAlertToast()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  BehaviorAlertToast copyWith(void Function(BehaviorAlertToast) updates) => super.copyWith((message) => updates(message as BehaviorAlertToast)) as BehaviorAlertToast;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BehaviorAlertToast clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BehaviorAlertToast copyWith(void Function(BehaviorAlertToast) updates) =>
+      super.copyWith((message) => updates(message as BehaviorAlertToast))
+          as BehaviorAlertToast;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static BehaviorAlertToast create() => BehaviorAlertToast._();
+  @$core.override
   BehaviorAlertToast createEmptyInstance() => create();
-  static $pb.PbList<BehaviorAlertToast> createRepeated() => $pb.PbList<BehaviorAlertToast>();
+  static $pb.PbList<BehaviorAlertToast> createRepeated() =>
+      $pb.PbList<BehaviorAlertToast>();
   @$core.pragma('dart2js:noInline')
-  static BehaviorAlertToast getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<BehaviorAlertToast>(create);
+  static BehaviorAlertToast getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<BehaviorAlertToast>(create);
   static BehaviorAlertToast? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get title => $_getSZ(0);
   @$pb.TagNumber(1)
-  set title($core.String v) { $_setString(0, v); }
+  set title($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasTitle() => $_has(0);
   @$pb.TagNumber(1)
@@ -339,7 +364,7 @@ class BehaviorAlertToast extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get content => $_getSZ(1);
   @$pb.TagNumber(2)
-  set content($core.String v) { $_setString(1, v); }
+  set content($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasContent() => $_has(1);
   @$pb.TagNumber(2)
@@ -348,7 +373,7 @@ class BehaviorAlertToast extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get typeStr => $_getSZ(2);
   @$pb.TagNumber(3)
-  set typeStr($core.String v) { $_setString(2, v); }
+  set typeStr($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasTypeStr() => $_has(2);
   @$pb.TagNumber(3)
@@ -357,7 +382,7 @@ class BehaviorAlertToast extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   AlertToastType get type => $_getN(3);
   @$pb.TagNumber(4)
-  set type(AlertToastType v) { $_setField(4, v); }
+  set type(AlertToastType value) => $_setField(4, value);
   @$pb.TagNumber(4)
   $core.bool hasType() => $_has(3);
   @$pb.TagNumber(4)
@@ -369,50 +394,55 @@ class BorderedLabel extends $pb.GeneratedMessage {
     $core.String? icon,
     $core.String? text,
   }) {
-    final $result = create();
-    if (icon != null) {
-      $result.icon = icon;
-    }
-    if (text != null) {
-      $result.text = text;
-    }
-    return $result;
+    final result = create();
+    if (icon != null) result.icon = icon;
+    if (text != null) result.text = text;
+    return result;
   }
-  BorderedLabel._() : super();
-  factory BorderedLabel.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory BorderedLabel.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'BorderedLabel', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  BorderedLabel._();
+
+  factory BorderedLabel.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory BorderedLabel.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'BorderedLabel',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'icon')
     ..aOS(2, _omitFieldNames ? '' : 'text')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  BorderedLabel clone() => BorderedLabel()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  BorderedLabel copyWith(void Function(BorderedLabel) updates) => super.copyWith((message) => updates(message as BorderedLabel)) as BorderedLabel;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BorderedLabel clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BorderedLabel copyWith(void Function(BorderedLabel) updates) =>
+      super.copyWith((message) => updates(message as BorderedLabel))
+          as BorderedLabel;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static BorderedLabel create() => BorderedLabel._();
+  @$core.override
   BorderedLabel createEmptyInstance() => create();
-  static $pb.PbList<BorderedLabel> createRepeated() => $pb.PbList<BorderedLabel>();
+  static $pb.PbList<BorderedLabel> createRepeated() =>
+      $pb.PbList<BorderedLabel>();
   @$core.pragma('dart2js:noInline')
-  static BorderedLabel getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<BorderedLabel>(create);
+  static BorderedLabel getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<BorderedLabel>(create);
   static BorderedLabel? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get icon => $_getSZ(0);
   @$pb.TagNumber(1)
-  set icon($core.String v) { $_setString(0, v); }
+  set icon($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasIcon() => $_has(0);
   @$pb.TagNumber(1)
@@ -421,7 +451,7 @@ class BorderedLabel extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get text => $_getSZ(1);
   @$pb.TagNumber(2)
-  set text($core.String v) { $_setString(1, v); }
+  set text($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasText() => $_has(1);
   @$pb.TagNumber(2)
@@ -430,33 +460,45 @@ class BorderedLabel extends $pb.GeneratedMessage {
 
 class CancelInterceptInDustbinReply extends $pb.GeneratedMessage {
   factory CancelInterceptInDustbinReply() => create();
-  CancelInterceptInDustbinReply._() : super();
-  factory CancelInterceptInDustbinReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory CancelInterceptInDustbinReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CancelInterceptInDustbinReply', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..hasRequiredFields = false
-  ;
+  CancelInterceptInDustbinReply._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  CancelInterceptInDustbinReply clone() => CancelInterceptInDustbinReply()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  CancelInterceptInDustbinReply copyWith(void Function(CancelInterceptInDustbinReply) updates) => super.copyWith((message) => updates(message as CancelInterceptInDustbinReply)) as CancelInterceptInDustbinReply;
+  factory CancelInterceptInDustbinReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory CancelInterceptInDustbinReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'CancelInterceptInDustbinReply',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  CancelInterceptInDustbinReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  CancelInterceptInDustbinReply copyWith(
+          void Function(CancelInterceptInDustbinReply) updates) =>
+      super.copyWith(
+              (message) => updates(message as CancelInterceptInDustbinReply))
+          as CancelInterceptInDustbinReply;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static CancelInterceptInDustbinReply create() => CancelInterceptInDustbinReply._();
+  static CancelInterceptInDustbinReply create() =>
+      CancelInterceptInDustbinReply._();
+  @$core.override
   CancelInterceptInDustbinReply createEmptyInstance() => create();
-  static $pb.PbList<CancelInterceptInDustbinReply> createRepeated() => $pb.PbList<CancelInterceptInDustbinReply>();
+  static $pb.PbList<CancelInterceptInDustbinReply> createRepeated() =>
+      $pb.PbList<CancelInterceptInDustbinReply>();
   @$core.pragma('dart2js:noInline')
-  static CancelInterceptInDustbinReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CancelInterceptInDustbinReply>(create);
+  static CancelInterceptInDustbinReply getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<CancelInterceptInDustbinReply>(create);
   static CancelInterceptInDustbinReply? _defaultInstance;
 }
 
@@ -464,46 +506,57 @@ class CancelInterceptInDustbinReq extends $pb.GeneratedMessage {
   factory CancelInterceptInDustbinReq({
     SessionId? sessionId,
   }) {
-    final $result = create();
-    if (sessionId != null) {
-      $result.sessionId = sessionId;
-    }
-    return $result;
+    final result = create();
+    if (sessionId != null) result.sessionId = sessionId;
+    return result;
   }
-  CancelInterceptInDustbinReq._() : super();
-  factory CancelInterceptInDustbinReq.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory CancelInterceptInDustbinReq.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CancelInterceptInDustbinReq', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..aOM<SessionId>(1, _omitFieldNames ? '' : 'sessionId', subBuilder: SessionId.create)
-    ..hasRequiredFields = false
-  ;
+  CancelInterceptInDustbinReq._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  CancelInterceptInDustbinReq clone() => CancelInterceptInDustbinReq()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  CancelInterceptInDustbinReq copyWith(void Function(CancelInterceptInDustbinReq) updates) => super.copyWith((message) => updates(message as CancelInterceptInDustbinReq)) as CancelInterceptInDustbinReq;
+  factory CancelInterceptInDustbinReq.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory CancelInterceptInDustbinReq.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'CancelInterceptInDustbinReq',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aOM<SessionId>(1, _omitFieldNames ? '' : 'sessionId',
+        subBuilder: SessionId.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  CancelInterceptInDustbinReq clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  CancelInterceptInDustbinReq copyWith(
+          void Function(CancelInterceptInDustbinReq) updates) =>
+      super.copyWith(
+              (message) => updates(message as CancelInterceptInDustbinReq))
+          as CancelInterceptInDustbinReq;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static CancelInterceptInDustbinReq create() => CancelInterceptInDustbinReq._();
+  static CancelInterceptInDustbinReq create() =>
+      CancelInterceptInDustbinReq._();
+  @$core.override
   CancelInterceptInDustbinReq createEmptyInstance() => create();
-  static $pb.PbList<CancelInterceptInDustbinReq> createRepeated() => $pb.PbList<CancelInterceptInDustbinReq>();
+  static $pb.PbList<CancelInterceptInDustbinReq> createRepeated() =>
+      $pb.PbList<CancelInterceptInDustbinReq>();
   @$core.pragma('dart2js:noInline')
-  static CancelInterceptInDustbinReq getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CancelInterceptInDustbinReq>(create);
+  static CancelInterceptInDustbinReq getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<CancelInterceptInDustbinReq>(create);
   static CancelInterceptInDustbinReq? _defaultInstance;
 
   @$pb.TagNumber(1)
   SessionId get sessionId => $_getN(0);
   @$pb.TagNumber(1)
-  set sessionId(SessionId v) { $_setField(1, v); }
+  set sessionId(SessionId value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasSessionId() => $_has(0);
   @$pb.TagNumber(1)
@@ -514,33 +567,42 @@ class CancelInterceptInDustbinReq extends $pb.GeneratedMessage {
 
 class ClearAlertReply extends $pb.GeneratedMessage {
   factory ClearAlertReply() => create();
-  ClearAlertReply._() : super();
-  factory ClearAlertReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory ClearAlertReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ClearAlertReply', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..hasRequiredFields = false
-  ;
+  ClearAlertReply._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  ClearAlertReply clone() => ClearAlertReply()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  ClearAlertReply copyWith(void Function(ClearAlertReply) updates) => super.copyWith((message) => updates(message as ClearAlertReply)) as ClearAlertReply;
+  factory ClearAlertReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ClearAlertReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ClearAlertReply',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ClearAlertReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ClearAlertReply copyWith(void Function(ClearAlertReply) updates) =>
+      super.copyWith((message) => updates(message as ClearAlertReply))
+          as ClearAlertReply;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ClearAlertReply create() => ClearAlertReply._();
+  @$core.override
   ClearAlertReply createEmptyInstance() => create();
-  static $pb.PbList<ClearAlertReply> createRepeated() => $pb.PbList<ClearAlertReply>();
+  static $pb.PbList<ClearAlertReply> createRepeated() =>
+      $pb.PbList<ClearAlertReply>();
   @$core.pragma('dart2js:noInline')
-  static ClearAlertReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ClearAlertReply>(create);
+  static ClearAlertReply getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ClearAlertReply>(create);
   static ClearAlertReply? _defaultInstance;
 }
 
@@ -548,46 +610,54 @@ class ClearAlertReq extends $pb.GeneratedMessage {
   factory ClearAlertReq({
     AlertToastType? type,
   }) {
-    final $result = create();
-    if (type != null) {
-      $result.type = type;
-    }
-    return $result;
+    final result = create();
+    if (type != null) result.type = type;
+    return result;
   }
-  ClearAlertReq._() : super();
-  factory ClearAlertReq.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory ClearAlertReq.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ClearAlertReq', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..e<AlertToastType>(1, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: AlertToastType.ALERT_TOAST_TYPE_UNSPECIFIED, valueOf: AlertToastType.valueOf, enumValues: AlertToastType.values)
-    ..hasRequiredFields = false
-  ;
+  ClearAlertReq._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  ClearAlertReq clone() => ClearAlertReq()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  ClearAlertReq copyWith(void Function(ClearAlertReq) updates) => super.copyWith((message) => updates(message as ClearAlertReq)) as ClearAlertReq;
+  factory ClearAlertReq.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ClearAlertReq.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ClearAlertReq',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aE<AlertToastType>(1, _omitFieldNames ? '' : 'type',
+        enumValues: AlertToastType.values)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ClearAlertReq clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ClearAlertReq copyWith(void Function(ClearAlertReq) updates) =>
+      super.copyWith((message) => updates(message as ClearAlertReq))
+          as ClearAlertReq;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ClearAlertReq create() => ClearAlertReq._();
+  @$core.override
   ClearAlertReq createEmptyInstance() => create();
-  static $pb.PbList<ClearAlertReq> createRepeated() => $pb.PbList<ClearAlertReq>();
+  static $pb.PbList<ClearAlertReq> createRepeated() =>
+      $pb.PbList<ClearAlertReq>();
   @$core.pragma('dart2js:noInline')
-  static ClearAlertReq getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ClearAlertReq>(create);
+  static ClearAlertReq getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ClearAlertReq>(create);
   static ClearAlertReq? _defaultInstance;
 
   @$pb.TagNumber(1)
   AlertToastType get type => $_getN(0);
   @$pb.TagNumber(1)
-  set type(AlertToastType v) { $_setField(1, v); }
+  set type(AlertToastType value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasType() => $_has(0);
   @$pb.TagNumber(1)
@@ -596,33 +666,42 @@ class ClearAlertReq extends $pb.GeneratedMessage {
 
 class ClearUnreadReply extends $pb.GeneratedMessage {
   factory ClearUnreadReply() => create();
-  ClearUnreadReply._() : super();
-  factory ClearUnreadReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory ClearUnreadReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ClearUnreadReply', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..hasRequiredFields = false
-  ;
+  ClearUnreadReply._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  ClearUnreadReply clone() => ClearUnreadReply()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  ClearUnreadReply copyWith(void Function(ClearUnreadReply) updates) => super.copyWith((message) => updates(message as ClearUnreadReply)) as ClearUnreadReply;
+  factory ClearUnreadReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ClearUnreadReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ClearUnreadReply',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ClearUnreadReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ClearUnreadReply copyWith(void Function(ClearUnreadReply) updates) =>
+      super.copyWith((message) => updates(message as ClearUnreadReply))
+          as ClearUnreadReply;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ClearUnreadReply create() => ClearUnreadReply._();
+  @$core.override
   ClearUnreadReply createEmptyInstance() => create();
-  static $pb.PbList<ClearUnreadReply> createRepeated() => $pb.PbList<ClearUnreadReply>();
+  static $pb.PbList<ClearUnreadReply> createRepeated() =>
+      $pb.PbList<ClearUnreadReply>();
   @$core.pragma('dart2js:noInline')
-  static ClearUnreadReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ClearUnreadReply>(create);
+  static ClearUnreadReply getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ClearUnreadReply>(create);
   static ClearUnreadReply? _defaultInstance;
 }
 
@@ -631,50 +710,57 @@ class ClearUnreadReq extends $pb.GeneratedMessage {
     SessionPageType? pageType,
     SessionId? sessionId,
   }) {
-    final $result = create();
-    if (pageType != null) {
-      $result.pageType = pageType;
-    }
-    if (sessionId != null) {
-      $result.sessionId = sessionId;
-    }
-    return $result;
+    final result = create();
+    if (pageType != null) result.pageType = pageType;
+    if (sessionId != null) result.sessionId = sessionId;
+    return result;
   }
-  ClearUnreadReq._() : super();
-  factory ClearUnreadReq.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory ClearUnreadReq.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ClearUnreadReq', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..e<SessionPageType>(1, _omitFieldNames ? '' : 'pageType', $pb.PbFieldType.OE, defaultOrMaker: SessionPageType.SESSION_PAGE_TYPE_UNKNOWN, valueOf: SessionPageType.valueOf, enumValues: SessionPageType.values)
-    ..aOM<SessionId>(2, _omitFieldNames ? '' : 'sessionId', subBuilder: SessionId.create)
-    ..hasRequiredFields = false
-  ;
+  ClearUnreadReq._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  ClearUnreadReq clone() => ClearUnreadReq()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  ClearUnreadReq copyWith(void Function(ClearUnreadReq) updates) => super.copyWith((message) => updates(message as ClearUnreadReq)) as ClearUnreadReq;
+  factory ClearUnreadReq.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ClearUnreadReq.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ClearUnreadReq',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aE<SessionPageType>(1, _omitFieldNames ? '' : 'pageType',
+        enumValues: SessionPageType.values)
+    ..aOM<SessionId>(2, _omitFieldNames ? '' : 'sessionId',
+        subBuilder: SessionId.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ClearUnreadReq clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ClearUnreadReq copyWith(void Function(ClearUnreadReq) updates) =>
+      super.copyWith((message) => updates(message as ClearUnreadReq))
+          as ClearUnreadReq;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ClearUnreadReq create() => ClearUnreadReq._();
+  @$core.override
   ClearUnreadReq createEmptyInstance() => create();
-  static $pb.PbList<ClearUnreadReq> createRepeated() => $pb.PbList<ClearUnreadReq>();
+  static $pb.PbList<ClearUnreadReq> createRepeated() =>
+      $pb.PbList<ClearUnreadReq>();
   @$core.pragma('dart2js:noInline')
-  static ClearUnreadReq getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ClearUnreadReq>(create);
+  static ClearUnreadReq getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ClearUnreadReq>(create);
   static ClearUnreadReq? _defaultInstance;
 
   @$pb.TagNumber(1)
   SessionPageType get pageType => $_getN(0);
   @$pb.TagNumber(1)
-  set pageType(SessionPageType v) { $_setField(1, v); }
+  set pageType(SessionPageType value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasPageType() => $_has(0);
   @$pb.TagNumber(1)
@@ -683,7 +769,7 @@ class ClearUnreadReq extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   SessionId get sessionId => $_getN(1);
   @$pb.TagNumber(2)
-  set sessionId(SessionId v) { $_setField(2, v); }
+  set sessionId(SessionId value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasSessionId() => $_has(1);
   @$pb.TagNumber(2)
@@ -704,78 +790,69 @@ class Contact extends $pb.GeneratedMessage {
     $core.String? face,
     $core.int? officialType,
   }) {
-    final $result = create();
-    if (id != null) {
-      $result.id = id;
-    }
-    if (name != null) {
-      $result.name = name;
-    }
-    if (avatar != null) {
-      $result.avatar = avatar;
-    }
-    if (vipInfo != null) {
-      $result.vipInfo = vipInfo;
-    }
-    if (url != null) {
-      $result.url = url;
-    }
-    if (nameRender != null) {
-      $result.nameRender = nameRender;
-    }
-    if (isSpecialFollow != null) {
-      $result.isSpecialFollow = isSpecialFollow;
-    }
-    if (face != null) {
-      $result.face = face;
-    }
-    if (officialType != null) {
-      $result.officialType = officialType;
-    }
-    return $result;
+    final result = create();
+    if (id != null) result.id = id;
+    if (name != null) result.name = name;
+    if (avatar != null) result.avatar = avatar;
+    if (vipInfo != null) result.vipInfo = vipInfo;
+    if (url != null) result.url = url;
+    if (nameRender != null) result.nameRender = nameRender;
+    if (isSpecialFollow != null) result.isSpecialFollow = isSpecialFollow;
+    if (face != null) result.face = face;
+    if (officialType != null) result.officialType = officialType;
+    return result;
   }
-  Contact._() : super();
-  factory Contact.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Contact.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Contact', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  Contact._();
+
+  factory Contact.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory Contact.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'Contact',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aInt64(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
-    ..aOM<$0.AvatarItem>(3, _omitFieldNames ? '' : 'avatar', subBuilder: $0.AvatarItem.create)
+    ..aOM<$0.AvatarItem>(3, _omitFieldNames ? '' : 'avatar',
+        subBuilder: $0.AvatarItem.create)
     ..aOS(4, _omitFieldNames ? '' : 'vipInfo')
     ..aOS(5, _omitFieldNames ? '' : 'url')
-    ..aOM<$1.NameRender>(6, _omitFieldNames ? '' : 'nameRender', subBuilder: $1.NameRender.create)
+    ..aOM<$1.NameRender>(6, _omitFieldNames ? '' : 'nameRender',
+        subBuilder: $1.NameRender.create)
     ..aOB(7, _omitFieldNames ? '' : 'isSpecialFollow')
     ..aOS(8, _omitFieldNames ? '' : 'face')
-    ..a<$core.int>(9, _omitFieldNames ? '' : 'officialType', $pb.PbFieldType.O3)
-    ..hasRequiredFields = false
-  ;
+    ..aI(9, _omitFieldNames ? '' : 'officialType')
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  Contact clone() => Contact()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  Contact copyWith(void Function(Contact) updates) => super.copyWith((message) => updates(message as Contact)) as Contact;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Contact clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Contact copyWith(void Function(Contact) updates) =>
+      super.copyWith((message) => updates(message as Contact)) as Contact;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static Contact create() => Contact._();
+  @$core.override
   Contact createEmptyInstance() => create();
   static $pb.PbList<Contact> createRepeated() => $pb.PbList<Contact>();
   @$core.pragma('dart2js:noInline')
-  static Contact getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Contact>(create);
+  static Contact getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Contact>(create);
   static Contact? _defaultInstance;
 
   @$pb.TagNumber(1)
   $fixnum.Int64 get id => $_getI64(0);
   @$pb.TagNumber(1)
-  set id($fixnum.Int64 v) { $_setInt64(0, v); }
+  set id($fixnum.Int64 value) => $_setInt64(0, value);
   @$pb.TagNumber(1)
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
@@ -784,7 +861,7 @@ class Contact extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get name => $_getSZ(1);
   @$pb.TagNumber(2)
-  set name($core.String v) { $_setString(1, v); }
+  set name($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasName() => $_has(1);
   @$pb.TagNumber(2)
@@ -793,7 +870,7 @@ class Contact extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $0.AvatarItem get avatar => $_getN(2);
   @$pb.TagNumber(3)
-  set avatar($0.AvatarItem v) { $_setField(3, v); }
+  set avatar($0.AvatarItem value) => $_setField(3, value);
   @$pb.TagNumber(3)
   $core.bool hasAvatar() => $_has(2);
   @$pb.TagNumber(3)
@@ -804,7 +881,7 @@ class Contact extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.String get vipInfo => $_getSZ(3);
   @$pb.TagNumber(4)
-  set vipInfo($core.String v) { $_setString(3, v); }
+  set vipInfo($core.String value) => $_setString(3, value);
   @$pb.TagNumber(4)
   $core.bool hasVipInfo() => $_has(3);
   @$pb.TagNumber(4)
@@ -813,7 +890,7 @@ class Contact extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $core.String get url => $_getSZ(4);
   @$pb.TagNumber(5)
-  set url($core.String v) { $_setString(4, v); }
+  set url($core.String value) => $_setString(4, value);
   @$pb.TagNumber(5)
   $core.bool hasUrl() => $_has(4);
   @$pb.TagNumber(5)
@@ -822,7 +899,7 @@ class Contact extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   $1.NameRender get nameRender => $_getN(5);
   @$pb.TagNumber(6)
-  set nameRender($1.NameRender v) { $_setField(6, v); }
+  set nameRender($1.NameRender value) => $_setField(6, value);
   @$pb.TagNumber(6)
   $core.bool hasNameRender() => $_has(5);
   @$pb.TagNumber(6)
@@ -833,7 +910,7 @@ class Contact extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   $core.bool get isSpecialFollow => $_getBF(6);
   @$pb.TagNumber(7)
-  set isSpecialFollow($core.bool v) { $_setBool(6, v); }
+  set isSpecialFollow($core.bool value) => $_setBool(6, value);
   @$pb.TagNumber(7)
   $core.bool hasIsSpecialFollow() => $_has(6);
   @$pb.TagNumber(7)
@@ -842,7 +919,7 @@ class Contact extends $pb.GeneratedMessage {
   @$pb.TagNumber(8)
   $core.String get face => $_getSZ(7);
   @$pb.TagNumber(8)
-  set face($core.String v) { $_setString(7, v); }
+  set face($core.String value) => $_setString(7, value);
   @$pb.TagNumber(8)
   $core.bool hasFace() => $_has(7);
   @$pb.TagNumber(8)
@@ -851,7 +928,7 @@ class Contact extends $pb.GeneratedMessage {
   @$pb.TagNumber(9)
   $core.int get officialType => $_getIZ(8);
   @$pb.TagNumber(9)
-  set officialType($core.int v) { $_setSignedInt32(8, v); }
+  set officialType($core.int value) => $_setSignedInt32(8, value);
   @$pb.TagNumber(9)
   $core.bool hasOfficialType() => $_has(8);
   @$pb.TagNumber(9)
@@ -863,50 +940,54 @@ class ContactTab extends $pb.GeneratedMessage {
     ContactTabType? tab,
     $core.String? name,
   }) {
-    final $result = create();
-    if (tab != null) {
-      $result.tab = tab;
-    }
-    if (name != null) {
-      $result.name = name;
-    }
-    return $result;
+    final result = create();
+    if (tab != null) result.tab = tab;
+    if (name != null) result.name = name;
+    return result;
   }
-  ContactTab._() : super();
-  factory ContactTab.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory ContactTab.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ContactTab', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..e<ContactTabType>(1, _omitFieldNames ? '' : 'tab', $pb.PbFieldType.OE, defaultOrMaker: ContactTabType.TAB_UNKNOWN, valueOf: ContactTabType.valueOf, enumValues: ContactTabType.values)
+  ContactTab._();
+
+  factory ContactTab.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ContactTab.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ContactTab',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aE<ContactTabType>(1, _omitFieldNames ? '' : 'tab',
+        enumValues: ContactTabType.values)
     ..aOS(2, _omitFieldNames ? '' : 'name')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  ContactTab clone() => ContactTab()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  ContactTab copyWith(void Function(ContactTab) updates) => super.copyWith((message) => updates(message as ContactTab)) as ContactTab;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ContactTab clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ContactTab copyWith(void Function(ContactTab) updates) =>
+      super.copyWith((message) => updates(message as ContactTab)) as ContactTab;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ContactTab create() => ContactTab._();
+  @$core.override
   ContactTab createEmptyInstance() => create();
   static $pb.PbList<ContactTab> createRepeated() => $pb.PbList<ContactTab>();
   @$core.pragma('dart2js:noInline')
-  static ContactTab getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ContactTab>(create);
+  static ContactTab getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ContactTab>(create);
   static ContactTab? _defaultInstance;
 
   @$pb.TagNumber(1)
   ContactTabType get tab => $_getN(0);
   @$pb.TagNumber(1)
-  set tab(ContactTabType v) { $_setField(1, v); }
+  set tab(ContactTabType value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasTab() => $_has(0);
   @$pb.TagNumber(1)
@@ -915,7 +996,7 @@ class ContactTab extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get name => $_getSZ(1);
   @$pb.TagNumber(2)
-  set name($core.String v) { $_setString(1, v); }
+  set name($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasName() => $_has(1);
   @$pb.TagNumber(2)
@@ -929,52 +1010,57 @@ class ContactsReply extends $pb.GeneratedMessage {
     ContactTabType? currentTab,
     PaginationParams? paginationParams,
   }) {
-    final $result = create();
-    if (contacts != null) {
-      $result.contacts.addAll(contacts);
-    }
-    if (tab != null) {
-      $result.tab.addAll(tab);
-    }
-    if (currentTab != null) {
-      $result.currentTab = currentTab;
-    }
-    if (paginationParams != null) {
-      $result.paginationParams = paginationParams;
-    }
-    return $result;
+    final result = create();
+    if (contacts != null) result.contacts.addAll(contacts);
+    if (tab != null) result.tab.addAll(tab);
+    if (currentTab != null) result.currentTab = currentTab;
+    if (paginationParams != null) result.paginationParams = paginationParams;
+    return result;
   }
-  ContactsReply._() : super();
-  factory ContactsReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory ContactsReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ContactsReply', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..pc<Contact>(1, _omitFieldNames ? '' : 'contacts', $pb.PbFieldType.PM, subBuilder: Contact.create)
-    ..pc<ContactTab>(2, _omitFieldNames ? '' : 'tab', $pb.PbFieldType.PM, subBuilder: ContactTab.create)
-    ..e<ContactTabType>(3, _omitFieldNames ? '' : 'currentTab', $pb.PbFieldType.OE, defaultOrMaker: ContactTabType.TAB_UNKNOWN, valueOf: ContactTabType.valueOf, enumValues: ContactTabType.values)
-    ..aOM<PaginationParams>(4, _omitFieldNames ? '' : 'paginationParams', subBuilder: PaginationParams.create)
-    ..hasRequiredFields = false
-  ;
+  ContactsReply._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  ContactsReply clone() => ContactsReply()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  ContactsReply copyWith(void Function(ContactsReply) updates) => super.copyWith((message) => updates(message as ContactsReply)) as ContactsReply;
+  factory ContactsReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ContactsReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ContactsReply',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..pPM<Contact>(1, _omitFieldNames ? '' : 'contacts',
+        subBuilder: Contact.create)
+    ..pPM<ContactTab>(2, _omitFieldNames ? '' : 'tab',
+        subBuilder: ContactTab.create)
+    ..aE<ContactTabType>(3, _omitFieldNames ? '' : 'currentTab',
+        enumValues: ContactTabType.values)
+    ..aOM<PaginationParams>(4, _omitFieldNames ? '' : 'paginationParams',
+        subBuilder: PaginationParams.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ContactsReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ContactsReply copyWith(void Function(ContactsReply) updates) =>
+      super.copyWith((message) => updates(message as ContactsReply))
+          as ContactsReply;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ContactsReply create() => ContactsReply._();
+  @$core.override
   ContactsReply createEmptyInstance() => create();
-  static $pb.PbList<ContactsReply> createRepeated() => $pb.PbList<ContactsReply>();
+  static $pb.PbList<ContactsReply> createRepeated() =>
+      $pb.PbList<ContactsReply>();
   @$core.pragma('dart2js:noInline')
-  static ContactsReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ContactsReply>(create);
+  static ContactsReply getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ContactsReply>(create);
   static ContactsReply? _defaultInstance;
 
   @$pb.TagNumber(1)
@@ -986,7 +1072,7 @@ class ContactsReply extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   ContactTabType get currentTab => $_getN(2);
   @$pb.TagNumber(3)
-  set currentTab(ContactTabType v) { $_setField(3, v); }
+  set currentTab(ContactTabType value) => $_setField(3, value);
   @$pb.TagNumber(3)
   $core.bool hasCurrentTab() => $_has(2);
   @$pb.TagNumber(3)
@@ -995,7 +1081,7 @@ class ContactsReply extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   PaginationParams get paginationParams => $_getN(3);
   @$pb.TagNumber(4)
-  set paginationParams(PaginationParams v) { $_setField(4, v); }
+  set paginationParams(PaginationParams value) => $_setField(4, value);
   @$pb.TagNumber(4)
   $core.bool hasPaginationParams() => $_has(3);
   @$pb.TagNumber(4)
@@ -1009,50 +1095,56 @@ class ContactsReq extends $pb.GeneratedMessage {
     ContactTabType? tab,
     PaginationParams? paginationParams,
   }) {
-    final $result = create();
-    if (tab != null) {
-      $result.tab = tab;
-    }
-    if (paginationParams != null) {
-      $result.paginationParams = paginationParams;
-    }
-    return $result;
+    final result = create();
+    if (tab != null) result.tab = tab;
+    if (paginationParams != null) result.paginationParams = paginationParams;
+    return result;
   }
-  ContactsReq._() : super();
-  factory ContactsReq.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory ContactsReq.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ContactsReq', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..e<ContactTabType>(1, _omitFieldNames ? '' : 'tab', $pb.PbFieldType.OE, defaultOrMaker: ContactTabType.TAB_UNKNOWN, valueOf: ContactTabType.valueOf, enumValues: ContactTabType.values)
-    ..aOM<PaginationParams>(2, _omitFieldNames ? '' : 'paginationParams', subBuilder: PaginationParams.create)
-    ..hasRequiredFields = false
-  ;
+  ContactsReq._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  ContactsReq clone() => ContactsReq()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  ContactsReq copyWith(void Function(ContactsReq) updates) => super.copyWith((message) => updates(message as ContactsReq)) as ContactsReq;
+  factory ContactsReq.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ContactsReq.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ContactsReq',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aE<ContactTabType>(1, _omitFieldNames ? '' : 'tab',
+        enumValues: ContactTabType.values)
+    ..aOM<PaginationParams>(2, _omitFieldNames ? '' : 'paginationParams',
+        subBuilder: PaginationParams.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ContactsReq clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ContactsReq copyWith(void Function(ContactsReq) updates) =>
+      super.copyWith((message) => updates(message as ContactsReq))
+          as ContactsReq;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ContactsReq create() => ContactsReq._();
+  @$core.override
   ContactsReq createEmptyInstance() => create();
   static $pb.PbList<ContactsReq> createRepeated() => $pb.PbList<ContactsReq>();
   @$core.pragma('dart2js:noInline')
-  static ContactsReq getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ContactsReq>(create);
+  static ContactsReq getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ContactsReq>(create);
   static ContactsReq? _defaultInstance;
 
   @$pb.TagNumber(1)
   ContactTabType get tab => $_getN(0);
   @$pb.TagNumber(1)
-  set tab(ContactTabType v) { $_setField(1, v); }
+  set tab(ContactTabType value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasTab() => $_has(0);
   @$pb.TagNumber(1)
@@ -1061,7 +1153,7 @@ class ContactsReq extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   PaginationParams get paginationParams => $_getN(1);
   @$pb.TagNumber(2)
-  set paginationParams(PaginationParams v) { $_setField(2, v); }
+  set paginationParams(PaginationParams value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasPaginationParams() => $_has(1);
   @$pb.TagNumber(2)
@@ -1075,44 +1167,51 @@ class ContactsSearchReply extends $pb.GeneratedMessage {
     $core.Iterable<Contact>? contacts,
     PaginationParams? paginationParams,
   }) {
-    final $result = create();
-    if (contacts != null) {
-      $result.contacts.addAll(contacts);
-    }
-    if (paginationParams != null) {
-      $result.paginationParams = paginationParams;
-    }
-    return $result;
+    final result = create();
+    if (contacts != null) result.contacts.addAll(contacts);
+    if (paginationParams != null) result.paginationParams = paginationParams;
+    return result;
   }
-  ContactsSearchReply._() : super();
-  factory ContactsSearchReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory ContactsSearchReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ContactsSearchReply', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..pc<Contact>(1, _omitFieldNames ? '' : 'contacts', $pb.PbFieldType.PM, subBuilder: Contact.create)
-    ..aOM<PaginationParams>(2, _omitFieldNames ? '' : 'paginationParams', subBuilder: PaginationParams.create)
-    ..hasRequiredFields = false
-  ;
+  ContactsSearchReply._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  ContactsSearchReply clone() => ContactsSearchReply()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  ContactsSearchReply copyWith(void Function(ContactsSearchReply) updates) => super.copyWith((message) => updates(message as ContactsSearchReply)) as ContactsSearchReply;
+  factory ContactsSearchReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ContactsSearchReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ContactsSearchReply',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..pPM<Contact>(1, _omitFieldNames ? '' : 'contacts',
+        subBuilder: Contact.create)
+    ..aOM<PaginationParams>(2, _omitFieldNames ? '' : 'paginationParams',
+        subBuilder: PaginationParams.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ContactsSearchReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ContactsSearchReply copyWith(void Function(ContactsSearchReply) updates) =>
+      super.copyWith((message) => updates(message as ContactsSearchReply))
+          as ContactsSearchReply;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ContactsSearchReply create() => ContactsSearchReply._();
+  @$core.override
   ContactsSearchReply createEmptyInstance() => create();
-  static $pb.PbList<ContactsSearchReply> createRepeated() => $pb.PbList<ContactsSearchReply>();
+  static $pb.PbList<ContactsSearchReply> createRepeated() =>
+      $pb.PbList<ContactsSearchReply>();
   @$core.pragma('dart2js:noInline')
-  static ContactsSearchReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ContactsSearchReply>(create);
+  static ContactsSearchReply getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ContactsSearchReply>(create);
   static ContactsSearchReply? _defaultInstance;
 
   @$pb.TagNumber(1)
@@ -1121,7 +1220,7 @@ class ContactsSearchReply extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   PaginationParams get paginationParams => $_getN(1);
   @$pb.TagNumber(2)
-  set paginationParams(PaginationParams v) { $_setField(2, v); }
+  set paginationParams(PaginationParams value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasPaginationParams() => $_has(1);
   @$pb.TagNumber(2)
@@ -1136,54 +1235,59 @@ class ContactsSearchReq extends $pb.GeneratedMessage {
     ContactTabType? tab,
     PaginationParams? paginationParams,
   }) {
-    final $result = create();
-    if (keyword != null) {
-      $result.keyword = keyword;
-    }
-    if (tab != null) {
-      $result.tab = tab;
-    }
-    if (paginationParams != null) {
-      $result.paginationParams = paginationParams;
-    }
-    return $result;
+    final result = create();
+    if (keyword != null) result.keyword = keyword;
+    if (tab != null) result.tab = tab;
+    if (paginationParams != null) result.paginationParams = paginationParams;
+    return result;
   }
-  ContactsSearchReq._() : super();
-  factory ContactsSearchReq.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory ContactsSearchReq.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ContactsSearchReq', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  ContactsSearchReq._();
+
+  factory ContactsSearchReq.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ContactsSearchReq.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ContactsSearchReq',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'keyword')
-    ..e<ContactTabType>(2, _omitFieldNames ? '' : 'tab', $pb.PbFieldType.OE, defaultOrMaker: ContactTabType.TAB_UNKNOWN, valueOf: ContactTabType.valueOf, enumValues: ContactTabType.values)
-    ..aOM<PaginationParams>(3, _omitFieldNames ? '' : 'paginationParams', subBuilder: PaginationParams.create)
-    ..hasRequiredFields = false
-  ;
+    ..aE<ContactTabType>(2, _omitFieldNames ? '' : 'tab',
+        enumValues: ContactTabType.values)
+    ..aOM<PaginationParams>(3, _omitFieldNames ? '' : 'paginationParams',
+        subBuilder: PaginationParams.create)
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  ContactsSearchReq clone() => ContactsSearchReq()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  ContactsSearchReq copyWith(void Function(ContactsSearchReq) updates) => super.copyWith((message) => updates(message as ContactsSearchReq)) as ContactsSearchReq;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ContactsSearchReq clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ContactsSearchReq copyWith(void Function(ContactsSearchReq) updates) =>
+      super.copyWith((message) => updates(message as ContactsSearchReq))
+          as ContactsSearchReq;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ContactsSearchReq create() => ContactsSearchReq._();
+  @$core.override
   ContactsSearchReq createEmptyInstance() => create();
-  static $pb.PbList<ContactsSearchReq> createRepeated() => $pb.PbList<ContactsSearchReq>();
+  static $pb.PbList<ContactsSearchReq> createRepeated() =>
+      $pb.PbList<ContactsSearchReq>();
   @$core.pragma('dart2js:noInline')
-  static ContactsSearchReq getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ContactsSearchReq>(create);
+  static ContactsSearchReq getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ContactsSearchReq>(create);
   static ContactsSearchReq? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get keyword => $_getSZ(0);
   @$pb.TagNumber(1)
-  set keyword($core.String v) { $_setString(0, v); }
+  set keyword($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasKeyword() => $_has(0);
   @$pb.TagNumber(1)
@@ -1192,7 +1296,7 @@ class ContactsSearchReq extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   ContactTabType get tab => $_getN(1);
   @$pb.TagNumber(2)
-  set tab(ContactTabType v) { $_setField(2, v); }
+  set tab(ContactTabType value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasTab() => $_has(1);
   @$pb.TagNumber(2)
@@ -1201,7 +1305,7 @@ class ContactsSearchReq extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   PaginationParams get paginationParams => $_getN(2);
   @$pb.TagNumber(3)
-  set paginationParams(PaginationParams v) { $_setField(3, v); }
+  set paginationParams(PaginationParams value) => $_setField(3, value);
   @$pb.TagNumber(3)
   $core.bool hasPaginationParams() => $_has(2);
   @$pb.TagNumber(3)
@@ -1215,50 +1319,53 @@ class CustomerId extends $pb.GeneratedMessage {
     $fixnum.Int64? shopId,
     $fixnum.Int64? shopType,
   }) {
-    final $result = create();
-    if (shopId != null) {
-      $result.shopId = shopId;
-    }
-    if (shopType != null) {
-      $result.shopType = shopType;
-    }
-    return $result;
+    final result = create();
+    if (shopId != null) result.shopId = shopId;
+    if (shopType != null) result.shopType = shopType;
+    return result;
   }
-  CustomerId._() : super();
-  factory CustomerId.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory CustomerId.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CustomerId', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  CustomerId._();
+
+  factory CustomerId.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory CustomerId.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'CustomerId',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aInt64(1, _omitFieldNames ? '' : 'shopId')
     ..aInt64(2, _omitFieldNames ? '' : 'shopType')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  CustomerId clone() => CustomerId()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  CustomerId copyWith(void Function(CustomerId) updates) => super.copyWith((message) => updates(message as CustomerId)) as CustomerId;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  CustomerId clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  CustomerId copyWith(void Function(CustomerId) updates) =>
+      super.copyWith((message) => updates(message as CustomerId)) as CustomerId;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static CustomerId create() => CustomerId._();
+  @$core.override
   CustomerId createEmptyInstance() => create();
   static $pb.PbList<CustomerId> createRepeated() => $pb.PbList<CustomerId>();
   @$core.pragma('dart2js:noInline')
-  static CustomerId getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CustomerId>(create);
+  static CustomerId getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<CustomerId>(create);
   static CustomerId? _defaultInstance;
 
   @$pb.TagNumber(1)
   $fixnum.Int64 get shopId => $_getI64(0);
   @$pb.TagNumber(1)
-  set shopId($fixnum.Int64 v) { $_setInt64(0, v); }
+  set shopId($fixnum.Int64 value) => $_setInt64(0, value);
   @$pb.TagNumber(1)
   $core.bool hasShopId() => $_has(0);
   @$pb.TagNumber(1)
@@ -1267,7 +1374,7 @@ class CustomerId extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $fixnum.Int64 get shopType => $_getI64(1);
   @$pb.TagNumber(2)
-  set shopType($fixnum.Int64 v) { $_setInt64(1, v); }
+  set shopType($fixnum.Int64 value) => $_setInt64(1, value);
   @$pb.TagNumber(2)
   $core.bool hasShopType() => $_has(1);
   @$pb.TagNumber(2)
@@ -1276,33 +1383,43 @@ class CustomerId extends $pb.GeneratedMessage {
 
 class DeleteSessionListReply extends $pb.GeneratedMessage {
   factory DeleteSessionListReply() => create();
-  DeleteSessionListReply._() : super();
-  factory DeleteSessionListReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory DeleteSessionListReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteSessionListReply', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..hasRequiredFields = false
-  ;
+  DeleteSessionListReply._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  DeleteSessionListReply clone() => DeleteSessionListReply()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  DeleteSessionListReply copyWith(void Function(DeleteSessionListReply) updates) => super.copyWith((message) => updates(message as DeleteSessionListReply)) as DeleteSessionListReply;
+  factory DeleteSessionListReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory DeleteSessionListReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'DeleteSessionListReply',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  DeleteSessionListReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  DeleteSessionListReply copyWith(
+          void Function(DeleteSessionListReply) updates) =>
+      super.copyWith((message) => updates(message as DeleteSessionListReply))
+          as DeleteSessionListReply;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static DeleteSessionListReply create() => DeleteSessionListReply._();
+  @$core.override
   DeleteSessionListReply createEmptyInstance() => create();
-  static $pb.PbList<DeleteSessionListReply> createRepeated() => $pb.PbList<DeleteSessionListReply>();
+  static $pb.PbList<DeleteSessionListReply> createRepeated() =>
+      $pb.PbList<DeleteSessionListReply>();
   @$core.pragma('dart2js:noInline')
-  static DeleteSessionListReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeleteSessionListReply>(create);
+  static DeleteSessionListReply getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<DeleteSessionListReply>(create);
   static DeleteSessionListReply? _defaultInstance;
 }
 
@@ -1310,46 +1427,54 @@ class DeleteSessionListReq extends $pb.GeneratedMessage {
   factory DeleteSessionListReq({
     SessionPageType? pageType,
   }) {
-    final $result = create();
-    if (pageType != null) {
-      $result.pageType = pageType;
-    }
-    return $result;
+    final result = create();
+    if (pageType != null) result.pageType = pageType;
+    return result;
   }
-  DeleteSessionListReq._() : super();
-  factory DeleteSessionListReq.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory DeleteSessionListReq.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteSessionListReq', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..e<SessionPageType>(1, _omitFieldNames ? '' : 'pageType', $pb.PbFieldType.OE, defaultOrMaker: SessionPageType.SESSION_PAGE_TYPE_UNKNOWN, valueOf: SessionPageType.valueOf, enumValues: SessionPageType.values)
-    ..hasRequiredFields = false
-  ;
+  DeleteSessionListReq._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  DeleteSessionListReq clone() => DeleteSessionListReq()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  DeleteSessionListReq copyWith(void Function(DeleteSessionListReq) updates) => super.copyWith((message) => updates(message as DeleteSessionListReq)) as DeleteSessionListReq;
+  factory DeleteSessionListReq.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory DeleteSessionListReq.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'DeleteSessionListReq',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aE<SessionPageType>(1, _omitFieldNames ? '' : 'pageType',
+        enumValues: SessionPageType.values)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  DeleteSessionListReq clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  DeleteSessionListReq copyWith(void Function(DeleteSessionListReq) updates) =>
+      super.copyWith((message) => updates(message as DeleteSessionListReq))
+          as DeleteSessionListReq;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static DeleteSessionListReq create() => DeleteSessionListReq._();
+  @$core.override
   DeleteSessionListReq createEmptyInstance() => create();
-  static $pb.PbList<DeleteSessionListReq> createRepeated() => $pb.PbList<DeleteSessionListReq>();
+  static $pb.PbList<DeleteSessionListReq> createRepeated() =>
+      $pb.PbList<DeleteSessionListReq>();
   @$core.pragma('dart2js:noInline')
-  static DeleteSessionListReq getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeleteSessionListReq>(create);
+  static DeleteSessionListReq getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<DeleteSessionListReq>(create);
   static DeleteSessionListReq? _defaultInstance;
 
   @$pb.TagNumber(1)
   SessionPageType get pageType => $_getN(0);
   @$pb.TagNumber(1)
-  set pageType(SessionPageType v) { $_setField(1, v); }
+  set pageType(SessionPageType value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasPageType() => $_has(0);
   @$pb.TagNumber(1)
@@ -1358,33 +1483,42 @@ class DeleteSessionListReq extends $pb.GeneratedMessage {
 
 class DeleteSessionReply extends $pb.GeneratedMessage {
   factory DeleteSessionReply() => create();
-  DeleteSessionReply._() : super();
-  factory DeleteSessionReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory DeleteSessionReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteSessionReply', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..hasRequiredFields = false
-  ;
+  DeleteSessionReply._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  DeleteSessionReply clone() => DeleteSessionReply()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  DeleteSessionReply copyWith(void Function(DeleteSessionReply) updates) => super.copyWith((message) => updates(message as DeleteSessionReply)) as DeleteSessionReply;
+  factory DeleteSessionReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory DeleteSessionReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'DeleteSessionReply',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  DeleteSessionReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  DeleteSessionReply copyWith(void Function(DeleteSessionReply) updates) =>
+      super.copyWith((message) => updates(message as DeleteSessionReply))
+          as DeleteSessionReply;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static DeleteSessionReply create() => DeleteSessionReply._();
+  @$core.override
   DeleteSessionReply createEmptyInstance() => create();
-  static $pb.PbList<DeleteSessionReply> createRepeated() => $pb.PbList<DeleteSessionReply>();
+  static $pb.PbList<DeleteSessionReply> createRepeated() =>
+      $pb.PbList<DeleteSessionReply>();
   @$core.pragma('dart2js:noInline')
-  static DeleteSessionReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeleteSessionReply>(create);
+  static DeleteSessionReply getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<DeleteSessionReply>(create);
   static DeleteSessionReply? _defaultInstance;
 }
 
@@ -1392,46 +1526,54 @@ class DeleteSessionReq extends $pb.GeneratedMessage {
   factory DeleteSessionReq({
     SessionId? sessionId,
   }) {
-    final $result = create();
-    if (sessionId != null) {
-      $result.sessionId = sessionId;
-    }
-    return $result;
+    final result = create();
+    if (sessionId != null) result.sessionId = sessionId;
+    return result;
   }
-  DeleteSessionReq._() : super();
-  factory DeleteSessionReq.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory DeleteSessionReq.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteSessionReq', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..aOM<SessionId>(1, _omitFieldNames ? '' : 'sessionId', subBuilder: SessionId.create)
-    ..hasRequiredFields = false
-  ;
+  DeleteSessionReq._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  DeleteSessionReq clone() => DeleteSessionReq()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  DeleteSessionReq copyWith(void Function(DeleteSessionReq) updates) => super.copyWith((message) => updates(message as DeleteSessionReq)) as DeleteSessionReq;
+  factory DeleteSessionReq.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory DeleteSessionReq.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'DeleteSessionReq',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aOM<SessionId>(1, _omitFieldNames ? '' : 'sessionId',
+        subBuilder: SessionId.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  DeleteSessionReq clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  DeleteSessionReq copyWith(void Function(DeleteSessionReq) updates) =>
+      super.copyWith((message) => updates(message as DeleteSessionReq))
+          as DeleteSessionReq;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static DeleteSessionReq create() => DeleteSessionReq._();
+  @$core.override
   DeleteSessionReq createEmptyInstance() => create();
-  static $pb.PbList<DeleteSessionReq> createRepeated() => $pb.PbList<DeleteSessionReq>();
+  static $pb.PbList<DeleteSessionReq> createRepeated() =>
+      $pb.PbList<DeleteSessionReq>();
   @$core.pragma('dart2js:noInline')
-  static DeleteSessionReq getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeleteSessionReq>(create);
+  static DeleteSessionReq getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<DeleteSessionReq>(create);
   static DeleteSessionReq? _defaultInstance;
 
   @$pb.TagNumber(1)
   SessionId get sessionId => $_getN(0);
   @$pb.TagNumber(1)
-  set sessionId(SessionId v) { $_setField(1, v); }
+  set sessionId(SessionId value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasSessionId() => $_has(0);
   @$pb.TagNumber(1)
@@ -1444,46 +1586,52 @@ class FilledLabel extends $pb.GeneratedMessage {
   factory FilledLabel({
     $core.String? text,
   }) {
-    final $result = create();
-    if (text != null) {
-      $result.text = text;
-    }
-    return $result;
+    final result = create();
+    if (text != null) result.text = text;
+    return result;
   }
-  FilledLabel._() : super();
-  factory FilledLabel.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory FilledLabel.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'FilledLabel', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  FilledLabel._();
+
+  factory FilledLabel.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory FilledLabel.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'FilledLabel',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'text')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  FilledLabel clone() => FilledLabel()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  FilledLabel copyWith(void Function(FilledLabel) updates) => super.copyWith((message) => updates(message as FilledLabel)) as FilledLabel;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  FilledLabel clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  FilledLabel copyWith(void Function(FilledLabel) updates) =>
+      super.copyWith((message) => updates(message as FilledLabel))
+          as FilledLabel;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static FilledLabel create() => FilledLabel._();
+  @$core.override
   FilledLabel createEmptyInstance() => create();
   static $pb.PbList<FilledLabel> createRepeated() => $pb.PbList<FilledLabel>();
   @$core.pragma('dart2js:noInline')
-  static FilledLabel getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FilledLabel>(create);
+  static FilledLabel getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<FilledLabel>(create);
   static FilledLabel? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get text => $_getSZ(0);
   @$pb.TagNumber(1)
-  set text($core.String v) { $_setString(0, v); }
+  set text($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasText() => $_has(0);
   @$pb.TagNumber(1)
@@ -1495,44 +1643,51 @@ class FilterConfig extends $pb.GeneratedMessage {
     $core.Iterable<SessionsFilter>? filters,
     SessionFilterType? currentFilter,
   }) {
-    final $result = create();
-    if (filters != null) {
-      $result.filters.addAll(filters);
-    }
-    if (currentFilter != null) {
-      $result.currentFilter = currentFilter;
-    }
-    return $result;
+    final result = create();
+    if (filters != null) result.filters.addAll(filters);
+    if (currentFilter != null) result.currentFilter = currentFilter;
+    return result;
   }
-  FilterConfig._() : super();
-  factory FilterConfig.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory FilterConfig.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'FilterConfig', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..pc<SessionsFilter>(1, _omitFieldNames ? '' : 'filters', $pb.PbFieldType.PM, subBuilder: SessionsFilter.create)
-    ..e<SessionFilterType>(2, _omitFieldNames ? '' : 'currentFilter', $pb.PbFieldType.OE, defaultOrMaker: SessionFilterType.FILTER_DEFAULT, valueOf: SessionFilterType.valueOf, enumValues: SessionFilterType.values)
-    ..hasRequiredFields = false
-  ;
+  FilterConfig._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  FilterConfig clone() => FilterConfig()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  FilterConfig copyWith(void Function(FilterConfig) updates) => super.copyWith((message) => updates(message as FilterConfig)) as FilterConfig;
+  factory FilterConfig.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory FilterConfig.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'FilterConfig',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..pPM<SessionsFilter>(1, _omitFieldNames ? '' : 'filters',
+        subBuilder: SessionsFilter.create)
+    ..aE<SessionFilterType>(2, _omitFieldNames ? '' : 'currentFilter',
+        enumValues: SessionFilterType.values)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  FilterConfig clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  FilterConfig copyWith(void Function(FilterConfig) updates) =>
+      super.copyWith((message) => updates(message as FilterConfig))
+          as FilterConfig;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static FilterConfig create() => FilterConfig._();
+  @$core.override
   FilterConfig createEmptyInstance() => create();
-  static $pb.PbList<FilterConfig> createRepeated() => $pb.PbList<FilterConfig>();
+  static $pb.PbList<FilterConfig> createRepeated() =>
+      $pb.PbList<FilterConfig>();
   @$core.pragma('dart2js:noInline')
-  static FilterConfig getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FilterConfig>(create);
+  static FilterConfig getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<FilterConfig>(create);
   static FilterConfig? _defaultInstance;
 
   @$pb.TagNumber(1)
@@ -1541,7 +1696,7 @@ class FilterConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   SessionFilterType get currentFilter => $_getN(1);
   @$pb.TagNumber(2)
-  set currentFilter(SessionFilterType v) { $_setField(2, v); }
+  set currentFilter(SessionFilterType value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasCurrentFilter() => $_has(1);
   @$pb.TagNumber(2)
@@ -1552,46 +1707,52 @@ class FoldId extends $pb.GeneratedMessage {
   factory FoldId({
     SessionType? type,
   }) {
-    final $result = create();
-    if (type != null) {
-      $result.type = type;
-    }
-    return $result;
+    final result = create();
+    if (type != null) result.type = type;
+    return result;
   }
-  FoldId._() : super();
-  factory FoldId.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory FoldId.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'FoldId', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..e<SessionType>(1, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: SessionType.SESSION_TYPE_UNKNOWN, valueOf: SessionType.valueOf, enumValues: SessionType.values)
-    ..hasRequiredFields = false
-  ;
+  FoldId._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  FoldId clone() => FoldId()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  FoldId copyWith(void Function(FoldId) updates) => super.copyWith((message) => updates(message as FoldId)) as FoldId;
+  factory FoldId.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory FoldId.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'FoldId',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aE<SessionType>(1, _omitFieldNames ? '' : 'type',
+        enumValues: SessionType.values)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  FoldId clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  FoldId copyWith(void Function(FoldId) updates) =>
+      super.copyWith((message) => updates(message as FoldId)) as FoldId;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static FoldId create() => FoldId._();
+  @$core.override
   FoldId createEmptyInstance() => create();
   static $pb.PbList<FoldId> createRepeated() => $pb.PbList<FoldId>();
   @$core.pragma('dart2js:noInline')
-  static FoldId getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FoldId>(create);
+  static FoldId getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FoldId>(create);
   static FoldId? _defaultInstance;
 
   @$pb.TagNumber(1)
   SessionType get type => $_getN(0);
   @$pb.TagNumber(1)
-  set type(SessionType v) { $_setField(1, v); }
+  set type(SessionType value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasType() => $_has(0);
   @$pb.TagNumber(1)
@@ -1601,52 +1762,63 @@ class FoldId extends $pb.GeneratedMessage {
 class GetImSettingsReply extends $pb.GeneratedMessage {
   factory GetImSettingsReply({
     $core.String? pageTitle,
-    $pb.PbMap<$core.int, Setting>? settings,
+    $core.Iterable<$core.MapEntry<$core.int, Setting>>? settings,
   }) {
-    final $result = create();
-    if (pageTitle != null) {
-      $result.pageTitle = pageTitle;
-    }
-    if (settings != null) {
-      $result.settings.addAll(settings);
-    }
-    return $result;
+    final result = create();
+    if (pageTitle != null) result.pageTitle = pageTitle;
+    if (settings != null) result.settings.addEntries(settings);
+    return result;
   }
-  GetImSettingsReply._() : super();
-  factory GetImSettingsReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetImSettingsReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetImSettingsReply', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  GetImSettingsReply._();
+
+  factory GetImSettingsReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory GetImSettingsReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GetImSettingsReply',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'pageTitle')
-    ..m<$core.int, Setting>(2, _omitFieldNames ? '' : 'settings', entryClassName: 'GetImSettingsReply.SettingsEntry', keyFieldType: $pb.PbFieldType.O3, valueFieldType: $pb.PbFieldType.OM, valueCreator: Setting.create, valueDefaultOrMaker: Setting.getDefault, packageName: const $pb.PackageName('bilibili.app.im.v1'))
-    ..hasRequiredFields = false
-  ;
+    ..m<$core.int, Setting>(2, _omitFieldNames ? '' : 'settings',
+        entryClassName: 'GetImSettingsReply.SettingsEntry',
+        keyFieldType: $pb.PbFieldType.O3,
+        valueFieldType: $pb.PbFieldType.OM,
+        valueCreator: Setting.create,
+        valueDefaultOrMaker: Setting.getDefault,
+        packageName: const $pb.PackageName('bilibili.app.im.v1'))
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetImSettingsReply clone() => GetImSettingsReply()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetImSettingsReply copyWith(void Function(GetImSettingsReply) updates) => super.copyWith((message) => updates(message as GetImSettingsReply)) as GetImSettingsReply;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetImSettingsReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetImSettingsReply copyWith(void Function(GetImSettingsReply) updates) =>
+      super.copyWith((message) => updates(message as GetImSettingsReply))
+          as GetImSettingsReply;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static GetImSettingsReply create() => GetImSettingsReply._();
+  @$core.override
   GetImSettingsReply createEmptyInstance() => create();
-  static $pb.PbList<GetImSettingsReply> createRepeated() => $pb.PbList<GetImSettingsReply>();
+  static $pb.PbList<GetImSettingsReply> createRepeated() =>
+      $pb.PbList<GetImSettingsReply>();
   @$core.pragma('dart2js:noInline')
-  static GetImSettingsReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetImSettingsReply>(create);
+  static GetImSettingsReply getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<GetImSettingsReply>(create);
   static GetImSettingsReply? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get pageTitle => $_getSZ(0);
   @$pb.TagNumber(1)
-  set pageTitle($core.String v) { $_setString(0, v); }
+  set pageTitle($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasPageTitle() => $_has(0);
   @$pb.TagNumber(1)
@@ -1660,46 +1832,54 @@ class GetImSettingsReq extends $pb.GeneratedMessage {
   factory GetImSettingsReq({
     IMSettingType? type,
   }) {
-    final $result = create();
-    if (type != null) {
-      $result.type = type;
-    }
-    return $result;
+    final result = create();
+    if (type != null) result.type = type;
+    return result;
   }
-  GetImSettingsReq._() : super();
-  factory GetImSettingsReq.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetImSettingsReq.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetImSettingsReq', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..e<IMSettingType>(1, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: IMSettingType.SETTING_TYPE_NEED_ALL, valueOf: IMSettingType.valueOf, enumValues: IMSettingType.values)
-    ..hasRequiredFields = false
-  ;
+  GetImSettingsReq._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetImSettingsReq clone() => GetImSettingsReq()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetImSettingsReq copyWith(void Function(GetImSettingsReq) updates) => super.copyWith((message) => updates(message as GetImSettingsReq)) as GetImSettingsReq;
+  factory GetImSettingsReq.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory GetImSettingsReq.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GetImSettingsReq',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aE<IMSettingType>(1, _omitFieldNames ? '' : 'type',
+        enumValues: IMSettingType.values)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetImSettingsReq clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetImSettingsReq copyWith(void Function(GetImSettingsReq) updates) =>
+      super.copyWith((message) => updates(message as GetImSettingsReq))
+          as GetImSettingsReq;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static GetImSettingsReq create() => GetImSettingsReq._();
+  @$core.override
   GetImSettingsReq createEmptyInstance() => create();
-  static $pb.PbList<GetImSettingsReq> createRepeated() => $pb.PbList<GetImSettingsReq>();
+  static $pb.PbList<GetImSettingsReq> createRepeated() =>
+      $pb.PbList<GetImSettingsReq>();
   @$core.pragma('dart2js:noInline')
-  static GetImSettingsReq getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetImSettingsReq>(create);
+  static GetImSettingsReq getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<GetImSettingsReq>(create);
   static GetImSettingsReq? _defaultInstance;
 
   @$pb.TagNumber(1)
   IMSettingType get type => $_getN(0);
   @$pb.TagNumber(1)
-  set type(IMSettingType v) { $_setField(1, v); }
+  set type(IMSettingType value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasType() => $_has(0);
   @$pb.TagNumber(1)
@@ -1710,40 +1890,49 @@ class GetQuickLinkUnreadReply extends $pb.GeneratedMessage {
   factory GetQuickLinkUnreadReply({
     $core.Iterable<QuickLinkUnreadItem>? items,
   }) {
-    final $result = create();
-    if (items != null) {
-      $result.items.addAll(items);
-    }
-    return $result;
+    final result = create();
+    if (items != null) result.items.addAll(items);
+    return result;
   }
-  GetQuickLinkUnreadReply._() : super();
-  factory GetQuickLinkUnreadReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetQuickLinkUnreadReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetQuickLinkUnreadReply', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..pc<QuickLinkUnreadItem>(1, _omitFieldNames ? '' : 'items', $pb.PbFieldType.PM, subBuilder: QuickLinkUnreadItem.create)
-    ..hasRequiredFields = false
-  ;
+  GetQuickLinkUnreadReply._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetQuickLinkUnreadReply clone() => GetQuickLinkUnreadReply()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetQuickLinkUnreadReply copyWith(void Function(GetQuickLinkUnreadReply) updates) => super.copyWith((message) => updates(message as GetQuickLinkUnreadReply)) as GetQuickLinkUnreadReply;
+  factory GetQuickLinkUnreadReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory GetQuickLinkUnreadReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GetQuickLinkUnreadReply',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..pPM<QuickLinkUnreadItem>(1, _omitFieldNames ? '' : 'items',
+        subBuilder: QuickLinkUnreadItem.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetQuickLinkUnreadReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetQuickLinkUnreadReply copyWith(
+          void Function(GetQuickLinkUnreadReply) updates) =>
+      super.copyWith((message) => updates(message as GetQuickLinkUnreadReply))
+          as GetQuickLinkUnreadReply;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static GetQuickLinkUnreadReply create() => GetQuickLinkUnreadReply._();
+  @$core.override
   GetQuickLinkUnreadReply createEmptyInstance() => create();
-  static $pb.PbList<GetQuickLinkUnreadReply> createRepeated() => $pb.PbList<GetQuickLinkUnreadReply>();
+  static $pb.PbList<GetQuickLinkUnreadReply> createRepeated() =>
+      $pb.PbList<GetQuickLinkUnreadReply>();
   @$core.pragma('dart2js:noInline')
-  static GetQuickLinkUnreadReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetQuickLinkUnreadReply>(create);
+  static GetQuickLinkUnreadReply getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<GetQuickLinkUnreadReply>(create);
   static GetQuickLinkUnreadReply? _defaultInstance;
 
   @$pb.TagNumber(1)
@@ -1752,33 +1941,43 @@ class GetQuickLinkUnreadReply extends $pb.GeneratedMessage {
 
 class GetQuickLinkUnreadReq extends $pb.GeneratedMessage {
   factory GetQuickLinkUnreadReq() => create();
-  GetQuickLinkUnreadReq._() : super();
-  factory GetQuickLinkUnreadReq.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetQuickLinkUnreadReq.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetQuickLinkUnreadReq', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..hasRequiredFields = false
-  ;
+  GetQuickLinkUnreadReq._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetQuickLinkUnreadReq clone() => GetQuickLinkUnreadReq()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetQuickLinkUnreadReq copyWith(void Function(GetQuickLinkUnreadReq) updates) => super.copyWith((message) => updates(message as GetQuickLinkUnreadReq)) as GetQuickLinkUnreadReq;
+  factory GetQuickLinkUnreadReq.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory GetQuickLinkUnreadReq.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GetQuickLinkUnreadReq',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetQuickLinkUnreadReq clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetQuickLinkUnreadReq copyWith(
+          void Function(GetQuickLinkUnreadReq) updates) =>
+      super.copyWith((message) => updates(message as GetQuickLinkUnreadReq))
+          as GetQuickLinkUnreadReq;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static GetQuickLinkUnreadReq create() => GetQuickLinkUnreadReq._();
+  @$core.override
   GetQuickLinkUnreadReq createEmptyInstance() => create();
-  static $pb.PbList<GetQuickLinkUnreadReq> createRepeated() => $pb.PbList<GetQuickLinkUnreadReq>();
+  static $pb.PbList<GetQuickLinkUnreadReq> createRepeated() =>
+      $pb.PbList<GetQuickLinkUnreadReq>();
   @$core.pragma('dart2js:noInline')
-  static GetQuickLinkUnreadReq getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetQuickLinkUnreadReq>(create);
+  static GetQuickLinkUnreadReq getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<GetQuickLinkUnreadReq>(create);
   static GetQuickLinkUnreadReq? _defaultInstance;
 }
 
@@ -1786,46 +1985,53 @@ class GetTotalUnreadReply extends $pb.GeneratedMessage {
   factory GetTotalUnreadReply({
     Unread? total,
   }) {
-    final $result = create();
-    if (total != null) {
-      $result.total = total;
-    }
-    return $result;
+    final result = create();
+    if (total != null) result.total = total;
+    return result;
   }
-  GetTotalUnreadReply._() : super();
-  factory GetTotalUnreadReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetTotalUnreadReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetTotalUnreadReply', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  GetTotalUnreadReply._();
+
+  factory GetTotalUnreadReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory GetTotalUnreadReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GetTotalUnreadReply',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOM<Unread>(1, _omitFieldNames ? '' : 'total', subBuilder: Unread.create)
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetTotalUnreadReply clone() => GetTotalUnreadReply()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetTotalUnreadReply copyWith(void Function(GetTotalUnreadReply) updates) => super.copyWith((message) => updates(message as GetTotalUnreadReply)) as GetTotalUnreadReply;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetTotalUnreadReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetTotalUnreadReply copyWith(void Function(GetTotalUnreadReply) updates) =>
+      super.copyWith((message) => updates(message as GetTotalUnreadReply))
+          as GetTotalUnreadReply;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static GetTotalUnreadReply create() => GetTotalUnreadReply._();
+  @$core.override
   GetTotalUnreadReply createEmptyInstance() => create();
-  static $pb.PbList<GetTotalUnreadReply> createRepeated() => $pb.PbList<GetTotalUnreadReply>();
+  static $pb.PbList<GetTotalUnreadReply> createRepeated() =>
+      $pb.PbList<GetTotalUnreadReply>();
   @$core.pragma('dart2js:noInline')
-  static GetTotalUnreadReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetTotalUnreadReply>(create);
+  static GetTotalUnreadReply getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<GetTotalUnreadReply>(create);
   static GetTotalUnreadReply? _defaultInstance;
 
   @$pb.TagNumber(1)
   Unread get total => $_getN(0);
   @$pb.TagNumber(1)
-  set total(Unread v) { $_setField(1, v); }
+  set total(Unread value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasTotal() => $_has(0);
   @$pb.TagNumber(1)
@@ -1836,33 +2042,42 @@ class GetTotalUnreadReply extends $pb.GeneratedMessage {
 
 class GetTotalUnreadReq extends $pb.GeneratedMessage {
   factory GetTotalUnreadReq() => create();
-  GetTotalUnreadReq._() : super();
-  factory GetTotalUnreadReq.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetTotalUnreadReq.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetTotalUnreadReq', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..hasRequiredFields = false
-  ;
+  GetTotalUnreadReq._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetTotalUnreadReq clone() => GetTotalUnreadReq()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetTotalUnreadReq copyWith(void Function(GetTotalUnreadReq) updates) => super.copyWith((message) => updates(message as GetTotalUnreadReq)) as GetTotalUnreadReq;
+  factory GetTotalUnreadReq.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory GetTotalUnreadReq.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GetTotalUnreadReq',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetTotalUnreadReq clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetTotalUnreadReq copyWith(void Function(GetTotalUnreadReq) updates) =>
+      super.copyWith((message) => updates(message as GetTotalUnreadReq))
+          as GetTotalUnreadReq;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static GetTotalUnreadReq create() => GetTotalUnreadReq._();
+  @$core.override
   GetTotalUnreadReq createEmptyInstance() => create();
-  static $pb.PbList<GetTotalUnreadReq> createRepeated() => $pb.PbList<GetTotalUnreadReq>();
+  static $pb.PbList<GetTotalUnreadReq> createRepeated() =>
+      $pb.PbList<GetTotalUnreadReq>();
   @$core.pragma('dart2js:noInline')
-  static GetTotalUnreadReq getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetTotalUnreadReq>(create);
+  static GetTotalUnreadReq getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<GetTotalUnreadReq>(create);
   static GetTotalUnreadReq? _defaultInstance;
 }
 
@@ -1870,46 +2085,51 @@ class GroupId extends $pb.GeneratedMessage {
   factory GroupId({
     $fixnum.Int64? groupId,
   }) {
-    final $result = create();
-    if (groupId != null) {
-      $result.groupId = groupId;
-    }
-    return $result;
+    final result = create();
+    if (groupId != null) result.groupId = groupId;
+    return result;
   }
-  GroupId._() : super();
-  factory GroupId.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GroupId.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GroupId', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  GroupId._();
+
+  factory GroupId.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory GroupId.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GroupId',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aInt64(1, _omitFieldNames ? '' : 'groupId')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GroupId clone() => GroupId()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GroupId copyWith(void Function(GroupId) updates) => super.copyWith((message) => updates(message as GroupId)) as GroupId;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GroupId clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GroupId copyWith(void Function(GroupId) updates) =>
+      super.copyWith((message) => updates(message as GroupId)) as GroupId;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static GroupId create() => GroupId._();
+  @$core.override
   GroupId createEmptyInstance() => create();
   static $pb.PbList<GroupId> createRepeated() => $pb.PbList<GroupId>();
   @$core.pragma('dart2js:noInline')
-  static GroupId getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GroupId>(create);
+  static GroupId getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GroupId>(create);
   static GroupId? _defaultInstance;
 
   @$pb.TagNumber(1)
   $fixnum.Int64 get groupId => $_getI64(0);
   @$pb.TagNumber(1)
-  set groupId($fixnum.Int64 v) { $_setInt64(0, v); }
+  set groupId($fixnum.Int64 value) => $_setInt64(0, value);
   @$pb.TagNumber(1)
   $core.bool hasGroupId() => $_has(0);
   @$pb.TagNumber(1)
@@ -1922,54 +2142,55 @@ class ImageLabel extends $pb.GeneratedMessage {
     $core.int? width,
     $core.int? height,
   }) {
-    final $result = create();
-    if (url != null) {
-      $result.url = url;
-    }
-    if (width != null) {
-      $result.width = width;
-    }
-    if (height != null) {
-      $result.height = height;
-    }
-    return $result;
+    final result = create();
+    if (url != null) result.url = url;
+    if (width != null) result.width = width;
+    if (height != null) result.height = height;
+    return result;
   }
-  ImageLabel._() : super();
-  factory ImageLabel.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory ImageLabel.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ImageLabel', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  ImageLabel._();
+
+  factory ImageLabel.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ImageLabel.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ImageLabel',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'url')
-    ..a<$core.int>(2, _omitFieldNames ? '' : 'width', $pb.PbFieldType.O3)
-    ..a<$core.int>(3, _omitFieldNames ? '' : 'height', $pb.PbFieldType.O3)
-    ..hasRequiredFields = false
-  ;
+    ..aI(2, _omitFieldNames ? '' : 'width')
+    ..aI(3, _omitFieldNames ? '' : 'height')
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  ImageLabel clone() => ImageLabel()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  ImageLabel copyWith(void Function(ImageLabel) updates) => super.copyWith((message) => updates(message as ImageLabel)) as ImageLabel;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ImageLabel clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ImageLabel copyWith(void Function(ImageLabel) updates) =>
+      super.copyWith((message) => updates(message as ImageLabel)) as ImageLabel;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ImageLabel create() => ImageLabel._();
+  @$core.override
   ImageLabel createEmptyInstance() => create();
   static $pb.PbList<ImageLabel> createRepeated() => $pb.PbList<ImageLabel>();
   @$core.pragma('dart2js:noInline')
-  static ImageLabel getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ImageLabel>(create);
+  static ImageLabel getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ImageLabel>(create);
   static ImageLabel? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get url => $_getSZ(0);
   @$pb.TagNumber(1)
-  set url($core.String v) { $_setString(0, v); }
+  set url($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasUrl() => $_has(0);
   @$pb.TagNumber(1)
@@ -1978,7 +2199,7 @@ class ImageLabel extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.int get width => $_getIZ(1);
   @$pb.TagNumber(2)
-  set width($core.int v) { $_setSignedInt32(1, v); }
+  set width($core.int value) => $_setSignedInt32(1, value);
   @$pb.TagNumber(2)
   $core.bool hasWidth() => $_has(1);
   @$pb.TagNumber(2)
@@ -1987,7 +2208,7 @@ class ImageLabel extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.int get height => $_getIZ(2);
   @$pb.TagNumber(3)
-  set height($core.int v) { $_setSignedInt32(2, v); }
+  set height($core.int value) => $_setSignedInt32(2, value);
   @$pb.TagNumber(3)
   $core.bool hasHeight() => $_has(2);
   @$pb.TagNumber(3)
@@ -1999,50 +2220,57 @@ class KeywordBlockingAddReply extends $pb.GeneratedMessage {
     $core.String? toast,
     KeywordBlockingItem? item,
   }) {
-    final $result = create();
-    if (toast != null) {
-      $result.toast = toast;
-    }
-    if (item != null) {
-      $result.item = item;
-    }
-    return $result;
+    final result = create();
+    if (toast != null) result.toast = toast;
+    if (item != null) result.item = item;
+    return result;
   }
-  KeywordBlockingAddReply._() : super();
-  factory KeywordBlockingAddReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory KeywordBlockingAddReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'KeywordBlockingAddReply', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  KeywordBlockingAddReply._();
+
+  factory KeywordBlockingAddReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory KeywordBlockingAddReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'KeywordBlockingAddReply',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'toast')
-    ..aOM<KeywordBlockingItem>(2, _omitFieldNames ? '' : 'item', subBuilder: KeywordBlockingItem.create)
-    ..hasRequiredFields = false
-  ;
+    ..aOM<KeywordBlockingItem>(2, _omitFieldNames ? '' : 'item',
+        subBuilder: KeywordBlockingItem.create)
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  KeywordBlockingAddReply clone() => KeywordBlockingAddReply()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  KeywordBlockingAddReply copyWith(void Function(KeywordBlockingAddReply) updates) => super.copyWith((message) => updates(message as KeywordBlockingAddReply)) as KeywordBlockingAddReply;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  KeywordBlockingAddReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  KeywordBlockingAddReply copyWith(
+          void Function(KeywordBlockingAddReply) updates) =>
+      super.copyWith((message) => updates(message as KeywordBlockingAddReply))
+          as KeywordBlockingAddReply;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static KeywordBlockingAddReply create() => KeywordBlockingAddReply._();
+  @$core.override
   KeywordBlockingAddReply createEmptyInstance() => create();
-  static $pb.PbList<KeywordBlockingAddReply> createRepeated() => $pb.PbList<KeywordBlockingAddReply>();
+  static $pb.PbList<KeywordBlockingAddReply> createRepeated() =>
+      $pb.PbList<KeywordBlockingAddReply>();
   @$core.pragma('dart2js:noInline')
-  static KeywordBlockingAddReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<KeywordBlockingAddReply>(create);
+  static KeywordBlockingAddReply getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<KeywordBlockingAddReply>(create);
   static KeywordBlockingAddReply? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get toast => $_getSZ(0);
   @$pb.TagNumber(1)
-  set toast($core.String v) { $_setString(0, v); }
+  set toast($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasToast() => $_has(0);
   @$pb.TagNumber(1)
@@ -2051,7 +2279,7 @@ class KeywordBlockingAddReply extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   KeywordBlockingItem get item => $_getN(1);
   @$pb.TagNumber(2)
-  set item(KeywordBlockingItem v) { $_setField(2, v); }
+  set item(KeywordBlockingItem value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasItem() => $_has(1);
   @$pb.TagNumber(2)
@@ -2064,46 +2292,54 @@ class KeywordBlockingAddReq extends $pb.GeneratedMessage {
   factory KeywordBlockingAddReq({
     $core.String? keyword,
   }) {
-    final $result = create();
-    if (keyword != null) {
-      $result.keyword = keyword;
-    }
-    return $result;
+    final result = create();
+    if (keyword != null) result.keyword = keyword;
+    return result;
   }
-  KeywordBlockingAddReq._() : super();
-  factory KeywordBlockingAddReq.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory KeywordBlockingAddReq.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'KeywordBlockingAddReq', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  KeywordBlockingAddReq._();
+
+  factory KeywordBlockingAddReq.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory KeywordBlockingAddReq.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'KeywordBlockingAddReq',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'keyword')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  KeywordBlockingAddReq clone() => KeywordBlockingAddReq()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  KeywordBlockingAddReq copyWith(void Function(KeywordBlockingAddReq) updates) => super.copyWith((message) => updates(message as KeywordBlockingAddReq)) as KeywordBlockingAddReq;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  KeywordBlockingAddReq clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  KeywordBlockingAddReq copyWith(
+          void Function(KeywordBlockingAddReq) updates) =>
+      super.copyWith((message) => updates(message as KeywordBlockingAddReq))
+          as KeywordBlockingAddReq;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static KeywordBlockingAddReq create() => KeywordBlockingAddReq._();
+  @$core.override
   KeywordBlockingAddReq createEmptyInstance() => create();
-  static $pb.PbList<KeywordBlockingAddReq> createRepeated() => $pb.PbList<KeywordBlockingAddReq>();
+  static $pb.PbList<KeywordBlockingAddReq> createRepeated() =>
+      $pb.PbList<KeywordBlockingAddReq>();
   @$core.pragma('dart2js:noInline')
-  static KeywordBlockingAddReq getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<KeywordBlockingAddReq>(create);
+  static KeywordBlockingAddReq getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<KeywordBlockingAddReq>(create);
   static KeywordBlockingAddReq? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get keyword => $_getSZ(0);
   @$pb.TagNumber(1)
-  set keyword($core.String v) { $_setString(0, v); }
+  set keyword($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasKeyword() => $_has(0);
   @$pb.TagNumber(1)
@@ -2114,46 +2350,55 @@ class KeywordBlockingDeleteReply extends $pb.GeneratedMessage {
   factory KeywordBlockingDeleteReply({
     $core.String? toast,
   }) {
-    final $result = create();
-    if (toast != null) {
-      $result.toast = toast;
-    }
-    return $result;
+    final result = create();
+    if (toast != null) result.toast = toast;
+    return result;
   }
-  KeywordBlockingDeleteReply._() : super();
-  factory KeywordBlockingDeleteReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory KeywordBlockingDeleteReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'KeywordBlockingDeleteReply', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  KeywordBlockingDeleteReply._();
+
+  factory KeywordBlockingDeleteReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory KeywordBlockingDeleteReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'KeywordBlockingDeleteReply',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'toast')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  KeywordBlockingDeleteReply clone() => KeywordBlockingDeleteReply()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  KeywordBlockingDeleteReply copyWith(void Function(KeywordBlockingDeleteReply) updates) => super.copyWith((message) => updates(message as KeywordBlockingDeleteReply)) as KeywordBlockingDeleteReply;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  KeywordBlockingDeleteReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  KeywordBlockingDeleteReply copyWith(
+          void Function(KeywordBlockingDeleteReply) updates) =>
+      super.copyWith(
+              (message) => updates(message as KeywordBlockingDeleteReply))
+          as KeywordBlockingDeleteReply;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static KeywordBlockingDeleteReply create() => KeywordBlockingDeleteReply._();
+  @$core.override
   KeywordBlockingDeleteReply createEmptyInstance() => create();
-  static $pb.PbList<KeywordBlockingDeleteReply> createRepeated() => $pb.PbList<KeywordBlockingDeleteReply>();
+  static $pb.PbList<KeywordBlockingDeleteReply> createRepeated() =>
+      $pb.PbList<KeywordBlockingDeleteReply>();
   @$core.pragma('dart2js:noInline')
-  static KeywordBlockingDeleteReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<KeywordBlockingDeleteReply>(create);
+  static KeywordBlockingDeleteReply getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<KeywordBlockingDeleteReply>(create);
   static KeywordBlockingDeleteReply? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get toast => $_getSZ(0);
   @$pb.TagNumber(1)
-  set toast($core.String v) { $_setString(0, v); }
+  set toast($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasToast() => $_has(0);
   @$pb.TagNumber(1)
@@ -2164,46 +2409,54 @@ class KeywordBlockingDeleteReq extends $pb.GeneratedMessage {
   factory KeywordBlockingDeleteReq({
     $core.String? keyword,
   }) {
-    final $result = create();
-    if (keyword != null) {
-      $result.keyword = keyword;
-    }
-    return $result;
+    final result = create();
+    if (keyword != null) result.keyword = keyword;
+    return result;
   }
-  KeywordBlockingDeleteReq._() : super();
-  factory KeywordBlockingDeleteReq.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory KeywordBlockingDeleteReq.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'KeywordBlockingDeleteReq', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  KeywordBlockingDeleteReq._();
+
+  factory KeywordBlockingDeleteReq.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory KeywordBlockingDeleteReq.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'KeywordBlockingDeleteReq',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'keyword')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  KeywordBlockingDeleteReq clone() => KeywordBlockingDeleteReq()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  KeywordBlockingDeleteReq copyWith(void Function(KeywordBlockingDeleteReq) updates) => super.copyWith((message) => updates(message as KeywordBlockingDeleteReq)) as KeywordBlockingDeleteReq;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  KeywordBlockingDeleteReq clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  KeywordBlockingDeleteReq copyWith(
+          void Function(KeywordBlockingDeleteReq) updates) =>
+      super.copyWith((message) => updates(message as KeywordBlockingDeleteReq))
+          as KeywordBlockingDeleteReq;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static KeywordBlockingDeleteReq create() => KeywordBlockingDeleteReq._();
+  @$core.override
   KeywordBlockingDeleteReq createEmptyInstance() => create();
-  static $pb.PbList<KeywordBlockingDeleteReq> createRepeated() => $pb.PbList<KeywordBlockingDeleteReq>();
+  static $pb.PbList<KeywordBlockingDeleteReq> createRepeated() =>
+      $pb.PbList<KeywordBlockingDeleteReq>();
   @$core.pragma('dart2js:noInline')
-  static KeywordBlockingDeleteReq getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<KeywordBlockingDeleteReq>(create);
+  static KeywordBlockingDeleteReq getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<KeywordBlockingDeleteReq>(create);
   static KeywordBlockingDeleteReq? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get keyword => $_getSZ(0);
   @$pb.TagNumber(1)
-  set keyword($core.String v) { $_setString(0, v); }
+  set keyword($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasKeyword() => $_has(0);
   @$pb.TagNumber(1)
@@ -2214,46 +2467,53 @@ class KeywordBlockingItem extends $pb.GeneratedMessage {
   factory KeywordBlockingItem({
     $core.String? keyword,
   }) {
-    final $result = create();
-    if (keyword != null) {
-      $result.keyword = keyword;
-    }
-    return $result;
+    final result = create();
+    if (keyword != null) result.keyword = keyword;
+    return result;
   }
-  KeywordBlockingItem._() : super();
-  factory KeywordBlockingItem.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory KeywordBlockingItem.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'KeywordBlockingItem', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  KeywordBlockingItem._();
+
+  factory KeywordBlockingItem.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory KeywordBlockingItem.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'KeywordBlockingItem',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'keyword')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  KeywordBlockingItem clone() => KeywordBlockingItem()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  KeywordBlockingItem copyWith(void Function(KeywordBlockingItem) updates) => super.copyWith((message) => updates(message as KeywordBlockingItem)) as KeywordBlockingItem;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  KeywordBlockingItem clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  KeywordBlockingItem copyWith(void Function(KeywordBlockingItem) updates) =>
+      super.copyWith((message) => updates(message as KeywordBlockingItem))
+          as KeywordBlockingItem;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static KeywordBlockingItem create() => KeywordBlockingItem._();
+  @$core.override
   KeywordBlockingItem createEmptyInstance() => create();
-  static $pb.PbList<KeywordBlockingItem> createRepeated() => $pb.PbList<KeywordBlockingItem>();
+  static $pb.PbList<KeywordBlockingItem> createRepeated() =>
+      $pb.PbList<KeywordBlockingItem>();
   @$core.pragma('dart2js:noInline')
-  static KeywordBlockingItem getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<KeywordBlockingItem>(create);
+  static KeywordBlockingItem getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<KeywordBlockingItem>(create);
   static KeywordBlockingItem? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get keyword => $_getSZ(0);
   @$pb.TagNumber(1)
-  set keyword($core.String v) { $_setString(0, v); }
+  set keyword($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasKeyword() => $_has(0);
   @$pb.TagNumber(1)
@@ -2267,52 +2527,55 @@ class KeywordBlockingListReply extends $pb.GeneratedMessage {
     $core.int? charLimit,
     $core.String? listLimitText,
   }) {
-    final $result = create();
-    if (items != null) {
-      $result.items.addAll(items);
-    }
-    if (listLimit != null) {
-      $result.listLimit = listLimit;
-    }
-    if (charLimit != null) {
-      $result.charLimit = charLimit;
-    }
-    if (listLimitText != null) {
-      $result.listLimitText = listLimitText;
-    }
-    return $result;
+    final result = create();
+    if (items != null) result.items.addAll(items);
+    if (listLimit != null) result.listLimit = listLimit;
+    if (charLimit != null) result.charLimit = charLimit;
+    if (listLimitText != null) result.listLimitText = listLimitText;
+    return result;
   }
-  KeywordBlockingListReply._() : super();
-  factory KeywordBlockingListReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory KeywordBlockingListReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'KeywordBlockingListReply', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..pc<KeywordBlockingItem>(1, _omitFieldNames ? '' : 'items', $pb.PbFieldType.PM, subBuilder: KeywordBlockingItem.create)
-    ..a<$core.int>(2, _omitFieldNames ? '' : 'listLimit', $pb.PbFieldType.O3)
-    ..a<$core.int>(3, _omitFieldNames ? '' : 'charLimit', $pb.PbFieldType.O3)
+  KeywordBlockingListReply._();
+
+  factory KeywordBlockingListReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory KeywordBlockingListReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'KeywordBlockingListReply',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..pPM<KeywordBlockingItem>(1, _omitFieldNames ? '' : 'items',
+        subBuilder: KeywordBlockingItem.create)
+    ..aI(2, _omitFieldNames ? '' : 'listLimit')
+    ..aI(3, _omitFieldNames ? '' : 'charLimit')
     ..aOS(4, _omitFieldNames ? '' : 'listLimitText')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  KeywordBlockingListReply clone() => KeywordBlockingListReply()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  KeywordBlockingListReply copyWith(void Function(KeywordBlockingListReply) updates) => super.copyWith((message) => updates(message as KeywordBlockingListReply)) as KeywordBlockingListReply;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  KeywordBlockingListReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  KeywordBlockingListReply copyWith(
+          void Function(KeywordBlockingListReply) updates) =>
+      super.copyWith((message) => updates(message as KeywordBlockingListReply))
+          as KeywordBlockingListReply;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static KeywordBlockingListReply create() => KeywordBlockingListReply._();
+  @$core.override
   KeywordBlockingListReply createEmptyInstance() => create();
-  static $pb.PbList<KeywordBlockingListReply> createRepeated() => $pb.PbList<KeywordBlockingListReply>();
+  static $pb.PbList<KeywordBlockingListReply> createRepeated() =>
+      $pb.PbList<KeywordBlockingListReply>();
   @$core.pragma('dart2js:noInline')
-  static KeywordBlockingListReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<KeywordBlockingListReply>(create);
+  static KeywordBlockingListReply getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<KeywordBlockingListReply>(create);
   static KeywordBlockingListReply? _defaultInstance;
 
   @$pb.TagNumber(1)
@@ -2321,7 +2584,7 @@ class KeywordBlockingListReply extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.int get listLimit => $_getIZ(1);
   @$pb.TagNumber(2)
-  set listLimit($core.int v) { $_setSignedInt32(1, v); }
+  set listLimit($core.int value) => $_setSignedInt32(1, value);
   @$pb.TagNumber(2)
   $core.bool hasListLimit() => $_has(1);
   @$pb.TagNumber(2)
@@ -2330,7 +2593,7 @@ class KeywordBlockingListReply extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.int get charLimit => $_getIZ(2);
   @$pb.TagNumber(3)
-  set charLimit($core.int v) { $_setSignedInt32(2, v); }
+  set charLimit($core.int value) => $_setSignedInt32(2, value);
   @$pb.TagNumber(3)
   $core.bool hasCharLimit() => $_has(2);
   @$pb.TagNumber(3)
@@ -2339,7 +2602,7 @@ class KeywordBlockingListReply extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.String get listLimitText => $_getSZ(3);
   @$pb.TagNumber(4)
-  set listLimitText($core.String v) { $_setString(3, v); }
+  set listLimitText($core.String value) => $_setString(3, value);
   @$pb.TagNumber(4)
   $core.bool hasListLimitText() => $_has(3);
   @$pb.TagNumber(4)
@@ -2348,33 +2611,43 @@ class KeywordBlockingListReply extends $pb.GeneratedMessage {
 
 class KeywordBlockingListReq extends $pb.GeneratedMessage {
   factory KeywordBlockingListReq() => create();
-  KeywordBlockingListReq._() : super();
-  factory KeywordBlockingListReq.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory KeywordBlockingListReq.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'KeywordBlockingListReq', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..hasRequiredFields = false
-  ;
+  KeywordBlockingListReq._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  KeywordBlockingListReq clone() => KeywordBlockingListReq()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  KeywordBlockingListReq copyWith(void Function(KeywordBlockingListReq) updates) => super.copyWith((message) => updates(message as KeywordBlockingListReq)) as KeywordBlockingListReq;
+  factory KeywordBlockingListReq.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory KeywordBlockingListReq.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'KeywordBlockingListReq',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  KeywordBlockingListReq clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  KeywordBlockingListReq copyWith(
+          void Function(KeywordBlockingListReq) updates) =>
+      super.copyWith((message) => updates(message as KeywordBlockingListReq))
+          as KeywordBlockingListReq;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static KeywordBlockingListReq create() => KeywordBlockingListReq._();
+  @$core.override
   KeywordBlockingListReq createEmptyInstance() => create();
-  static $pb.PbList<KeywordBlockingListReq> createRepeated() => $pb.PbList<KeywordBlockingListReq>();
+  static $pb.PbList<KeywordBlockingListReq> createRepeated() =>
+      $pb.PbList<KeywordBlockingListReq>();
   @$core.pragma('dart2js:noInline')
-  static KeywordBlockingListReq getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<KeywordBlockingListReq>(create);
+  static KeywordBlockingListReq getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<KeywordBlockingListReq>(create);
   static KeywordBlockingListReq? _defaultInstance;
 }
 
@@ -2395,98 +2668,77 @@ class Medal extends $pb.GeneratedMessage {
     $core.String? medalColorLevel,
     $fixnum.Int64? guardLevel,
   }) {
-    final $result = create();
-    if (uid != null) {
-      $result.uid = uid;
-    }
-    if (medalId != null) {
-      $result.medalId = medalId;
-    }
-    if (level != null) {
-      $result.level = level;
-    }
-    if (medalName != null) {
-      $result.medalName = medalName;
-    }
-    if (score != null) {
-      $result.score = score;
-    }
-    if (intimacy != null) {
-      $result.intimacy = intimacy;
-    }
-    if (masterStatus != null) {
-      $result.masterStatus = masterStatus;
-    }
-    if (isReceive != null) {
-      $result.isReceive = isReceive;
-    }
-    if (medalColorStart != null) {
-      $result.medalColorStart = medalColorStart;
-    }
-    if (medalColorEnd != null) {
-      $result.medalColorEnd = medalColorEnd;
-    }
-    if (medalColorBorder != null) {
-      $result.medalColorBorder = medalColorBorder;
-    }
-    if (medalColorName != null) {
-      $result.medalColorName = medalColorName;
-    }
-    if (medalColorLevel != null) {
-      $result.medalColorLevel = medalColorLevel;
-    }
-    if (guardLevel != null) {
-      $result.guardLevel = guardLevel;
-    }
-    return $result;
+    final result = create();
+    if (uid != null) result.uid = uid;
+    if (medalId != null) result.medalId = medalId;
+    if (level != null) result.level = level;
+    if (medalName != null) result.medalName = medalName;
+    if (score != null) result.score = score;
+    if (intimacy != null) result.intimacy = intimacy;
+    if (masterStatus != null) result.masterStatus = masterStatus;
+    if (isReceive != null) result.isReceive = isReceive;
+    if (medalColorStart != null) result.medalColorStart = medalColorStart;
+    if (medalColorEnd != null) result.medalColorEnd = medalColorEnd;
+    if (medalColorBorder != null) result.medalColorBorder = medalColorBorder;
+    if (medalColorName != null) result.medalColorName = medalColorName;
+    if (medalColorLevel != null) result.medalColorLevel = medalColorLevel;
+    if (guardLevel != null) result.guardLevel = guardLevel;
+    return result;
   }
-  Medal._() : super();
-  factory Medal.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Medal.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Medal', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  Medal._();
+
+  factory Medal.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory Medal.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'Medal',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aInt64(1, _omitFieldNames ? '' : 'uid')
-    ..a<$core.int>(2, _omitFieldNames ? '' : 'medalId', $pb.PbFieldType.O3)
-    ..a<$core.int>(3, _omitFieldNames ? '' : 'level', $pb.PbFieldType.O3)
+    ..aI(2, _omitFieldNames ? '' : 'medalId')
+    ..aI(3, _omitFieldNames ? '' : 'level')
     ..aOS(4, _omitFieldNames ? '' : 'medalName')
-    ..a<$core.int>(5, _omitFieldNames ? '' : 'score', $pb.PbFieldType.O3)
-    ..a<$core.int>(6, _omitFieldNames ? '' : 'intimacy', $pb.PbFieldType.O3)
-    ..a<$core.int>(7, _omitFieldNames ? '' : 'masterStatus', $pb.PbFieldType.O3)
-    ..a<$core.int>(8, _omitFieldNames ? '' : 'isReceive', $pb.PbFieldType.O3)
+    ..aI(5, _omitFieldNames ? '' : 'score')
+    ..aI(6, _omitFieldNames ? '' : 'intimacy')
+    ..aI(7, _omitFieldNames ? '' : 'masterStatus')
+    ..aI(8, _omitFieldNames ? '' : 'isReceive')
     ..aOS(9, _omitFieldNames ? '' : 'medalColorStart')
     ..aOS(10, _omitFieldNames ? '' : 'medalColorEnd')
     ..aOS(11, _omitFieldNames ? '' : 'medalColorBorder')
     ..aOS(12, _omitFieldNames ? '' : 'medalColorName')
     ..aOS(13, _omitFieldNames ? '' : 'medalColorLevel')
     ..aInt64(14, _omitFieldNames ? '' : 'guardLevel')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  Medal clone() => Medal()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  Medal copyWith(void Function(Medal) updates) => super.copyWith((message) => updates(message as Medal)) as Medal;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Medal clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Medal copyWith(void Function(Medal) updates) =>
+      super.copyWith((message) => updates(message as Medal)) as Medal;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static Medal create() => Medal._();
+  @$core.override
   Medal createEmptyInstance() => create();
   static $pb.PbList<Medal> createRepeated() => $pb.PbList<Medal>();
   @$core.pragma('dart2js:noInline')
-  static Medal getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Medal>(create);
+  static Medal getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Medal>(create);
   static Medal? _defaultInstance;
 
   @$pb.TagNumber(1)
   $fixnum.Int64 get uid => $_getI64(0);
   @$pb.TagNumber(1)
-  set uid($fixnum.Int64 v) { $_setInt64(0, v); }
+  set uid($fixnum.Int64 value) => $_setInt64(0, value);
   @$pb.TagNumber(1)
   $core.bool hasUid() => $_has(0);
   @$pb.TagNumber(1)
@@ -2495,7 +2747,7 @@ class Medal extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.int get medalId => $_getIZ(1);
   @$pb.TagNumber(2)
-  set medalId($core.int v) { $_setSignedInt32(1, v); }
+  set medalId($core.int value) => $_setSignedInt32(1, value);
   @$pb.TagNumber(2)
   $core.bool hasMedalId() => $_has(1);
   @$pb.TagNumber(2)
@@ -2504,7 +2756,7 @@ class Medal extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.int get level => $_getIZ(2);
   @$pb.TagNumber(3)
-  set level($core.int v) { $_setSignedInt32(2, v); }
+  set level($core.int value) => $_setSignedInt32(2, value);
   @$pb.TagNumber(3)
   $core.bool hasLevel() => $_has(2);
   @$pb.TagNumber(3)
@@ -2513,7 +2765,7 @@ class Medal extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.String get medalName => $_getSZ(3);
   @$pb.TagNumber(4)
-  set medalName($core.String v) { $_setString(3, v); }
+  set medalName($core.String value) => $_setString(3, value);
   @$pb.TagNumber(4)
   $core.bool hasMedalName() => $_has(3);
   @$pb.TagNumber(4)
@@ -2522,7 +2774,7 @@ class Medal extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $core.int get score => $_getIZ(4);
   @$pb.TagNumber(5)
-  set score($core.int v) { $_setSignedInt32(4, v); }
+  set score($core.int value) => $_setSignedInt32(4, value);
   @$pb.TagNumber(5)
   $core.bool hasScore() => $_has(4);
   @$pb.TagNumber(5)
@@ -2531,7 +2783,7 @@ class Medal extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   $core.int get intimacy => $_getIZ(5);
   @$pb.TagNumber(6)
-  set intimacy($core.int v) { $_setSignedInt32(5, v); }
+  set intimacy($core.int value) => $_setSignedInt32(5, value);
   @$pb.TagNumber(6)
   $core.bool hasIntimacy() => $_has(5);
   @$pb.TagNumber(6)
@@ -2540,7 +2792,7 @@ class Medal extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   $core.int get masterStatus => $_getIZ(6);
   @$pb.TagNumber(7)
-  set masterStatus($core.int v) { $_setSignedInt32(6, v); }
+  set masterStatus($core.int value) => $_setSignedInt32(6, value);
   @$pb.TagNumber(7)
   $core.bool hasMasterStatus() => $_has(6);
   @$pb.TagNumber(7)
@@ -2549,7 +2801,7 @@ class Medal extends $pb.GeneratedMessage {
   @$pb.TagNumber(8)
   $core.int get isReceive => $_getIZ(7);
   @$pb.TagNumber(8)
-  set isReceive($core.int v) { $_setSignedInt32(7, v); }
+  set isReceive($core.int value) => $_setSignedInt32(7, value);
   @$pb.TagNumber(8)
   $core.bool hasIsReceive() => $_has(7);
   @$pb.TagNumber(8)
@@ -2558,7 +2810,7 @@ class Medal extends $pb.GeneratedMessage {
   @$pb.TagNumber(9)
   $core.String get medalColorStart => $_getSZ(8);
   @$pb.TagNumber(9)
-  set medalColorStart($core.String v) { $_setString(8, v); }
+  set medalColorStart($core.String value) => $_setString(8, value);
   @$pb.TagNumber(9)
   $core.bool hasMedalColorStart() => $_has(8);
   @$pb.TagNumber(9)
@@ -2567,7 +2819,7 @@ class Medal extends $pb.GeneratedMessage {
   @$pb.TagNumber(10)
   $core.String get medalColorEnd => $_getSZ(9);
   @$pb.TagNumber(10)
-  set medalColorEnd($core.String v) { $_setString(9, v); }
+  set medalColorEnd($core.String value) => $_setString(9, value);
   @$pb.TagNumber(10)
   $core.bool hasMedalColorEnd() => $_has(9);
   @$pb.TagNumber(10)
@@ -2576,7 +2828,7 @@ class Medal extends $pb.GeneratedMessage {
   @$pb.TagNumber(11)
   $core.String get medalColorBorder => $_getSZ(10);
   @$pb.TagNumber(11)
-  set medalColorBorder($core.String v) { $_setString(10, v); }
+  set medalColorBorder($core.String value) => $_setString(10, value);
   @$pb.TagNumber(11)
   $core.bool hasMedalColorBorder() => $_has(10);
   @$pb.TagNumber(11)
@@ -2585,7 +2837,7 @@ class Medal extends $pb.GeneratedMessage {
   @$pb.TagNumber(12)
   $core.String get medalColorName => $_getSZ(11);
   @$pb.TagNumber(12)
-  set medalColorName($core.String v) { $_setString(11, v); }
+  set medalColorName($core.String value) => $_setString(11, value);
   @$pb.TagNumber(12)
   $core.bool hasMedalColorName() => $_has(11);
   @$pb.TagNumber(12)
@@ -2594,7 +2846,7 @@ class Medal extends $pb.GeneratedMessage {
   @$pb.TagNumber(13)
   $core.String get medalColorLevel => $_getSZ(12);
   @$pb.TagNumber(13)
-  set medalColorLevel($core.String v) { $_setString(12, v); }
+  set medalColorLevel($core.String value) => $_setString(12, value);
   @$pb.TagNumber(13)
   $core.bool hasMedalColorLevel() => $_has(12);
   @$pb.TagNumber(13)
@@ -2603,7 +2855,7 @@ class Medal extends $pb.GeneratedMessage {
   @$pb.TagNumber(14)
   $fixnum.Int64 get guardLevel => $_getI64(13);
   @$pb.TagNumber(14)
-  set guardLevel($fixnum.Int64 v) { $_setInt64(13, v); }
+  set guardLevel($fixnum.Int64 value) => $_setInt64(13, value);
   @$pb.TagNumber(14)
   $core.bool hasGuardLevel() => $_has(13);
   @$pb.TagNumber(14)
@@ -2617,58 +2869,58 @@ class MsgSummary extends $pb.GeneratedMessage {
     $core.String? prefixText,
     $core.bool? isGroupOwner,
   }) {
-    final $result = create();
-    if (rawMsg != null) {
-      $result.rawMsg = rawMsg;
-    }
-    if (prefixType != null) {
-      $result.prefixType = prefixType;
-    }
-    if (prefixText != null) {
-      $result.prefixText = prefixText;
-    }
-    if (isGroupOwner != null) {
-      $result.isGroupOwner = isGroupOwner;
-    }
-    return $result;
+    final result = create();
+    if (rawMsg != null) result.rawMsg = rawMsg;
+    if (prefixType != null) result.prefixType = prefixType;
+    if (prefixText != null) result.prefixText = prefixText;
+    if (isGroupOwner != null) result.isGroupOwner = isGroupOwner;
+    return result;
   }
-  MsgSummary._() : super();
-  factory MsgSummary.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory MsgSummary.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'MsgSummary', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  MsgSummary._();
+
+  factory MsgSummary.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory MsgSummary.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'MsgSummary',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'rawMsg')
-    ..e<MsgSummaryPrefixType>(2, _omitFieldNames ? '' : 'prefixType', $pb.PbFieldType.OE, defaultOrMaker: MsgSummaryPrefixType.MSG_SUMMARY_PREFIX_TYPE_NONE, valueOf: MsgSummaryPrefixType.valueOf, enumValues: MsgSummaryPrefixType.values)
+    ..aE<MsgSummaryPrefixType>(2, _omitFieldNames ? '' : 'prefixType',
+        enumValues: MsgSummaryPrefixType.values)
     ..aOS(3, _omitFieldNames ? '' : 'prefixText')
     ..aOB(4, _omitFieldNames ? '' : 'isGroupOwner')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  MsgSummary clone() => MsgSummary()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  MsgSummary copyWith(void Function(MsgSummary) updates) => super.copyWith((message) => updates(message as MsgSummary)) as MsgSummary;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  MsgSummary clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  MsgSummary copyWith(void Function(MsgSummary) updates) =>
+      super.copyWith((message) => updates(message as MsgSummary)) as MsgSummary;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static MsgSummary create() => MsgSummary._();
+  @$core.override
   MsgSummary createEmptyInstance() => create();
   static $pb.PbList<MsgSummary> createRepeated() => $pb.PbList<MsgSummary>();
   @$core.pragma('dart2js:noInline')
-  static MsgSummary getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<MsgSummary>(create);
+  static MsgSummary getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<MsgSummary>(create);
   static MsgSummary? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get rawMsg => $_getSZ(0);
   @$pb.TagNumber(1)
-  set rawMsg($core.String v) { $_setString(0, v); }
+  set rawMsg($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasRawMsg() => $_has(0);
   @$pb.TagNumber(1)
@@ -2677,7 +2929,7 @@ class MsgSummary extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   MsgSummaryPrefixType get prefixType => $_getN(1);
   @$pb.TagNumber(2)
-  set prefixType(MsgSummaryPrefixType v) { $_setField(2, v); }
+  set prefixType(MsgSummaryPrefixType value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasPrefixType() => $_has(1);
   @$pb.TagNumber(2)
@@ -2686,7 +2938,7 @@ class MsgSummary extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get prefixText => $_getSZ(2);
   @$pb.TagNumber(3)
-  set prefixText($core.String v) { $_setString(2, v); }
+  set prefixText($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasPrefixText() => $_has(2);
   @$pb.TagNumber(3)
@@ -2695,7 +2947,7 @@ class MsgSummary extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.bool get isGroupOwner => $_getBF(3);
   @$pb.TagNumber(4)
-  set isGroupOwner($core.bool v) { $_setBool(3, v); }
+  set isGroupOwner($core.bool value) => $_setBool(3, value);
   @$pb.TagNumber(4)
   $core.bool hasIsGroupOwner() => $_has(3);
   @$pb.TagNumber(4)
@@ -2707,50 +2959,53 @@ class Offset extends $pb.GeneratedMessage {
     $fixnum.Int64? normalOffset,
     $fixnum.Int64? topOffset,
   }) {
-    final $result = create();
-    if (normalOffset != null) {
-      $result.normalOffset = normalOffset;
-    }
-    if (topOffset != null) {
-      $result.topOffset = topOffset;
-    }
-    return $result;
+    final result = create();
+    if (normalOffset != null) result.normalOffset = normalOffset;
+    if (topOffset != null) result.topOffset = topOffset;
+    return result;
   }
-  Offset._() : super();
-  factory Offset.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Offset.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Offset', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  Offset._();
+
+  factory Offset.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory Offset.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'Offset',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aInt64(1, _omitFieldNames ? '' : 'normalOffset')
     ..aInt64(2, _omitFieldNames ? '' : 'topOffset')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  Offset clone() => Offset()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  Offset copyWith(void Function(Offset) updates) => super.copyWith((message) => updates(message as Offset)) as Offset;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Offset clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Offset copyWith(void Function(Offset) updates) =>
+      super.copyWith((message) => updates(message as Offset)) as Offset;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static Offset create() => Offset._();
+  @$core.override
   Offset createEmptyInstance() => create();
   static $pb.PbList<Offset> createRepeated() => $pb.PbList<Offset>();
   @$core.pragma('dart2js:noInline')
-  static Offset getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Offset>(create);
+  static Offset getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Offset>(create);
   static Offset? _defaultInstance;
 
   @$pb.TagNumber(1)
   $fixnum.Int64 get normalOffset => $_getI64(0);
   @$pb.TagNumber(1)
-  set normalOffset($fixnum.Int64 v) { $_setInt64(0, v); }
+  set normalOffset($fixnum.Int64 value) => $_setInt64(0, value);
   @$pb.TagNumber(1)
   $core.bool hasNormalOffset() => $_has(0);
   @$pb.TagNumber(1)
@@ -2759,7 +3014,7 @@ class Offset extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $fixnum.Int64 get topOffset => $_getI64(1);
   @$pb.TagNumber(2)
-  set topOffset($fixnum.Int64 v) { $_setInt64(1, v); }
+  set topOffset($fixnum.Int64 value) => $_setInt64(1, value);
   @$pb.TagNumber(2)
   $core.bool hasTopOffset() => $_has(1);
   @$pb.TagNumber(2)
@@ -2771,50 +3026,55 @@ class OperationContent extends $pb.GeneratedMessage {
     $core.bool? show,
     $core.String? text,
   }) {
-    final $result = create();
-    if (show != null) {
-      $result.show = show;
-    }
-    if (text != null) {
-      $result.text = text;
-    }
-    return $result;
+    final result = create();
+    if (show != null) result.show = show;
+    if (text != null) result.text = text;
+    return result;
   }
-  OperationContent._() : super();
-  factory OperationContent.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory OperationContent.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'OperationContent', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  OperationContent._();
+
+  factory OperationContent.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory OperationContent.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'OperationContent',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOB(1, _omitFieldNames ? '' : 'show')
     ..aOS(2, _omitFieldNames ? '' : 'text')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  OperationContent clone() => OperationContent()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  OperationContent copyWith(void Function(OperationContent) updates) => super.copyWith((message) => updates(message as OperationContent)) as OperationContent;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  OperationContent clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  OperationContent copyWith(void Function(OperationContent) updates) =>
+      super.copyWith((message) => updates(message as OperationContent))
+          as OperationContent;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static OperationContent create() => OperationContent._();
+  @$core.override
   OperationContent createEmptyInstance() => create();
-  static $pb.PbList<OperationContent> createRepeated() => $pb.PbList<OperationContent>();
+  static $pb.PbList<OperationContent> createRepeated() =>
+      $pb.PbList<OperationContent>();
   @$core.pragma('dart2js:noInline')
-  static OperationContent getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<OperationContent>(create);
+  static OperationContent getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<OperationContent>(create);
   static OperationContent? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.bool get show => $_getBF(0);
   @$pb.TagNumber(1)
-  set show($core.bool v) { $_setBool(0, v); }
+  set show($core.bool value) => $_setBool(0, value);
   @$pb.TagNumber(1)
   $core.bool hasShow() => $_has(0);
   @$pb.TagNumber(1)
@@ -2823,7 +3083,7 @@ class OperationContent extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get text => $_getSZ(1);
   @$pb.TagNumber(2)
-  set text($core.String v) { $_setString(1, v); }
+  set text($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasText() => $_has(1);
   @$pb.TagNumber(2)
@@ -2832,47 +3092,58 @@ class OperationContent extends $pb.GeneratedMessage {
 
 class PaginationParams extends $pb.GeneratedMessage {
   factory PaginationParams({
-    $pb.PbMap<$core.int, Offset>? offsets,
+    $core.Iterable<$core.MapEntry<$core.int, Offset>>? offsets,
     $core.bool? hasMore,
   }) {
-    final $result = create();
-    if (offsets != null) {
-      $result.offsets.addAll(offsets);
-    }
-    if (hasMore != null) {
-      $result.hasMore = hasMore;
-    }
-    return $result;
+    final result = create();
+    if (offsets != null) result.offsets.addEntries(offsets);
+    if (hasMore != null) result.hasMore = hasMore;
+    return result;
   }
-  PaginationParams._() : super();
-  factory PaginationParams.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory PaginationParams.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PaginationParams', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..m<$core.int, Offset>(1, _omitFieldNames ? '' : 'offsets', entryClassName: 'PaginationParams.OffsetsEntry', keyFieldType: $pb.PbFieldType.O3, valueFieldType: $pb.PbFieldType.OM, valueCreator: Offset.create, valueDefaultOrMaker: Offset.getDefault, packageName: const $pb.PackageName('bilibili.app.im.v1'))
+  PaginationParams._();
+
+  factory PaginationParams.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory PaginationParams.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'PaginationParams',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..m<$core.int, Offset>(1, _omitFieldNames ? '' : 'offsets',
+        entryClassName: 'PaginationParams.OffsetsEntry',
+        keyFieldType: $pb.PbFieldType.O3,
+        valueFieldType: $pb.PbFieldType.OM,
+        valueCreator: Offset.create,
+        valueDefaultOrMaker: Offset.getDefault,
+        packageName: const $pb.PackageName('bilibili.app.im.v1'))
     ..aOB(2, _omitFieldNames ? '' : 'hasMore')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  PaginationParams clone() => PaginationParams()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  PaginationParams copyWith(void Function(PaginationParams) updates) => super.copyWith((message) => updates(message as PaginationParams)) as PaginationParams;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PaginationParams clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PaginationParams copyWith(void Function(PaginationParams) updates) =>
+      super.copyWith((message) => updates(message as PaginationParams))
+          as PaginationParams;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static PaginationParams create() => PaginationParams._();
+  @$core.override
   PaginationParams createEmptyInstance() => create();
-  static $pb.PbList<PaginationParams> createRepeated() => $pb.PbList<PaginationParams>();
+  static $pb.PbList<PaginationParams> createRepeated() =>
+      $pb.PbList<PaginationParams>();
   @$core.pragma('dart2js:noInline')
-  static PaginationParams getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PaginationParams>(create);
+  static PaginationParams getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<PaginationParams>(create);
   static PaginationParams? _defaultInstance;
 
   @$pb.TagNumber(1)
@@ -2881,7 +3152,7 @@ class PaginationParams extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool get hasMore => $_getBF(1);
   @$pb.TagNumber(2)
-  set hasMore($core.bool v) { $_setBool(1, v); }
+  set hasMore($core.bool value) => $_setBool(1, value);
   @$pb.TagNumber(2)
   $core.bool hasHasMore() => $_has(1);
   @$pb.TagNumber(2)
@@ -2894,54 +3165,57 @@ class PinSessionReply extends $pb.GeneratedMessage {
     $fixnum.Int64? code,
     $core.String? message,
   }) {
-    final $result = create();
-    if (sequenceNumber != null) {
-      $result.sequenceNumber = sequenceNumber;
-    }
-    if (code != null) {
-      $result.code = code;
-    }
-    if (message != null) {
-      $result.message = message;
-    }
-    return $result;
+    final result = create();
+    if (sequenceNumber != null) result.sequenceNumber = sequenceNumber;
+    if (code != null) result.code = code;
+    if (message != null) result.message = message;
+    return result;
   }
-  PinSessionReply._() : super();
-  factory PinSessionReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory PinSessionReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PinSessionReply', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  PinSessionReply._();
+
+  factory PinSessionReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory PinSessionReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'PinSessionReply',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aInt64(1, _omitFieldNames ? '' : 'sequenceNumber')
     ..aInt64(2, _omitFieldNames ? '' : 'code')
     ..aOS(3, _omitFieldNames ? '' : 'message')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  PinSessionReply clone() => PinSessionReply()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  PinSessionReply copyWith(void Function(PinSessionReply) updates) => super.copyWith((message) => updates(message as PinSessionReply)) as PinSessionReply;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PinSessionReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PinSessionReply copyWith(void Function(PinSessionReply) updates) =>
+      super.copyWith((message) => updates(message as PinSessionReply))
+          as PinSessionReply;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static PinSessionReply create() => PinSessionReply._();
+  @$core.override
   PinSessionReply createEmptyInstance() => create();
-  static $pb.PbList<PinSessionReply> createRepeated() => $pb.PbList<PinSessionReply>();
+  static $pb.PbList<PinSessionReply> createRepeated() =>
+      $pb.PbList<PinSessionReply>();
   @$core.pragma('dart2js:noInline')
-  static PinSessionReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PinSessionReply>(create);
+  static PinSessionReply getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<PinSessionReply>(create);
   static PinSessionReply? _defaultInstance;
 
   @$pb.TagNumber(1)
   $fixnum.Int64 get sequenceNumber => $_getI64(0);
   @$pb.TagNumber(1)
-  set sequenceNumber($fixnum.Int64 v) { $_setInt64(0, v); }
+  set sequenceNumber($fixnum.Int64 value) => $_setInt64(0, value);
   @$pb.TagNumber(1)
   $core.bool hasSequenceNumber() => $_has(0);
   @$pb.TagNumber(1)
@@ -2950,7 +3224,7 @@ class PinSessionReply extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $fixnum.Int64 get code => $_getI64(1);
   @$pb.TagNumber(2)
-  set code($fixnum.Int64 v) { $_setInt64(1, v); }
+  set code($fixnum.Int64 value) => $_setInt64(1, value);
   @$pb.TagNumber(2)
   $core.bool hasCode() => $_has(1);
   @$pb.TagNumber(2)
@@ -2959,7 +3233,7 @@ class PinSessionReply extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get message => $_getSZ(2);
   @$pb.TagNumber(3)
-  set message($core.String v) { $_setString(2, v); }
+  set message($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasMessage() => $_has(2);
   @$pb.TagNumber(3)
@@ -2971,50 +3245,56 @@ class PinSessionReq extends $pb.GeneratedMessage {
     SessionId? sessionId,
     $fixnum.Int64? topTimeMicros,
   }) {
-    final $result = create();
-    if (sessionId != null) {
-      $result.sessionId = sessionId;
-    }
-    if (topTimeMicros != null) {
-      $result.topTimeMicros = topTimeMicros;
-    }
-    return $result;
+    final result = create();
+    if (sessionId != null) result.sessionId = sessionId;
+    if (topTimeMicros != null) result.topTimeMicros = topTimeMicros;
+    return result;
   }
-  PinSessionReq._() : super();
-  factory PinSessionReq.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory PinSessionReq.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PinSessionReq', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..aOM<SessionId>(1, _omitFieldNames ? '' : 'sessionId', subBuilder: SessionId.create)
+  PinSessionReq._();
+
+  factory PinSessionReq.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory PinSessionReq.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'PinSessionReq',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aOM<SessionId>(1, _omitFieldNames ? '' : 'sessionId',
+        subBuilder: SessionId.create)
     ..aInt64(2, _omitFieldNames ? '' : 'topTimeMicros')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  PinSessionReq clone() => PinSessionReq()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  PinSessionReq copyWith(void Function(PinSessionReq) updates) => super.copyWith((message) => updates(message as PinSessionReq)) as PinSessionReq;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PinSessionReq clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PinSessionReq copyWith(void Function(PinSessionReq) updates) =>
+      super.copyWith((message) => updates(message as PinSessionReq))
+          as PinSessionReq;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static PinSessionReq create() => PinSessionReq._();
+  @$core.override
   PinSessionReq createEmptyInstance() => create();
-  static $pb.PbList<PinSessionReq> createRepeated() => $pb.PbList<PinSessionReq>();
+  static $pb.PbList<PinSessionReq> createRepeated() =>
+      $pb.PbList<PinSessionReq>();
   @$core.pragma('dart2js:noInline')
-  static PinSessionReq getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PinSessionReq>(create);
+  static PinSessionReq getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<PinSessionReq>(create);
   static PinSessionReq? _defaultInstance;
 
   @$pb.TagNumber(1)
   SessionId get sessionId => $_getN(0);
   @$pb.TagNumber(1)
-  set sessionId(SessionId v) { $_setField(1, v); }
+  set sessionId(SessionId value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasSessionId() => $_has(0);
   @$pb.TagNumber(1)
@@ -3025,7 +3305,7 @@ class PinSessionReq extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $fixnum.Int64 get topTimeMicros => $_getI64(1);
   @$pb.TagNumber(2)
-  set topTimeMicros($fixnum.Int64 v) { $_setInt64(1, v); }
+  set topTimeMicros($fixnum.Int64 value) => $_setInt64(1, value);
   @$pb.TagNumber(2)
   $core.bool hasTopTimeMicros() => $_has(1);
   @$pb.TagNumber(2)
@@ -3036,46 +3316,51 @@ class PrivateId extends $pb.GeneratedMessage {
   factory PrivateId({
     $fixnum.Int64? talkerUid,
   }) {
-    final $result = create();
-    if (talkerUid != null) {
-      $result.talkerUid = talkerUid;
-    }
-    return $result;
+    final result = create();
+    if (talkerUid != null) result.talkerUid = talkerUid;
+    return result;
   }
-  PrivateId._() : super();
-  factory PrivateId.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory PrivateId.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PrivateId', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  PrivateId._();
+
+  factory PrivateId.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory PrivateId.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'PrivateId',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aInt64(1, _omitFieldNames ? '' : 'talkerUid')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  PrivateId clone() => PrivateId()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  PrivateId copyWith(void Function(PrivateId) updates) => super.copyWith((message) => updates(message as PrivateId)) as PrivateId;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PrivateId clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PrivateId copyWith(void Function(PrivateId) updates) =>
+      super.copyWith((message) => updates(message as PrivateId)) as PrivateId;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static PrivateId create() => PrivateId._();
+  @$core.override
   PrivateId createEmptyInstance() => create();
   static $pb.PbList<PrivateId> createRepeated() => $pb.PbList<PrivateId>();
   @$core.pragma('dart2js:noInline')
-  static PrivateId getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PrivateId>(create);
+  static PrivateId getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PrivateId>(create);
   static PrivateId? _defaultInstance;
 
   @$pb.TagNumber(1)
   $fixnum.Int64 get talkerUid => $_getI64(0);
   @$pb.TagNumber(1)
-  set talkerUid($fixnum.Int64 v) { $_setInt64(0, v); }
+  set talkerUid($fixnum.Int64 value) => $_setInt64(0, value);
   @$pb.TagNumber(1)
   $core.bool hasTalkerUid() => $_has(0);
   @$pb.TagNumber(1)
@@ -3091,66 +3376,65 @@ class QuickLinkBubble extends $pb.GeneratedMessage {
     QuickLinkItemType? quickLinkItem,
     QuickLinkMsgType? msgType,
   }) {
-    final $result = create();
-    if (mid != null) {
-      $result.mid = mid;
-    }
-    if (avatar != null) {
-      $result.avatar = avatar;
-    }
-    if (nickName != null) {
-      $result.nickName = nickName;
-    }
-    if (content != null) {
-      $result.content = content;
-    }
-    if (quickLinkItem != null) {
-      $result.quickLinkItem = quickLinkItem;
-    }
-    if (msgType != null) {
-      $result.msgType = msgType;
-    }
-    return $result;
+    final result = create();
+    if (mid != null) result.mid = mid;
+    if (avatar != null) result.avatar = avatar;
+    if (nickName != null) result.nickName = nickName;
+    if (content != null) result.content = content;
+    if (quickLinkItem != null) result.quickLinkItem = quickLinkItem;
+    if (msgType != null) result.msgType = msgType;
+    return result;
   }
-  QuickLinkBubble._() : super();
-  factory QuickLinkBubble.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory QuickLinkBubble.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'QuickLinkBubble', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  QuickLinkBubble._();
+
+  factory QuickLinkBubble.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory QuickLinkBubble.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'QuickLinkBubble',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aInt64(1, _omitFieldNames ? '' : 'mid')
     ..aOS(2, _omitFieldNames ? '' : 'avatar')
     ..aOS(3, _omitFieldNames ? '' : 'nickName')
     ..aOS(4, _omitFieldNames ? '' : 'content')
-    ..e<QuickLinkItemType>(5, _omitFieldNames ? '' : 'quickLinkItem', $pb.PbFieldType.OE, defaultOrMaker: QuickLinkItemType.QUICK_LINK_ITEM_TYPE_UNKNOWN, valueOf: QuickLinkItemType.valueOf, enumValues: QuickLinkItemType.values)
-    ..e<QuickLinkMsgType>(6, _omitFieldNames ? '' : 'msgType', $pb.PbFieldType.OE, defaultOrMaker: QuickLinkMsgType.LikeMsg, valueOf: QuickLinkMsgType.valueOf, enumValues: QuickLinkMsgType.values)
-    ..hasRequiredFields = false
-  ;
+    ..aE<QuickLinkItemType>(5, _omitFieldNames ? '' : 'quickLinkItem',
+        enumValues: QuickLinkItemType.values)
+    ..aE<QuickLinkMsgType>(6, _omitFieldNames ? '' : 'msgType',
+        enumValues: QuickLinkMsgType.values)
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  QuickLinkBubble clone() => QuickLinkBubble()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  QuickLinkBubble copyWith(void Function(QuickLinkBubble) updates) => super.copyWith((message) => updates(message as QuickLinkBubble)) as QuickLinkBubble;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  QuickLinkBubble clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  QuickLinkBubble copyWith(void Function(QuickLinkBubble) updates) =>
+      super.copyWith((message) => updates(message as QuickLinkBubble))
+          as QuickLinkBubble;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static QuickLinkBubble create() => QuickLinkBubble._();
+  @$core.override
   QuickLinkBubble createEmptyInstance() => create();
-  static $pb.PbList<QuickLinkBubble> createRepeated() => $pb.PbList<QuickLinkBubble>();
+  static $pb.PbList<QuickLinkBubble> createRepeated() =>
+      $pb.PbList<QuickLinkBubble>();
   @$core.pragma('dart2js:noInline')
-  static QuickLinkBubble getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<QuickLinkBubble>(create);
+  static QuickLinkBubble getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<QuickLinkBubble>(create);
   static QuickLinkBubble? _defaultInstance;
 
   @$pb.TagNumber(1)
   $fixnum.Int64 get mid => $_getI64(0);
   @$pb.TagNumber(1)
-  set mid($fixnum.Int64 v) { $_setInt64(0, v); }
+  set mid($fixnum.Int64 value) => $_setInt64(0, value);
   @$pb.TagNumber(1)
   $core.bool hasMid() => $_has(0);
   @$pb.TagNumber(1)
@@ -3159,7 +3443,7 @@ class QuickLinkBubble extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get avatar => $_getSZ(1);
   @$pb.TagNumber(2)
-  set avatar($core.String v) { $_setString(1, v); }
+  set avatar($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasAvatar() => $_has(1);
   @$pb.TagNumber(2)
@@ -3168,7 +3452,7 @@ class QuickLinkBubble extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get nickName => $_getSZ(2);
   @$pb.TagNumber(3)
-  set nickName($core.String v) { $_setString(2, v); }
+  set nickName($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasNickName() => $_has(2);
   @$pb.TagNumber(3)
@@ -3177,7 +3461,7 @@ class QuickLinkBubble extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.String get content => $_getSZ(3);
   @$pb.TagNumber(4)
-  set content($core.String v) { $_setString(3, v); }
+  set content($core.String value) => $_setString(3, value);
   @$pb.TagNumber(4)
   $core.bool hasContent() => $_has(3);
   @$pb.TagNumber(4)
@@ -3186,7 +3470,7 @@ class QuickLinkBubble extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   QuickLinkItemType get quickLinkItem => $_getN(4);
   @$pb.TagNumber(5)
-  set quickLinkItem(QuickLinkItemType v) { $_setField(5, v); }
+  set quickLinkItem(QuickLinkItemType value) => $_setField(5, value);
   @$pb.TagNumber(5)
   $core.bool hasQuickLinkItem() => $_has(4);
   @$pb.TagNumber(5)
@@ -3195,7 +3479,7 @@ class QuickLinkBubble extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   QuickLinkMsgType get msgType => $_getN(5);
   @$pb.TagNumber(6)
-  set msgType(QuickLinkMsgType v) { $_setField(6, v); }
+  set msgType(QuickLinkMsgType value) => $_setField(6, value);
   @$pb.TagNumber(6)
   $core.bool hasMsgType() => $_has(5);
   @$pb.TagNumber(6)
@@ -3208,48 +3492,53 @@ class QuickLinkConfig extends $pb.GeneratedMessage {
     QuickLinkBubble? bubble,
     $core.bool? isLegacyStyle,
   }) {
-    final $result = create();
-    if (items != null) {
-      $result.items.addAll(items);
-    }
-    if (bubble != null) {
-      $result.bubble = bubble;
-    }
-    if (isLegacyStyle != null) {
-      $result.isLegacyStyle = isLegacyStyle;
-    }
-    return $result;
+    final result = create();
+    if (items != null) result.items.addAll(items);
+    if (bubble != null) result.bubble = bubble;
+    if (isLegacyStyle != null) result.isLegacyStyle = isLegacyStyle;
+    return result;
   }
-  QuickLinkConfig._() : super();
-  factory QuickLinkConfig.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory QuickLinkConfig.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'QuickLinkConfig', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..pc<QuickLinkItem>(1, _omitFieldNames ? '' : 'items', $pb.PbFieldType.PM, subBuilder: QuickLinkItem.create)
-    ..aOM<QuickLinkBubble>(2, _omitFieldNames ? '' : 'bubble', subBuilder: QuickLinkBubble.create)
+  QuickLinkConfig._();
+
+  factory QuickLinkConfig.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory QuickLinkConfig.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'QuickLinkConfig',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..pPM<QuickLinkItem>(1, _omitFieldNames ? '' : 'items',
+        subBuilder: QuickLinkItem.create)
+    ..aOM<QuickLinkBubble>(2, _omitFieldNames ? '' : 'bubble',
+        subBuilder: QuickLinkBubble.create)
     ..aOB(3, _omitFieldNames ? '' : 'isLegacyStyle')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  QuickLinkConfig clone() => QuickLinkConfig()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  QuickLinkConfig copyWith(void Function(QuickLinkConfig) updates) => super.copyWith((message) => updates(message as QuickLinkConfig)) as QuickLinkConfig;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  QuickLinkConfig clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  QuickLinkConfig copyWith(void Function(QuickLinkConfig) updates) =>
+      super.copyWith((message) => updates(message as QuickLinkConfig))
+          as QuickLinkConfig;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static QuickLinkConfig create() => QuickLinkConfig._();
+  @$core.override
   QuickLinkConfig createEmptyInstance() => create();
-  static $pb.PbList<QuickLinkConfig> createRepeated() => $pb.PbList<QuickLinkConfig>();
+  static $pb.PbList<QuickLinkConfig> createRepeated() =>
+      $pb.PbList<QuickLinkConfig>();
   @$core.pragma('dart2js:noInline')
-  static QuickLinkConfig getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<QuickLinkConfig>(create);
+  static QuickLinkConfig getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<QuickLinkConfig>(create);
   static QuickLinkConfig? _defaultInstance;
 
   @$pb.TagNumber(1)
@@ -3258,7 +3547,7 @@ class QuickLinkConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   QuickLinkBubble get bubble => $_getN(1);
   @$pb.TagNumber(2)
-  set bubble(QuickLinkBubble v) { $_setField(2, v); }
+  set bubble(QuickLinkBubble value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasBubble() => $_has(1);
   @$pb.TagNumber(2)
@@ -3269,7 +3558,7 @@ class QuickLinkConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.bool get isLegacyStyle => $_getBF(2);
   @$pb.TagNumber(3)
-  set isLegacyStyle($core.bool v) { $_setBool(2, v); }
+  set isLegacyStyle($core.bool value) => $_setBool(2, value);
   @$pb.TagNumber(3)
   $core.bool hasIsLegacyStyle() => $_has(2);
   @$pb.TagNumber(3)
@@ -3285,66 +3574,64 @@ class QuickLinkItem extends $pb.GeneratedMessage {
     Unread? unread,
     QuickLinkItemType? itemType,
   }) {
-    final $result = create();
-    if (title != null) {
-      $result.title = title;
-    }
-    if (icon != null) {
-      $result.icon = icon;
-    }
-    if (iconDark != null) {
-      $result.iconDark = iconDark;
-    }
-    if (url != null) {
-      $result.url = url;
-    }
-    if (unread != null) {
-      $result.unread = unread;
-    }
-    if (itemType != null) {
-      $result.itemType = itemType;
-    }
-    return $result;
+    final result = create();
+    if (title != null) result.title = title;
+    if (icon != null) result.icon = icon;
+    if (iconDark != null) result.iconDark = iconDark;
+    if (url != null) result.url = url;
+    if (unread != null) result.unread = unread;
+    if (itemType != null) result.itemType = itemType;
+    return result;
   }
-  QuickLinkItem._() : super();
-  factory QuickLinkItem.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory QuickLinkItem.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'QuickLinkItem', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  QuickLinkItem._();
+
+  factory QuickLinkItem.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory QuickLinkItem.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'QuickLinkItem',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'title')
     ..aOS(2, _omitFieldNames ? '' : 'icon')
     ..aOS(3, _omitFieldNames ? '' : 'iconDark')
     ..aOS(4, _omitFieldNames ? '' : 'url')
     ..aOM<Unread>(5, _omitFieldNames ? '' : 'unread', subBuilder: Unread.create)
-    ..e<QuickLinkItemType>(6, _omitFieldNames ? '' : 'itemType', $pb.PbFieldType.OE, defaultOrMaker: QuickLinkItemType.QUICK_LINK_ITEM_TYPE_UNKNOWN, valueOf: QuickLinkItemType.valueOf, enumValues: QuickLinkItemType.values)
-    ..hasRequiredFields = false
-  ;
+    ..aE<QuickLinkItemType>(6, _omitFieldNames ? '' : 'itemType',
+        enumValues: QuickLinkItemType.values)
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  QuickLinkItem clone() => QuickLinkItem()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  QuickLinkItem copyWith(void Function(QuickLinkItem) updates) => super.copyWith((message) => updates(message as QuickLinkItem)) as QuickLinkItem;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  QuickLinkItem clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  QuickLinkItem copyWith(void Function(QuickLinkItem) updates) =>
+      super.copyWith((message) => updates(message as QuickLinkItem))
+          as QuickLinkItem;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static QuickLinkItem create() => QuickLinkItem._();
+  @$core.override
   QuickLinkItem createEmptyInstance() => create();
-  static $pb.PbList<QuickLinkItem> createRepeated() => $pb.PbList<QuickLinkItem>();
+  static $pb.PbList<QuickLinkItem> createRepeated() =>
+      $pb.PbList<QuickLinkItem>();
   @$core.pragma('dart2js:noInline')
-  static QuickLinkItem getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<QuickLinkItem>(create);
+  static QuickLinkItem getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<QuickLinkItem>(create);
   static QuickLinkItem? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get title => $_getSZ(0);
   @$pb.TagNumber(1)
-  set title($core.String v) { $_setString(0, v); }
+  set title($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasTitle() => $_has(0);
   @$pb.TagNumber(1)
@@ -3353,7 +3640,7 @@ class QuickLinkItem extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get icon => $_getSZ(1);
   @$pb.TagNumber(2)
-  set icon($core.String v) { $_setString(1, v); }
+  set icon($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasIcon() => $_has(1);
   @$pb.TagNumber(2)
@@ -3362,7 +3649,7 @@ class QuickLinkItem extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get iconDark => $_getSZ(2);
   @$pb.TagNumber(3)
-  set iconDark($core.String v) { $_setString(2, v); }
+  set iconDark($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasIconDark() => $_has(2);
   @$pb.TagNumber(3)
@@ -3371,7 +3658,7 @@ class QuickLinkItem extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.String get url => $_getSZ(3);
   @$pb.TagNumber(4)
-  set url($core.String v) { $_setString(3, v); }
+  set url($core.String value) => $_setString(3, value);
   @$pb.TagNumber(4)
   $core.bool hasUrl() => $_has(3);
   @$pb.TagNumber(4)
@@ -3380,7 +3667,7 @@ class QuickLinkItem extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   Unread get unread => $_getN(4);
   @$pb.TagNumber(5)
-  set unread(Unread v) { $_setField(5, v); }
+  set unread(Unread value) => $_setField(5, value);
   @$pb.TagNumber(5)
   $core.bool hasUnread() => $_has(4);
   @$pb.TagNumber(5)
@@ -3391,7 +3678,7 @@ class QuickLinkItem extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   QuickLinkItemType get itemType => $_getN(5);
   @$pb.TagNumber(6)
-  set itemType(QuickLinkItemType v) { $_setField(6, v); }
+  set itemType(QuickLinkItemType value) => $_setField(6, value);
   @$pb.TagNumber(6)
   $core.bool hasItemType() => $_has(5);
   @$pb.TagNumber(6)
@@ -3403,50 +3690,56 @@ class QuickLinkUnreadItem extends $pb.GeneratedMessage {
     QuickLinkItemType? itemType,
     Unread? unread,
   }) {
-    final $result = create();
-    if (itemType != null) {
-      $result.itemType = itemType;
-    }
-    if (unread != null) {
-      $result.unread = unread;
-    }
-    return $result;
+    final result = create();
+    if (itemType != null) result.itemType = itemType;
+    if (unread != null) result.unread = unread;
+    return result;
   }
-  QuickLinkUnreadItem._() : super();
-  factory QuickLinkUnreadItem.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory QuickLinkUnreadItem.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'QuickLinkUnreadItem', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..e<QuickLinkItemType>(1, _omitFieldNames ? '' : 'itemType', $pb.PbFieldType.OE, defaultOrMaker: QuickLinkItemType.QUICK_LINK_ITEM_TYPE_UNKNOWN, valueOf: QuickLinkItemType.valueOf, enumValues: QuickLinkItemType.values)
+  QuickLinkUnreadItem._();
+
+  factory QuickLinkUnreadItem.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory QuickLinkUnreadItem.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'QuickLinkUnreadItem',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aE<QuickLinkItemType>(1, _omitFieldNames ? '' : 'itemType',
+        enumValues: QuickLinkItemType.values)
     ..aOM<Unread>(2, _omitFieldNames ? '' : 'unread', subBuilder: Unread.create)
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  QuickLinkUnreadItem clone() => QuickLinkUnreadItem()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  QuickLinkUnreadItem copyWith(void Function(QuickLinkUnreadItem) updates) => super.copyWith((message) => updates(message as QuickLinkUnreadItem)) as QuickLinkUnreadItem;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  QuickLinkUnreadItem clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  QuickLinkUnreadItem copyWith(void Function(QuickLinkUnreadItem) updates) =>
+      super.copyWith((message) => updates(message as QuickLinkUnreadItem))
+          as QuickLinkUnreadItem;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static QuickLinkUnreadItem create() => QuickLinkUnreadItem._();
+  @$core.override
   QuickLinkUnreadItem createEmptyInstance() => create();
-  static $pb.PbList<QuickLinkUnreadItem> createRepeated() => $pb.PbList<QuickLinkUnreadItem>();
+  static $pb.PbList<QuickLinkUnreadItem> createRepeated() =>
+      $pb.PbList<QuickLinkUnreadItem>();
   @$core.pragma('dart2js:noInline')
-  static QuickLinkUnreadItem getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<QuickLinkUnreadItem>(create);
+  static QuickLinkUnreadItem getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<QuickLinkUnreadItem>(create);
   static QuickLinkUnreadItem? _defaultInstance;
 
   @$pb.TagNumber(1)
   QuickLinkItemType get itemType => $_getN(0);
   @$pb.TagNumber(1)
-  set itemType(QuickLinkItemType v) { $_setField(1, v); }
+  set itemType(QuickLinkItemType value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasItemType() => $_has(0);
   @$pb.TagNumber(1)
@@ -3455,7 +3748,7 @@ class QuickLinkUnreadItem extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   Unread get unread => $_getN(1);
   @$pb.TagNumber(2)
-  set unread(Unread v) { $_setField(2, v); }
+  set unread(Unread value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasUnread() => $_has(1);
   @$pb.TagNumber(2)
@@ -3469,50 +3762,55 @@ class RestrictedMode extends $pb.GeneratedMessage {
     $core.bool? teenagers,
     $core.bool? lessons,
   }) {
-    final $result = create();
-    if (teenagers != null) {
-      $result.teenagers = teenagers;
-    }
-    if (lessons != null) {
-      $result.lessons = lessons;
-    }
-    return $result;
+    final result = create();
+    if (teenagers != null) result.teenagers = teenagers;
+    if (lessons != null) result.lessons = lessons;
+    return result;
   }
-  RestrictedMode._() : super();
-  factory RestrictedMode.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory RestrictedMode.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'RestrictedMode', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  RestrictedMode._();
+
+  factory RestrictedMode.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory RestrictedMode.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'RestrictedMode',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOB(1, _omitFieldNames ? '' : 'teenagers')
     ..aOB(2, _omitFieldNames ? '' : 'lessons')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  RestrictedMode clone() => RestrictedMode()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  RestrictedMode copyWith(void Function(RestrictedMode) updates) => super.copyWith((message) => updates(message as RestrictedMode)) as RestrictedMode;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  RestrictedMode clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  RestrictedMode copyWith(void Function(RestrictedMode) updates) =>
+      super.copyWith((message) => updates(message as RestrictedMode))
+          as RestrictedMode;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static RestrictedMode create() => RestrictedMode._();
+  @$core.override
   RestrictedMode createEmptyInstance() => create();
-  static $pb.PbList<RestrictedMode> createRepeated() => $pb.PbList<RestrictedMode>();
+  static $pb.PbList<RestrictedMode> createRepeated() =>
+      $pb.PbList<RestrictedMode>();
   @$core.pragma('dart2js:noInline')
-  static RestrictedMode getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RestrictedMode>(create);
+  static RestrictedMode getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<RestrictedMode>(create);
   static RestrictedMode? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.bool get teenagers => $_getBF(0);
   @$pb.TagNumber(1)
-  set teenagers($core.bool v) { $_setBool(0, v); }
+  set teenagers($core.bool value) => $_setBool(0, value);
   @$pb.TagNumber(1)
   $core.bool hasTeenagers() => $_has(0);
   @$pb.TagNumber(1)
@@ -3521,7 +3819,7 @@ class RestrictedMode extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool get lessons => $_getBF(1);
   @$pb.TagNumber(2)
-  set lessons($core.bool v) { $_setBool(1, v); }
+  set lessons($core.bool value) => $_setBool(1, value);
   @$pb.TagNumber(2)
   $core.bool hasLessons() => $_has(1);
   @$pb.TagNumber(2)
@@ -3534,54 +3832,55 @@ class SelectItem extends $pb.GeneratedMessage {
     $core.String? text,
     $core.bool? selected,
   }) {
-    final $result = create();
-    if (itemType != null) {
-      $result.itemType = itemType;
-    }
-    if (text != null) {
-      $result.text = text;
-    }
-    if (selected != null) {
-      $result.selected = selected;
-    }
-    return $result;
+    final result = create();
+    if (itemType != null) result.itemType = itemType;
+    if (text != null) result.text = text;
+    if (selected != null) result.selected = selected;
+    return result;
   }
-  SelectItem._() : super();
-  factory SelectItem.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory SelectItem.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SelectItem', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..a<$core.int>(1, _omitFieldNames ? '' : 'itemType', $pb.PbFieldType.O3)
+  SelectItem._();
+
+  factory SelectItem.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SelectItem.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SelectItem',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aI(1, _omitFieldNames ? '' : 'itemType')
     ..aOS(2, _omitFieldNames ? '' : 'text')
     ..aOB(3, _omitFieldNames ? '' : 'selected')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  SelectItem clone() => SelectItem()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  SelectItem copyWith(void Function(SelectItem) updates) => super.copyWith((message) => updates(message as SelectItem)) as SelectItem;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SelectItem clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SelectItem copyWith(void Function(SelectItem) updates) =>
+      super.copyWith((message) => updates(message as SelectItem)) as SelectItem;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static SelectItem create() => SelectItem._();
+  @$core.override
   SelectItem createEmptyInstance() => create();
   static $pb.PbList<SelectItem> createRepeated() => $pb.PbList<SelectItem>();
   @$core.pragma('dart2js:noInline')
-  static SelectItem getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SelectItem>(create);
+  static SelectItem getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SelectItem>(create);
   static SelectItem? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.int get itemType => $_getIZ(0);
   @$pb.TagNumber(1)
-  set itemType($core.int v) { $_setSignedInt32(0, v); }
+  set itemType($core.int value) => $_setSignedInt32(0, value);
   @$pb.TagNumber(1)
   $core.bool hasItemType() => $_has(0);
   @$pb.TagNumber(1)
@@ -3590,7 +3889,7 @@ class SelectItem extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get text => $_getSZ(1);
   @$pb.TagNumber(2)
-  set text($core.String v) { $_setString(1, v); }
+  set text($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasText() => $_has(1);
   @$pb.TagNumber(2)
@@ -3599,7 +3898,7 @@ class SelectItem extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.bool get selected => $_getBF(2);
   @$pb.TagNumber(3)
-  set selected($core.bool v) { $_setBool(2, v); }
+  set selected($core.bool value) => $_setBool(2, value);
   @$pb.TagNumber(3)
   $core.bool hasSelected() => $_has(2);
   @$pb.TagNumber(3)
@@ -3618,88 +3917,81 @@ class Session extends $pb.GeneratedMessage {
     $core.bool? isMuted,
     $core.String? chatUrl,
     SessionOperation? operation,
-    $pb.PbMap<$core.String, $core.String>? traceParams,
+    $core.Iterable<$core.MapEntry<$core.String, $core.String>>? traceParams,
   }) {
-    final $result = create();
-    if (id != null) {
-      $result.id = id;
-    }
-    if (sessionInfo != null) {
-      $result.sessionInfo = sessionInfo;
-    }
-    if (unread != null) {
-      $result.unread = unread;
-    }
-    if (msgSummary != null) {
-      $result.msgSummary = msgSummary;
-    }
-    if (timestamp != null) {
-      $result.timestamp = timestamp;
-    }
-    if (isPinned != null) {
-      $result.isPinned = isPinned;
-    }
-    if (sequenceNumber != null) {
-      $result.sequenceNumber = sequenceNumber;
-    }
-    if (isMuted != null) {
-      $result.isMuted = isMuted;
-    }
-    if (chatUrl != null) {
-      $result.chatUrl = chatUrl;
-    }
-    if (operation != null) {
-      $result.operation = operation;
-    }
-    if (traceParams != null) {
-      $result.traceParams.addAll(traceParams);
-    }
-    return $result;
+    final result = create();
+    if (id != null) result.id = id;
+    if (sessionInfo != null) result.sessionInfo = sessionInfo;
+    if (unread != null) result.unread = unread;
+    if (msgSummary != null) result.msgSummary = msgSummary;
+    if (timestamp != null) result.timestamp = timestamp;
+    if (isPinned != null) result.isPinned = isPinned;
+    if (sequenceNumber != null) result.sequenceNumber = sequenceNumber;
+    if (isMuted != null) result.isMuted = isMuted;
+    if (chatUrl != null) result.chatUrl = chatUrl;
+    if (operation != null) result.operation = operation;
+    if (traceParams != null) result.traceParams.addEntries(traceParams);
+    return result;
   }
-  Session._() : super();
-  factory Session.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Session.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Session', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..aOM<SessionId>(1, _omitFieldNames ? '' : 'id', subBuilder: SessionId.create)
-    ..aOM<SessionInfo>(2, _omitFieldNames ? '' : 'sessionInfo', subBuilder: SessionInfo.create)
+  Session._();
+
+  factory Session.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory Session.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'Session',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aOM<SessionId>(1, _omitFieldNames ? '' : 'id',
+        subBuilder: SessionId.create)
+    ..aOM<SessionInfo>(2, _omitFieldNames ? '' : 'sessionInfo',
+        subBuilder: SessionInfo.create)
     ..aOM<Unread>(3, _omitFieldNames ? '' : 'unread', subBuilder: Unread.create)
-    ..aOM<MsgSummary>(4, _omitFieldNames ? '' : 'msgSummary', subBuilder: MsgSummary.create)
+    ..aOM<MsgSummary>(4, _omitFieldNames ? '' : 'msgSummary',
+        subBuilder: MsgSummary.create)
     ..aInt64(5, _omitFieldNames ? '' : 'timestamp')
     ..aOB(6, _omitFieldNames ? '' : 'isPinned')
     ..aInt64(7, _omitFieldNames ? '' : 'sequenceNumber')
     ..aOB(8, _omitFieldNames ? '' : 'isMuted')
     ..aOS(9, _omitFieldNames ? '' : 'chatUrl')
-    ..aOM<SessionOperation>(10, _omitFieldNames ? '' : 'operation', subBuilder: SessionOperation.create)
-    ..m<$core.String, $core.String>(11, _omitFieldNames ? '' : 'traceParams', entryClassName: 'Session.TraceParamsEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OS, packageName: const $pb.PackageName('bilibili.app.im.v1'))
-    ..hasRequiredFields = false
-  ;
+    ..aOM<SessionOperation>(10, _omitFieldNames ? '' : 'operation',
+        subBuilder: SessionOperation.create)
+    ..m<$core.String, $core.String>(11, _omitFieldNames ? '' : 'traceParams',
+        entryClassName: 'Session.TraceParamsEntry',
+        keyFieldType: $pb.PbFieldType.OS,
+        valueFieldType: $pb.PbFieldType.OS,
+        packageName: const $pb.PackageName('bilibili.app.im.v1'))
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  Session clone() => Session()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  Session copyWith(void Function(Session) updates) => super.copyWith((message) => updates(message as Session)) as Session;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Session clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Session copyWith(void Function(Session) updates) =>
+      super.copyWith((message) => updates(message as Session)) as Session;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static Session create() => Session._();
+  @$core.override
   Session createEmptyInstance() => create();
   static $pb.PbList<Session> createRepeated() => $pb.PbList<Session>();
   @$core.pragma('dart2js:noInline')
-  static Session getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Session>(create);
+  static Session getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Session>(create);
   static Session? _defaultInstance;
 
   @$pb.TagNumber(1)
   SessionId get id => $_getN(0);
   @$pb.TagNumber(1)
-  set id(SessionId v) { $_setField(1, v); }
+  set id(SessionId value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
@@ -3710,7 +4002,7 @@ class Session extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   SessionInfo get sessionInfo => $_getN(1);
   @$pb.TagNumber(2)
-  set sessionInfo(SessionInfo v) { $_setField(2, v); }
+  set sessionInfo(SessionInfo value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasSessionInfo() => $_has(1);
   @$pb.TagNumber(2)
@@ -3721,7 +4013,7 @@ class Session extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   Unread get unread => $_getN(2);
   @$pb.TagNumber(3)
-  set unread(Unread v) { $_setField(3, v); }
+  set unread(Unread value) => $_setField(3, value);
   @$pb.TagNumber(3)
   $core.bool hasUnread() => $_has(2);
   @$pb.TagNumber(3)
@@ -3732,7 +4024,7 @@ class Session extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   MsgSummary get msgSummary => $_getN(3);
   @$pb.TagNumber(4)
-  set msgSummary(MsgSummary v) { $_setField(4, v); }
+  set msgSummary(MsgSummary value) => $_setField(4, value);
   @$pb.TagNumber(4)
   $core.bool hasMsgSummary() => $_has(3);
   @$pb.TagNumber(4)
@@ -3743,7 +4035,7 @@ class Session extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $fixnum.Int64 get timestamp => $_getI64(4);
   @$pb.TagNumber(5)
-  set timestamp($fixnum.Int64 v) { $_setInt64(4, v); }
+  set timestamp($fixnum.Int64 value) => $_setInt64(4, value);
   @$pb.TagNumber(5)
   $core.bool hasTimestamp() => $_has(4);
   @$pb.TagNumber(5)
@@ -3752,7 +4044,7 @@ class Session extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   $core.bool get isPinned => $_getBF(5);
   @$pb.TagNumber(6)
-  set isPinned($core.bool v) { $_setBool(5, v); }
+  set isPinned($core.bool value) => $_setBool(5, value);
   @$pb.TagNumber(6)
   $core.bool hasIsPinned() => $_has(5);
   @$pb.TagNumber(6)
@@ -3761,7 +4053,7 @@ class Session extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   $fixnum.Int64 get sequenceNumber => $_getI64(6);
   @$pb.TagNumber(7)
-  set sequenceNumber($fixnum.Int64 v) { $_setInt64(6, v); }
+  set sequenceNumber($fixnum.Int64 value) => $_setInt64(6, value);
   @$pb.TagNumber(7)
   $core.bool hasSequenceNumber() => $_has(6);
   @$pb.TagNumber(7)
@@ -3770,7 +4062,7 @@ class Session extends $pb.GeneratedMessage {
   @$pb.TagNumber(8)
   $core.bool get isMuted => $_getBF(7);
   @$pb.TagNumber(8)
-  set isMuted($core.bool v) { $_setBool(7, v); }
+  set isMuted($core.bool value) => $_setBool(7, value);
   @$pb.TagNumber(8)
   $core.bool hasIsMuted() => $_has(7);
   @$pb.TagNumber(8)
@@ -3779,7 +4071,7 @@ class Session extends $pb.GeneratedMessage {
   @$pb.TagNumber(9)
   $core.String get chatUrl => $_getSZ(8);
   @$pb.TagNumber(9)
-  set chatUrl($core.String v) { $_setString(8, v); }
+  set chatUrl($core.String value) => $_setString(8, value);
   @$pb.TagNumber(9)
   $core.bool hasChatUrl() => $_has(8);
   @$pb.TagNumber(9)
@@ -3788,7 +4080,7 @@ class Session extends $pb.GeneratedMessage {
   @$pb.TagNumber(10)
   SessionOperation get operation => $_getN(9);
   @$pb.TagNumber(10)
-  set operation(SessionOperation v) { $_setField(10, v); }
+  set operation(SessionOperation value) => $_setField(10, value);
   @$pb.TagNumber(10)
   $core.bool hasOperation() => $_has(9);
   @$pb.TagNumber(10)
@@ -3800,14 +4092,7 @@ class Session extends $pb.GeneratedMessage {
   $pb.PbMap<$core.String, $core.String> get traceParams => $_getMap(10);
 }
 
-enum SessionId_Id {
-  privateId, 
-  groupId, 
-  foldId, 
-  systemId, 
-  customerId, 
-  notSet
-}
+enum SessionId_Id { privateId, groupId, foldId, systemId, customerId, notSet }
 
 class SessionId extends $pb.GeneratedMessage {
   factory SessionId({
@@ -3817,74 +4102,85 @@ class SessionId extends $pb.GeneratedMessage {
     SystemId? systemId,
     CustomerId? customerId,
   }) {
-    final $result = create();
-    if (privateId != null) {
-      $result.privateId = privateId;
-    }
-    if (groupId != null) {
-      $result.groupId = groupId;
-    }
-    if (foldId != null) {
-      $result.foldId = foldId;
-    }
-    if (systemId != null) {
-      $result.systemId = systemId;
-    }
-    if (customerId != null) {
-      $result.customerId = customerId;
-    }
-    return $result;
+    final result = create();
+    if (privateId != null) result.privateId = privateId;
+    if (groupId != null) result.groupId = groupId;
+    if (foldId != null) result.foldId = foldId;
+    if (systemId != null) result.systemId = systemId;
+    if (customerId != null) result.customerId = customerId;
+    return result;
   }
-  SessionId._() : super();
-  factory SessionId.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory SessionId.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  SessionId._();
+
+  factory SessionId.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SessionId.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static const $core.Map<$core.int, SessionId_Id> _SessionId_IdByTag = {
-    1 : SessionId_Id.privateId,
-    2 : SessionId_Id.groupId,
-    3 : SessionId_Id.foldId,
-    4 : SessionId_Id.systemId,
-    5 : SessionId_Id.customerId,
-    0 : SessionId_Id.notSet
+    1: SessionId_Id.privateId,
+    2: SessionId_Id.groupId,
+    3: SessionId_Id.foldId,
+    4: SessionId_Id.systemId,
+    5: SessionId_Id.customerId,
+    0: SessionId_Id.notSet
   };
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SessionId', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SessionId',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..oo(0, [1, 2, 3, 4, 5])
-    ..aOM<PrivateId>(1, _omitFieldNames ? '' : 'privateId', subBuilder: PrivateId.create)
-    ..aOM<GroupId>(2, _omitFieldNames ? '' : 'groupId', subBuilder: GroupId.create)
+    ..aOM<PrivateId>(1, _omitFieldNames ? '' : 'privateId',
+        subBuilder: PrivateId.create)
+    ..aOM<GroupId>(2, _omitFieldNames ? '' : 'groupId',
+        subBuilder: GroupId.create)
     ..aOM<FoldId>(3, _omitFieldNames ? '' : 'foldId', subBuilder: FoldId.create)
-    ..aOM<SystemId>(4, _omitFieldNames ? '' : 'systemId', subBuilder: SystemId.create)
-    ..aOM<CustomerId>(5, _omitFieldNames ? '' : 'customerId', subBuilder: CustomerId.create)
-    ..hasRequiredFields = false
-  ;
+    ..aOM<SystemId>(4, _omitFieldNames ? '' : 'systemId',
+        subBuilder: SystemId.create)
+    ..aOM<CustomerId>(5, _omitFieldNames ? '' : 'customerId',
+        subBuilder: CustomerId.create)
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  SessionId clone() => SessionId()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  SessionId copyWith(void Function(SessionId) updates) => super.copyWith((message) => updates(message as SessionId)) as SessionId;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionId clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionId copyWith(void Function(SessionId) updates) =>
+      super.copyWith((message) => updates(message as SessionId)) as SessionId;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static SessionId create() => SessionId._();
+  @$core.override
   SessionId createEmptyInstance() => create();
   static $pb.PbList<SessionId> createRepeated() => $pb.PbList<SessionId>();
   @$core.pragma('dart2js:noInline')
-  static SessionId getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SessionId>(create);
+  static SessionId getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SessionId>(create);
   static SessionId? _defaultInstance;
 
+  @$pb.TagNumber(1)
+  @$pb.TagNumber(2)
+  @$pb.TagNumber(3)
+  @$pb.TagNumber(4)
+  @$pb.TagNumber(5)
   SessionId_Id whichId() => _SessionId_IdByTag[$_whichOneof(0)]!;
+  @$pb.TagNumber(1)
+  @$pb.TagNumber(2)
+  @$pb.TagNumber(3)
+  @$pb.TagNumber(4)
+  @$pb.TagNumber(5)
   void clearId() => $_clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
   PrivateId get privateId => $_getN(0);
   @$pb.TagNumber(1)
-  set privateId(PrivateId v) { $_setField(1, v); }
+  set privateId(PrivateId value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasPrivateId() => $_has(0);
   @$pb.TagNumber(1)
@@ -3895,7 +4191,7 @@ class SessionId extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   GroupId get groupId => $_getN(1);
   @$pb.TagNumber(2)
-  set groupId(GroupId v) { $_setField(2, v); }
+  set groupId(GroupId value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasGroupId() => $_has(1);
   @$pb.TagNumber(2)
@@ -3906,7 +4202,7 @@ class SessionId extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   FoldId get foldId => $_getN(2);
   @$pb.TagNumber(3)
-  set foldId(FoldId v) { $_setField(3, v); }
+  set foldId(FoldId value) => $_setField(3, value);
   @$pb.TagNumber(3)
   $core.bool hasFoldId() => $_has(2);
   @$pb.TagNumber(3)
@@ -3917,7 +4213,7 @@ class SessionId extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   SystemId get systemId => $_getN(3);
   @$pb.TagNumber(4)
-  set systemId(SystemId v) { $_setField(4, v); }
+  set systemId(SystemId value) => $_setField(4, value);
   @$pb.TagNumber(4)
   $core.bool hasSystemId() => $_has(3);
   @$pb.TagNumber(4)
@@ -3928,7 +4224,7 @@ class SessionId extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   CustomerId get customerId => $_getN(4);
   @$pb.TagNumber(5)
-  set customerId(CustomerId v) { $_setField(5, v); }
+  set customerId(CustomerId value) => $_setField(5, value);
   @$pb.TagNumber(5)
   $core.bool hasCustomerId() => $_has(4);
   @$pb.TagNumber(5)
@@ -3946,66 +4242,65 @@ class SessionInfo extends $pb.GeneratedMessage {
     UserLabel? userLabel,
     $core.bool? isLive,
   }) {
-    final $result = create();
-    if (sessionName != null) {
-      $result.sessionName = sessionName;
-    }
-    if (nameRender != null) {
-      $result.nameRender = nameRender;
-    }
-    if (avatar != null) {
-      $result.avatar = avatar;
-    }
-    if (vipInfo != null) {
-      $result.vipInfo = vipInfo;
-    }
-    if (userLabel != null) {
-      $result.userLabel = userLabel;
-    }
-    if (isLive != null) {
-      $result.isLive = isLive;
-    }
-    return $result;
+    final result = create();
+    if (sessionName != null) result.sessionName = sessionName;
+    if (nameRender != null) result.nameRender = nameRender;
+    if (avatar != null) result.avatar = avatar;
+    if (vipInfo != null) result.vipInfo = vipInfo;
+    if (userLabel != null) result.userLabel = userLabel;
+    if (isLive != null) result.isLive = isLive;
+    return result;
   }
-  SessionInfo._() : super();
-  factory SessionInfo.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory SessionInfo.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SessionInfo', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  SessionInfo._();
+
+  factory SessionInfo.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SessionInfo.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SessionInfo',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'sessionName')
-    ..aOM<$1.NameRender>(2, _omitFieldNames ? '' : 'nameRender', subBuilder: $1.NameRender.create)
-    ..aOM<$0.AvatarItem>(3, _omitFieldNames ? '' : 'avatar', subBuilder: $0.AvatarItem.create)
+    ..aOM<$1.NameRender>(2, _omitFieldNames ? '' : 'nameRender',
+        subBuilder: $1.NameRender.create)
+    ..aOM<$0.AvatarItem>(3, _omitFieldNames ? '' : 'avatar',
+        subBuilder: $0.AvatarItem.create)
     ..aOS(4, _omitFieldNames ? '' : 'vipInfo')
-    ..aOM<UserLabel>(5, _omitFieldNames ? '' : 'userLabel', subBuilder: UserLabel.create)
+    ..aOM<UserLabel>(5, _omitFieldNames ? '' : 'userLabel',
+        subBuilder: UserLabel.create)
     ..aOB(6, _omitFieldNames ? '' : 'isLive')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  SessionInfo clone() => SessionInfo()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  SessionInfo copyWith(void Function(SessionInfo) updates) => super.copyWith((message) => updates(message as SessionInfo)) as SessionInfo;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionInfo clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionInfo copyWith(void Function(SessionInfo) updates) =>
+      super.copyWith((message) => updates(message as SessionInfo))
+          as SessionInfo;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static SessionInfo create() => SessionInfo._();
+  @$core.override
   SessionInfo createEmptyInstance() => create();
   static $pb.PbList<SessionInfo> createRepeated() => $pb.PbList<SessionInfo>();
   @$core.pragma('dart2js:noInline')
-  static SessionInfo getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SessionInfo>(create);
+  static SessionInfo getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SessionInfo>(create);
   static SessionInfo? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get sessionName => $_getSZ(0);
   @$pb.TagNumber(1)
-  set sessionName($core.String v) { $_setString(0, v); }
+  set sessionName($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasSessionName() => $_has(0);
   @$pb.TagNumber(1)
@@ -4014,7 +4309,7 @@ class SessionInfo extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $1.NameRender get nameRender => $_getN(1);
   @$pb.TagNumber(2)
-  set nameRender($1.NameRender v) { $_setField(2, v); }
+  set nameRender($1.NameRender value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasNameRender() => $_has(1);
   @$pb.TagNumber(2)
@@ -4025,7 +4320,7 @@ class SessionInfo extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $0.AvatarItem get avatar => $_getN(2);
   @$pb.TagNumber(3)
-  set avatar($0.AvatarItem v) { $_setField(3, v); }
+  set avatar($0.AvatarItem value) => $_setField(3, value);
   @$pb.TagNumber(3)
   $core.bool hasAvatar() => $_has(2);
   @$pb.TagNumber(3)
@@ -4036,7 +4331,7 @@ class SessionInfo extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.String get vipInfo => $_getSZ(3);
   @$pb.TagNumber(4)
-  set vipInfo($core.String v) { $_setString(3, v); }
+  set vipInfo($core.String value) => $_setString(3, value);
   @$pb.TagNumber(4)
   $core.bool hasVipInfo() => $_has(3);
   @$pb.TagNumber(4)
@@ -4045,7 +4340,7 @@ class SessionInfo extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   UserLabel get userLabel => $_getN(4);
   @$pb.TagNumber(5)
-  set userLabel(UserLabel v) { $_setField(5, v); }
+  set userLabel(UserLabel value) => $_setField(5, value);
   @$pb.TagNumber(5)
   $core.bool hasUserLabel() => $_has(4);
   @$pb.TagNumber(5)
@@ -4056,7 +4351,7 @@ class SessionInfo extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   $core.bool get isLive => $_getBF(5);
   @$pb.TagNumber(6)
-  set isLive($core.bool v) { $_setBool(5, v); }
+  set isLive($core.bool value) => $_setBool(5, value);
   @$pb.TagNumber(6)
   $core.bool hasIsLive() => $_has(5);
   @$pb.TagNumber(6)
@@ -4070,58 +4365,63 @@ class SessionListExtraInfo extends $pb.GeneratedMessage {
     $core.String? customerHintTitle,
     BehaviorAlertToast? behaviorAlertToast,
   }) {
-    final $result = create();
-    if (autoReplyToast != null) {
-      $result.autoReplyToast = autoReplyToast;
-    }
-    if (showAntiHarassmentPopup != null) {
-      $result.showAntiHarassmentPopup = showAntiHarassmentPopup;
-    }
-    if (customerHintTitle != null) {
-      $result.customerHintTitle = customerHintTitle;
-    }
-    if (behaviorAlertToast != null) {
-      $result.behaviorAlertToast = behaviorAlertToast;
-    }
-    return $result;
+    final result = create();
+    if (autoReplyToast != null) result.autoReplyToast = autoReplyToast;
+    if (showAntiHarassmentPopup != null)
+      result.showAntiHarassmentPopup = showAntiHarassmentPopup;
+    if (customerHintTitle != null) result.customerHintTitle = customerHintTitle;
+    if (behaviorAlertToast != null)
+      result.behaviorAlertToast = behaviorAlertToast;
+    return result;
   }
-  SessionListExtraInfo._() : super();
-  factory SessionListExtraInfo.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory SessionListExtraInfo.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SessionListExtraInfo', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..aOM<AutoReplyToast>(1, _omitFieldNames ? '' : 'autoReplyToast', subBuilder: AutoReplyToast.create)
+  SessionListExtraInfo._();
+
+  factory SessionListExtraInfo.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SessionListExtraInfo.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SessionListExtraInfo',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aOM<AutoReplyToast>(1, _omitFieldNames ? '' : 'autoReplyToast',
+        subBuilder: AutoReplyToast.create)
     ..aOB(2, _omitFieldNames ? '' : 'showAntiHarassmentPopup')
     ..aOS(3, _omitFieldNames ? '' : 'customerHintTitle')
-    ..aOM<BehaviorAlertToast>(4, _omitFieldNames ? '' : 'behaviorAlertToast', subBuilder: BehaviorAlertToast.create)
-    ..hasRequiredFields = false
-  ;
+    ..aOM<BehaviorAlertToast>(4, _omitFieldNames ? '' : 'behaviorAlertToast',
+        subBuilder: BehaviorAlertToast.create)
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  SessionListExtraInfo clone() => SessionListExtraInfo()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  SessionListExtraInfo copyWith(void Function(SessionListExtraInfo) updates) => super.copyWith((message) => updates(message as SessionListExtraInfo)) as SessionListExtraInfo;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionListExtraInfo clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionListExtraInfo copyWith(void Function(SessionListExtraInfo) updates) =>
+      super.copyWith((message) => updates(message as SessionListExtraInfo))
+          as SessionListExtraInfo;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static SessionListExtraInfo create() => SessionListExtraInfo._();
+  @$core.override
   SessionListExtraInfo createEmptyInstance() => create();
-  static $pb.PbList<SessionListExtraInfo> createRepeated() => $pb.PbList<SessionListExtraInfo>();
+  static $pb.PbList<SessionListExtraInfo> createRepeated() =>
+      $pb.PbList<SessionListExtraInfo>();
   @$core.pragma('dart2js:noInline')
-  static SessionListExtraInfo getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SessionListExtraInfo>(create);
+  static SessionListExtraInfo getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SessionListExtraInfo>(create);
   static SessionListExtraInfo? _defaultInstance;
 
   @$pb.TagNumber(1)
   AutoReplyToast get autoReplyToast => $_getN(0);
   @$pb.TagNumber(1)
-  set autoReplyToast(AutoReplyToast v) { $_setField(1, v); }
+  set autoReplyToast(AutoReplyToast value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasAutoReplyToast() => $_has(0);
   @$pb.TagNumber(1)
@@ -4132,7 +4432,7 @@ class SessionListExtraInfo extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool get showAntiHarassmentPopup => $_getBF(1);
   @$pb.TagNumber(2)
-  set showAntiHarassmentPopup($core.bool v) { $_setBool(1, v); }
+  set showAntiHarassmentPopup($core.bool value) => $_setBool(1, value);
   @$pb.TagNumber(2)
   $core.bool hasShowAntiHarassmentPopup() => $_has(1);
   @$pb.TagNumber(2)
@@ -4141,7 +4441,7 @@ class SessionListExtraInfo extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get customerHintTitle => $_getSZ(2);
   @$pb.TagNumber(3)
-  set customerHintTitle($core.String v) { $_setString(2, v); }
+  set customerHintTitle($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasCustomerHintTitle() => $_has(2);
   @$pb.TagNumber(3)
@@ -4150,7 +4450,7 @@ class SessionListExtraInfo extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   BehaviorAlertToast get behaviorAlertToast => $_getN(3);
   @$pb.TagNumber(4)
-  set behaviorAlertToast(BehaviorAlertToast v) { $_setField(4, v); }
+  set behaviorAlertToast(BehaviorAlertToast value) => $_setField(4, value);
   @$pb.TagNumber(4)
   $core.bool hasBehaviorAlertToast() => $_has(3);
   @$pb.TagNumber(4)
@@ -4164,44 +4464,53 @@ class SessionListUpdateReply extends $pb.GeneratedMessage {
     $core.Iterable<Session>? sessions,
     UpdateSessionParams? updateSessionParams,
   }) {
-    final $result = create();
-    if (sessions != null) {
-      $result.sessions.addAll(sessions);
-    }
-    if (updateSessionParams != null) {
-      $result.updateSessionParams = updateSessionParams;
-    }
-    return $result;
+    final result = create();
+    if (sessions != null) result.sessions.addAll(sessions);
+    if (updateSessionParams != null)
+      result.updateSessionParams = updateSessionParams;
+    return result;
   }
-  SessionListUpdateReply._() : super();
-  factory SessionListUpdateReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory SessionListUpdateReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SessionListUpdateReply', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..pc<Session>(1, _omitFieldNames ? '' : 'sessions', $pb.PbFieldType.PM, subBuilder: Session.create)
-    ..aOM<UpdateSessionParams>(2, _omitFieldNames ? '' : 'updateSessionParams', subBuilder: UpdateSessionParams.create)
-    ..hasRequiredFields = false
-  ;
+  SessionListUpdateReply._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  SessionListUpdateReply clone() => SessionListUpdateReply()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  SessionListUpdateReply copyWith(void Function(SessionListUpdateReply) updates) => super.copyWith((message) => updates(message as SessionListUpdateReply)) as SessionListUpdateReply;
+  factory SessionListUpdateReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SessionListUpdateReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SessionListUpdateReply',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..pPM<Session>(1, _omitFieldNames ? '' : 'sessions',
+        subBuilder: Session.create)
+    ..aOM<UpdateSessionParams>(2, _omitFieldNames ? '' : 'updateSessionParams',
+        subBuilder: UpdateSessionParams.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionListUpdateReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionListUpdateReply copyWith(
+          void Function(SessionListUpdateReply) updates) =>
+      super.copyWith((message) => updates(message as SessionListUpdateReply))
+          as SessionListUpdateReply;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static SessionListUpdateReply create() => SessionListUpdateReply._();
+  @$core.override
   SessionListUpdateReply createEmptyInstance() => create();
-  static $pb.PbList<SessionListUpdateReply> createRepeated() => $pb.PbList<SessionListUpdateReply>();
+  static $pb.PbList<SessionListUpdateReply> createRepeated() =>
+      $pb.PbList<SessionListUpdateReply>();
   @$core.pragma('dart2js:noInline')
-  static SessionListUpdateReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SessionListUpdateReply>(create);
+  static SessionListUpdateReply getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SessionListUpdateReply>(create);
   static SessionListUpdateReply? _defaultInstance;
 
   @$pb.TagNumber(1)
@@ -4210,7 +4519,7 @@ class SessionListUpdateReply extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   UpdateSessionParams get updateSessionParams => $_getN(1);
   @$pb.TagNumber(2)
-  set updateSessionParams(UpdateSessionParams v) { $_setField(2, v); }
+  set updateSessionParams(UpdateSessionParams value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasUpdateSessionParams() => $_has(1);
   @$pb.TagNumber(2)
@@ -4226,58 +4535,63 @@ class SessionListUpdateReq extends $pb.GeneratedMessage {
     SessionPageType? pageType,
     SessionFilterType? filterType,
   }) {
-    final $result = create();
-    if (restrictedMode != null) {
-      $result.restrictedMode = restrictedMode;
-    }
-    if (updateParams != null) {
-      $result.updateParams = updateParams;
-    }
-    if (pageType != null) {
-      $result.pageType = pageType;
-    }
-    if (filterType != null) {
-      $result.filterType = filterType;
-    }
-    return $result;
+    final result = create();
+    if (restrictedMode != null) result.restrictedMode = restrictedMode;
+    if (updateParams != null) result.updateParams = updateParams;
+    if (pageType != null) result.pageType = pageType;
+    if (filterType != null) result.filterType = filterType;
+    return result;
   }
-  SessionListUpdateReq._() : super();
-  factory SessionListUpdateReq.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory SessionListUpdateReq.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SessionListUpdateReq', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..aOM<RestrictedMode>(1, _omitFieldNames ? '' : 'restrictedMode', subBuilder: RestrictedMode.create)
-    ..aOM<UpdateSessionParams>(2, _omitFieldNames ? '' : 'updateParams', subBuilder: UpdateSessionParams.create)
-    ..e<SessionPageType>(3, _omitFieldNames ? '' : 'pageType', $pb.PbFieldType.OE, defaultOrMaker: SessionPageType.SESSION_PAGE_TYPE_UNKNOWN, valueOf: SessionPageType.valueOf, enumValues: SessionPageType.values)
-    ..e<SessionFilterType>(4, _omitFieldNames ? '' : 'filterType', $pb.PbFieldType.OE, defaultOrMaker: SessionFilterType.FILTER_DEFAULT, valueOf: SessionFilterType.valueOf, enumValues: SessionFilterType.values)
-    ..hasRequiredFields = false
-  ;
+  SessionListUpdateReq._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  SessionListUpdateReq clone() => SessionListUpdateReq()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  SessionListUpdateReq copyWith(void Function(SessionListUpdateReq) updates) => super.copyWith((message) => updates(message as SessionListUpdateReq)) as SessionListUpdateReq;
+  factory SessionListUpdateReq.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SessionListUpdateReq.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SessionListUpdateReq',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aOM<RestrictedMode>(1, _omitFieldNames ? '' : 'restrictedMode',
+        subBuilder: RestrictedMode.create)
+    ..aOM<UpdateSessionParams>(2, _omitFieldNames ? '' : 'updateParams',
+        subBuilder: UpdateSessionParams.create)
+    ..aE<SessionPageType>(3, _omitFieldNames ? '' : 'pageType',
+        enumValues: SessionPageType.values)
+    ..aE<SessionFilterType>(4, _omitFieldNames ? '' : 'filterType',
+        enumValues: SessionFilterType.values)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionListUpdateReq clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionListUpdateReq copyWith(void Function(SessionListUpdateReq) updates) =>
+      super.copyWith((message) => updates(message as SessionListUpdateReq))
+          as SessionListUpdateReq;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static SessionListUpdateReq create() => SessionListUpdateReq._();
+  @$core.override
   SessionListUpdateReq createEmptyInstance() => create();
-  static $pb.PbList<SessionListUpdateReq> createRepeated() => $pb.PbList<SessionListUpdateReq>();
+  static $pb.PbList<SessionListUpdateReq> createRepeated() =>
+      $pb.PbList<SessionListUpdateReq>();
   @$core.pragma('dart2js:noInline')
-  static SessionListUpdateReq getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SessionListUpdateReq>(create);
+  static SessionListUpdateReq getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SessionListUpdateReq>(create);
   static SessionListUpdateReq? _defaultInstance;
 
   @$pb.TagNumber(1)
   RestrictedMode get restrictedMode => $_getN(0);
   @$pb.TagNumber(1)
-  set restrictedMode(RestrictedMode v) { $_setField(1, v); }
+  set restrictedMode(RestrictedMode value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasRestrictedMode() => $_has(0);
   @$pb.TagNumber(1)
@@ -4288,7 +4602,7 @@ class SessionListUpdateReq extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   UpdateSessionParams get updateParams => $_getN(1);
   @$pb.TagNumber(2)
-  set updateParams(UpdateSessionParams v) { $_setField(2, v); }
+  set updateParams(UpdateSessionParams value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasUpdateParams() => $_has(1);
   @$pb.TagNumber(2)
@@ -4299,7 +4613,7 @@ class SessionListUpdateReq extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   SessionPageType get pageType => $_getN(2);
   @$pb.TagNumber(3)
-  set pageType(SessionPageType v) { $_setField(3, v); }
+  set pageType(SessionPageType value) => $_setField(3, value);
   @$pb.TagNumber(3)
   $core.bool hasPageType() => $_has(2);
   @$pb.TagNumber(3)
@@ -4308,7 +4622,7 @@ class SessionListUpdateReq extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   SessionFilterType get filterType => $_getN(3);
   @$pb.TagNumber(4)
-  set filterType(SessionFilterType v) { $_setField(4, v); }
+  set filterType(SessionFilterType value) => $_setField(4, value);
   @$pb.TagNumber(4)
   $core.bool hasFilterType() => $_has(3);
   @$pb.TagNumber(4)
@@ -4326,74 +4640,76 @@ class SessionMainReply extends $pb.GeneratedMessage {
     $core.Iterable<ThreeDotItem>? outsideItem,
     SessionListExtraInfo? extraInfo,
   }) {
-    final $result = create();
-    if (paginationParams != null) {
-      $result.paginationParams = paginationParams;
-    }
-    if (updateSessionParams != null) {
-      $result.updateSessionParams = updateSessionParams;
-    }
-    if (quickLinkConfig != null) {
-      $result.quickLinkConfig = quickLinkConfig;
-    }
-    if (filterConfig != null) {
-      $result.filterConfig = filterConfig;
-    }
-    if (sessions != null) {
-      $result.sessions.addAll(sessions);
-    }
-    if (threeDotItems != null) {
-      $result.threeDotItems.addAll(threeDotItems);
-    }
-    if (outsideItem != null) {
-      $result.outsideItem.addAll(outsideItem);
-    }
-    if (extraInfo != null) {
-      $result.extraInfo = extraInfo;
-    }
-    return $result;
+    final result = create();
+    if (paginationParams != null) result.paginationParams = paginationParams;
+    if (updateSessionParams != null)
+      result.updateSessionParams = updateSessionParams;
+    if (quickLinkConfig != null) result.quickLinkConfig = quickLinkConfig;
+    if (filterConfig != null) result.filterConfig = filterConfig;
+    if (sessions != null) result.sessions.addAll(sessions);
+    if (threeDotItems != null) result.threeDotItems.addAll(threeDotItems);
+    if (outsideItem != null) result.outsideItem.addAll(outsideItem);
+    if (extraInfo != null) result.extraInfo = extraInfo;
+    return result;
   }
-  SessionMainReply._() : super();
-  factory SessionMainReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory SessionMainReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SessionMainReply', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..aOM<PaginationParams>(1, _omitFieldNames ? '' : 'paginationParams', subBuilder: PaginationParams.create)
-    ..aOM<UpdateSessionParams>(2, _omitFieldNames ? '' : 'updateSessionParams', subBuilder: UpdateSessionParams.create)
-    ..aOM<QuickLinkConfig>(3, _omitFieldNames ? '' : 'quickLinkConfig', subBuilder: QuickLinkConfig.create)
-    ..aOM<FilterConfig>(4, _omitFieldNames ? '' : 'filterConfig', subBuilder: FilterConfig.create)
-    ..pc<Session>(5, _omitFieldNames ? '' : 'sessions', $pb.PbFieldType.PM, subBuilder: Session.create)
-    ..pc<ThreeDotItem>(6, _omitFieldNames ? '' : 'threeDotItems', $pb.PbFieldType.PM, subBuilder: ThreeDotItem.create)
-    ..pc<ThreeDotItem>(7, _omitFieldNames ? '' : 'outsideItem', $pb.PbFieldType.PM, subBuilder: ThreeDotItem.create)
-    ..aOM<SessionListExtraInfo>(8, _omitFieldNames ? '' : 'extraInfo', subBuilder: SessionListExtraInfo.create)
-    ..hasRequiredFields = false
-  ;
+  SessionMainReply._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  SessionMainReply clone() => SessionMainReply()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  SessionMainReply copyWith(void Function(SessionMainReply) updates) => super.copyWith((message) => updates(message as SessionMainReply)) as SessionMainReply;
+  factory SessionMainReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SessionMainReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SessionMainReply',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aOM<PaginationParams>(1, _omitFieldNames ? '' : 'paginationParams',
+        subBuilder: PaginationParams.create)
+    ..aOM<UpdateSessionParams>(2, _omitFieldNames ? '' : 'updateSessionParams',
+        subBuilder: UpdateSessionParams.create)
+    ..aOM<QuickLinkConfig>(3, _omitFieldNames ? '' : 'quickLinkConfig',
+        subBuilder: QuickLinkConfig.create)
+    ..aOM<FilterConfig>(4, _omitFieldNames ? '' : 'filterConfig',
+        subBuilder: FilterConfig.create)
+    ..pPM<Session>(5, _omitFieldNames ? '' : 'sessions',
+        subBuilder: Session.create)
+    ..pPM<ThreeDotItem>(6, _omitFieldNames ? '' : 'threeDotItems',
+        subBuilder: ThreeDotItem.create)
+    ..pPM<ThreeDotItem>(7, _omitFieldNames ? '' : 'outsideItem',
+        subBuilder: ThreeDotItem.create)
+    ..aOM<SessionListExtraInfo>(8, _omitFieldNames ? '' : 'extraInfo',
+        subBuilder: SessionListExtraInfo.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionMainReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionMainReply copyWith(void Function(SessionMainReply) updates) =>
+      super.copyWith((message) => updates(message as SessionMainReply))
+          as SessionMainReply;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static SessionMainReply create() => SessionMainReply._();
+  @$core.override
   SessionMainReply createEmptyInstance() => create();
-  static $pb.PbList<SessionMainReply> createRepeated() => $pb.PbList<SessionMainReply>();
+  static $pb.PbList<SessionMainReply> createRepeated() =>
+      $pb.PbList<SessionMainReply>();
   @$core.pragma('dart2js:noInline')
-  static SessionMainReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SessionMainReply>(create);
+  static SessionMainReply getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SessionMainReply>(create);
   static SessionMainReply? _defaultInstance;
 
   @$pb.TagNumber(1)
   PaginationParams get paginationParams => $_getN(0);
   @$pb.TagNumber(1)
-  set paginationParams(PaginationParams v) { $_setField(1, v); }
+  set paginationParams(PaginationParams value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasPaginationParams() => $_has(0);
   @$pb.TagNumber(1)
@@ -4404,7 +4720,7 @@ class SessionMainReply extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   UpdateSessionParams get updateSessionParams => $_getN(1);
   @$pb.TagNumber(2)
-  set updateSessionParams(UpdateSessionParams v) { $_setField(2, v); }
+  set updateSessionParams(UpdateSessionParams value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasUpdateSessionParams() => $_has(1);
   @$pb.TagNumber(2)
@@ -4415,7 +4731,7 @@ class SessionMainReply extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   QuickLinkConfig get quickLinkConfig => $_getN(2);
   @$pb.TagNumber(3)
-  set quickLinkConfig(QuickLinkConfig v) { $_setField(3, v); }
+  set quickLinkConfig(QuickLinkConfig value) => $_setField(3, value);
   @$pb.TagNumber(3)
   $core.bool hasQuickLinkConfig() => $_has(2);
   @$pb.TagNumber(3)
@@ -4426,7 +4742,7 @@ class SessionMainReply extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   FilterConfig get filterConfig => $_getN(3);
   @$pb.TagNumber(4)
-  set filterConfig(FilterConfig v) { $_setField(4, v); }
+  set filterConfig(FilterConfig value) => $_setField(4, value);
   @$pb.TagNumber(4)
   $core.bool hasFilterConfig() => $_has(3);
   @$pb.TagNumber(4)
@@ -4446,7 +4762,7 @@ class SessionMainReply extends $pb.GeneratedMessage {
   @$pb.TagNumber(8)
   SessionListExtraInfo get extraInfo => $_getN(7);
   @$pb.TagNumber(8)
-  set extraInfo(SessionListExtraInfo v) { $_setField(8, v); }
+  set extraInfo(SessionListExtraInfo value) => $_setField(8, value);
   @$pb.TagNumber(8)
   $core.bool hasExtraInfo() => $_has(7);
   @$pb.TagNumber(8)
@@ -4461,54 +4777,60 @@ class SessionMainReq extends $pb.GeneratedMessage {
     PaginationParams? paginationParams,
     SessionFilterType? filterType,
   }) {
-    final $result = create();
-    if (restrictedMode != null) {
-      $result.restrictedMode = restrictedMode;
-    }
-    if (paginationParams != null) {
-      $result.paginationParams = paginationParams;
-    }
-    if (filterType != null) {
-      $result.filterType = filterType;
-    }
-    return $result;
+    final result = create();
+    if (restrictedMode != null) result.restrictedMode = restrictedMode;
+    if (paginationParams != null) result.paginationParams = paginationParams;
+    if (filterType != null) result.filterType = filterType;
+    return result;
   }
-  SessionMainReq._() : super();
-  factory SessionMainReq.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory SessionMainReq.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SessionMainReq', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..aOM<RestrictedMode>(1, _omitFieldNames ? '' : 'restrictedMode', subBuilder: RestrictedMode.create)
-    ..aOM<PaginationParams>(2, _omitFieldNames ? '' : 'paginationParams', subBuilder: PaginationParams.create)
-    ..e<SessionFilterType>(3, _omitFieldNames ? '' : 'filterType', $pb.PbFieldType.OE, defaultOrMaker: SessionFilterType.FILTER_DEFAULT, valueOf: SessionFilterType.valueOf, enumValues: SessionFilterType.values)
-    ..hasRequiredFields = false
-  ;
+  SessionMainReq._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  SessionMainReq clone() => SessionMainReq()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  SessionMainReq copyWith(void Function(SessionMainReq) updates) => super.copyWith((message) => updates(message as SessionMainReq)) as SessionMainReq;
+  factory SessionMainReq.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SessionMainReq.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SessionMainReq',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aOM<RestrictedMode>(1, _omitFieldNames ? '' : 'restrictedMode',
+        subBuilder: RestrictedMode.create)
+    ..aOM<PaginationParams>(2, _omitFieldNames ? '' : 'paginationParams',
+        subBuilder: PaginationParams.create)
+    ..aE<SessionFilterType>(3, _omitFieldNames ? '' : 'filterType',
+        enumValues: SessionFilterType.values)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionMainReq clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionMainReq copyWith(void Function(SessionMainReq) updates) =>
+      super.copyWith((message) => updates(message as SessionMainReq))
+          as SessionMainReq;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static SessionMainReq create() => SessionMainReq._();
+  @$core.override
   SessionMainReq createEmptyInstance() => create();
-  static $pb.PbList<SessionMainReq> createRepeated() => $pb.PbList<SessionMainReq>();
+  static $pb.PbList<SessionMainReq> createRepeated() =>
+      $pb.PbList<SessionMainReq>();
   @$core.pragma('dart2js:noInline')
-  static SessionMainReq getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SessionMainReq>(create);
+  static SessionMainReq getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SessionMainReq>(create);
   static SessionMainReq? _defaultInstance;
 
   @$pb.TagNumber(1)
   RestrictedMode get restrictedMode => $_getN(0);
   @$pb.TagNumber(1)
-  set restrictedMode(RestrictedMode v) { $_setField(1, v); }
+  set restrictedMode(RestrictedMode value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasRestrictedMode() => $_has(0);
   @$pb.TagNumber(1)
@@ -4519,7 +4841,7 @@ class SessionMainReq extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   PaginationParams get paginationParams => $_getN(1);
   @$pb.TagNumber(2)
-  set paginationParams(PaginationParams v) { $_setField(2, v); }
+  set paginationParams(PaginationParams value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasPaginationParams() => $_has(1);
   @$pb.TagNumber(2)
@@ -4530,7 +4852,7 @@ class SessionMainReq extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   SessionFilterType get filterType => $_getN(2);
   @$pb.TagNumber(3)
-  set filterType(SessionFilterType v) { $_setField(3, v); }
+  set filterType(SessionFilterType value) => $_setField(3, value);
   @$pb.TagNumber(3)
   $core.bool hasFilterType() => $_has(2);
   @$pb.TagNumber(3)
@@ -4545,62 +4867,66 @@ class SessionOperation extends $pb.GeneratedMessage {
     OperationContent? clearUnread,
     OperationContent? unblock,
   }) {
-    final $result = create();
-    if (pin != null) {
-      $result.pin = pin;
-    }
-    if (unpin != null) {
-      $result.unpin = unpin;
-    }
-    if (delete != null) {
-      $result.delete = delete;
-    }
-    if (clearUnread != null) {
-      $result.clearUnread = clearUnread;
-    }
-    if (unblock != null) {
-      $result.unblock = unblock;
-    }
-    return $result;
+    final result = create();
+    if (pin != null) result.pin = pin;
+    if (unpin != null) result.unpin = unpin;
+    if (delete != null) result.delete = delete;
+    if (clearUnread != null) result.clearUnread = clearUnread;
+    if (unblock != null) result.unblock = unblock;
+    return result;
   }
-  SessionOperation._() : super();
-  factory SessionOperation.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory SessionOperation.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SessionOperation', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..aOM<OperationContent>(1, _omitFieldNames ? '' : 'pin', subBuilder: OperationContent.create)
-    ..aOM<OperationContent>(2, _omitFieldNames ? '' : 'unpin', subBuilder: OperationContent.create)
-    ..aOM<OperationContent>(3, _omitFieldNames ? '' : 'delete', subBuilder: OperationContent.create)
-    ..aOM<OperationContent>(4, _omitFieldNames ? '' : 'clearUnread', subBuilder: OperationContent.create)
-    ..aOM<OperationContent>(5, _omitFieldNames ? '' : 'unblock', subBuilder: OperationContent.create)
-    ..hasRequiredFields = false
-  ;
+  SessionOperation._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  SessionOperation clone() => SessionOperation()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  SessionOperation copyWith(void Function(SessionOperation) updates) => super.copyWith((message) => updates(message as SessionOperation)) as SessionOperation;
+  factory SessionOperation.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SessionOperation.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SessionOperation',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aOM<OperationContent>(1, _omitFieldNames ? '' : 'pin',
+        subBuilder: OperationContent.create)
+    ..aOM<OperationContent>(2, _omitFieldNames ? '' : 'unpin',
+        subBuilder: OperationContent.create)
+    ..aOM<OperationContent>(3, _omitFieldNames ? '' : 'delete',
+        subBuilder: OperationContent.create)
+    ..aOM<OperationContent>(4, _omitFieldNames ? '' : 'clearUnread',
+        subBuilder: OperationContent.create)
+    ..aOM<OperationContent>(5, _omitFieldNames ? '' : 'unblock',
+        subBuilder: OperationContent.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionOperation clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionOperation copyWith(void Function(SessionOperation) updates) =>
+      super.copyWith((message) => updates(message as SessionOperation))
+          as SessionOperation;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static SessionOperation create() => SessionOperation._();
+  @$core.override
   SessionOperation createEmptyInstance() => create();
-  static $pb.PbList<SessionOperation> createRepeated() => $pb.PbList<SessionOperation>();
+  static $pb.PbList<SessionOperation> createRepeated() =>
+      $pb.PbList<SessionOperation>();
   @$core.pragma('dart2js:noInline')
-  static SessionOperation getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SessionOperation>(create);
+  static SessionOperation getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SessionOperation>(create);
   static SessionOperation? _defaultInstance;
 
   @$pb.TagNumber(1)
   OperationContent get pin => $_getN(0);
   @$pb.TagNumber(1)
-  set pin(OperationContent v) { $_setField(1, v); }
+  set pin(OperationContent value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasPin() => $_has(0);
   @$pb.TagNumber(1)
@@ -4611,7 +4937,7 @@ class SessionOperation extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   OperationContent get unpin => $_getN(1);
   @$pb.TagNumber(2)
-  set unpin(OperationContent v) { $_setField(2, v); }
+  set unpin(OperationContent value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasUnpin() => $_has(1);
   @$pb.TagNumber(2)
@@ -4622,7 +4948,7 @@ class SessionOperation extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   OperationContent get delete => $_getN(2);
   @$pb.TagNumber(3)
-  set delete(OperationContent v) { $_setField(3, v); }
+  set delete(OperationContent value) => $_setField(3, value);
   @$pb.TagNumber(3)
   $core.bool hasDelete() => $_has(2);
   @$pb.TagNumber(3)
@@ -4633,7 +4959,7 @@ class SessionOperation extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   OperationContent get clearUnread => $_getN(3);
   @$pb.TagNumber(4)
-  set clearUnread(OperationContent v) { $_setField(4, v); }
+  set clearUnread(OperationContent value) => $_setField(4, value);
   @$pb.TagNumber(4)
   $core.bool hasClearUnread() => $_has(3);
   @$pb.TagNumber(4)
@@ -4644,7 +4970,7 @@ class SessionOperation extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   OperationContent get unblock => $_getN(4);
   @$pb.TagNumber(5)
-  set unblock(OperationContent v) { $_setField(5, v); }
+  set unblock(OperationContent value) => $_setField(5, value);
   @$pb.TagNumber(5)
   $core.bool hasUnblock() => $_has(4);
   @$pb.TagNumber(5)
@@ -4661,62 +4987,68 @@ class SessionSecondaryReply extends $pb.GeneratedMessage {
     $core.Iterable<ThreeDotItem>? threeDotItems,
     $core.Iterable<ThreeDotItem>? outsideItem,
   }) {
-    final $result = create();
-    if (paginationParams != null) {
-      $result.paginationParams = paginationParams;
-    }
-    if (updateSessionParams != null) {
-      $result.updateSessionParams = updateSessionParams;
-    }
-    if (sessions != null) {
-      $result.sessions.addAll(sessions);
-    }
-    if (threeDotItems != null) {
-      $result.threeDotItems.addAll(threeDotItems);
-    }
-    if (outsideItem != null) {
-      $result.outsideItem.addAll(outsideItem);
-    }
-    return $result;
+    final result = create();
+    if (paginationParams != null) result.paginationParams = paginationParams;
+    if (updateSessionParams != null)
+      result.updateSessionParams = updateSessionParams;
+    if (sessions != null) result.sessions.addAll(sessions);
+    if (threeDotItems != null) result.threeDotItems.addAll(threeDotItems);
+    if (outsideItem != null) result.outsideItem.addAll(outsideItem);
+    return result;
   }
-  SessionSecondaryReply._() : super();
-  factory SessionSecondaryReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory SessionSecondaryReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SessionSecondaryReply', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..aOM<PaginationParams>(1, _omitFieldNames ? '' : 'paginationParams', subBuilder: PaginationParams.create)
-    ..aOM<UpdateSessionParams>(2, _omitFieldNames ? '' : 'updateSessionParams', subBuilder: UpdateSessionParams.create)
-    ..pc<Session>(3, _omitFieldNames ? '' : 'sessions', $pb.PbFieldType.PM, subBuilder: Session.create)
-    ..pc<ThreeDotItem>(4, _omitFieldNames ? '' : 'threeDotItems', $pb.PbFieldType.PM, subBuilder: ThreeDotItem.create)
-    ..pc<ThreeDotItem>(5, _omitFieldNames ? '' : 'outsideItem', $pb.PbFieldType.PM, subBuilder: ThreeDotItem.create)
-    ..hasRequiredFields = false
-  ;
+  SessionSecondaryReply._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  SessionSecondaryReply clone() => SessionSecondaryReply()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  SessionSecondaryReply copyWith(void Function(SessionSecondaryReply) updates) => super.copyWith((message) => updates(message as SessionSecondaryReply)) as SessionSecondaryReply;
+  factory SessionSecondaryReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SessionSecondaryReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SessionSecondaryReply',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aOM<PaginationParams>(1, _omitFieldNames ? '' : 'paginationParams',
+        subBuilder: PaginationParams.create)
+    ..aOM<UpdateSessionParams>(2, _omitFieldNames ? '' : 'updateSessionParams',
+        subBuilder: UpdateSessionParams.create)
+    ..pPM<Session>(3, _omitFieldNames ? '' : 'sessions',
+        subBuilder: Session.create)
+    ..pPM<ThreeDotItem>(4, _omitFieldNames ? '' : 'threeDotItems',
+        subBuilder: ThreeDotItem.create)
+    ..pPM<ThreeDotItem>(5, _omitFieldNames ? '' : 'outsideItem',
+        subBuilder: ThreeDotItem.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionSecondaryReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionSecondaryReply copyWith(
+          void Function(SessionSecondaryReply) updates) =>
+      super.copyWith((message) => updates(message as SessionSecondaryReply))
+          as SessionSecondaryReply;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static SessionSecondaryReply create() => SessionSecondaryReply._();
+  @$core.override
   SessionSecondaryReply createEmptyInstance() => create();
-  static $pb.PbList<SessionSecondaryReply> createRepeated() => $pb.PbList<SessionSecondaryReply>();
+  static $pb.PbList<SessionSecondaryReply> createRepeated() =>
+      $pb.PbList<SessionSecondaryReply>();
   @$core.pragma('dart2js:noInline')
-  static SessionSecondaryReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SessionSecondaryReply>(create);
+  static SessionSecondaryReply getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SessionSecondaryReply>(create);
   static SessionSecondaryReply? _defaultInstance;
 
   @$pb.TagNumber(1)
   PaginationParams get paginationParams => $_getN(0);
   @$pb.TagNumber(1)
-  set paginationParams(PaginationParams v) { $_setField(1, v); }
+  set paginationParams(PaginationParams value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasPaginationParams() => $_has(0);
   @$pb.TagNumber(1)
@@ -4727,7 +5059,7 @@ class SessionSecondaryReply extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   UpdateSessionParams get updateSessionParams => $_getN(1);
   @$pb.TagNumber(2)
-  set updateSessionParams(UpdateSessionParams v) { $_setField(2, v); }
+  set updateSessionParams(UpdateSessionParams value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasUpdateSessionParams() => $_has(1);
   @$pb.TagNumber(2)
@@ -4751,54 +5083,60 @@ class SessionSecondaryReq extends $pb.GeneratedMessage {
     PaginationParams? paginationParams,
     SessionPageType? pageType,
   }) {
-    final $result = create();
-    if (restrictedMode != null) {
-      $result.restrictedMode = restrictedMode;
-    }
-    if (paginationParams != null) {
-      $result.paginationParams = paginationParams;
-    }
-    if (pageType != null) {
-      $result.pageType = pageType;
-    }
-    return $result;
+    final result = create();
+    if (restrictedMode != null) result.restrictedMode = restrictedMode;
+    if (paginationParams != null) result.paginationParams = paginationParams;
+    if (pageType != null) result.pageType = pageType;
+    return result;
   }
-  SessionSecondaryReq._() : super();
-  factory SessionSecondaryReq.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory SessionSecondaryReq.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SessionSecondaryReq', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..aOM<RestrictedMode>(1, _omitFieldNames ? '' : 'restrictedMode', subBuilder: RestrictedMode.create)
-    ..aOM<PaginationParams>(2, _omitFieldNames ? '' : 'paginationParams', subBuilder: PaginationParams.create)
-    ..e<SessionPageType>(3, _omitFieldNames ? '' : 'pageType', $pb.PbFieldType.OE, defaultOrMaker: SessionPageType.SESSION_PAGE_TYPE_UNKNOWN, valueOf: SessionPageType.valueOf, enumValues: SessionPageType.values)
-    ..hasRequiredFields = false
-  ;
+  SessionSecondaryReq._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  SessionSecondaryReq clone() => SessionSecondaryReq()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  SessionSecondaryReq copyWith(void Function(SessionSecondaryReq) updates) => super.copyWith((message) => updates(message as SessionSecondaryReq)) as SessionSecondaryReq;
+  factory SessionSecondaryReq.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SessionSecondaryReq.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SessionSecondaryReq',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aOM<RestrictedMode>(1, _omitFieldNames ? '' : 'restrictedMode',
+        subBuilder: RestrictedMode.create)
+    ..aOM<PaginationParams>(2, _omitFieldNames ? '' : 'paginationParams',
+        subBuilder: PaginationParams.create)
+    ..aE<SessionPageType>(3, _omitFieldNames ? '' : 'pageType',
+        enumValues: SessionPageType.values)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionSecondaryReq clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionSecondaryReq copyWith(void Function(SessionSecondaryReq) updates) =>
+      super.copyWith((message) => updates(message as SessionSecondaryReq))
+          as SessionSecondaryReq;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static SessionSecondaryReq create() => SessionSecondaryReq._();
+  @$core.override
   SessionSecondaryReq createEmptyInstance() => create();
-  static $pb.PbList<SessionSecondaryReq> createRepeated() => $pb.PbList<SessionSecondaryReq>();
+  static $pb.PbList<SessionSecondaryReq> createRepeated() =>
+      $pb.PbList<SessionSecondaryReq>();
   @$core.pragma('dart2js:noInline')
-  static SessionSecondaryReq getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SessionSecondaryReq>(create);
+  static SessionSecondaryReq getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SessionSecondaryReq>(create);
   static SessionSecondaryReq? _defaultInstance;
 
   @$pb.TagNumber(1)
   RestrictedMode get restrictedMode => $_getN(0);
   @$pb.TagNumber(1)
-  set restrictedMode(RestrictedMode v) { $_setField(1, v); }
+  set restrictedMode(RestrictedMode value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasRestrictedMode() => $_has(0);
   @$pb.TagNumber(1)
@@ -4809,7 +5147,7 @@ class SessionSecondaryReq extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   PaginationParams get paginationParams => $_getN(1);
   @$pb.TagNumber(2)
-  set paginationParams(PaginationParams v) { $_setField(2, v); }
+  set paginationParams(PaginationParams value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasPaginationParams() => $_has(1);
   @$pb.TagNumber(2)
@@ -4820,7 +5158,7 @@ class SessionSecondaryReq extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   SessionPageType get pageType => $_getN(2);
   @$pb.TagNumber(3)
-  set pageType(SessionPageType v) { $_setField(3, v); }
+  set pageType(SessionPageType value) => $_setField(3, value);
   @$pb.TagNumber(3)
   $core.bool hasPageType() => $_has(2);
   @$pb.TagNumber(3)
@@ -4831,46 +5169,54 @@ class SessionUpdateReply extends $pb.GeneratedMessage {
   factory SessionUpdateReply({
     Session? session,
   }) {
-    final $result = create();
-    if (session != null) {
-      $result.session = session;
-    }
-    return $result;
+    final result = create();
+    if (session != null) result.session = session;
+    return result;
   }
-  SessionUpdateReply._() : super();
-  factory SessionUpdateReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory SessionUpdateReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SessionUpdateReply', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..aOM<Session>(1, _omitFieldNames ? '' : 'session', subBuilder: Session.create)
-    ..hasRequiredFields = false
-  ;
+  SessionUpdateReply._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  SessionUpdateReply clone() => SessionUpdateReply()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  SessionUpdateReply copyWith(void Function(SessionUpdateReply) updates) => super.copyWith((message) => updates(message as SessionUpdateReply)) as SessionUpdateReply;
+  factory SessionUpdateReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SessionUpdateReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SessionUpdateReply',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aOM<Session>(1, _omitFieldNames ? '' : 'session',
+        subBuilder: Session.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionUpdateReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionUpdateReply copyWith(void Function(SessionUpdateReply) updates) =>
+      super.copyWith((message) => updates(message as SessionUpdateReply))
+          as SessionUpdateReply;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static SessionUpdateReply create() => SessionUpdateReply._();
+  @$core.override
   SessionUpdateReply createEmptyInstance() => create();
-  static $pb.PbList<SessionUpdateReply> createRepeated() => $pb.PbList<SessionUpdateReply>();
+  static $pb.PbList<SessionUpdateReply> createRepeated() =>
+      $pb.PbList<SessionUpdateReply>();
   @$core.pragma('dart2js:noInline')
-  static SessionUpdateReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SessionUpdateReply>(create);
+  static SessionUpdateReply getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SessionUpdateReply>(create);
   static SessionUpdateReply? _defaultInstance;
 
   @$pb.TagNumber(1)
   Session get session => $_getN(0);
   @$pb.TagNumber(1)
-  set session(Session v) { $_setField(1, v); }
+  set session(Session value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasSession() => $_has(0);
   @$pb.TagNumber(1)
@@ -4884,50 +5230,57 @@ class SessionUpdateReq extends $pb.GeneratedMessage {
     SessionId? sessionId,
     SessionPageType? pageType,
   }) {
-    final $result = create();
-    if (sessionId != null) {
-      $result.sessionId = sessionId;
-    }
-    if (pageType != null) {
-      $result.pageType = pageType;
-    }
-    return $result;
+    final result = create();
+    if (sessionId != null) result.sessionId = sessionId;
+    if (pageType != null) result.pageType = pageType;
+    return result;
   }
-  SessionUpdateReq._() : super();
-  factory SessionUpdateReq.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory SessionUpdateReq.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SessionUpdateReq', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..aOM<SessionId>(1, _omitFieldNames ? '' : 'sessionId', subBuilder: SessionId.create)
-    ..e<SessionPageType>(2, _omitFieldNames ? '' : 'pageType', $pb.PbFieldType.OE, defaultOrMaker: SessionPageType.SESSION_PAGE_TYPE_UNKNOWN, valueOf: SessionPageType.valueOf, enumValues: SessionPageType.values)
-    ..hasRequiredFields = false
-  ;
+  SessionUpdateReq._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  SessionUpdateReq clone() => SessionUpdateReq()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  SessionUpdateReq copyWith(void Function(SessionUpdateReq) updates) => super.copyWith((message) => updates(message as SessionUpdateReq)) as SessionUpdateReq;
+  factory SessionUpdateReq.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SessionUpdateReq.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SessionUpdateReq',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aOM<SessionId>(1, _omitFieldNames ? '' : 'sessionId',
+        subBuilder: SessionId.create)
+    ..aE<SessionPageType>(2, _omitFieldNames ? '' : 'pageType',
+        enumValues: SessionPageType.values)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionUpdateReq clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionUpdateReq copyWith(void Function(SessionUpdateReq) updates) =>
+      super.copyWith((message) => updates(message as SessionUpdateReq))
+          as SessionUpdateReq;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static SessionUpdateReq create() => SessionUpdateReq._();
+  @$core.override
   SessionUpdateReq createEmptyInstance() => create();
-  static $pb.PbList<SessionUpdateReq> createRepeated() => $pb.PbList<SessionUpdateReq>();
+  static $pb.PbList<SessionUpdateReq> createRepeated() =>
+      $pb.PbList<SessionUpdateReq>();
   @$core.pragma('dart2js:noInline')
-  static SessionUpdateReq getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SessionUpdateReq>(create);
+  static SessionUpdateReq getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SessionUpdateReq>(create);
   static SessionUpdateReq? _defaultInstance;
 
   @$pb.TagNumber(1)
   SessionId get sessionId => $_getN(0);
   @$pb.TagNumber(1)
-  set sessionId(SessionId v) { $_setField(1, v); }
+  set sessionId(SessionId value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasSessionId() => $_has(0);
   @$pb.TagNumber(1)
@@ -4938,7 +5291,7 @@ class SessionUpdateReq extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   SessionPageType get pageType => $_getN(1);
   @$pb.TagNumber(2)
-  set pageType(SessionPageType v) { $_setField(2, v); }
+  set pageType(SessionPageType value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasPageType() => $_has(1);
   @$pb.TagNumber(2)
@@ -4950,50 +5303,56 @@ class SessionsFilter extends $pb.GeneratedMessage {
     SessionFilterType? stype,
     $core.String? title,
   }) {
-    final $result = create();
-    if (stype != null) {
-      $result.stype = stype;
-    }
-    if (title != null) {
-      $result.title = title;
-    }
-    return $result;
+    final result = create();
+    if (stype != null) result.stype = stype;
+    if (title != null) result.title = title;
+    return result;
   }
-  SessionsFilter._() : super();
-  factory SessionsFilter.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory SessionsFilter.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SessionsFilter', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..e<SessionFilterType>(1, _omitFieldNames ? '' : 'stype', $pb.PbFieldType.OE, defaultOrMaker: SessionFilterType.FILTER_DEFAULT, valueOf: SessionFilterType.valueOf, enumValues: SessionFilterType.values)
+  SessionsFilter._();
+
+  factory SessionsFilter.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SessionsFilter.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SessionsFilter',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aE<SessionFilterType>(1, _omitFieldNames ? '' : 'stype',
+        enumValues: SessionFilterType.values)
     ..aOS(2, _omitFieldNames ? '' : 'title')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  SessionsFilter clone() => SessionsFilter()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  SessionsFilter copyWith(void Function(SessionsFilter) updates) => super.copyWith((message) => updates(message as SessionsFilter)) as SessionsFilter;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionsFilter clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SessionsFilter copyWith(void Function(SessionsFilter) updates) =>
+      super.copyWith((message) => updates(message as SessionsFilter))
+          as SessionsFilter;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static SessionsFilter create() => SessionsFilter._();
+  @$core.override
   SessionsFilter createEmptyInstance() => create();
-  static $pb.PbList<SessionsFilter> createRepeated() => $pb.PbList<SessionsFilter>();
+  static $pb.PbList<SessionsFilter> createRepeated() =>
+      $pb.PbList<SessionsFilter>();
   @$core.pragma('dart2js:noInline')
-  static SessionsFilter getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SessionsFilter>(create);
+  static SessionsFilter getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SessionsFilter>(create);
   static SessionsFilter? _defaultInstance;
 
   @$pb.TagNumber(1)
   SessionFilterType get stype => $_getN(0);
   @$pb.TagNumber(1)
-  set stype(SessionFilterType v) { $_setField(1, v); }
+  set stype(SessionFilterType value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasStype() => $_has(0);
   @$pb.TagNumber(1)
@@ -5002,7 +5361,7 @@ class SessionsFilter extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get title => $_getSZ(1);
   @$pb.TagNumber(2)
-  set title($core.String v) { $_setString(1, v); }
+  set title($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasTitle() => $_has(1);
   @$pb.TagNumber(2)
@@ -5013,46 +5372,53 @@ class SetImSettingsReply extends $pb.GeneratedMessage {
   factory SetImSettingsReply({
     $core.String? toast,
   }) {
-    final $result = create();
-    if (toast != null) {
-      $result.toast = toast;
-    }
-    return $result;
+    final result = create();
+    if (toast != null) result.toast = toast;
+    return result;
   }
-  SetImSettingsReply._() : super();
-  factory SetImSettingsReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory SetImSettingsReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SetImSettingsReply', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  SetImSettingsReply._();
+
+  factory SetImSettingsReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SetImSettingsReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SetImSettingsReply',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'toast')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  SetImSettingsReply clone() => SetImSettingsReply()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  SetImSettingsReply copyWith(void Function(SetImSettingsReply) updates) => super.copyWith((message) => updates(message as SetImSettingsReply)) as SetImSettingsReply;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SetImSettingsReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SetImSettingsReply copyWith(void Function(SetImSettingsReply) updates) =>
+      super.copyWith((message) => updates(message as SetImSettingsReply))
+          as SetImSettingsReply;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static SetImSettingsReply create() => SetImSettingsReply._();
+  @$core.override
   SetImSettingsReply createEmptyInstance() => create();
-  static $pb.PbList<SetImSettingsReply> createRepeated() => $pb.PbList<SetImSettingsReply>();
+  static $pb.PbList<SetImSettingsReply> createRepeated() =>
+      $pb.PbList<SetImSettingsReply>();
   @$core.pragma('dart2js:noInline')
-  static SetImSettingsReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SetImSettingsReply>(create);
+  static SetImSettingsReply getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SetImSettingsReply>(create);
   static SetImSettingsReply? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get toast => $_getSZ(0);
   @$pb.TagNumber(1)
-  set toast($core.String v) { $_setString(0, v); }
+  set toast($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasToast() => $_has(0);
   @$pb.TagNumber(1)
@@ -5061,55 +5427,62 @@ class SetImSettingsReply extends $pb.GeneratedMessage {
 
 class SetImSettingsReq extends $pb.GeneratedMessage {
   factory SetImSettingsReq({
-    $pb.PbMap<$core.int, Setting>? settings,
+    $core.Iterable<$core.MapEntry<$core.int, Setting>>? settings,
   }) {
-    final $result = create();
-    if (settings != null) {
-      $result.settings.addAll(settings);
-    }
-    return $result;
+    final result = create();
+    if (settings != null) result.settings.addEntries(settings);
+    return result;
   }
-  SetImSettingsReq._() : super();
-  factory SetImSettingsReq.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory SetImSettingsReq.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SetImSettingsReq', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..m<$core.int, Setting>(1, _omitFieldNames ? '' : 'settings', entryClassName: 'SetImSettingsReq.SettingsEntry', keyFieldType: $pb.PbFieldType.O3, valueFieldType: $pb.PbFieldType.OM, valueCreator: Setting.create, valueDefaultOrMaker: Setting.getDefault, packageName: const $pb.PackageName('bilibili.app.im.v1'))
-    ..hasRequiredFields = false
-  ;
+  SetImSettingsReq._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  SetImSettingsReq clone() => SetImSettingsReq()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  SetImSettingsReq copyWith(void Function(SetImSettingsReq) updates) => super.copyWith((message) => updates(message as SetImSettingsReq)) as SetImSettingsReq;
+  factory SetImSettingsReq.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SetImSettingsReq.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SetImSettingsReq',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..m<$core.int, Setting>(1, _omitFieldNames ? '' : 'settings',
+        entryClassName: 'SetImSettingsReq.SettingsEntry',
+        keyFieldType: $pb.PbFieldType.O3,
+        valueFieldType: $pb.PbFieldType.OM,
+        valueCreator: Setting.create,
+        valueDefaultOrMaker: Setting.getDefault,
+        packageName: const $pb.PackageName('bilibili.app.im.v1'))
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SetImSettingsReq clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SetImSettingsReq copyWith(void Function(SetImSettingsReq) updates) =>
+      super.copyWith((message) => updates(message as SetImSettingsReq))
+          as SetImSettingsReq;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static SetImSettingsReq create() => SetImSettingsReq._();
+  @$core.override
   SetImSettingsReq createEmptyInstance() => create();
-  static $pb.PbList<SetImSettingsReq> createRepeated() => $pb.PbList<SetImSettingsReq>();
+  static $pb.PbList<SetImSettingsReq> createRepeated() =>
+      $pb.PbList<SetImSettingsReq>();
   @$core.pragma('dart2js:noInline')
-  static SetImSettingsReq getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SetImSettingsReq>(create);
+  static SetImSettingsReq getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SetImSettingsReq>(create);
   static SetImSettingsReq? _defaultInstance;
 
   @$pb.TagNumber(1)
   $pb.PbMap<$core.int, Setting> get settings => $_getMap(0);
 }
 
-enum Setting_Content {
-  switch_1, 
-  select, 
-  redirect, 
-  text, 
-  notSet
-}
+enum Setting_Content { switch_1, select, redirect, text, notSet }
 
 class Setting extends $pb.GeneratedMessage {
   factory Setting({
@@ -5118,69 +5491,80 @@ class Setting extends $pb.GeneratedMessage {
     SettingRedirect? redirect,
     SettingText? text,
   }) {
-    final $result = create();
-    if (switch_1 != null) {
-      $result.switch_1 = switch_1;
-    }
-    if (select != null) {
-      $result.select = select;
-    }
-    if (redirect != null) {
-      $result.redirect = redirect;
-    }
-    if (text != null) {
-      $result.text = text;
-    }
-    return $result;
+    final result = create();
+    if (switch_1 != null) result.switch_1 = switch_1;
+    if (select != null) result.select = select;
+    if (redirect != null) result.redirect = redirect;
+    if (text != null) result.text = text;
+    return result;
   }
-  Setting._() : super();
-  factory Setting.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Setting.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  Setting._();
+
+  factory Setting.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory Setting.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static const $core.Map<$core.int, Setting_Content> _Setting_ContentByTag = {
-    1 : Setting_Content.switch_1,
-    2 : Setting_Content.select,
-    3 : Setting_Content.redirect,
-    4 : Setting_Content.text,
-    0 : Setting_Content.notSet
+    1: Setting_Content.switch_1,
+    2: Setting_Content.select,
+    3: Setting_Content.redirect,
+    4: Setting_Content.text,
+    0: Setting_Content.notSet
   };
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Setting', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'Setting',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..oo(0, [1, 2, 3, 4])
-    ..aOM<SettingSwitch>(1, _omitFieldNames ? '' : 'switch', subBuilder: SettingSwitch.create)
-    ..aOM<SettingSelect>(2, _omitFieldNames ? '' : 'select', subBuilder: SettingSelect.create)
-    ..aOM<SettingRedirect>(3, _omitFieldNames ? '' : 'redirect', subBuilder: SettingRedirect.create)
-    ..aOM<SettingText>(4, _omitFieldNames ? '' : 'text', subBuilder: SettingText.create)
-    ..hasRequiredFields = false
-  ;
+    ..aOM<SettingSwitch>(1, _omitFieldNames ? '' : 'switch',
+        subBuilder: SettingSwitch.create)
+    ..aOM<SettingSelect>(2, _omitFieldNames ? '' : 'select',
+        subBuilder: SettingSelect.create)
+    ..aOM<SettingRedirect>(3, _omitFieldNames ? '' : 'redirect',
+        subBuilder: SettingRedirect.create)
+    ..aOM<SettingText>(4, _omitFieldNames ? '' : 'text',
+        subBuilder: SettingText.create)
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  Setting clone() => Setting()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  Setting copyWith(void Function(Setting) updates) => super.copyWith((message) => updates(message as Setting)) as Setting;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Setting clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Setting copyWith(void Function(Setting) updates) =>
+      super.copyWith((message) => updates(message as Setting)) as Setting;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static Setting create() => Setting._();
+  @$core.override
   Setting createEmptyInstance() => create();
   static $pb.PbList<Setting> createRepeated() => $pb.PbList<Setting>();
   @$core.pragma('dart2js:noInline')
-  static Setting getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Setting>(create);
+  static Setting getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Setting>(create);
   static Setting? _defaultInstance;
 
+  @$pb.TagNumber(1)
+  @$pb.TagNumber(2)
+  @$pb.TagNumber(3)
+  @$pb.TagNumber(4)
   Setting_Content whichContent() => _Setting_ContentByTag[$_whichOneof(0)]!;
+  @$pb.TagNumber(1)
+  @$pb.TagNumber(2)
+  @$pb.TagNumber(3)
+  @$pb.TagNumber(4)
   void clearContent() => $_clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
   SettingSwitch get switch_1 => $_getN(0);
   @$pb.TagNumber(1)
-  set switch_1(SettingSwitch v) { $_setField(1, v); }
+  set switch_1(SettingSwitch value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasSwitch_1() => $_has(0);
   @$pb.TagNumber(1)
@@ -5191,7 +5575,7 @@ class Setting extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   SettingSelect get select => $_getN(1);
   @$pb.TagNumber(2)
-  set select(SettingSelect v) { $_setField(2, v); }
+  set select(SettingSelect value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasSelect() => $_has(1);
   @$pb.TagNumber(2)
@@ -5202,7 +5586,7 @@ class Setting extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   SettingRedirect get redirect => $_getN(2);
   @$pb.TagNumber(3)
-  set redirect(SettingRedirect v) { $_setField(3, v); }
+  set redirect(SettingRedirect value) => $_setField(3, value);
   @$pb.TagNumber(3)
   $core.bool hasRedirect() => $_has(2);
   @$pb.TagNumber(3)
@@ -5213,7 +5597,7 @@ class Setting extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   SettingText get text => $_getN(3);
   @$pb.TagNumber(4)
-  set text(SettingText v) { $_setField(4, v); }
+  set text(SettingText value) => $_setField(4, value);
   @$pb.TagNumber(4)
   $core.bool hasText() => $_has(3);
   @$pb.TagNumber(4)
@@ -5223,10 +5607,10 @@ class Setting extends $pb.GeneratedMessage {
 }
 
 enum SettingRedirect_Content {
-  settingPage, 
-  otherPage, 
-  popup, 
-  windowSelect, 
+  settingPage,
+  otherPage,
+  popup,
+  windowSelect,
   notSet
 }
 
@@ -5240,81 +5624,90 @@ class SettingRedirect extends $pb.GeneratedMessage {
     redirect2Popup? popup,
     redirectWindowSelect? windowSelect,
   }) {
-    final $result = create();
-    if (settingPage != null) {
-      $result.settingPage = settingPage;
-    }
-    if (otherPage != null) {
-      $result.otherPage = otherPage;
-    }
-    if (title != null) {
-      $result.title = title;
-    }
-    if (subtitle != null) {
-      $result.subtitle = subtitle;
-    }
-    if (selectedSummary != null) {
-      $result.selectedSummary = selectedSummary;
-    }
-    if (popup != null) {
-      $result.popup = popup;
-    }
-    if (windowSelect != null) {
-      $result.windowSelect = windowSelect;
-    }
-    return $result;
+    final result = create();
+    if (settingPage != null) result.settingPage = settingPage;
+    if (otherPage != null) result.otherPage = otherPage;
+    if (title != null) result.title = title;
+    if (subtitle != null) result.subtitle = subtitle;
+    if (selectedSummary != null) result.selectedSummary = selectedSummary;
+    if (popup != null) result.popup = popup;
+    if (windowSelect != null) result.windowSelect = windowSelect;
+    return result;
   }
-  SettingRedirect._() : super();
-  factory SettingRedirect.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory SettingRedirect.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static const $core.Map<$core.int, SettingRedirect_Content> _SettingRedirect_ContentByTag = {
-    1 : SettingRedirect_Content.settingPage,
-    2 : SettingRedirect_Content.otherPage,
-    6 : SettingRedirect_Content.popup,
-    7 : SettingRedirect_Content.windowSelect,
-    0 : SettingRedirect_Content.notSet
+  SettingRedirect._();
+
+  factory SettingRedirect.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SettingRedirect.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static const $core.Map<$core.int, SettingRedirect_Content>
+      _SettingRedirect_ContentByTag = {
+    1: SettingRedirect_Content.settingPage,
+    2: SettingRedirect_Content.otherPage,
+    6: SettingRedirect_Content.popup,
+    7: SettingRedirect_Content.windowSelect,
+    0: SettingRedirect_Content.notSet
   };
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SettingRedirect', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SettingRedirect',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..oo(0, [1, 2, 6, 7])
-    ..aOM<redirect2SettingPage>(1, _omitFieldNames ? '' : 'settingPage', subBuilder: redirect2SettingPage.create)
-    ..aOM<redirect2OtherPage>(2, _omitFieldNames ? '' : 'otherPage', subBuilder: redirect2OtherPage.create)
+    ..aOM<redirect2SettingPage>(1, _omitFieldNames ? '' : 'settingPage',
+        subBuilder: redirect2SettingPage.create)
+    ..aOM<redirect2OtherPage>(2, _omitFieldNames ? '' : 'otherPage',
+        subBuilder: redirect2OtherPage.create)
     ..aOS(3, _omitFieldNames ? '' : 'title')
     ..aOS(4, _omitFieldNames ? '' : 'subtitle')
     ..aOS(5, _omitFieldNames ? '' : 'selectedSummary')
-    ..aOM<redirect2Popup>(6, _omitFieldNames ? '' : 'popup', subBuilder: redirect2Popup.create)
-    ..aOM<redirectWindowSelect>(7, _omitFieldNames ? '' : 'windowSelect', subBuilder: redirectWindowSelect.create)
-    ..hasRequiredFields = false
-  ;
+    ..aOM<redirect2Popup>(6, _omitFieldNames ? '' : 'popup',
+        subBuilder: redirect2Popup.create)
+    ..aOM<redirectWindowSelect>(7, _omitFieldNames ? '' : 'windowSelect',
+        subBuilder: redirectWindowSelect.create)
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  SettingRedirect clone() => SettingRedirect()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  SettingRedirect copyWith(void Function(SettingRedirect) updates) => super.copyWith((message) => updates(message as SettingRedirect)) as SettingRedirect;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SettingRedirect clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SettingRedirect copyWith(void Function(SettingRedirect) updates) =>
+      super.copyWith((message) => updates(message as SettingRedirect))
+          as SettingRedirect;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static SettingRedirect create() => SettingRedirect._();
+  @$core.override
   SettingRedirect createEmptyInstance() => create();
-  static $pb.PbList<SettingRedirect> createRepeated() => $pb.PbList<SettingRedirect>();
+  static $pb.PbList<SettingRedirect> createRepeated() =>
+      $pb.PbList<SettingRedirect>();
   @$core.pragma('dart2js:noInline')
-  static SettingRedirect getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SettingRedirect>(create);
+  static SettingRedirect getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SettingRedirect>(create);
   static SettingRedirect? _defaultInstance;
 
-  SettingRedirect_Content whichContent() => _SettingRedirect_ContentByTag[$_whichOneof(0)]!;
+  @$pb.TagNumber(1)
+  @$pb.TagNumber(2)
+  @$pb.TagNumber(6)
+  @$pb.TagNumber(7)
+  SettingRedirect_Content whichContent() =>
+      _SettingRedirect_ContentByTag[$_whichOneof(0)]!;
+  @$pb.TagNumber(1)
+  @$pb.TagNumber(2)
+  @$pb.TagNumber(6)
+  @$pb.TagNumber(7)
   void clearContent() => $_clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
   redirect2SettingPage get settingPage => $_getN(0);
   @$pb.TagNumber(1)
-  set settingPage(redirect2SettingPage v) { $_setField(1, v); }
+  set settingPage(redirect2SettingPage value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasSettingPage() => $_has(0);
   @$pb.TagNumber(1)
@@ -5325,7 +5718,7 @@ class SettingRedirect extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   redirect2OtherPage get otherPage => $_getN(1);
   @$pb.TagNumber(2)
-  set otherPage(redirect2OtherPage v) { $_setField(2, v); }
+  set otherPage(redirect2OtherPage value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasOtherPage() => $_has(1);
   @$pb.TagNumber(2)
@@ -5336,7 +5729,7 @@ class SettingRedirect extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get title => $_getSZ(2);
   @$pb.TagNumber(3)
-  set title($core.String v) { $_setString(2, v); }
+  set title($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasTitle() => $_has(2);
   @$pb.TagNumber(3)
@@ -5345,7 +5738,7 @@ class SettingRedirect extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.String get subtitle => $_getSZ(3);
   @$pb.TagNumber(4)
-  set subtitle($core.String v) { $_setString(3, v); }
+  set subtitle($core.String value) => $_setString(3, value);
   @$pb.TagNumber(4)
   $core.bool hasSubtitle() => $_has(3);
   @$pb.TagNumber(4)
@@ -5354,7 +5747,7 @@ class SettingRedirect extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $core.String get selectedSummary => $_getSZ(4);
   @$pb.TagNumber(5)
-  set selectedSummary($core.String v) { $_setString(4, v); }
+  set selectedSummary($core.String value) => $_setString(4, value);
   @$pb.TagNumber(5)
   $core.bool hasSelectedSummary() => $_has(4);
   @$pb.TagNumber(5)
@@ -5363,7 +5756,7 @@ class SettingRedirect extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   redirect2Popup get popup => $_getN(5);
   @$pb.TagNumber(6)
-  set popup(redirect2Popup v) { $_setField(6, v); }
+  set popup(redirect2Popup value) => $_setField(6, value);
   @$pb.TagNumber(6)
   $core.bool hasPopup() => $_has(5);
   @$pb.TagNumber(6)
@@ -5374,7 +5767,7 @@ class SettingRedirect extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   redirectWindowSelect get windowSelect => $_getN(6);
   @$pb.TagNumber(7)
-  set windowSelect(redirectWindowSelect v) { $_setField(7, v); }
+  set windowSelect(redirectWindowSelect value) => $_setField(7, value);
   @$pb.TagNumber(7)
   $core.bool hasWindowSelect() => $_has(6);
   @$pb.TagNumber(7)
@@ -5387,40 +5780,48 @@ class SettingSelect extends $pb.GeneratedMessage {
   factory SettingSelect({
     $core.Iterable<SelectItem>? item,
   }) {
-    final $result = create();
-    if (item != null) {
-      $result.item.addAll(item);
-    }
-    return $result;
+    final result = create();
+    if (item != null) result.item.addAll(item);
+    return result;
   }
-  SettingSelect._() : super();
-  factory SettingSelect.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory SettingSelect.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SettingSelect', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..pc<SelectItem>(1, _omitFieldNames ? '' : 'item', $pb.PbFieldType.PM, subBuilder: SelectItem.create)
-    ..hasRequiredFields = false
-  ;
+  SettingSelect._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  SettingSelect clone() => SettingSelect()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  SettingSelect copyWith(void Function(SettingSelect) updates) => super.copyWith((message) => updates(message as SettingSelect)) as SettingSelect;
+  factory SettingSelect.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SettingSelect.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SettingSelect',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..pPM<SelectItem>(1, _omitFieldNames ? '' : 'item',
+        subBuilder: SelectItem.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SettingSelect clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SettingSelect copyWith(void Function(SettingSelect) updates) =>
+      super.copyWith((message) => updates(message as SettingSelect))
+          as SettingSelect;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static SettingSelect create() => SettingSelect._();
+  @$core.override
   SettingSelect createEmptyInstance() => create();
-  static $pb.PbList<SettingSelect> createRepeated() => $pb.PbList<SettingSelect>();
+  static $pb.PbList<SettingSelect> createRepeated() =>
+      $pb.PbList<SettingSelect>();
   @$core.pragma('dart2js:noInline')
-  static SettingSelect getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SettingSelect>(create);
+  static SettingSelect getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SettingSelect>(create);
   static SettingSelect? _defaultInstance;
 
   @$pb.TagNumber(1)
@@ -5433,54 +5834,57 @@ class SettingSwitch extends $pb.GeneratedMessage {
     $core.String? title,
     $core.String? subtitle,
   }) {
-    final $result = create();
-    if (switchOn != null) {
-      $result.switchOn = switchOn;
-    }
-    if (title != null) {
-      $result.title = title;
-    }
-    if (subtitle != null) {
-      $result.subtitle = subtitle;
-    }
-    return $result;
+    final result = create();
+    if (switchOn != null) result.switchOn = switchOn;
+    if (title != null) result.title = title;
+    if (subtitle != null) result.subtitle = subtitle;
+    return result;
   }
-  SettingSwitch._() : super();
-  factory SettingSwitch.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory SettingSwitch.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SettingSwitch', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  SettingSwitch._();
+
+  factory SettingSwitch.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SettingSwitch.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SettingSwitch',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOB(1, _omitFieldNames ? '' : 'switchOn')
     ..aOS(2, _omitFieldNames ? '' : 'title')
     ..aOS(3, _omitFieldNames ? '' : 'subtitle')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  SettingSwitch clone() => SettingSwitch()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  SettingSwitch copyWith(void Function(SettingSwitch) updates) => super.copyWith((message) => updates(message as SettingSwitch)) as SettingSwitch;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SettingSwitch clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SettingSwitch copyWith(void Function(SettingSwitch) updates) =>
+      super.copyWith((message) => updates(message as SettingSwitch))
+          as SettingSwitch;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static SettingSwitch create() => SettingSwitch._();
+  @$core.override
   SettingSwitch createEmptyInstance() => create();
-  static $pb.PbList<SettingSwitch> createRepeated() => $pb.PbList<SettingSwitch>();
+  static $pb.PbList<SettingSwitch> createRepeated() =>
+      $pb.PbList<SettingSwitch>();
   @$core.pragma('dart2js:noInline')
-  static SettingSwitch getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SettingSwitch>(create);
+  static SettingSwitch getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SettingSwitch>(create);
   static SettingSwitch? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.bool get switchOn => $_getBF(0);
   @$pb.TagNumber(1)
-  set switchOn($core.bool v) { $_setBool(0, v); }
+  set switchOn($core.bool value) => $_setBool(0, value);
   @$pb.TagNumber(1)
   $core.bool hasSwitchOn() => $_has(0);
   @$pb.TagNumber(1)
@@ -5489,7 +5893,7 @@ class SettingSwitch extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get title => $_getSZ(1);
   @$pb.TagNumber(2)
-  set title($core.String v) { $_setString(1, v); }
+  set title($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasTitle() => $_has(1);
   @$pb.TagNumber(2)
@@ -5498,7 +5902,7 @@ class SettingSwitch extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get subtitle => $_getSZ(2);
   @$pb.TagNumber(3)
-  set subtitle($core.String v) { $_setString(2, v); }
+  set subtitle($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasSubtitle() => $_has(2);
   @$pb.TagNumber(3)
@@ -5509,46 +5913,52 @@ class SettingText extends $pb.GeneratedMessage {
   factory SettingText({
     $core.String? text,
   }) {
-    final $result = create();
-    if (text != null) {
-      $result.text = text;
-    }
-    return $result;
+    final result = create();
+    if (text != null) result.text = text;
+    return result;
   }
-  SettingText._() : super();
-  factory SettingText.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory SettingText.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SettingText', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  SettingText._();
+
+  factory SettingText.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SettingText.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SettingText',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'text')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  SettingText clone() => SettingText()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  SettingText copyWith(void Function(SettingText) updates) => super.copyWith((message) => updates(message as SettingText)) as SettingText;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SettingText clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SettingText copyWith(void Function(SettingText) updates) =>
+      super.copyWith((message) => updates(message as SettingText))
+          as SettingText;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static SettingText create() => SettingText._();
+  @$core.override
   SettingText createEmptyInstance() => create();
   static $pb.PbList<SettingText> createRepeated() => $pb.PbList<SettingText>();
   @$core.pragma('dart2js:noInline')
-  static SettingText getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SettingText>(create);
+  static SettingText getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SettingText>(create);
   static SettingText? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get text => $_getSZ(0);
   @$pb.TagNumber(1)
-  set text($core.String v) { $_setString(0, v); }
+  set text($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasText() => $_has(0);
   @$pb.TagNumber(1)
@@ -5559,46 +5969,52 @@ class SystemId extends $pb.GeneratedMessage {
   factory SystemId({
     SessionType? type,
   }) {
-    final $result = create();
-    if (type != null) {
-      $result.type = type;
-    }
-    return $result;
+    final result = create();
+    if (type != null) result.type = type;
+    return result;
   }
-  SystemId._() : super();
-  factory SystemId.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory SystemId.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SystemId', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..e<SessionType>(1, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: SessionType.SESSION_TYPE_UNKNOWN, valueOf: SessionType.valueOf, enumValues: SessionType.values)
-    ..hasRequiredFields = false
-  ;
+  SystemId._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  SystemId clone() => SystemId()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  SystemId copyWith(void Function(SystemId) updates) => super.copyWith((message) => updates(message as SystemId)) as SystemId;
+  factory SystemId.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SystemId.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SystemId',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aE<SessionType>(1, _omitFieldNames ? '' : 'type',
+        enumValues: SessionType.values)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SystemId clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SystemId copyWith(void Function(SystemId) updates) =>
+      super.copyWith((message) => updates(message as SystemId)) as SystemId;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static SystemId create() => SystemId._();
+  @$core.override
   SystemId createEmptyInstance() => create();
   static $pb.PbList<SystemId> createRepeated() => $pb.PbList<SystemId>();
   @$core.pragma('dart2js:noInline')
-  static SystemId getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SystemId>(create);
+  static SystemId getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SystemId>(create);
   static SystemId? _defaultInstance;
 
   @$pb.TagNumber(1)
   SessionType get type => $_getN(0);
   @$pb.TagNumber(1)
-  set type(SessionType v) { $_setField(1, v); }
+  set type(SessionType value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasType() => $_has(0);
   @$pb.TagNumber(1)
@@ -5613,62 +6029,62 @@ class ThreeDotItem extends $pb.GeneratedMessage {
     ThreeDotItemType? type,
     $core.bool? hasRedDot,
   }) {
-    final $result = create();
-    if (title != null) {
-      $result.title = title;
-    }
-    if (icon != null) {
-      $result.icon = icon;
-    }
-    if (url != null) {
-      $result.url = url;
-    }
-    if (type != null) {
-      $result.type = type;
-    }
-    if (hasRedDot != null) {
-      $result.hasRedDot = hasRedDot;
-    }
-    return $result;
+    final result = create();
+    if (title != null) result.title = title;
+    if (icon != null) result.icon = icon;
+    if (url != null) result.url = url;
+    if (type != null) result.type = type;
+    if (hasRedDot != null) result.hasRedDot = hasRedDot;
+    return result;
   }
-  ThreeDotItem._() : super();
-  factory ThreeDotItem.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory ThreeDotItem.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ThreeDotItem', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  ThreeDotItem._();
+
+  factory ThreeDotItem.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ThreeDotItem.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ThreeDotItem',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'title')
     ..aOS(2, _omitFieldNames ? '' : 'icon')
     ..aOS(3, _omitFieldNames ? '' : 'url')
-    ..e<ThreeDotItemType>(4, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: ThreeDotItemType.THREE_DOT_ITEM_TYPE_UNKNOWN, valueOf: ThreeDotItemType.valueOf, enumValues: ThreeDotItemType.values)
+    ..aE<ThreeDotItemType>(4, _omitFieldNames ? '' : 'type',
+        enumValues: ThreeDotItemType.values)
     ..aOB(5, _omitFieldNames ? '' : 'hasRedDot')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  ThreeDotItem clone() => ThreeDotItem()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  ThreeDotItem copyWith(void Function(ThreeDotItem) updates) => super.copyWith((message) => updates(message as ThreeDotItem)) as ThreeDotItem;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ThreeDotItem clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ThreeDotItem copyWith(void Function(ThreeDotItem) updates) =>
+      super.copyWith((message) => updates(message as ThreeDotItem))
+          as ThreeDotItem;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ThreeDotItem create() => ThreeDotItem._();
+  @$core.override
   ThreeDotItem createEmptyInstance() => create();
-  static $pb.PbList<ThreeDotItem> createRepeated() => $pb.PbList<ThreeDotItem>();
+  static $pb.PbList<ThreeDotItem> createRepeated() =>
+      $pb.PbList<ThreeDotItem>();
   @$core.pragma('dart2js:noInline')
-  static ThreeDotItem getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ThreeDotItem>(create);
+  static ThreeDotItem getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ThreeDotItem>(create);
   static ThreeDotItem? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get title => $_getSZ(0);
   @$pb.TagNumber(1)
-  set title($core.String v) { $_setString(0, v); }
+  set title($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasTitle() => $_has(0);
   @$pb.TagNumber(1)
@@ -5677,7 +6093,7 @@ class ThreeDotItem extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get icon => $_getSZ(1);
   @$pb.TagNumber(2)
-  set icon($core.String v) { $_setString(1, v); }
+  set icon($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasIcon() => $_has(1);
   @$pb.TagNumber(2)
@@ -5686,7 +6102,7 @@ class ThreeDotItem extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get url => $_getSZ(2);
   @$pb.TagNumber(3)
-  set url($core.String v) { $_setString(2, v); }
+  set url($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasUrl() => $_has(2);
   @$pb.TagNumber(3)
@@ -5695,7 +6111,7 @@ class ThreeDotItem extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   ThreeDotItemType get type => $_getN(3);
   @$pb.TagNumber(4)
-  set type(ThreeDotItemType v) { $_setField(4, v); }
+  set type(ThreeDotItemType value) => $_setField(4, value);
   @$pb.TagNumber(4)
   $core.bool hasType() => $_has(3);
   @$pb.TagNumber(4)
@@ -5704,7 +6120,7 @@ class ThreeDotItem extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $core.bool get hasRedDot => $_getBF(4);
   @$pb.TagNumber(5)
-  set hasRedDot($core.bool v) { $_setBool(4, v); }
+  set hasRedDot($core.bool value) => $_setBool(4, value);
   @$pb.TagNumber(5)
   $core.bool hasHasRedDot() => $_has(4);
   @$pb.TagNumber(5)
@@ -5715,46 +6131,53 @@ class UnPinSessionReply extends $pb.GeneratedMessage {
   factory UnPinSessionReply({
     $fixnum.Int64? sequenceNumber,
   }) {
-    final $result = create();
-    if (sequenceNumber != null) {
-      $result.sequenceNumber = sequenceNumber;
-    }
-    return $result;
+    final result = create();
+    if (sequenceNumber != null) result.sequenceNumber = sequenceNumber;
+    return result;
   }
-  UnPinSessionReply._() : super();
-  factory UnPinSessionReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory UnPinSessionReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UnPinSessionReply', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  UnPinSessionReply._();
+
+  factory UnPinSessionReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UnPinSessionReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UnPinSessionReply',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aInt64(1, _omitFieldNames ? '' : 'sequenceNumber')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  UnPinSessionReply clone() => UnPinSessionReply()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  UnPinSessionReply copyWith(void Function(UnPinSessionReply) updates) => super.copyWith((message) => updates(message as UnPinSessionReply)) as UnPinSessionReply;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UnPinSessionReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UnPinSessionReply copyWith(void Function(UnPinSessionReply) updates) =>
+      super.copyWith((message) => updates(message as UnPinSessionReply))
+          as UnPinSessionReply;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static UnPinSessionReply create() => UnPinSessionReply._();
+  @$core.override
   UnPinSessionReply createEmptyInstance() => create();
-  static $pb.PbList<UnPinSessionReply> createRepeated() => $pb.PbList<UnPinSessionReply>();
+  static $pb.PbList<UnPinSessionReply> createRepeated() =>
+      $pb.PbList<UnPinSessionReply>();
   @$core.pragma('dart2js:noInline')
-  static UnPinSessionReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UnPinSessionReply>(create);
+  static UnPinSessionReply getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UnPinSessionReply>(create);
   static UnPinSessionReply? _defaultInstance;
 
   @$pb.TagNumber(1)
   $fixnum.Int64 get sequenceNumber => $_getI64(0);
   @$pb.TagNumber(1)
-  set sequenceNumber($fixnum.Int64 v) { $_setInt64(0, v); }
+  set sequenceNumber($fixnum.Int64 value) => $_setInt64(0, value);
   @$pb.TagNumber(1)
   $core.bool hasSequenceNumber() => $_has(0);
   @$pb.TagNumber(1)
@@ -5765,46 +6188,54 @@ class UnPinSessionReq extends $pb.GeneratedMessage {
   factory UnPinSessionReq({
     SessionId? sessionId,
   }) {
-    final $result = create();
-    if (sessionId != null) {
-      $result.sessionId = sessionId;
-    }
-    return $result;
+    final result = create();
+    if (sessionId != null) result.sessionId = sessionId;
+    return result;
   }
-  UnPinSessionReq._() : super();
-  factory UnPinSessionReq.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory UnPinSessionReq.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UnPinSessionReq', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..aOM<SessionId>(1, _omitFieldNames ? '' : 'sessionId', subBuilder: SessionId.create)
-    ..hasRequiredFields = false
-  ;
+  UnPinSessionReq._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  UnPinSessionReq clone() => UnPinSessionReq()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  UnPinSessionReq copyWith(void Function(UnPinSessionReq) updates) => super.copyWith((message) => updates(message as UnPinSessionReq)) as UnPinSessionReq;
+  factory UnPinSessionReq.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UnPinSessionReq.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UnPinSessionReq',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aOM<SessionId>(1, _omitFieldNames ? '' : 'sessionId',
+        subBuilder: SessionId.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UnPinSessionReq clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UnPinSessionReq copyWith(void Function(UnPinSessionReq) updates) =>
+      super.copyWith((message) => updates(message as UnPinSessionReq))
+          as UnPinSessionReq;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static UnPinSessionReq create() => UnPinSessionReq._();
+  @$core.override
   UnPinSessionReq createEmptyInstance() => create();
-  static $pb.PbList<UnPinSessionReq> createRepeated() => $pb.PbList<UnPinSessionReq>();
+  static $pb.PbList<UnPinSessionReq> createRepeated() =>
+      $pb.PbList<UnPinSessionReq>();
   @$core.pragma('dart2js:noInline')
-  static UnPinSessionReq getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UnPinSessionReq>(create);
+  static UnPinSessionReq getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UnPinSessionReq>(create);
   static UnPinSessionReq? _defaultInstance;
 
   @$pb.TagNumber(1)
   SessionId get sessionId => $_getN(0);
   @$pb.TagNumber(1)
-  set sessionId(SessionId v) { $_setField(1, v); }
+  set sessionId(SessionId value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasSessionId() => $_has(0);
   @$pb.TagNumber(1)
@@ -5819,54 +6250,56 @@ class Unread extends $pb.GeneratedMessage {
     $fixnum.Int64? number,
     $core.String? numberShow,
   }) {
-    final $result = create();
-    if (style != null) {
-      $result.style = style;
-    }
-    if (number != null) {
-      $result.number = number;
-    }
-    if (numberShow != null) {
-      $result.numberShow = numberShow;
-    }
-    return $result;
+    final result = create();
+    if (style != null) result.style = style;
+    if (number != null) result.number = number;
+    if (numberShow != null) result.numberShow = numberShow;
+    return result;
   }
-  Unread._() : super();
-  factory Unread.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Unread.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Unread', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..e<UnreadStyle>(1, _omitFieldNames ? '' : 'style', $pb.PbFieldType.OE, defaultOrMaker: UnreadStyle.UNREAD_STYLE_NONE, valueOf: UnreadStyle.valueOf, enumValues: UnreadStyle.values)
+  Unread._();
+
+  factory Unread.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory Unread.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'Unread',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aE<UnreadStyle>(1, _omitFieldNames ? '' : 'style',
+        enumValues: UnreadStyle.values)
     ..aInt64(2, _omitFieldNames ? '' : 'number')
     ..aOS(3, _omitFieldNames ? '' : 'numberShow')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  Unread clone() => Unread()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  Unread copyWith(void Function(Unread) updates) => super.copyWith((message) => updates(message as Unread)) as Unread;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Unread clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Unread copyWith(void Function(Unread) updates) =>
+      super.copyWith((message) => updates(message as Unread)) as Unread;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static Unread create() => Unread._();
+  @$core.override
   Unread createEmptyInstance() => create();
   static $pb.PbList<Unread> createRepeated() => $pb.PbList<Unread>();
   @$core.pragma('dart2js:noInline')
-  static Unread getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Unread>(create);
+  static Unread getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Unread>(create);
   static Unread? _defaultInstance;
 
   @$pb.TagNumber(1)
   UnreadStyle get style => $_getN(0);
   @$pb.TagNumber(1)
-  set style(UnreadStyle v) { $_setField(1, v); }
+  set style(UnreadStyle value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasStyle() => $_has(0);
   @$pb.TagNumber(1)
@@ -5875,7 +6308,7 @@ class Unread extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $fixnum.Int64 get number => $_getI64(1);
   @$pb.TagNumber(2)
-  set number($fixnum.Int64 v) { $_setInt64(1, v); }
+  set number($fixnum.Int64 value) => $_setInt64(1, value);
   @$pb.TagNumber(2)
   $core.bool hasNumber() => $_has(1);
   @$pb.TagNumber(2)
@@ -5884,7 +6317,7 @@ class Unread extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get numberShow => $_getSZ(2);
   @$pb.TagNumber(3)
-  set numberShow($core.String v) { $_setString(2, v); }
+  set numberShow($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasNumberShow() => $_has(2);
   @$pb.TagNumber(3)
@@ -5893,42 +6326,55 @@ class Unread extends $pb.GeneratedMessage {
 
 class UpdateSessionParams extends $pb.GeneratedMessage {
   factory UpdateSessionParams({
-    $pb.PbMap<$core.int, Offset>? maxSessionTs,
+    $core.Iterable<$core.MapEntry<$core.int, Offset>>? maxSessionTs,
   }) {
-    final $result = create();
-    if (maxSessionTs != null) {
-      $result.maxSessionTs.addAll(maxSessionTs);
-    }
-    return $result;
+    final result = create();
+    if (maxSessionTs != null) result.maxSessionTs.addEntries(maxSessionTs);
+    return result;
   }
-  UpdateSessionParams._() : super();
-  factory UpdateSessionParams.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory UpdateSessionParams.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateSessionParams', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..m<$core.int, Offset>(1, _omitFieldNames ? '' : 'maxSessionTs', entryClassName: 'UpdateSessionParams.MaxSessionTsEntry', keyFieldType: $pb.PbFieldType.O3, valueFieldType: $pb.PbFieldType.OM, valueCreator: Offset.create, valueDefaultOrMaker: Offset.getDefault, packageName: const $pb.PackageName('bilibili.app.im.v1'))
-    ..hasRequiredFields = false
-  ;
+  UpdateSessionParams._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  UpdateSessionParams clone() => UpdateSessionParams()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  UpdateSessionParams copyWith(void Function(UpdateSessionParams) updates) => super.copyWith((message) => updates(message as UpdateSessionParams)) as UpdateSessionParams;
+  factory UpdateSessionParams.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UpdateSessionParams.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UpdateSessionParams',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..m<$core.int, Offset>(1, _omitFieldNames ? '' : 'maxSessionTs',
+        entryClassName: 'UpdateSessionParams.MaxSessionTsEntry',
+        keyFieldType: $pb.PbFieldType.O3,
+        valueFieldType: $pb.PbFieldType.OM,
+        valueCreator: Offset.create,
+        valueDefaultOrMaker: Offset.getDefault,
+        packageName: const $pb.PackageName('bilibili.app.im.v1'))
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateSessionParams clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateSessionParams copyWith(void Function(UpdateSessionParams) updates) =>
+      super.copyWith((message) => updates(message as UpdateSessionParams))
+          as UpdateSessionParams;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static UpdateSessionParams create() => UpdateSessionParams._();
+  @$core.override
   UpdateSessionParams createEmptyInstance() => create();
-  static $pb.PbList<UpdateSessionParams> createRepeated() => $pb.PbList<UpdateSessionParams>();
+  static $pb.PbList<UpdateSessionParams> createRepeated() =>
+      $pb.PbList<UpdateSessionParams>();
   @$core.pragma('dart2js:noInline')
-  static UpdateSessionParams getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdateSessionParams>(create);
+  static UpdateSessionParams getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UpdateSessionParams>(create);
   static UpdateSessionParams? _defaultInstance;
 
   @$pb.TagNumber(1)
@@ -5940,50 +6386,55 @@ class UserLabel extends $pb.GeneratedMessage {
     LabelType? type,
     UserLabelStyle? style,
   }) {
-    final $result = create();
-    if (type != null) {
-      $result.type = type;
-    }
-    if (style != null) {
-      $result.style = style;
-    }
-    return $result;
+    final result = create();
+    if (type != null) result.type = type;
+    if (style != null) result.style = style;
+    return result;
   }
-  UserLabel._() : super();
-  factory UserLabel.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory UserLabel.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UserLabel', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..e<LabelType>(1, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: LabelType.LABEL_TYPE_DEFAULT, valueOf: LabelType.valueOf, enumValues: LabelType.values)
-    ..aOM<UserLabelStyle>(2, _omitFieldNames ? '' : 'style', subBuilder: UserLabelStyle.create)
-    ..hasRequiredFields = false
-  ;
+  UserLabel._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  UserLabel clone() => UserLabel()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  UserLabel copyWith(void Function(UserLabel) updates) => super.copyWith((message) => updates(message as UserLabel)) as UserLabel;
+  factory UserLabel.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UserLabel.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UserLabel',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..aE<LabelType>(1, _omitFieldNames ? '' : 'type',
+        enumValues: LabelType.values)
+    ..aOM<UserLabelStyle>(2, _omitFieldNames ? '' : 'style',
+        subBuilder: UserLabelStyle.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UserLabel clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UserLabel copyWith(void Function(UserLabel) updates) =>
+      super.copyWith((message) => updates(message as UserLabel)) as UserLabel;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static UserLabel create() => UserLabel._();
+  @$core.override
   UserLabel createEmptyInstance() => create();
   static $pb.PbList<UserLabel> createRepeated() => $pb.PbList<UserLabel>();
   @$core.pragma('dart2js:noInline')
-  static UserLabel getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UserLabel>(create);
+  static UserLabel getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UserLabel>(create);
   static UserLabel? _defaultInstance;
 
   @$pb.TagNumber(1)
   LabelType get type => $_getN(0);
   @$pb.TagNumber(1)
-  set type(LabelType v) { $_setField(1, v); }
+  set type(LabelType value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasType() => $_has(0);
   @$pb.TagNumber(1)
@@ -5992,7 +6443,7 @@ class UserLabel extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   UserLabelStyle get style => $_getN(1);
   @$pb.TagNumber(2)
-  set style(UserLabelStyle v) { $_setField(2, v); }
+  set style(UserLabelStyle value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasStyle() => $_has(1);
   @$pb.TagNumber(2)
@@ -6002,10 +6453,10 @@ class UserLabel extends $pb.GeneratedMessage {
 }
 
 enum UserLabelStyle_Style {
-  borderedLabel, 
-  filledLabel, 
-  imageLabel, 
-  medalLabel, 
+  borderedLabel,
+  filledLabel,
+  imageLabel,
+  medalLabel,
   notSet
 }
 
@@ -6016,69 +6467,84 @@ class UserLabelStyle extends $pb.GeneratedMessage {
     ImageLabel? imageLabel,
     Medal? medalLabel,
   }) {
-    final $result = create();
-    if (borderedLabel != null) {
-      $result.borderedLabel = borderedLabel;
-    }
-    if (filledLabel != null) {
-      $result.filledLabel = filledLabel;
-    }
-    if (imageLabel != null) {
-      $result.imageLabel = imageLabel;
-    }
-    if (medalLabel != null) {
-      $result.medalLabel = medalLabel;
-    }
-    return $result;
+    final result = create();
+    if (borderedLabel != null) result.borderedLabel = borderedLabel;
+    if (filledLabel != null) result.filledLabel = filledLabel;
+    if (imageLabel != null) result.imageLabel = imageLabel;
+    if (medalLabel != null) result.medalLabel = medalLabel;
+    return result;
   }
-  UserLabelStyle._() : super();
-  factory UserLabelStyle.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory UserLabelStyle.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static const $core.Map<$core.int, UserLabelStyle_Style> _UserLabelStyle_StyleByTag = {
-    2 : UserLabelStyle_Style.borderedLabel,
-    3 : UserLabelStyle_Style.filledLabel,
-    4 : UserLabelStyle_Style.imageLabel,
-    5 : UserLabelStyle_Style.medalLabel,
-    0 : UserLabelStyle_Style.notSet
+  UserLabelStyle._();
+
+  factory UserLabelStyle.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UserLabelStyle.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static const $core.Map<$core.int, UserLabelStyle_Style>
+      _UserLabelStyle_StyleByTag = {
+    2: UserLabelStyle_Style.borderedLabel,
+    3: UserLabelStyle_Style.filledLabel,
+    4: UserLabelStyle_Style.imageLabel,
+    5: UserLabelStyle_Style.medalLabel,
+    0: UserLabelStyle_Style.notSet
   };
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UserLabelStyle', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UserLabelStyle',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..oo(0, [2, 3, 4, 5])
-    ..aOM<BorderedLabel>(2, _omitFieldNames ? '' : 'borderedLabel', subBuilder: BorderedLabel.create)
-    ..aOM<FilledLabel>(3, _omitFieldNames ? '' : 'filledLabel', subBuilder: FilledLabel.create)
-    ..aOM<ImageLabel>(4, _omitFieldNames ? '' : 'imageLabel', subBuilder: ImageLabel.create)
-    ..aOM<Medal>(5, _omitFieldNames ? '' : 'medalLabel', subBuilder: Medal.create)
-    ..hasRequiredFields = false
-  ;
+    ..aOM<BorderedLabel>(2, _omitFieldNames ? '' : 'borderedLabel',
+        subBuilder: BorderedLabel.create)
+    ..aOM<FilledLabel>(3, _omitFieldNames ? '' : 'filledLabel',
+        subBuilder: FilledLabel.create)
+    ..aOM<ImageLabel>(4, _omitFieldNames ? '' : 'imageLabel',
+        subBuilder: ImageLabel.create)
+    ..aOM<Medal>(5, _omitFieldNames ? '' : 'medalLabel',
+        subBuilder: Medal.create)
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  UserLabelStyle clone() => UserLabelStyle()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  UserLabelStyle copyWith(void Function(UserLabelStyle) updates) => super.copyWith((message) => updates(message as UserLabelStyle)) as UserLabelStyle;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UserLabelStyle clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UserLabelStyle copyWith(void Function(UserLabelStyle) updates) =>
+      super.copyWith((message) => updates(message as UserLabelStyle))
+          as UserLabelStyle;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static UserLabelStyle create() => UserLabelStyle._();
+  @$core.override
   UserLabelStyle createEmptyInstance() => create();
-  static $pb.PbList<UserLabelStyle> createRepeated() => $pb.PbList<UserLabelStyle>();
+  static $pb.PbList<UserLabelStyle> createRepeated() =>
+      $pb.PbList<UserLabelStyle>();
   @$core.pragma('dart2js:noInline')
-  static UserLabelStyle getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UserLabelStyle>(create);
+  static UserLabelStyle getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UserLabelStyle>(create);
   static UserLabelStyle? _defaultInstance;
 
-  UserLabelStyle_Style whichStyle() => _UserLabelStyle_StyleByTag[$_whichOneof(0)]!;
+  @$pb.TagNumber(2)
+  @$pb.TagNumber(3)
+  @$pb.TagNumber(4)
+  @$pb.TagNumber(5)
+  UserLabelStyle_Style whichStyle() =>
+      _UserLabelStyle_StyleByTag[$_whichOneof(0)]!;
+  @$pb.TagNumber(2)
+  @$pb.TagNumber(3)
+  @$pb.TagNumber(4)
+  @$pb.TagNumber(5)
   void clearStyle() => $_clearField($_whichOneof(0));
 
   @$pb.TagNumber(2)
   BorderedLabel get borderedLabel => $_getN(0);
   @$pb.TagNumber(2)
-  set borderedLabel(BorderedLabel v) { $_setField(2, v); }
+  set borderedLabel(BorderedLabel value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasBorderedLabel() => $_has(0);
   @$pb.TagNumber(2)
@@ -6089,7 +6555,7 @@ class UserLabelStyle extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   FilledLabel get filledLabel => $_getN(1);
   @$pb.TagNumber(3)
-  set filledLabel(FilledLabel v) { $_setField(3, v); }
+  set filledLabel(FilledLabel value) => $_setField(3, value);
   @$pb.TagNumber(3)
   $core.bool hasFilledLabel() => $_has(1);
   @$pb.TagNumber(3)
@@ -6100,7 +6566,7 @@ class UserLabelStyle extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   ImageLabel get imageLabel => $_getN(2);
   @$pb.TagNumber(4)
-  set imageLabel(ImageLabel v) { $_setField(4, v); }
+  set imageLabel(ImageLabel value) => $_setField(4, value);
   @$pb.TagNumber(4)
   $core.bool hasImageLabel() => $_has(2);
   @$pb.TagNumber(4)
@@ -6111,7 +6577,7 @@ class UserLabelStyle extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   Medal get medalLabel => $_getN(3);
   @$pb.TagNumber(5)
-  set medalLabel(Medal v) { $_setField(5, v); }
+  set medalLabel(Medal value) => $_setField(5, value);
   @$pb.TagNumber(5)
   $core.bool hasMedalLabel() => $_has(3);
   @$pb.TagNumber(5)
@@ -6124,46 +6590,53 @@ class redirect2OtherPage extends $pb.GeneratedMessage {
   factory redirect2OtherPage({
     $core.String? url,
   }) {
-    final $result = create();
-    if (url != null) {
-      $result.url = url;
-    }
-    return $result;
+    final result = create();
+    if (url != null) result.url = url;
+    return result;
   }
-  redirect2OtherPage._() : super();
-  factory redirect2OtherPage.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory redirect2OtherPage.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'redirect2OtherPage', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  redirect2OtherPage._();
+
+  factory redirect2OtherPage.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory redirect2OtherPage.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'redirect2OtherPage',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'url')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  redirect2OtherPage clone() => redirect2OtherPage()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  redirect2OtherPage copyWith(void Function(redirect2OtherPage) updates) => super.copyWith((message) => updates(message as redirect2OtherPage)) as redirect2OtherPage;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  redirect2OtherPage clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  redirect2OtherPage copyWith(void Function(redirect2OtherPage) updates) =>
+      super.copyWith((message) => updates(message as redirect2OtherPage))
+          as redirect2OtherPage;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static redirect2OtherPage create() => redirect2OtherPage._();
+  @$core.override
   redirect2OtherPage createEmptyInstance() => create();
-  static $pb.PbList<redirect2OtherPage> createRepeated() => $pb.PbList<redirect2OtherPage>();
+  static $pb.PbList<redirect2OtherPage> createRepeated() =>
+      $pb.PbList<redirect2OtherPage>();
   @$core.pragma('dart2js:noInline')
-  static redirect2OtherPage getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<redirect2OtherPage>(create);
+  static redirect2OtherPage getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<redirect2OtherPage>(create);
   static redirect2OtherPage? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get url => $_getSZ(0);
   @$pb.TagNumber(1)
-  set url($core.String v) { $_setString(0, v); }
+  set url($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasUrl() => $_has(0);
   @$pb.TagNumber(1)
@@ -6176,54 +6649,57 @@ class redirect2Popup extends $pb.GeneratedMessage {
     $core.String? subtitle,
     $core.String? url,
   }) {
-    final $result = create();
-    if (title != null) {
-      $result.title = title;
-    }
-    if (subtitle != null) {
-      $result.subtitle = subtitle;
-    }
-    if (url != null) {
-      $result.url = url;
-    }
-    return $result;
+    final result = create();
+    if (title != null) result.title = title;
+    if (subtitle != null) result.subtitle = subtitle;
+    if (url != null) result.url = url;
+    return result;
   }
-  redirect2Popup._() : super();
-  factory redirect2Popup.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory redirect2Popup.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'redirect2Popup', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  redirect2Popup._();
+
+  factory redirect2Popup.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory redirect2Popup.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'redirect2Popup',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'title')
     ..aOS(2, _omitFieldNames ? '' : 'subtitle')
     ..aOS(3, _omitFieldNames ? '' : 'url')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  redirect2Popup clone() => redirect2Popup()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  redirect2Popup copyWith(void Function(redirect2Popup) updates) => super.copyWith((message) => updates(message as redirect2Popup)) as redirect2Popup;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  redirect2Popup clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  redirect2Popup copyWith(void Function(redirect2Popup) updates) =>
+      super.copyWith((message) => updates(message as redirect2Popup))
+          as redirect2Popup;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static redirect2Popup create() => redirect2Popup._();
+  @$core.override
   redirect2Popup createEmptyInstance() => create();
-  static $pb.PbList<redirect2Popup> createRepeated() => $pb.PbList<redirect2Popup>();
+  static $pb.PbList<redirect2Popup> createRepeated() =>
+      $pb.PbList<redirect2Popup>();
   @$core.pragma('dart2js:noInline')
-  static redirect2Popup getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<redirect2Popup>(create);
+  static redirect2Popup getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<redirect2Popup>(create);
   static redirect2Popup? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get title => $_getSZ(0);
   @$pb.TagNumber(1)
-  set title($core.String v) { $_setString(0, v); }
+  set title($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasTitle() => $_has(0);
   @$pb.TagNumber(1)
@@ -6232,7 +6708,7 @@ class redirect2Popup extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get subtitle => $_getSZ(1);
   @$pb.TagNumber(2)
-  set subtitle($core.String v) { $_setString(1, v); }
+  set subtitle($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasSubtitle() => $_has(1);
   @$pb.TagNumber(2)
@@ -6241,7 +6717,7 @@ class redirect2Popup extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get url => $_getSZ(2);
   @$pb.TagNumber(3)
-  set url($core.String v) { $_setString(2, v); }
+  set url($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasUrl() => $_has(2);
   @$pb.TagNumber(3)
@@ -6250,57 +6726,65 @@ class redirect2Popup extends $pb.GeneratedMessage {
 
 class redirect2SettingPage extends $pb.GeneratedMessage {
   factory redirect2SettingPage({
-    $pb.PbMap<$core.int, Setting>? subSettings,
+    $core.Iterable<$core.MapEntry<$core.int, Setting>>? subSettings,
     $core.String? pageTitle,
     $core.String? url,
     IMSettingType? parentSettingType,
   }) {
-    final $result = create();
-    if (subSettings != null) {
-      $result.subSettings.addAll(subSettings);
-    }
-    if (pageTitle != null) {
-      $result.pageTitle = pageTitle;
-    }
-    if (url != null) {
-      $result.url = url;
-    }
-    if (parentSettingType != null) {
-      $result.parentSettingType = parentSettingType;
-    }
-    return $result;
+    final result = create();
+    if (subSettings != null) result.subSettings.addEntries(subSettings);
+    if (pageTitle != null) result.pageTitle = pageTitle;
+    if (url != null) result.url = url;
+    if (parentSettingType != null) result.parentSettingType = parentSettingType;
+    return result;
   }
-  redirect2SettingPage._() : super();
-  factory redirect2SettingPage.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory redirect2SettingPage.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'redirect2SettingPage', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
-    ..m<$core.int, Setting>(1, _omitFieldNames ? '' : 'subSettings', entryClassName: 'redirect2SettingPage.SubSettingsEntry', keyFieldType: $pb.PbFieldType.O3, valueFieldType: $pb.PbFieldType.OM, valueCreator: Setting.create, valueDefaultOrMaker: Setting.getDefault, packageName: const $pb.PackageName('bilibili.app.im.v1'))
+  redirect2SettingPage._();
+
+  factory redirect2SettingPage.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory redirect2SettingPage.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'redirect2SettingPage',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
+    ..m<$core.int, Setting>(1, _omitFieldNames ? '' : 'subSettings',
+        entryClassName: 'redirect2SettingPage.SubSettingsEntry',
+        keyFieldType: $pb.PbFieldType.O3,
+        valueFieldType: $pb.PbFieldType.OM,
+        valueCreator: Setting.create,
+        valueDefaultOrMaker: Setting.getDefault,
+        packageName: const $pb.PackageName('bilibili.app.im.v1'))
     ..aOS(2, _omitFieldNames ? '' : 'pageTitle')
     ..aOS(3, _omitFieldNames ? '' : 'url')
-    ..e<IMSettingType>(4, _omitFieldNames ? '' : 'parentSettingType', $pb.PbFieldType.OE, defaultOrMaker: IMSettingType.SETTING_TYPE_NEED_ALL, valueOf: IMSettingType.valueOf, enumValues: IMSettingType.values)
-    ..hasRequiredFields = false
-  ;
+    ..aE<IMSettingType>(4, _omitFieldNames ? '' : 'parentSettingType',
+        enumValues: IMSettingType.values)
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  redirect2SettingPage clone() => redirect2SettingPage()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  redirect2SettingPage copyWith(void Function(redirect2SettingPage) updates) => super.copyWith((message) => updates(message as redirect2SettingPage)) as redirect2SettingPage;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  redirect2SettingPage clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  redirect2SettingPage copyWith(void Function(redirect2SettingPage) updates) =>
+      super.copyWith((message) => updates(message as redirect2SettingPage))
+          as redirect2SettingPage;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static redirect2SettingPage create() => redirect2SettingPage._();
+  @$core.override
   redirect2SettingPage createEmptyInstance() => create();
-  static $pb.PbList<redirect2SettingPage> createRepeated() => $pb.PbList<redirect2SettingPage>();
+  static $pb.PbList<redirect2SettingPage> createRepeated() =>
+      $pb.PbList<redirect2SettingPage>();
   @$core.pragma('dart2js:noInline')
-  static redirect2SettingPage getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<redirect2SettingPage>(create);
+  static redirect2SettingPage getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<redirect2SettingPage>(create);
   static redirect2SettingPage? _defaultInstance;
 
   @$pb.TagNumber(1)
@@ -6309,7 +6793,7 @@ class redirect2SettingPage extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get pageTitle => $_getSZ(1);
   @$pb.TagNumber(2)
-  set pageTitle($core.String v) { $_setString(1, v); }
+  set pageTitle($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasPageTitle() => $_has(1);
   @$pb.TagNumber(2)
@@ -6318,7 +6802,7 @@ class redirect2SettingPage extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get url => $_getSZ(2);
   @$pb.TagNumber(3)
-  set url($core.String v) { $_setString(2, v); }
+  set url($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasUrl() => $_has(2);
   @$pb.TagNumber(3)
@@ -6327,7 +6811,7 @@ class redirect2SettingPage extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   IMSettingType get parentSettingType => $_getN(3);
   @$pb.TagNumber(4)
-  set parentSettingType(IMSettingType v) { $_setField(4, v); }
+  set parentSettingType(IMSettingType value) => $_setField(4, value);
   @$pb.TagNumber(4)
   $core.bool hasParentSettingType() => $_has(3);
   @$pb.TagNumber(4)
@@ -6339,50 +6823,56 @@ class redirectWindowSelect extends $pb.GeneratedMessage {
     $core.String? title,
     $core.Iterable<SelectItem>? item,
   }) {
-    final $result = create();
-    if (title != null) {
-      $result.title = title;
-    }
-    if (item != null) {
-      $result.item.addAll(item);
-    }
-    return $result;
+    final result = create();
+    if (title != null) result.title = title;
+    if (item != null) result.item.addAll(item);
+    return result;
   }
-  redirectWindowSelect._() : super();
-  factory redirectWindowSelect.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory redirectWindowSelect.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'redirectWindowSelect', package: const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'), createEmptyInstance: create)
+  redirectWindowSelect._();
+
+  factory redirectWindowSelect.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory redirectWindowSelect.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'redirectWindowSelect',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'bilibili.app.im.v1'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'title')
-    ..pc<SelectItem>(2, _omitFieldNames ? '' : 'item', $pb.PbFieldType.PM, subBuilder: SelectItem.create)
-    ..hasRequiredFields = false
-  ;
+    ..pPM<SelectItem>(2, _omitFieldNames ? '' : 'item',
+        subBuilder: SelectItem.create)
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  redirectWindowSelect clone() => redirectWindowSelect()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  redirectWindowSelect copyWith(void Function(redirectWindowSelect) updates) => super.copyWith((message) => updates(message as redirectWindowSelect)) as redirectWindowSelect;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  redirectWindowSelect clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  redirectWindowSelect copyWith(void Function(redirectWindowSelect) updates) =>
+      super.copyWith((message) => updates(message as redirectWindowSelect))
+          as redirectWindowSelect;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static redirectWindowSelect create() => redirectWindowSelect._();
+  @$core.override
   redirectWindowSelect createEmptyInstance() => create();
-  static $pb.PbList<redirectWindowSelect> createRepeated() => $pb.PbList<redirectWindowSelect>();
+  static $pb.PbList<redirectWindowSelect> createRepeated() =>
+      $pb.PbList<redirectWindowSelect>();
   @$core.pragma('dart2js:noInline')
-  static redirectWindowSelect getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<redirectWindowSelect>(create);
+  static redirectWindowSelect getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<redirectWindowSelect>(create);
   static redirectWindowSelect? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get title => $_getSZ(0);
   @$pb.TagNumber(1)
-  set title($core.String v) { $_setString(0, v); }
+  set title($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasTitle() => $_has(0);
   @$pb.TagNumber(1)
@@ -6392,6 +6882,7 @@ class redirectWindowSelect extends $pb.GeneratedMessage {
   $pb.PbList<SelectItem> get item => $_getList(1);
 }
 
-
-const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
-const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');
+const $core.bool _omitFieldNames =
+    $core.bool.fromEnvironment('protobuf.omit_field_names');
+const $core.bool _omitMessageNames =
+    $core.bool.fromEnvironment('protobuf.omit_message_names');
