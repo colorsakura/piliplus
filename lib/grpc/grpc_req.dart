@@ -178,7 +178,7 @@ class GrpcReq {
             // UNKNOWN : -400 : msg
             final errMsg = details.map((e) => e.message).join('\n');
             msg = kDebugMode
-                ? 'CODE: ${grpcMsg.code}(${grpcMsg.message})'
+                ? 'CODE: ${grpcMsg.code}(${grpcMsg.message})\n'
                       'MSG: $errMsg'
                 : errMsg;
           } catch (e) {
