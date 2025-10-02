@@ -1805,7 +1805,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 : MouseCursor.defer,
             onEnter: (_) => plPlayerController.controls = true,
             onHover: (_) => plPlayerController.controls = true,
-            onExit: (_) => plPlayerController.controls = false,
+            onExit: (_) => plPlayerController.controls =
+                widget.videoDetailController?.showSteinEdgeInfo.value ?? false,
             child: child,
           ),
         ),
