@@ -124,7 +124,7 @@ dependencies:
     git:
       url: https://github.com/bggRGjQaUbCoE/auto_orientation.git
       ref: master
-  protobuf: ^4.0.0
+  protobuf: ^5.0.0
   animations: ^2.0.11
 
   # 获取appx信息
@@ -133,7 +133,7 @@ dependencies:
   # 防抖节流
   easy_debounce: ^2.0.3
   # 高帧率
-  flutter_displaymode: ^0.6.0
+  flutter_displaymode: ^0.7.0
   # scheme跳转
   app_links: ^6.3.2
   # 弹幕
