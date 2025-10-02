@@ -94,7 +94,9 @@ class PlPlayerController {
   late double lastPlaybackSpeed = 1.0;
   final RxDouble _playbackSpeed = Pref.playSpeedDefault.obs;
   late final RxDouble _longPressSpeed = Pref.longPressSpeedDefault.obs;
-  final RxDouble _currentVolume = 1.0.obs;
+  final RxDouble _currentVolume = RxDouble(
+    Utils.isDesktop ? Pref.desktopVolume : 1.0,
+  );
   final RxDouble _currentBrightness = (-1.0).obs;
 
   final RxBool _showControls = false.obs;
@@ -779,6 +781,9 @@ class PlPlayerController {
         );
     final pp = player.platform!;
     if (_videoPlayerController == null) {
+      if (Utils.isDesktop) {
+        pp.setVolume(this.volume.value * 100);
+      }
       if (isAnim) {
         setShader(superResolutionType.value, pp);
       }
@@ -1330,6 +1335,9 @@ class PlPlayerController {
     volumeTimer = Timer(const Duration(milliseconds: 200), () {
       volumeIndicator.value = false;
       volumeInterceptEventStream.value = false;
+      if (Utils.isDesktop) {
+        setting.put(SettingBoxKey.desktopVolume, volume.toPrecision(3));
+      }
     });
   }
 
