@@ -1058,7 +1058,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   void onTap(PointerDeviceKind? kind) {
     switch (kind) {
-      case ui.PointerDeviceKind.mouse:
+      case ui.PointerDeviceKind.mouse when Utils.isDesktop:
         onTapDesktop();
         break;
       default:
@@ -1069,7 +1069,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   void onDoubleTapDown(TapDownDetails details) {
     switch (details.kind) {
-      case ui.PointerDeviceKind.mouse:
+      case ui.PointerDeviceKind.mouse when Utils.isDesktop:
         onDoubleTapDesktop();
         break;
       default:
