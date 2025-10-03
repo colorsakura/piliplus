@@ -1511,48 +1511,53 @@ class PlPlayerController {
     bool status = true,
     bool inAppFullScreen = false,
   }) async {
+    if (isFullScreen.value == status) return;
+
     if (fsProcessing) {
       return;
     }
     fsProcessing = true;
 
-    if (!isFullScreen.value && status) {
-      hideStatusBar();
+    toggleFullScreen(status);
 
-      /// 按照视频宽高比决定全屏方向
-      toggleFullScreen(true);
-
-      /// 进入全屏
-      if (mode == FullScreenMode.none) {
-        fsProcessing = false;
-        return;
-      }
-      if (mode == FullScreenMode.gravity) {
-        fullAutoModeForceSensor();
-        fsProcessing = false;
-        return;
-      }
-      late final size = Get.size;
-      if (Utils.isMobile &&
-          (mode == FullScreenMode.vertical ||
-              (mode == FullScreenMode.auto && isVertical) ||
-              (mode == FullScreenMode.ratio &&
-                  (isVertical || size.height / size.width < 1.25)))) {
-        await verticalScreenForTwoSeconds();
+    if (status) {
+      if (Utils.isMobile) {
+        hideStatusBar();
+        if (mode == FullScreenMode.none) {
+          fsProcessing = false;
+          return;
+        }
+        if (mode == FullScreenMode.gravity) {
+          await fullAutoModeForceSensor();
+          fsProcessing = false;
+          return;
+        }
+        late final size = Get.mediaQuery.size;
+        if ((mode == FullScreenMode.vertical ||
+            (mode == FullScreenMode.auto && isVertical) ||
+            (mode == FullScreenMode.ratio &&
+                (isVertical || size.height / size.width < 1.25)))) {
+          await verticalScreenForTwoSeconds();
+        } else {
+          await landscape();
+        }
       } else {
-        await landscape(inAppFullScreen: inAppFullScreen);
+        await enterDesktopFullscreen();
       }
-    } else if (isFullScreen.value && !status) {
-      showStatusBar();
-      toggleFullScreen(false);
-      if (mode == FullScreenMode.none) {
-        fsProcessing = false;
-        return;
-      }
-      if (!horizontalScreen) {
-        await verticalScreenForTwoSeconds();
+    } else {
+      if (Utils.isMobile) {
+        showStatusBar();
+        if (mode == FullScreenMode.none) {
+          fsProcessing = false;
+          return;
+        }
+        if (!horizontalScreen) {
+          await verticalScreenForTwoSeconds();
+        } else {
+          await autoScreen();
+        }
       } else {
-        await autoScreen();
+        await exitDesktopFullscreen();
       }
     }
     fsProcessing = false;

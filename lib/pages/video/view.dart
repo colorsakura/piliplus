@@ -369,7 +369,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     }
     PageUtils.routeObserver.unsubscribe(this);
     WidgetsBinding.instance.removeObserver(this);
-    showStatusBar();
+    if (Utils.isMobile) {
+      showStatusBar();
+    }
     super.dispose();
   }
 
@@ -545,7 +547,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     videoDetailController.animationController
       ..removeListener(animListener)
       ..addListener(animListener);
-    if (mounted && isShowing && !isFullScreen) {
+    if (Utils.isMobile && mounted && isShowing && !isFullScreen) {
       if (isPortrait) {
         if (!videoDetailController.imageStatus) {
           showStatusBar();
