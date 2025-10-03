@@ -2245,10 +2245,12 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       return;
     }
     if (isFullScreen) {
-      plPlayerController!.triggerFullScreen(status: false);
+      videoDetailController.plPlayerController.triggerFullScreen(status: false);
+      return;
     }
     if (!videoDetailController.horizontalScreen && !isPortrait) {
       verticalScreenForTwoSeconds();
+      return;
     }
   }
 

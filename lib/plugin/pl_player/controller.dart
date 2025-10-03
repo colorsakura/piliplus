@@ -1542,7 +1542,7 @@ class PlPlayerController {
           await landscape();
         }
       } else {
-        await enterDesktopFullscreen();
+        await enterDesktopFullscreen(inAppFullScreen: inAppFullScreen);
       }
     } else {
       if (Utils.isMobile) {
