@@ -1786,10 +1786,14 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           final buttons = event.buttons;
           final isSecondaryBtn = buttons == kSecondaryMouseButton;
           if (isSecondaryBtn || buttons == kMiddleMouseButton) {
-            plPlayerController.triggerFullScreen(
-              status: !isFullScreen,
-              inAppFullScreen: isSecondaryBtn,
-            );
+            plPlayerController
+                .triggerFullScreen(
+                  status: !isFullScreen,
+                  inAppFullScreen: isSecondaryBtn,
+                )
+                .whenComplete(
+                  () => plPlayerController.initialFocalPoint = Offset.zero,
+                );
           }
         },
         onPointerSignal: (event) {
