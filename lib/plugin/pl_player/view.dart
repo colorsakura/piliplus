@@ -1783,8 +1783,13 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       return Listener(
         behavior: HitTestBehavior.translucent,
         onPointerDown: (event) {
-          if (event.buttons == kMiddleMouseButton) {
-            plPlayerController.triggerFullScreen(status: !isFullScreen);
+          final buttons = event.buttons;
+          final isSecondaryBtn = buttons == kSecondaryMouseButton;
+          if (isSecondaryBtn || buttons == kMiddleMouseButton) {
+            plPlayerController.triggerFullScreen(
+              status: !isFullScreen,
+              inAppFullScreen: isSecondaryBtn,
+            );
           }
         },
         onPointerSignal: (event) {

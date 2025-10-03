@@ -1438,12 +1438,7 @@ class PlPlayerController {
 
   // 双击播放、暂停
   Future<void> onDoubleTapCenter() async {
-    if (videoPlayerController!.state.completed) {
-      await videoPlayerController!.seek(Duration.zero);
-      videoPlayerController!.play();
-    } else {
-      videoPlayerController!.playOrPause();
-    }
+    videoPlayerController!.playOrPause();
   }
 
   final RxBool mountSeekBackwardButton = false.obs;
