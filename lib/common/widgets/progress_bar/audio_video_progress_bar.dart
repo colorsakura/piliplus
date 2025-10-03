@@ -293,8 +293,8 @@ class ProgressBar extends LeafRenderObjectWidget {
     final textStyle = timeLabelTextStyle ?? theme.textTheme.bodyLarge;
     final textScaleFactor = MediaQuery.textScalerOf(context).scale(1);
     (renderObject as _RenderProgressBar)
-      ..progress = progress
       ..total = total
+      ..progress = progress
       ..buffered = buffered ?? Duration.zero
       ..onSeek = onSeek
       ..onDragStart = onDragStart
