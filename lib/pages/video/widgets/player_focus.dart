@@ -163,18 +163,6 @@ class PlayerFocus extends StatelessWidget {
             ..controlsLock.value = false;
           return true;
 
-        case LogicalKeyboardKey.escape:
-          if (plPlayerController.controlsLock.value) {
-            plPlayerController.onLockControl(false);
-          } else if (plPlayerController.isDesktopPip) {
-            plPlayerController.exitDesktopPip();
-          } else if (isFullScreen) {
-            plPlayerController.triggerFullScreen(status: false);
-          } else {
-            Get.back();
-          }
-          return true;
-
         case LogicalKeyboardKey.keyD:
           if (plPlayerController.isLive) {
             final newVal = !plPlayerController.enableShowLiveDanmaku.value;

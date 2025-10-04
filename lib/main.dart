@@ -264,38 +264,46 @@ class MyApp extends StatelessWidget {
                 child: child!,
               );
               if (Utils.isDesktop) {
-                return MouseBackDetector(
-                  onTapDown: () {
-                    if (SmartDialog.checkExist()) {
-                      SmartDialog.dismiss();
-                      return;
-                    }
+                void onBack() {
+                  if (SmartDialog.checkExist()) {
+                    SmartDialog.dismiss();
+                    return;
+                  }
 
-                    if (Get.isDialogOpen ?? Get.isBottomSheetOpen ?? false) {
-                      Get.back();
-                      return;
-                    }
-
-                    final plCtr = PlPlayerController.instance;
-                    if (plCtr != null) {
-                      if (plCtr.isFullScreen.value == true) {
-                        plCtr
-                          ..triggerFullScreen(status: false)
-                          ..controlsLock.value = false;
-                        return;
-                      }
-
-                      if (plCtr.isDesktopPip) {
-                        plCtr.exitDesktopPip().whenComplete(
-                          () => plCtr.initialFocalPoint = Offset.zero,
-                        );
-                        return;
-                      }
-                    }
-
+                  if (Get.isDialogOpen ?? Get.isBottomSheetOpen ?? false) {
                     Get.back();
+                    return;
+                  }
+
+                  final plCtr = PlPlayerController.instance;
+                  if (plCtr != null) {
+                    if (plCtr.isFullScreen.value == true) {
+                      plCtr
+                        ..triggerFullScreen(status: false)
+                        ..controlsLock.value = false;
+                      return;
+                    }
+
+                    if (plCtr.isDesktopPip) {
+                      plCtr.exitDesktopPip().whenComplete(
+                        () => plCtr.initialFocalPoint = Offset.zero,
+                      );
+                      return;
+                    }
+                  }
+
+                  Get.back();
+                }
+
+                return Shortcuts(
+                  shortcuts: {
+                    LogicalKeySet(LogicalKeyboardKey.escape):
+                        VoidCallbackIntent(onBack),
                   },
-                  child: child,
+                  child: MouseBackDetector(
+                    onTapDown: onBack,
+                    child: child,
+                  ),
                 );
               }
               return child;
