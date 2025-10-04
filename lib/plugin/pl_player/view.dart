@@ -1075,6 +1075,93 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     }
   }
 
+  void onPointerDown(PointerDownEvent event) {
+    final buttons = event.buttons;
+    final isSecondaryBtn = buttons == kSecondaryMouseButton;
+    if (isSecondaryBtn || buttons == kMiddleMouseButton) {
+      plPlayerController
+          .triggerFullScreen(
+            status: !isFullScreen,
+            inAppFullScreen: isSecondaryBtn,
+          )
+          .whenComplete(
+            () => plPlayerController.initialFocalPoint = Offset.zero,
+          );
+    }
+  }
+
+  void onPointerPanZoomUpdate(PointerPanZoomUpdateEvent event) {
+    if (_gestureType == null) {
+      final pan = event.pan;
+      if (pan.distance < 1) return;
+      if (pan.dx.abs() > 3 * pan.dy.abs()) {
+        _gestureType = GestureType.horizontal;
+      } else if (pan.dy.abs() > 3 * pan.dx.abs()) {
+        _gestureType = GestureType.right;
+      }
+      return;
+    }
+
+    if (_gestureType == GestureType.horizontal) {
+      if (plPlayerController.isLive) return;
+
+      Offset delta = event.localPanDelta;
+      final int curSliderPosition =
+          plPlayerController.sliderPosition.value.inMilliseconds;
+      final int newPos =
+          (curSliderPosition +
+                  (plPlayerController.sliderScale * delta.dx / maxWidth)
+                      .round())
+              .clamp(
+                0,
+                plPlayerController.duration.value.inMilliseconds,
+              );
+      final Duration result = Duration(milliseconds: newPos);
+      if (plPlayerController.cancelSeek == true) {
+        plPlayerController
+          ..cancelSeek = null
+          ..hasToast = null;
+      }
+      plPlayerController
+        ..onUpdatedSliderProgress(result)
+        ..onChangedSliderStart();
+      if (plPlayerController.showSeekPreview &&
+          plPlayerController.cancelSeek != true) {
+        plPlayerController.updatePreviewIndex(newPos ~/ 1000);
+      }
+    } else if (_gestureType == GestureType.right) {
+      final double level = maxHeight * 0.5;
+      EasyThrottle.throttle(
+        'setVolume',
+        const Duration(milliseconds: 20),
+        () {
+          final double volume = clampDouble(
+            plPlayerController.volume.value - event.localPanDelta.dy / level,
+            0.0,
+            1.0,
+          );
+          plPlayerController.setVolume(volume);
+        },
+      );
+    }
+  }
+
+  void onPointerPanZoomEnd(PointerPanZoomEndEvent event) {
+    _gestureType = null;
+  }
+
+  void onPointerSignal(PointerSignalEvent event) {
+    if (event is PointerScrollEvent) {
+      final offset = -event.scrollDelta.dy / 4000;
+      final volume = clampDouble(
+        plPlayerController.volume.value + offset,
+        0.0,
+        1.0,
+      );
+      plPlayerController.setVolume(volume);
+    }
+  }
+
   final isMobile = Utils.isMobile;
 
   @override
@@ -1779,31 +1866,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     if (!isMobile) {
       return Listener(
         behavior: HitTestBehavior.translucent,
-        onPointerDown: (event) {
-          final buttons = event.buttons;
-          final isSecondaryBtn = buttons == kSecondaryMouseButton;
-          if (isSecondaryBtn || buttons == kMiddleMouseButton) {
-            plPlayerController
-                .triggerFullScreen(
-                  status: !isFullScreen,
-                  inAppFullScreen: isSecondaryBtn,
-                )
-                .whenComplete(
-                  () => plPlayerController.initialFocalPoint = Offset.zero,
-                );
-          }
-        },
-        onPointerSignal: (event) {
-          if (event is PointerScrollEvent) {
-            final offset = -event.scrollDelta.dy / 4000;
-            final volume = clampDouble(
-              plPlayerController.volume.value + offset,
-              0.0,
-              1.0,
-            );
-            plPlayerController.setVolume(volume);
-          }
-        },
+        onPointerDown: onPointerDown,
+        onPointerPanZoomUpdate: onPointerPanZoomUpdate,
+        onPointerPanZoomEnd: onPointerPanZoomEnd,
+        onPointerSignal: onPointerSignal,
         child: Obx(
           () => MouseRegion(
             cursor: !plPlayerController.showControls.value && isFullScreen
