@@ -1436,11 +1436,14 @@ class PlPlayerController {
     return (duration.inMilliseconds / 1000).round();
   }
 
+  bool get _isCompleted =>
+      videoPlayerController!.state.completed ||
+      (_durationInSeconds(position.value) ==
+          _durationInSeconds(duration.value));
+
   // 双击播放、暂停
   Future<void> onDoubleTapCenter() async {
-    if (videoPlayerController!.state.completed ||
-        (_durationInSeconds(position.value) ==
-            _durationInSeconds(duration.value))) {
+    if (!isLive && _isCompleted) {
       await videoPlayerController!.seek(Duration.zero);
       videoPlayerController!.play();
     } else {
