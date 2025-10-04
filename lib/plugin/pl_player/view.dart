@@ -128,9 +128,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   //播放器放缩
   bool interacting = false;
 
-  // 是否在调整固定进度条
-  RxBool draggingFixedProgressBar = false.obs;
-
   // 阅读器限制
   // Timer? _accessibilityDebounce;
   // double _lastAnnouncedValue = -1;
@@ -1086,6 +1083,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     maxWidth = widget.maxWidth;
     maxHeight = widget.maxHeight;
     final Color primary = theme.colorScheme.primary;
+    late final bufferedBarColor = primary.withValues(alpha: 0.4);
     const TextStyle textStyle = TextStyle(
       color: Colors.white,
       fontSize: 12,
@@ -1507,13 +1505,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                             total: Duration(seconds: max),
                             progressBarColor: primary,
                             baseBarColor: const Color(0x33FFFFFF),
-                            bufferedBarColor: primary.withValues(alpha: 0.4),
-                            timeLabelLocation: TimeLabelLocation.none,
+                            bufferedBarColor: bufferedBarColor,
                             thumbColor: primary,
                             barHeight: 3.5,
-                            thumbRadius: draggingFixedProgressBar.value
-                                ? 7
-                                : 2.5,
+                            thumbRadius: 2.5,
                           );
                         }),
                         0,
