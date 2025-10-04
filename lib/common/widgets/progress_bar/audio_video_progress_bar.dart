@@ -43,7 +43,7 @@ class ProgressBar extends LeafRenderObjectWidget {
     this.barCapShape = BarCapShape.round,
     this.thumbRadius = 10.0,
     required this.thumbColor,
-    this.thumbGlowColor,
+    required this.thumbGlowColor,
     this.thumbGlowRadius = 30.0,
     this.thumbCanPaintOutsideBar = true,
   });
@@ -154,7 +154,7 @@ class ProgressBar extends LeafRenderObjectWidget {
   /// The color of the pressed-down effect of the moveable progress bar thumb.
   ///
   /// By default it is [thumbColor] with an alpha value of 80.
-  final Color? thumbGlowColor;
+  final Color thumbGlowColor;
 
   /// The radius of the circle for the pressed-down effect of the moveable
   /// progress bar thumb.
@@ -196,7 +196,7 @@ class ProgressBar extends LeafRenderObjectWidget {
       barCapShape: barCapShape,
       thumbRadius: thumbRadius,
       thumbColor: thumbColor,
-      thumbGlowColor: thumbGlowColor ?? thumbColor,
+      thumbGlowColor: thumbGlowColor,
       thumbGlowRadius: thumbGlowRadius,
       thumbCanPaintOutsideBar: thumbCanPaintOutsideBar,
     );
@@ -219,7 +219,7 @@ class ProgressBar extends LeafRenderObjectWidget {
       ..barCapShape = barCapShape
       ..thumbRadius = thumbRadius
       ..thumbColor = thumbColor
-      ..thumbGlowColor = thumbGlowColor ?? thumbColor
+      ..thumbGlowColor = thumbGlowColor
       ..thumbGlowRadius = thumbGlowRadius
       ..thumbCanPaintOutsideBar = thumbCanPaintOutsideBar;
   }

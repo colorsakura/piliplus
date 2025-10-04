@@ -31,6 +31,7 @@ class BottomControl extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     Color primary = theme.colorScheme.primary;
+    final thumbGlowColor = primary.withAlpha(80);
     final bufferedBarColor = primary.withValues(alpha: 0.4);
     //阅读器限制
     Timer? accessibilityDebounce;
@@ -109,6 +110,7 @@ class BottomControl extends StatelessWidget {
                       baseBarColor: const Color(0x33FFFFFF),
                       bufferedBarColor: bufferedBarColor,
                       thumbColor: primary,
+                      thumbGlowColor: thumbGlowColor,
                       barHeight: 3.5,
                       thumbRadius: 7,
                       onDragStart: onDragStart,

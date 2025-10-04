@@ -1083,6 +1083,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     maxWidth = widget.maxWidth;
     maxHeight = widget.maxHeight;
     final Color primary = theme.colorScheme.primary;
+    late final thumbGlowColor = primary.withAlpha(80);
     late final bufferedBarColor = primary.withValues(alpha: 0.4);
     const TextStyle textStyle = TextStyle(
       color: Colors.white,
@@ -1507,6 +1508,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                             baseBarColor: const Color(0x33FFFFFF),
                             bufferedBarColor: bufferedBarColor,
                             thumbColor: primary,
+                            thumbGlowColor: thumbGlowColor,
                             barHeight: 3.5,
                             thumbRadius: 2.5,
                           );
