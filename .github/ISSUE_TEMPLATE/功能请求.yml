@@ -14,6 +14,14 @@ body:
         - label: 正在使用最新版本。
           required: true
 
+  - type: checkboxes
+    id: assign
+    attributes:
+      label: Assign
+      options:
+        - label: self-assign
+          required: false
+
   - type: textarea
     id: desc
     attributes:
