@@ -1432,9 +1432,20 @@ class PlPlayerController {
     }
   }
 
+  int _durationInSeconds(Duration duration) {
+    return (duration.inMilliseconds / 1000).round();
+  }
+
   // 双击播放、暂停
   Future<void> onDoubleTapCenter() async {
-    videoPlayerController!.playOrPause();
+    if (videoPlayerController!.state.completed ||
+        (_durationInSeconds(position.value) ==
+            _durationInSeconds(duration.value))) {
+      await videoPlayerController!.seek(Duration.zero);
+      videoPlayerController!.play();
+    } else {
+      videoPlayerController!.playOrPause();
+    }
   }
 
   final RxBool mountSeekBackwardButton = false.obs;
