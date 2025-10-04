@@ -106,7 +106,7 @@ class PlPlayerController {
   final RxBool _controlsLock = false.obs;
   final RxBool _isFullScreen = false.obs;
   // 默认投稿视频格式
-  bool _isLive = false;
+  bool isLive = false;
 
   bool _isVertical = false;
 
@@ -130,7 +130,7 @@ class PlPlayerController {
   // 记录历史记录
   int? _aid;
   String? _bvid;
-  int? _cid;
+  int? cid;
   int? _epid;
   int? _seasonId;
   int? _pgcType;
@@ -152,7 +152,6 @@ class PlPlayerController {
   // final Durations durations;
 
   String get bvid => _bvid!;
-  int get cid => _cid!;
 
   /// 数据加载监听
   Stream<DataStatus> get onDataStatusChanged => dataStatus.status.stream;
@@ -248,9 +247,6 @@ class PlPlayerController {
 
   /// 全屏方向
   bool get isVertical => _isVertical;
-
-  ///
-  bool get isLive => _isLive;
 
   /// 弹幕开关
   late final RxBool enableShowDanmaku = Pref.enableShowDanmaku.obs;
@@ -574,7 +570,7 @@ class PlPlayerController {
     // 如果实例尚未创建，则创建一个新实例
     _instance ??= PlPlayerController._();
     _instance!
-      .._isLive = isLive
+      ..isLive = isLive
       .._playerCount += 1;
     return _instance!;
   }
@@ -607,7 +603,7 @@ class PlPlayerController {
     Volume? volume,
   }) async {
     try {
-      _isLive = isLive;
+      this.isLive = isLive;
       _videoType = videoType ?? VideoType.ugc;
       this.width = width;
       this.height = height;
@@ -622,7 +618,7 @@ class PlPlayerController {
       _isVertical = isVertical ?? false;
       _aid = aid;
       _bvid = bvid;
-      _cid = cid;
+      this.cid = cid;
       _epid = epid;
       _seasonId = seasonId;
       _pgcType = pgcType;
@@ -1615,7 +1611,7 @@ class PlPlayerController {
       await VideoHttp.heartBeat(
         aid: aid ?? _aid,
         bvid: bvid ?? _bvid,
-        cid: cid ?? _cid,
+        cid: cid ?? this.cid,
         progress: isComplete ? -1 : progress,
         epid: epid ?? _epid,
         seasonId: seasonId ?? _seasonId,
@@ -1630,7 +1626,7 @@ class PlPlayerController {
       await VideoHttp.heartBeat(
         aid: aid ?? _aid,
         bvid: bvid ?? _bvid,
-        cid: cid ?? _cid,
+        cid: cid ?? this.cid,
         progress: progress,
         epid: epid ?? _epid,
         seasonId: seasonId ?? _seasonId,
@@ -1680,7 +1676,9 @@ class PlPlayerController {
     if (!isCloseAll && _playerCount > 1) {
       _playerCount -= 1;
       _heartDuration = 0;
-      if (!Get.previousRoute.startsWith('/video')) {
+      final previousRoute = Get.previousRoute;
+      if (!previousRoute.startsWith('/video') &&
+          !previousRoute.startsWith('/liveRoom')) {
         pause();
       }
       return;
@@ -1782,7 +1780,7 @@ class PlPlayerController {
         queryParameters: {
           // 'aid': IdUtils.bv2av(_bvid),
           'bvid': _bvid,
-          'cid': _cid,
+          'cid': cid,
           'index': 1,
         },
         options: Options(

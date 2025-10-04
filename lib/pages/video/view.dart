@@ -415,6 +415,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
     WidgetsBinding.instance.addObserver(this);
 
+    plPlayerController?.isLive = false;
     if (videoDetailController.plPlayerController.playerStatus.status.value ==
             PlayerStatus.playing &&
         videoDetailController.playerStatus != PlayerStatus.playing) {

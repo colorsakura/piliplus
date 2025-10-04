@@ -440,7 +440,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             return;
           }
           int? index;
-          int currentCid = plPlayerController.cid;
+          int currentCid = plPlayerController.cid!;
           String bvid = plPlayerController.bvid;
           List episodes = [];
           if (isSeason) {
