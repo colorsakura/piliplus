@@ -126,6 +126,7 @@ class HorizontalMemberPageController
   }
 
   void queryBySort() {
+    if (isLoading) return;
     order.value = order.value == 'pubdate' ? 'click' : 'pubdate';
     onReload();
   }

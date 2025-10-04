@@ -141,6 +141,7 @@ class VideoReplyReplyController extends ReplyController
 
   @override
   void queryBySort() {
+    if (isLoading) return;
     mode.value = mode.value == Mode.MAIN_LIST_HOT
         ? Mode.MAIN_LIST_TIME
         : Mode.MAIN_LIST_HOT;

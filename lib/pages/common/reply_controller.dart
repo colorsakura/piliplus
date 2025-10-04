@@ -12,7 +12,6 @@ import 'package:PiliPlus/utils/reply_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
-import 'package:easy_debounce/easy_throttle.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -87,20 +86,19 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
 
   // 排序搜索评论
   void queryBySort() {
-    EasyThrottle.throttle('queryBySort', const Duration(seconds: 1), () {
-      feedBack();
-      switch (sortType.value) {
-        case ReplySortType.time:
-          sortType.value = ReplySortType.hot;
-          mode.value = Mode.MAIN_LIST_HOT;
-          break;
-        case ReplySortType.hot:
-          sortType.value = ReplySortType.time;
-          mode.value = Mode.MAIN_LIST_TIME;
-          break;
-      }
-      onReload();
-    });
+    if (isLoading) return;
+    feedBack();
+    switch (sortType.value) {
+      case ReplySortType.time:
+        sortType.value = ReplySortType.hot;
+        mode.value = Mode.MAIN_LIST_HOT;
+        break;
+      case ReplySortType.hot:
+        sortType.value = ReplySortType.time;
+        mode.value = Mode.MAIN_LIST_TIME;
+        break;
+    }
+    onReload();
   }
 
   (bool inputDisable, String? hint) get replyHint {

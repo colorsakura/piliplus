@@ -117,6 +117,7 @@ class PgcReviewController
   }
 
   void queryBySort() {
+    if (isLoading) return;
     sortType.value = sortType.value == PgcReviewSortType.def
         ? PgcReviewSortType.latest
         : PgcReviewSortType.def;

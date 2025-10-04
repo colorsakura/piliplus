@@ -135,6 +135,7 @@ class MemberVideoCtr
       );
 
   void queryBySort() {
+    if (isLoading) return;
     if (type == ContributeType.video) {
       isLocating.value = false;
       order.value = order.value == 'pubdate' ? 'click' : 'pubdate';
