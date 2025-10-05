@@ -278,11 +278,10 @@ class LiveRoomController extends GetxController {
   }
 
   void listener() {
-    if (scrollController.position.userScrollDirection ==
-        ScrollDirection.forward) {
+    final userScrollDirection = scrollController.position.userScrollDirection;
+    if (userScrollDirection == ScrollDirection.forward) {
       disableAutoScroll.value = true;
-    } else if (scrollController.position.userScrollDirection ==
-        ScrollDirection.reverse) {
+    } else if (userScrollDirection == ScrollDirection.reverse) {
       final pos = scrollController.position;
       if (pos.maxScrollExtent - pos.pixels <= 100) {
         disableAutoScroll.value = false;

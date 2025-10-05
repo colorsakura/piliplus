@@ -26,43 +26,22 @@ class _FavSortPageState extends State<FavSortPage> {
   );
   List<String> sort = <String>[];
 
-  final ScrollController _scrollController = ScrollController();
-
-  void listener() {
+  void onLoadMore() {
     if (_favDetailController.isEnd) {
       return;
     }
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      _favDetailController.onLoadMore().whenComplete(() {
-        try {
-          if (_favDetailController.loadingState.value.isSuccess) {
-            List<FavDetailItemModel> list =
-                _favDetailController.loadingState.value.data!;
-            sortList.addAll(list.sublist(sortList.length));
-            if (mounted) {
-              setState(() {});
-            }
+    _favDetailController.onLoadMore().whenComplete(() {
+      try {
+        if (_favDetailController.loadingState.value.isSuccess) {
+          List<FavDetailItemModel> list =
+              _favDetailController.loadingState.value.data!;
+          sortList.addAll(list.sublist(sortList.length));
+          if (mounted) {
+            setState(() {});
           }
-        } catch (_) {}
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    if (!_favDetailController.isEnd) {
-      _scrollController.addListener(listener);
-    }
-  }
-
-  @override
-  void dispose() {
-    _scrollController
-      ..removeListener(listener)
-      ..dispose();
-    super.dispose();
+        }
+      } catch (_) {}
+    });
   }
 
   @override
@@ -119,9 +98,8 @@ class _FavSortPageState extends State<FavSortPage> {
   }
 
   Widget get _buildBody {
-    return ReorderableListView.builder(
+    final child = ReorderableListView.builder(
       key: _key,
-      scrollController: _scrollController,
       onReorder: onReorder,
       physics: const AlwaysScrollableScrollPhysics(),
       padding:
@@ -137,5 +115,18 @@ class _FavSortPageState extends State<FavSortPage> {
         );
       },
     );
+    if (!_favDetailController.isEnd) {
+      return NotificationListener<ScrollEndNotification>(
+        onNotification: (notification) {
+          final metrics = notification.metrics;
+          if (metrics.pixels >= metrics.maxScrollExtent - 300) {
+            onLoadMore();
+          }
+          return false;
+        },
+        child: child,
+      );
+    }
+    return child;
   }
 }

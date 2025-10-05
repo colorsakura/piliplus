@@ -55,26 +55,44 @@ class DynamicsController extends GetxController
   @override
   void onInit() {
     super.onInit();
-    if (_showAllUp) {
-      scrollController.addListener(listener);
-    }
     queryFollowUp();
   }
 
-  void listener() {
-    if (scrollController.position.pixels >=
-        scrollController.position.maxScrollExtent - 300) {
+  void onLoadMoreUp() {
+    if (_showAllUp) {
       queryAllUp();
+    } else {
+      queryUpList();
     }
   }
 
-  Future<void> queryAllUp() async {
-    if (isQuerying) return;
+  Future<void> queryUpList() async {
+    if (isQuerying || _upEnd) return;
     isQuerying = true;
-    if (_upEnd) {
-      isQuerying = false;
-      return;
+
+    final res = await DynamicsHttp.dynUpList(upState.value.data.offset);
+
+    if (res.isSuccess) {
+      final data = res.data;
+      if (data.hasMore == false || data.offset.isNullOrEmpty) {
+        _upEnd = true;
+      }
+      final upData = upState.value.data
+        ..hasMore = data.hasMore
+        ..offset = data.offset;
+      final list = data.upList;
+      if (list != null && list.isNotEmpty) {
+        upData.upList.addAll(list);
+        upState.refresh();
+      }
     }
+
+    isQuerying = false;
+  }
+
+  Future<void> queryAllUp() async {
+    if (isQuerying || _upEnd) return;
+    isQuerying = true;
 
     final res = await FollowHttp.followings(
       vmid: accountService.mid,
@@ -110,6 +128,10 @@ class DynamicsController extends GetxController
       return;
     }
 
+    // reset
+    _upEnd = false;
+    if (_showAllUp) _upPage = 1;
+
     final res = await Future.wait([
       DynamicsHttp.followUp(),
       if (_showAllUp)
@@ -137,6 +159,11 @@ class DynamicsController extends GetxController
         final list = data.upList;
         _cacheUpList = List<UpItem>.from(list);
         list.addAll(list1..removeWhere(list.contains));
+      }
+      if (!_showAllUp) {
+        if (data.hasMore == false || data.offset.isNullOrEmpty) {
+          _upEnd = true;
+        }
       }
       upState.value = Success(data);
     } else {
@@ -201,9 +228,7 @@ class DynamicsController extends GetxController
   @override
   void onClose() {
     tabController.dispose();
-    scrollController
-      ..removeListener(listener)
-      ..dispose();
+    scrollController.dispose();
     super.onClose();
   }
 }

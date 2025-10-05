@@ -6,16 +6,34 @@ class FollowUpModel {
 
   LiveUsers? liveUsers;
   late List<UpItem> upList;
+  bool? hasMore;
+  String? offset;
 
   FollowUpModel.fromJson(Map<String, dynamic> json) {
     liveUsers = json['live_users'] != null
         ? LiveUsers.fromJson(json['live_users'])
         : null;
     upList =
-        (json['up_list'] as List?)
+        (json['up_list']?['items'] as List?)
             ?.map<UpItem>((e) => UpItem.fromJson(e))
             .toList() ??
         <UpItem>[];
+    hasMore = json['up_list']?['has_more'];
+    offset = json['up_list']?['offset'];
+  }
+}
+
+class DynUpList {
+  List<UpItem>? upList;
+  bool? hasMore;
+  String? offset;
+
+  DynUpList.fromJson(Map<String, dynamic> json) {
+    upList = (json['items'] as List?)
+        ?.map<UpItem>((e) => UpItem.fromJson(e))
+        .toList();
+    hasMore = json['has_more'];
+    offset = json['offset'];
   }
 }
 

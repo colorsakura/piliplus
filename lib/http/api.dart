@@ -214,6 +214,8 @@ class Api {
   // https://api.bilibili.com/x/polymer/web-dynamic/v1/portal
   static const String followUp = '/x/polymer/web-dynamic/v1/portal';
 
+  static const String dynUplist = '/x/polymer/web-dynamic/v1/uplist';
+
   // 关注的up动态
   // https://api.bilibili.com/x/polymer/web-dynamic/v1/feed/all
   // https://api.bilibili.com/x/polymer/web-dynamic/v1/feed/all?timezone_offset=-480&type=video&page=1&features=itemOpusStyle

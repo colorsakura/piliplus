@@ -61,7 +61,16 @@ class _DynamicsPageState extends State<DynamicsPage>
       child: SizedBox(
         width: isTop ? null : 64,
         height: isTop ? 76 : null,
-        child: Obx(() => _buildUpPanel(_dynamicsController.upState.value)),
+        child: NotificationListener<ScrollEndNotification>(
+          onNotification: (notification) {
+            final metrics = notification.metrics;
+            if (metrics.pixels >= metrics.maxScrollExtent - 300) {
+              _dynamicsController.onLoadMoreUp();
+            }
+            return false;
+          },
+          child: Obx(() => _buildUpPanel(_dynamicsController.upState.value)),
+        ),
       ),
     );
   }
