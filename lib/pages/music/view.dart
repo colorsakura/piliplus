@@ -170,8 +170,7 @@ class _MusicDetailPageState extends CommonDynPageState<MusicDetailPage> {
                     body: refreshIndicator(
                       onRefresh: controller.onRefresh,
                       child: CustomScrollView(
-                        controller: controller
-                            .scrollController, // debug: The provided ScrollController is attached to more than one ScrollPosition.
+                        controller: scrollController,
                         physics: const AlwaysScrollableScrollPhysics(),
                         slivers: [
                           buildReplyHeader(theme),

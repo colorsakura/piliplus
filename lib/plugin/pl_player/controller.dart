@@ -1108,7 +1108,8 @@ class PlPlayerController {
         } else if (event.startsWith('Could not open codec')) {
           SmartDialog.showToast('无法加载解码器, $event，可能会切换至软解');
         } else if (!onlyPlayAudio.value) {
-          if (event.startsWith("Failed to open .") ||
+          if (event.startsWith("error running") ||
+              event.startsWith("Failed to open .") ||
               event.startsWith("Cannot open") ||
               event.startsWith("Can not open")) {
             return;
@@ -1442,14 +1443,9 @@ class PlPlayerController {
     }
   }
 
-  int _durationInSeconds(Duration duration) {
-    return (duration.inMilliseconds / 1000).round();
-  }
-
   bool get _isCompleted =>
       videoPlayerController!.state.completed ||
-      (_durationInSeconds(position.value) ==
-          _durationInSeconds(duration.value));
+      (duration.value - position.value).inMilliseconds <= 50;
 
   // 双击播放、暂停
   Future<void> onDoubleTapCenter() async {

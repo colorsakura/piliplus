@@ -981,31 +981,27 @@ List<SettingsModel> get extraSettings => [
               mainAxisSize: MainAxisSize.min,
               children: [
                 const SizedBox(height: 6),
-                TextField(
-                  decoration: InputDecoration(
+                TextFormField(
+                  initialValue: systemProxyHost,
+                  decoration: const InputDecoration(
                     isDense: true,
-                    labelText: systemProxyHost.isNotEmpty
-                        ? systemProxyHost
-                        : '请输入Host，使用 . 分割',
-                    border: const OutlineInputBorder(
+                    labelText: '请输入Host，使用 . 分割',
+                    border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(6)),
                     ),
-                    hintText: systemProxyHost,
                   ),
                   onChanged: (e) => systemProxyHost = e,
                 ),
                 const SizedBox(height: 10),
-                TextField(
+                TextFormField(
+                  initialValue: systemProxyPort,
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     isDense: true,
-                    labelText: systemProxyPort.isNotEmpty
-                        ? systemProxyPort
-                        : '请输入Port',
-                    border: const OutlineInputBorder(
+                    labelText: '请输入Port',
+                    border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(6)),
                     ),
-                    hintText: systemProxyPort,
                   ),
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   onChanged: (e) => systemProxyPort = e,

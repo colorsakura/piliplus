@@ -88,7 +88,9 @@ abstract class CommonDynPageState<T extends StatefulWidget> extends State<T>
 
   @override
   void dispose() {
-    scrollController.dispose();
+    scrollController
+      ..removeListener(listener)
+      ..dispose();
     super.dispose();
   }
 
