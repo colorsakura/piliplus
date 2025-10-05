@@ -5,14 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
 
 class PlayOrPauseButton extends StatefulWidget {
-  final double? iconSize;
-  final Color? iconColor;
   final PlPlayerController plPlayerController;
 
   const PlayOrPauseButton({
     super.key,
-    this.iconSize,
-    this.iconColor,
     required this.plPlayerController,
   });
 
@@ -58,13 +54,7 @@ class PlayOrPauseButtonState extends State<PlayOrPauseButton>
       height: 34,
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: () {
-          if (player.state.completed) {
-            player.seek(Duration.zero).whenComplete(player.play);
-          } else {
-            player.playOrPause();
-          }
-        },
+        onTap: widget.plPlayerController.onDoubleTapCenter,
         child: Center(
           child: AnimatedIcon(
             semanticLabel: player.state.playing ? '暂停' : '播放',
