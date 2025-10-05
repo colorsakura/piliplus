@@ -268,6 +268,16 @@ class PlPlayerController {
       windowManager.setMinimumSize(const Size(400, 700)),
       windowManager.setBounds(_lastWindowBounds),
       windowManager.setAlwaysOnTop(false),
+      setting.putAll({
+        SettingBoxKey.windowSize: [
+          _lastWindowBounds.width,
+          _lastWindowBounds.height,
+        ],
+        SettingBoxKey.windowPosition: [
+          _lastWindowBounds.left,
+          _lastWindowBounds.top,
+        ],
+      }),
     ]);
   }
 
