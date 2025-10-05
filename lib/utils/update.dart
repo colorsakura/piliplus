@@ -6,6 +6,7 @@ import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/ua_type.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
@@ -46,6 +47,10 @@ abstract class Update {
           animationType: SmartAnimationType.centerFade_otherSlide,
           builder: (context) {
             final ThemeData theme = Theme.of(context);
+            Widget downloadBtn(String text, {String? ext}) => TextButton(
+              onPressed: () => onDownload(res.data[0], ext: ext),
+              child: Text(text),
+            );
             return AlertDialog(
               title: const Text('🎉 发现新版本 '),
               content: SizedBox(
@@ -76,18 +81,19 @@ abstract class Update {
                 ),
               ),
               actions: [
-                TextButton(
-                  onPressed: () {
-                    SmartDialog.dismiss();
-                    GStorage.setting.put(SettingBoxKey.autoUpdate, false);
-                  },
-                  child: Text(
-                    '不再提醒',
-                    style: TextStyle(
-                      color: theme.colorScheme.outline,
+                if (isAuto)
+                  TextButton(
+                    onPressed: () {
+                      SmartDialog.dismiss();
+                      GStorage.setting.put(SettingBoxKey.autoUpdate, false);
+                    },
+                    child: Text(
+                      '不再提醒',
+                      style: TextStyle(
+                        color: theme.colorScheme.outline,
+                      ),
                     ),
                   ),
-                ),
                 TextButton(
                   onPressed: SmartDialog.dismiss,
                   child: Text(
@@ -97,10 +103,14 @@ abstract class Update {
                     ),
                   ),
                 ),
-                TextButton(
-                  onPressed: () => onDownload(res.data[0]),
-                  child: const Text('Github'),
-                ),
+                if (Platform.isWindows) ...[
+                  downloadBtn('zip', ext: 'zip'),
+                  downloadBtn('exe', ext: 'exe'),
+                ] else if (Platform.isLinux) ...[
+                  downloadBtn('deb', ext: 'deb'),
+                  downloadBtn('targz', ext: 'tar.gz'),
+                ] else
+                  downloadBtn('Github'),
               ],
             );
           },
@@ -112,13 +122,15 @@ abstract class Update {
   }
 
   // 下载适用于当前系统的安装包
-  static Future<void> onDownload(Map data) async {
+  static Future<void> onDownload(Map data, {String? ext}) async {
     SmartDialog.dismiss();
     try {
       void download(String plat) {
         if (data['assets'].isNotEmpty) {
           for (Map<String, dynamic> i in data['assets']) {
-            if (i['name'].contains(plat)) {
+            final String name = i['name'];
+            if (name.contains(plat) &&
+                (ext.isNullOrEmpty ? true : name.endsWith(ext!))) {
               PageUtils.launchURL(i['browser_download_url']);
               return;
             }

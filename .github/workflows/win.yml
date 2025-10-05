@@ -58,7 +58,7 @@ jobs:
       - name: Upload windows file release
         uses: actions/upload-artifact@v4
         with:
-          name: windows-file-release
+          name: windows-release
           path: Release
 
       - name: Upload windows setup release
