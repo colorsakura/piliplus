@@ -1447,6 +1447,7 @@ class VideoDetailController extends GetxController
 
   Future<void> _queryPlayInfo() async {
     _vttSubtitles.clear();
+    vttSubtitlesIndex.value = 0;
     if (plPlayerController.showViewPoints) {
       viewPointList.clear();
     }

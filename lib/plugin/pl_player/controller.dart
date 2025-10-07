@@ -1254,22 +1254,14 @@ class PlPlayerController {
 
   /// 暂停播放
   Future<void> pause({bool notify = true, bool isInterrupt = false}) async {
-    await _videoPlayerController?.pause();
-    playerStatus.status.value = PlayerStatus.paused;
+    if (videoPlayerController?.state.playing ?? false) {
+      await _videoPlayerController?.playOrPause();
+      playerStatus.status.value = PlayerStatus.paused;
 
-    // 主动暂停时让出音频焦点
-    if (!isInterrupt) {
-      audioSessionHandler?.setActive(false);
-    }
-  }
-
-  /// 更改播放状态
-  Future<void> togglePlay() async {
-    feedBack();
-    if (playerStatus.playing) {
-      pause();
-    } else {
-      play();
+      // 主动暂停时让出音频焦点
+      if (!isInterrupt) {
+        audioSessionHandler?.setActive(false);
+      }
     }
   }
 
@@ -1708,6 +1700,7 @@ class PlPlayerController {
       }
       return;
     }
+    setPlayCallBack(null);
     dmState.clear();
     _playerCount = 0;
     _clearPreview();
@@ -1731,6 +1724,7 @@ class PlPlayerController {
     await removeListeners();
     _videoPlayerController?.dispose();
     _videoPlayerController = null;
+    _videoController = null;
     _instance = null;
     videoPlayerServiceHandler?.clear();
   }

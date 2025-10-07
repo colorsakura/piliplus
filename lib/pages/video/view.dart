@@ -413,6 +413,10 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       return;
     }
 
+    if (plPlayerController?.isCloseAll == true) {
+      return;
+    }
+
     WidgetsBinding.instance.addObserver(this);
 
     plPlayerController?.isLive = false;
