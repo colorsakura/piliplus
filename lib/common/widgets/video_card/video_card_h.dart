@@ -14,6 +14,7 @@ import 'package:PiliPlus/models/search/result.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
 import 'package:PiliPlus/utils/duration_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
@@ -23,13 +24,11 @@ class VideoCardH extends StatelessWidget {
     super.key,
     required this.videoItem,
     this.onTap,
-    this.onLongPress,
     this.onViewLater,
     this.onRemove,
   });
   final BaseVideoItemModel videoItem;
   final VoidCallback? onTap;
-  final VoidCallback? onLongPress;
   final ValueChanged<int>? onViewLater;
   final VoidCallback? onRemove;
 
@@ -59,19 +58,19 @@ class VideoCardH extends StatelessWidget {
         badge = item.pgcLabel;
       }
     }
+    void onLongPress() => imageSaveDialog(
+      bvid: videoItem.bvid,
+      title: videoItem.title,
+      cover: videoItem.cover,
+    );
     return Material(
       type: MaterialType.transparency,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           InkWell(
-            onLongPress:
-                onLongPress ??
-                () => imageSaveDialog(
-                  bvid: videoItem.bvid,
-                  title: videoItem.title,
-                  cover: videoItem.cover,
-                ),
+            onLongPress: onLongPress,
+            onSecondaryTap: Utils.isMobile ? null : onLongPress,
             onTap:
                 onTap ??
                 () async {

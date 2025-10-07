@@ -142,6 +142,7 @@ class _MainAppState extends State<MainApp>
   Future<void> _onClose() async {
     await GStorage.compact();
     await GStorage.close();
+    await trayManager.destroy();
     if (Platform.isWindows) {
       const MethodChannel('window_control').invokeMethod('closeWindow');
     } else {
