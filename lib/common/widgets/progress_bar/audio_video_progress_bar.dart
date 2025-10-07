@@ -701,7 +701,7 @@ class _RenderProgressBar extends RenderBox {
   ///
   void _drawProgressBarWithoutLabels(Canvas canvas) {
     final barWidth = size.width;
-    final barHeight = 2 * _thumbRadius;
+    final barHeight = _heightWhenNoLabels();
     _drawProgressBar(canvas, Offset.zero, Size(barWidth, barHeight));
   }
 
@@ -815,16 +815,16 @@ class _RenderProgressBar extends RenderBox {
   void increaseAction() {
     final newValue = _thumbValue + _semanticActionUnit;
     _thumbValue = (newValue).clamp(0.0, 1.0);
+    onSeek?.call(_currentThumbDuration());
     markNeedsPaint();
     markNeedsSemanticsUpdate();
-    onSeek?.call(_currentThumbDuration());
   }
 
   void decreaseAction() {
     final newValue = _thumbValue - _semanticActionUnit;
     _thumbValue = (newValue).clamp(0.0, 1.0);
+    onSeek?.call(_currentThumbDuration());
     markNeedsPaint();
     markNeedsSemanticsUpdate();
-    onSeek?.call(_currentThumbDuration());
   }
 }

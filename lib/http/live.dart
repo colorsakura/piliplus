@@ -83,18 +83,19 @@ abstract final class LiveHttp {
   }) async {
     var res = await Request().get(
       Api.liveRoomInfo,
-      queryParameters: {
+      queryParameters: await WbiSign.makSign({
         'room_id': roomId,
-        'protocol': '0, 1',
-        'format': '0, 1, 2',
-        'codec': '0, 1',
+        'protocol': '0,1',
+        'format': '0,1,2',
+        'codec': '0,1,2',
         'qn': qn,
         'platform': 'web',
         'ptype': 8,
         'dolby': 5,
         'panorama': 1,
         if (onlyAudio) 'only_audio': 1,
-      },
+        'web_location': 444.8,
+      }),
     );
     if (res.data['code'] == 0) {
       return Success(RoomPlayInfoData.fromJson(res.data['data']));

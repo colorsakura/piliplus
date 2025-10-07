@@ -1526,6 +1526,7 @@ class PlPlayerController {
   Future<void> triggerFullScreen({
     bool status = true,
     bool inAppFullScreen = false,
+    FullScreenMode? mode,
   }) async {
     if (isFullScreen.value == status) return;
 
@@ -1536,6 +1537,7 @@ class PlPlayerController {
 
     toggleFullScreen(status);
 
+    mode ??= this.mode;
     if (status) {
       if (Utils.isMobile) {
         hideStatusBar();

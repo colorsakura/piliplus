@@ -557,6 +557,23 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         hideStatusBar();
       }
     }
+    if (Utils.isMobile) {
+      if (!isPortrait &&
+          !isFullScreen &&
+          plPlayerController != null &&
+          videoDetailController.autoPlay.value) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          plPlayerController!.triggerFullScreen(
+            status: true,
+            mode: FullScreenMode.gravity,
+          );
+        });
+      } else if (isPortrait && isFullScreen) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          plPlayerController!.triggerFullScreen(status: false);
+        });
+      }
+    }
     return Obx(
       () {
         final isFullScreen = this.isFullScreen;
