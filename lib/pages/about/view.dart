@@ -138,6 +138,9 @@ class _AboutPageState extends State<AboutPage> {
           ListTile(
             onTap: () => Update.checkUpdate(false),
             onLongPress: () => Utils.copyText(currentVersion),
+            onSecondaryTap: Utils.isMobile
+                ? null
+                : () => Utils.copyText(currentVersion),
             title: const Text('当前版本'),
             leading: const Icon(Icons.commit_outlined),
             trailing: Text(
@@ -157,6 +160,9 @@ Commit Hash: ${BuildConfig.commitHash}''',
               '${Constants.sourceCodeUrl}/commit/${BuildConfig.commitHash}',
             ),
             onLongPress: () => Utils.copyText(BuildConfig.commitHash),
+            onSecondaryTap: Utils.isMobile
+                ? null
+                : () => Utils.copyText(BuildConfig.commitHash),
           ),
           Divider(
             thickness: 1,
@@ -194,6 +200,7 @@ Commit Hash: ${BuildConfig.commitHash}''',
           ListTile(
             onTap: () => Get.toNamed('/logs'),
             onLongPress: LoggerUtils.clearLogs,
+            onSecondaryTap: Utils.isMobile ? null : LoggerUtils.clearLogs,
             leading: const Icon(Icons.bug_report_outlined),
             title: const Text('错误日志'),
             subtitle: Text('长按清除日志', style: subTitleStyle),

@@ -3,6 +3,7 @@ import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/search/result.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class LiveItem extends StatelessWidget {
@@ -13,14 +14,16 @@ class LiveItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    void onLongPress() => imageSaveDialog(
+      title: liveItem.title.map((item) => item.text).join(),
+      cover: liveItem.cover,
+    );
     return Card(
       clipBehavior: Clip.hardEdge,
       child: InkWell(
         onTap: () => PageUtils.toLiveRoom(liveItem.roomid),
-        onLongPress: () => imageSaveDialog(
-          title: liveItem.title.map((item) => item.text).join(),
-          cover: liveItem.cover,
-        ),
+        onLongPress: onLongPress,
+        onSecondaryTap: Utils.isMobile ? null : onLongPress,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

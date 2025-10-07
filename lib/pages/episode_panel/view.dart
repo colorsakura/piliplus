@@ -29,6 +29,7 @@ import 'package:PiliPlus/utils/duration_utils.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide TabBarView;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -414,6 +415,12 @@ class _EpisodePanelState extends State<EpisodePanel>
     }
     late final Color primary = theme.colorScheme.primary;
 
+    void onLongPress() {
+      if (cover?.isNotEmpty == true) {
+        imageSaveDialog(title: title, cover: cover, bvid: bvid);
+      }
+    }
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 2),
       child: SizedBox(
@@ -450,11 +457,8 @@ class _EpisodePanelState extends State<EpisodePanel>
                 }
               });
             },
-            onLongPress: () {
-              if (cover?.isNotEmpty == true) {
-                imageSaveDialog(title: title, cover: cover, bvid: bvid);
-              }
-            },
+            onLongPress: onLongPress,
+            onSecondaryTap: Utils.isMobile ? null : onLongPress,
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: StyleString.safeSpace,

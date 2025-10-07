@@ -1,6 +1,7 @@
 import 'package:PiliPlus/common/skeleton/msg_feed_top.dart';
 import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/list_tile.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/grpc/bilibili/app/im/v1.pbenum.dart'
@@ -12,7 +13,8 @@ import 'package:PiliPlus/pages/msg_feed_top/at_me/controller.dart';
 import 'package:PiliPlus/pages/whisper_settings/view.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
-import 'package:flutter/material.dart';
+import 'package:PiliPlus/utils/utils.dart';
+import 'package:flutter/material.dart' hide ListTile;
 import 'package:get/get.dart';
 
 class AtMePage extends StatefulWidget {
@@ -91,7 +93,13 @@ class _AtMePageState extends State<AtMePage> {
                     _atMeController.onLoadMore();
                   }
                   final item = response[index];
+                  void onLongPress() => showConfirmDialog(
+                    context: context,
+                    title: '确定删除该通知?',
+                    onConfirm: () => _atMeController.onRemove(item.id, index),
+                  );
                   return ListTile(
+                    safeArea: true,
                     onTap: () {
                       String? nativeUri = item.item?.nativeUri;
                       if (nativeUri == null ||
@@ -101,11 +109,8 @@ class _AtMePageState extends State<AtMePage> {
                       }
                       PiliScheme.routePushFromUrl(nativeUri);
                     },
-                    onLongPress: () => showConfirmDialog(
-                      context: context,
-                      title: '确定删除该通知?',
-                      onConfirm: () => _atMeController.onRemove(item.id, index),
-                    ),
+                    onLongPress: onLongPress,
+                    onSecondaryTap: Utils.isMobile ? null : onLongPress,
                     leading: GestureDetector(
                       onTap: () => Get.toNamed('/member?mid=${item.user?.mid}'),
                       child: NetworkImgLayer(

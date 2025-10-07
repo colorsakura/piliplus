@@ -11,6 +11,7 @@ import 'package:PiliPlus/models_new/space/space_archive/item.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
 import 'package:PiliPlus/utils/duration_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
@@ -31,17 +32,19 @@ class VideoCardHMemberVideo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    void onLongPress() => imageSaveDialog(
+      title: videoItem.title,
+      cover: videoItem.cover,
+      bvid: videoItem.bvid,
+    );
     return Material(
       type: MaterialType.transparency,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           InkWell(
-            onLongPress: () => imageSaveDialog(
-              title: videoItem.title,
-              cover: videoItem.cover,
-              bvid: videoItem.bvid,
-            ),
+            onLongPress: onLongPress,
+            onSecondaryTap: Utils.isMobile ? null : onLongPress,
             onTap:
                 onTap ??
                 () async {

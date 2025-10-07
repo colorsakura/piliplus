@@ -3,6 +3,7 @@ import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models_new/live/live_follow/item.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 // 视频卡片 - 垂直布局
@@ -16,14 +17,16 @@ class LiveCardVFollow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void onLongPress() => imageSaveDialog(
+      title: liveItem.title,
+      cover: liveItem.roomCover,
+    );
     return Card(
       clipBehavior: Clip.hardEdge,
       child: InkWell(
         onTap: () => PageUtils.toLiveRoom(liveItem.roomid),
-        onLongPress: () => imageSaveDialog(
-          title: liveItem.title,
-          cover: liveItem.roomCover,
-        ),
+        onLongPress: onLongPress,
+        onSecondaryTap: Utils.isMobile ? null : onLongPress,
         child: Column(
           children: [
             AspectRatio(

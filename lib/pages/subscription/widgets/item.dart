@@ -26,6 +26,10 @@ class SubItem extends StatelessWidget {
       21 => '合集',
       _ => '其它(${item.type})',
     };
+    void onLongPress() => imageSaveDialog(
+      title: item.title,
+      cover: item.cover,
+    );
     return Material(
       type: MaterialType.transparency,
       child: InkWell(
@@ -50,10 +54,8 @@ class SubItem extends StatelessWidget {
             );
           }
         },
-        onLongPress: () => imageSaveDialog(
-          title: item.title,
-          cover: item.cover,
-        ),
+        onLongPress: onLongPress,
+        onSecondaryTap: Utils.isMobile ? null : onLongPress,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
           child: Row(

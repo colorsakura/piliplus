@@ -10,6 +10,7 @@ import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models_new/music/bgm_recommend_list.dart';
 import 'package:PiliPlus/utils/duration_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class MusicVideoCardH extends StatelessWidget {
@@ -22,6 +23,11 @@ class MusicVideoCardH extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void onLongPress() => imageSaveDialog(
+      title: videoItem.title,
+      cover: videoItem.cover,
+      bvid: videoItem.bvid,
+    );
     return Material(
       type: MaterialType.transparency,
       child: InkWell(
@@ -37,11 +43,8 @@ class MusicVideoCardH extends StatelessWidget {
             );
           }
         },
-        onLongPress: () => imageSaveDialog(
-          title: videoItem.title,
-          cover: videoItem.cover,
-          bvid: videoItem.bvid,
-        ),
+        onLongPress: onLongPress,
+        onSecondaryTap: Utils.isMobile ? null : onLongPress,
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: StyleString.safeSpace,

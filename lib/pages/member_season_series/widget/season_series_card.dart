@@ -4,6 +4,7 @@ import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models_new/space/space_season_series/season.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class SeasonSeriesCard extends StatelessWidget {
@@ -17,13 +18,15 @@ class SeasonSeriesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void onLongPress() => imageSaveDialog(
+      title: item.meta!.name,
+      cover: item.meta!.cover,
+    );
     return Material(
       type: MaterialType.transparency,
       child: InkWell(
-        onLongPress: () => imageSaveDialog(
-          title: item.meta!.name,
-          cover: item.meta!.cover,
-        ),
+        onLongPress: onLongPress,
+        onSecondaryTap: Utils.isMobile ? null : onLongPress,
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.symmetric(

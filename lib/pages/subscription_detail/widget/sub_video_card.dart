@@ -10,6 +10,7 @@ import 'package:PiliPlus/models_new/sub/sub_detail/media.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
 import 'package:PiliPlus/utils/duration_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 // 收藏视频卡片 - 水平布局
@@ -25,6 +26,11 @@ class SubVideoCardH extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void onLongPress() => imageSaveDialog(
+      title: videoItem.title,
+      cover: videoItem.cover,
+      bvid: videoItem.bvid,
+    );
     return Material(
       type: MaterialType.transparency,
       child: InkWell(
@@ -39,11 +45,8 @@ class SubVideoCardH extends StatelessWidget {
             );
           }
         },
-        onLongPress: () => imageSaveDialog(
-          title: videoItem.title,
-          cover: videoItem.cover,
-          bvid: videoItem.bvid,
-        ),
+        onLongPress: onLongPress,
+        onSecondaryTap: Utils.isMobile ? null : onLongPress,
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: StyleString.safeSpace,

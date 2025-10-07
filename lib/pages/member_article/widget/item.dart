@@ -5,6 +5,7 @@ import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models_new/space/space_article/item.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class MemberArticleItem extends StatelessWidget {
@@ -16,6 +17,10 @@ class MemberArticleItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final outline = theme.colorScheme.outline;
+    void onLongPress() => imageSaveDialog(
+      title: item.title,
+      cover: item.originImageUrls?.firstOrNull,
+    );
     return Material(
       type: MaterialType.transparency,
       child: InkWell(
@@ -24,10 +29,8 @@ class MemberArticleItem extends StatelessWidget {
             PiliScheme.routePushFromUrl(item.uri!);
           }
         },
-        onLongPress: () => imageSaveDialog(
-          title: item.title,
-          cover: item.originImageUrls?.firstOrNull,
-        ),
+        onLongPress: onLongPress,
+        onSecondaryTap: Utils.isMobile ? null : onLongPress,
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: StyleString.safeSpace,

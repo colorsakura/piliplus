@@ -316,6 +316,7 @@ class ListTile extends StatelessWidget {
   /// Requires one of its ancestors to be a [Material] widget.
   const ListTile({
     super.key,
+    this.safeArea = false,
     this.leading,
     this.title,
     this.subtitle,
@@ -335,6 +336,7 @@ class ListTile extends StatelessWidget {
     this.enabled = true,
     this.onTap,
     this.onLongPress,
+    this.onSecondaryTap,
     this.onFocusChange,
     this.mouseCursor,
     this.selected = false,
@@ -354,6 +356,8 @@ class ListTile extends StatelessWidget {
     this.internalAddSemanticForOnTap = true,
     this.statesController,
   }) : assert(isThreeLine != true || subtitle != null);
+
+  final bool safeArea;
 
   /// A widget to display before the title.
   ///
@@ -562,6 +566,8 @@ class ListTile extends StatelessWidget {
   ///
   /// Inoperative if [enabled] is false.
   final GestureLongPressCallback? onLongPress;
+
+  final GestureTapCallback? onSecondaryTap;
 
   /// {@macro flutter.material.inkwell.onFocusChange}
   final ValueChanged<bool>? onFocusChange;
@@ -922,10 +928,64 @@ class ListTile extends StatelessWidget {
             ? ListTileTitleAlignment.threeLine
             : ListTileTitleAlignment.titleHeight);
 
+    Widget child = IconTheme.merge(
+      data: iconThemeData,
+      child: IconButtonTheme(
+        data: iconButtonThemeData,
+        child: _ListTile(
+          leading: leadingIcon,
+          title: titleText,
+          subtitle: subtitleText,
+          trailing: trailingIcon,
+          isDense: _isDenseLayout(theme, tileTheme),
+          visualDensity:
+              visualDensity ?? tileTheme.visualDensity ?? theme.visualDensity,
+          isThreeLine:
+              isThreeLine ??
+              tileTheme.isThreeLine ??
+              theme.listTileTheme.isThreeLine ??
+              false,
+          textDirection: textDirection,
+          titleBaselineType:
+              titleStyle.textBaseline ?? defaults.titleTextStyle!.textBaseline!,
+          subtitleBaselineType:
+              subtitleStyle?.textBaseline ??
+              defaults.subtitleTextStyle!.textBaseline!,
+          horizontalTitleGap:
+              horizontalTitleGap ?? tileTheme.horizontalTitleGap ?? 16,
+          minVerticalPadding:
+              minVerticalPadding ??
+              tileTheme.minVerticalPadding ??
+              defaults.minVerticalPadding!,
+          minLeadingWidth:
+              minLeadingWidth ??
+              tileTheme.minLeadingWidth ??
+              defaults.minLeadingWidth!,
+          minTileHeight: minTileHeight ?? tileTheme.minTileHeight,
+          titleAlignment: effectiveTitleAlignment,
+        ),
+      ),
+    );
+
+    if (safeArea) {
+      child = SafeArea(
+        top: false,
+        bottom: false,
+        minimum: resolvedContentPadding,
+        child: child,
+      );
+    } else {
+      child = Padding(
+        padding: resolvedContentPadding,
+        child: child,
+      );
+    }
+
     return InkWell(
       customBorder: shape ?? tileTheme.shape,
       onTap: enabled ? onTap : null,
       onLongPress: enabled ? onLongPress : null,
+      onSecondaryTap: enabled ? onSecondaryTap : null,
       onFocusChange: onFocusChange,
       mouseCursor: effectiveMouseCursor,
       canRequestFocus: enabled,
@@ -947,50 +1007,7 @@ class ListTile extends StatelessWidget {
             shape: shape ?? tileTheme.shape ?? const Border(),
             color: _tileBackgroundColor(theme, tileTheme, defaults),
           ),
-          child: Padding(
-            padding: resolvedContentPadding,
-            child: IconTheme.merge(
-              data: iconThemeData,
-              child: IconButtonTheme(
-                data: iconButtonThemeData,
-                child: _ListTile(
-                  leading: leadingIcon,
-                  title: titleText,
-                  subtitle: subtitleText,
-                  trailing: trailingIcon,
-                  isDense: _isDenseLayout(theme, tileTheme),
-                  visualDensity:
-                      visualDensity ??
-                      tileTheme.visualDensity ??
-                      theme.visualDensity,
-                  isThreeLine:
-                      isThreeLine ??
-                      tileTheme.isThreeLine ??
-                      theme.listTileTheme.isThreeLine ??
-                      false,
-                  textDirection: textDirection,
-                  titleBaselineType:
-                      titleStyle.textBaseline ??
-                      defaults.titleTextStyle!.textBaseline!,
-                  subtitleBaselineType:
-                      subtitleStyle?.textBaseline ??
-                      defaults.subtitleTextStyle!.textBaseline!,
-                  horizontalTitleGap:
-                      horizontalTitleGap ?? tileTheme.horizontalTitleGap ?? 16,
-                  minVerticalPadding:
-                      minVerticalPadding ??
-                      tileTheme.minVerticalPadding ??
-                      defaults.minVerticalPadding!,
-                  minLeadingWidth:
-                      minLeadingWidth ??
-                      tileTheme.minLeadingWidth ??
-                      defaults.minLeadingWidth!,
-                  minTileHeight: minTileHeight ?? tileTheme.minTileHeight,
-                  titleAlignment: effectiveTitleAlignment,
-                ),
-              ),
-            ),
-          ),
+          child: child,
         ),
       ),
     );

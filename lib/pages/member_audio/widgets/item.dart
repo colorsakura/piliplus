@@ -7,6 +7,7 @@ import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models_new/space/space_audio/item.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
@@ -19,6 +20,7 @@ class MemberAudioItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final hasStat = item.statistic != null;
+    void onLongPress() => imageSaveDialog(title: item.title, cover: item.cover);
     return Material(
       type: MaterialType.transparency,
       child: InkWell(
@@ -35,8 +37,8 @@ class MemberAudioItem extends StatelessWidget {
           SmartDialog.showToast('没有MV');
           return;
         },
-        onLongPress: () =>
-            imageSaveDialog(title: item.title, cover: item.cover),
+        onLongPress: onLongPress,
+        onSecondaryTap: Utils.isMobile ? null : onLongPress,
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: StyleString.safeSpace,

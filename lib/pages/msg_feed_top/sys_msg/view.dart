@@ -1,5 +1,6 @@
 import 'package:PiliPlus/common/skeleton/msg_feed_sys_msg_.dart';
 import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
+import 'package:PiliPlus/common/widgets/list_tile.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -10,7 +11,7 @@ import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ListTile;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
@@ -78,13 +79,15 @@ class _SysMsgPageState extends State<SysMsgPage> {
                     _sysMsgController.onLoadMore();
                   }
                   final item = response[index];
+                  void onLongPress() => showConfirmDialog(
+                    context: context,
+                    title: '确定删除该通知?',
+                    onConfirm: () => _sysMsgController.onRemove(item.id, index),
+                  );
                   return ListTile(
-                    onLongPress: () => showConfirmDialog(
-                      context: context,
-                      title: '确定删除该通知?',
-                      onConfirm: () =>
-                          _sysMsgController.onRemove(item.id, index),
-                    ),
+                    safeArea: true,
+                    onLongPress: onLongPress,
+                    onSecondaryTap: Utils.isMobile ? null : onLongPress,
                     title: Text(
                       "${item.title}",
                       style: theme.textTheme.titleMedium,

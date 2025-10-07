@@ -11,6 +11,7 @@ import 'package:PiliPlus/models_new/member/coin_like_arc/item.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
 import 'package:PiliPlus/utils/duration_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class MemberCoinLikeItem extends StatelessWidget {
@@ -23,6 +24,11 @@ class MemberCoinLikeItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void onLongPress() => imageSaveDialog(
+      title: item.title,
+      cover: item.cover,
+      aid: item.param,
+    );
     return Card(
       clipBehavior: Clip.hardEdge,
       child: InkWell(
@@ -46,11 +52,8 @@ class MemberCoinLikeItem extends StatelessWidget {
             }
           }
         },
-        onLongPress: () => imageSaveDialog(
-          title: item.title,
-          cover: item.cover,
-          aid: item.param,
-        ),
+        onLongPress: onLongPress,
+        onSecondaryTap: Utils.isMobile ? null : onLongPress,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

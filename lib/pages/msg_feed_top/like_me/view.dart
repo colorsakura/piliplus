@@ -1,6 +1,7 @@
 import 'package:PiliPlus/common/skeleton/msg_feed_top.dart';
 import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/list_tile.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
@@ -13,7 +14,8 @@ import 'package:PiliPlus/pages/msg_feed_top/like_me/controller.dart';
 import 'package:PiliPlus/pages/whisper_settings/view.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
-import 'package:flutter/material.dart';
+import 'package:PiliPlus/utils/utils.dart';
+import 'package:flutter/material.dart' hide ListTile;
 import 'package:get/get.dart';
 
 class LikeMePage extends StatefulWidget {
@@ -162,7 +164,60 @@ class _LikeMePageState extends State<LikeMePage> {
     MsgLikeItem item,
     ValueChanged<int?> onRemove,
   ) {
+    void onLongPress() => showDialog(
+      context: context,
+      builder: (context) {
+        final isNotice = item.noticeState == 0;
+        return AlertDialog(
+          clipBehavior: Clip.hardEdge,
+          contentPadding: const EdgeInsets.symmetric(vertical: 12),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                onTap: () {
+                  Get.back();
+                  showConfirmDialog(
+                    context: context,
+                    title: '删除',
+                    content: '该条通知删除后，当有新点赞时会重新出现在列表，是否继续？',
+                    onConfirm: () => onRemove(item.id),
+                  );
+                },
+                dense: true,
+                title: const Text(
+                  '删除',
+                  style: TextStyle(fontSize: 14),
+                ),
+              ),
+              ListTile(
+                onTap: () {
+                  Get.back();
+                  if (isNotice) {
+                    showConfirmDialog(
+                      context: context,
+                      title: '不再通知',
+                      content: '这条内容的点赞将不再通知，但仍可在列表内查看，是否继续？',
+                      onConfirm: () =>
+                          _likeMeController.onSetNotice(item, isNotice),
+                    );
+                  } else {
+                    _likeMeController.onSetNotice(item, isNotice);
+                  }
+                },
+                dense: true,
+                title: Text(
+                  isNotice ? '不再通知' : '接收通知',
+                  style: const TextStyle(fontSize: 14),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
     return ListTile(
+      safeArea: true,
       onTap: () {
         String? nativeUri = item.item?.nativeUri;
         bool isInvalid =
@@ -183,58 +238,8 @@ class _LikeMePageState extends State<LikeMePage> {
         }
         PiliScheme.routePushFromUrl(nativeUri);
       },
-      onLongPress: () => showDialog(
-        context: context,
-        builder: (context) {
-          final isNotice = item.noticeState == 0;
-          return AlertDialog(
-            clipBehavior: Clip.hardEdge,
-            contentPadding: const EdgeInsets.symmetric(vertical: 12),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ListTile(
-                  onTap: () {
-                    Get.back();
-                    showConfirmDialog(
-                      context: context,
-                      title: '删除',
-                      content: '该条通知删除后，当有新点赞时会重新出现在列表，是否继续？',
-                      onConfirm: () => onRemove(item.id),
-                    );
-                  },
-                  dense: true,
-                  title: const Text(
-                    '删除',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                ),
-                ListTile(
-                  onTap: () {
-                    Get.back();
-                    if (isNotice) {
-                      showConfirmDialog(
-                        context: context,
-                        title: '不再通知',
-                        content: '这条内容的点赞将不再通知，但仍可在列表内查看，是否继续？',
-                        onConfirm: () =>
-                            _likeMeController.onSetNotice(item, isNotice),
-                      );
-                    } else {
-                      _likeMeController.onSetNotice(item, isNotice);
-                    }
-                  },
-                  dense: true,
-                  title: Text(
-                    isNotice ? '不再通知' : '接收通知',
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+      onLongPress: onLongPress,
+      onSecondaryTap: Utils.isMobile ? null : onLongPress,
       leading: Column(
         children: [
           const Spacer(),

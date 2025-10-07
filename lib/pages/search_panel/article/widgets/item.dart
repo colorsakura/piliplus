@@ -3,6 +3,7 @@ import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/search/result.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,6 +19,10 @@ class SearchArticleItem extends StatelessWidget {
       fontSize: theme.textTheme.labelSmall!.fontSize,
       color: theme.colorScheme.outline,
     );
+    void onLongPress() => imageSaveDialog(
+      title: item.title.map((item) => item.text).join(),
+      cover: item.imageUrls?.firstOrNull,
+    );
     return Material(
       type: MaterialType.transparency,
       child: InkWell(
@@ -28,10 +33,8 @@ class SearchArticleItem extends StatelessWidget {
             'type': 'read',
           },
         ),
-        onLongPress: () => imageSaveDialog(
-          title: item.title.map((item) => item.text).join(),
-          cover: item.imageUrls?.firstOrNull,
-        ),
+        onLongPress: onLongPress,
+        onSecondaryTap: Utils.isMobile ? null : onLongPress,
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: StyleString.safeSpace,

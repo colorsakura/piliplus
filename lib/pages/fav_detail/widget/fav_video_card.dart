@@ -12,6 +12,7 @@ import 'package:PiliPlus/pages/fav_detail/controller.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
 import 'package:PiliPlus/utils/duration_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -35,6 +36,21 @@ class FavVideoCardH extends StatelessWidget {
     final isOwner = !isSort && ctr!.isOwner;
     late final enableMultiSelect = ctr?.enableMultiSelect.value ?? false;
     final theme = Theme.of(context);
+
+    final onLongPress = isSort || enableMultiSelect
+        ? null
+        : isOwner && !enableMultiSelect
+        ? () {
+            ctr!
+              ..enableMultiSelect.value = true
+              ..onSelect(item);
+          }
+        : () => imageSaveDialog(
+            title: item.title,
+            cover: item.cover,
+            bvid: item.bvid,
+          );
+
     return Material(
       type: MaterialType.transparency,
       child: InkWell(
@@ -59,19 +75,8 @@ class FavVideoCardH extends StatelessWidget {
 
                 ctr!.onViewFav(item, index);
               },
-        onLongPress: isSort || enableMultiSelect
-            ? null
-            : isOwner && !enableMultiSelect
-            ? () {
-                ctr!
-                  ..enableMultiSelect.value = true
-                  ..onSelect(item);
-              }
-            : () => imageSaveDialog(
-                title: item.title,
-                cover: item.cover,
-                bvid: item.bvid,
-              ),
+        onLongPress: onLongPress,
+        onSecondaryTap: Utils.isMobile ? null : onLongPress,
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: StyleString.safeSpace,
