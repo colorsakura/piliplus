@@ -664,10 +664,6 @@ class CustomScrollableState extends State<CustomScrollable>
       vsync: this,
       reverseDuration: const Duration(milliseconds: 500),
     );
-    _anim = Tween<Offset>(
-      begin: Offset.zero,
-      end: const Offset(0, 1),
-    ).animate(_animController);
   }
 
   @protected
@@ -786,7 +782,6 @@ class CustomScrollableState extends State<CustomScrollable>
   bool? _isSliding;
 
   late AnimationController _animController;
-  late Animation<Offset> _anim;
 
   @override
   @protected
@@ -1185,8 +1180,15 @@ class CustomScrollableState extends State<CustomScrollable>
     return LayoutBuilder(
       builder: (context, constraints) {
         _maxWidth = constraints.maxWidth;
-        return SlideTransition(
-          position: _anim,
+        return AnimatedBuilder(
+          animation: _animController,
+          builder: (context, child) {
+            return Align(
+              alignment: AlignmentDirectional.topStart,
+              heightFactor: 1 - _animController.value,
+              child: child,
+            );
+          },
           child: Material(
             color: widget.bgColor,
             child: widget.header != null

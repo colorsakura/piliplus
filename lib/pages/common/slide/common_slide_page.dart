@@ -18,7 +18,6 @@ mixin CommonSlideMixin<T extends CommonSlidePage> on State<T>, TickerProvider {
   late bool _isRTL = false;
   late final bool enableSlide;
   AnimationController? _animController;
-  Animation<Offset>? _anim;
 
   static bool slideDismissReplyPage = Pref.slideDismissReplyPage;
 
@@ -31,10 +30,6 @@ mixin CommonSlideMixin<T extends CommonSlidePage> on State<T>, TickerProvider {
         vsync: this,
         reverseDuration: const Duration(milliseconds: 500),
       );
-      _anim = Tween<Offset>(
-        begin: Offset.zero,
-        end: const Offset(0, 1),
-      ).animate(_animController!);
     }
   }
 
@@ -51,8 +46,15 @@ mixin CommonSlideMixin<T extends CommonSlidePage> on State<T>, TickerProvider {
         ? LayoutBuilder(
             builder: (context, constraints) {
               maxWidth = constraints.maxWidth;
-              return SlideTransition(
-                position: _anim!,
+              return AnimatedBuilder(
+                animation: _animController!,
+                builder: (context, child) {
+                  return Align(
+                    alignment: AlignmentDirectional.topStart,
+                    heightFactor: 1 - _animController!.value,
+                    child: child,
+                  );
+                },
                 child: buildPage(theme),
               );
             },
