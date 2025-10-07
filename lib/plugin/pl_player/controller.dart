@@ -1518,6 +1518,7 @@ class PlPlayerController {
     updateSubtitleStyle();
   }
 
+  late bool isManualFS = true;
   late final FullScreenMode mode = FullScreenMode.values[Pref.fullScreenMode];
   late final horizontalScreen = Pref.horizontalScreen;
 
@@ -1526,6 +1527,7 @@ class PlPlayerController {
   Future<void> triggerFullScreen({
     bool status = true,
     bool inAppFullScreen = false,
+    bool isManualFS = true,
     FullScreenMode? mode,
   }) async {
     if (isFullScreen.value == status) return;
@@ -1535,9 +1537,10 @@ class PlPlayerController {
     }
     fsProcessing = true;
 
+    mode ??= this.mode;
+    this.isManualFS = isManualFS;
     toggleFullScreen(status);
 
-    mode ??= this.mode;
     if (status) {
       if (Utils.isMobile) {
         hideStatusBar();

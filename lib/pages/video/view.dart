@@ -565,10 +565,14 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         WidgetsBinding.instance.addPostFrameCallback((_) {
           plPlayerController!.triggerFullScreen(
             status: true,
+            isManualFS: false,
             mode: FullScreenMode.gravity,
           );
         });
-      } else if (isPortrait && isFullScreen) {
+      } else if (isPortrait &&
+          isFullScreen &&
+          plPlayerController?.isManualFS == false &&
+          plPlayerController?.controlsLock.value == false) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           plPlayerController!.triggerFullScreen(status: false);
         });
