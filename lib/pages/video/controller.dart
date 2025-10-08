@@ -431,6 +431,7 @@ class VideoDetailController extends GetxController
   bool get showVideoSheet =>
       (!horizontalScreen && !isPortrait) || plPlayerController.isDesktopPip;
 
+  late final _isBlock = isUgc || !plPlayerController.enablePgcSkip;
   int? _lastPos;
   late final List<PostSegmentModel> postList = [];
   late final List<SegmentModel> segmentList = <SegmentModel>[];
@@ -586,7 +587,9 @@ class VideoDetailController extends GetxController
                   (item) => ListTile(
                     onTap: () {
                       Get.back();
-                      if (isUgc) _showVoteDialog(context, item);
+                      if (_isBlock) {
+                        _showVoteDialog(context, item);
+                      }
                     },
                     dense: true,
                     title: Text.rich(
@@ -718,7 +721,7 @@ class VideoDetailController extends GetxController
                         '${videoLabel.value.isNotEmpty ? '/' : ''}${segmentType.title}';
                   }
                   SkipType skipType;
-                  if (isUgc) {
+                  if (_isBlock) {
                     skipType = plPlayerController
                         .blockSettings[segmentType.index]
                         .second;
@@ -962,7 +965,7 @@ class VideoDetailController extends GetxController
         if (Pref.blockToast) {
           _showBlockToast('已跳过${item.segmentType.shortTitle}片段');
         }
-        if (isUgc && Pref.blockTrack) {
+        if (_isBlock && Pref.blockTrack) {
           Request().post(
             '$blockServer/api/viewedVideoSponsorTime',
             queryParameters: {'UUID': item.UUID},
@@ -1175,9 +1178,7 @@ class VideoDetailController extends GetxController
       return;
     }
     isQuerying = true;
-    if (plPlayerController.enableSponsorBlock &&
-        (isUgc || !plPlayerController.enablePgcSkip) &&
-        !fromReset) {
+    if (plPlayerController.enableSponsorBlock && _isBlock && !fromReset) {
       _querySponsorBlock();
     }
     if (plPlayerController.cacheVideoQa == null) {
