@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:PiliPlus/common/widgets/cached_network_svg_image.dart';
+import 'package:PiliPlus/common/widgets/image/cached_network_svg_image.dart';
 import 'package:PiliPlus/common/widgets/image/custom_grid_view.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/http/constants.dart';

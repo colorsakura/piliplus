@@ -124,9 +124,7 @@ class _CachedNetworkSVGImageState extends State<CachedNetworkSVGImage> {
 
   Future<void> _loadImage() async {
     try {
-      var file = (await widget._cacheManager.getFileFromMemory(
-        _cacheKey,
-      ))?.file;
+      var file = (await widget._cacheManager.getFileFromCache(_cacheKey))?.file;
 
       file ??= await widget._cacheManager.getSingleFile(
         widget._url,
@@ -173,13 +171,12 @@ class _CachedNetworkSVGImageState extends State<CachedNetworkSVGImage> {
     if (mounted) {
       setState(() {});
     } else {
-      SchedulerBinding.instance.addPostFrameCallback((_) => setState(() {}));
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {});
+        }
+      });
     }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override
