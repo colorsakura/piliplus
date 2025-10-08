@@ -10,11 +10,10 @@ class SegmentModel {
     required this.segmentType,
     required this.segment,
     required this.skipType,
-    this.hasSkipped = false,
   });
   String UUID;
   SegmentType segmentType;
   Pair<int, int> segment;
   SkipType skipType;
-  bool hasSkipped;
+  late bool hasSkipped = false;
 }

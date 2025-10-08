@@ -26,7 +26,8 @@ abstract class SettingBoxKey {
       enableOnlineTotal = 'enableOnlineTotal',
       showSuperChat = 'showSuperChat',
       keyboardControl = 'keyboardControl',
-      pauseOnMinimize = 'pauseOnMinimize';
+      pauseOnMinimize = 'pauseOnMinimize',
+      pgcSkipType = 'pgcSkipType';
 
   static const String enableVerticalExpand = 'enableVerticalExpand',
       feedBackEnable = 'feedBackEnable',

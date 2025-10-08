@@ -847,4 +847,8 @@ abstract class Pref {
 
   static double get desktopVolume =>
       _setting.get(SettingBoxKey.desktopVolume, defaultValue: 1.0);
+
+  static SkipType get pgcSkipType =>
+      SkipType.values[_setting.get(SettingBoxKey.pgcSkipType) ??
+          SkipType.skipOnce.index];
 }

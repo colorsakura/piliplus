@@ -684,6 +684,7 @@ class HeaderControlState extends State<HeaderControl> {
                         final int quality = item.quality!;
                         final newQa = VideoQuality.fromCode(quality);
                         videoDetailCtr
+                          ..plPlayerController.cacheVideoQa = newQa.code
                           ..currentVideoQa.value = newQa
                           ..updatePlayer();
 
@@ -762,6 +763,7 @@ class HeaderControlState extends State<HeaderControl> {
                         final int quality = i.id!;
                         final newQa = AudioQuality.fromCode(quality);
                         videoDetailCtr
+                          ..plPlayerController.cacheAudioQa = newQa.code
                           ..currentAudioQa = newQa
                           ..updatePlayer();
 

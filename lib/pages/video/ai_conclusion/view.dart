@@ -142,6 +142,7 @@ class _AiDetailState extends State<AiConclusionPanel>
                                             tag: Get.arguments['heroTag'],
                                           ).plPlayerController.seekTo(
                                             Duration(seconds: item.timestamp!),
+                                            isSeek: false,
                                           );
                                         } catch (_) {}
                                       },

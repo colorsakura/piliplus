@@ -682,6 +682,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                       final int quality = item.quality!;
                       final newQa = VideoQuality.fromCode(quality);
                       videoDetailController
+                        ..plPlayerController.cacheVideoQa = newQa.code
                         ..currentVideoQa.value = newQa
                         ..updatePlayer();
 
@@ -1756,7 +1757,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
         Obx(() {
           if (plPlayerController.dataStatus.loading ||
-              plPlayerController.isBuffering.value) {
+              (plPlayerController.isBuffering.value &&
+                  plPlayerController.playerStatus.playing)) {
             return Center(
               child: GestureDetector(
                 onTap: plPlayerController.refreshPlayer,

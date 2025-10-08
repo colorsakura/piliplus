@@ -13,6 +13,7 @@ import 'package:PiliPlus/models/common/dynamic/dynamics_type.dart';
 import 'package:PiliPlus/models/common/member/tab_type.dart';
 import 'package:PiliPlus/models/common/reply/reply_sort_type.dart';
 import 'package:PiliPlus/models/common/settings_type.dart';
+import 'package:PiliPlus/models/common/sponsor_block/skip_type.dart';
 import 'package:PiliPlus/models/common/super_resolution_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/common/slide/common_slide_page.dart';
@@ -69,6 +70,54 @@ List<SettingsModel> get extraSettings => [
         Icon(Icons.shield_outlined),
         Icon(Icons.play_arrow_rounded, size: 15),
       ],
+    ),
+  ),
+  SettingsModel(
+    settingsType: SettingsType.normal,
+    leading: const Icon(MdiIcons.debugStepOver),
+    title: '番剧片头/片尾跳过类型',
+    getTrailing: () => Builder(
+      builder: (context) {
+        final pgcSkipType = Pref.pgcSkipType;
+        final colorScheme = ColorScheme.of(context);
+        final color = pgcSkipType == SkipType.disable
+            ? colorScheme.outline
+            : colorScheme.secondary;
+        return PopupMenuButton<SkipType>(
+          initialValue: pgcSkipType,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  pgcSkipType.title,
+                  style: TextStyle(fontSize: 14, height: 1, color: color),
+                  strutStyle: const StrutStyle(
+                    leading: 0,
+                    height: 1,
+                    fontSize: 14,
+                  ),
+                ),
+                Icon(
+                  MdiIcons.unfoldMoreHorizontal,
+                  size: MediaQuery.textScalerOf(context).scale(14),
+                  color: color,
+                ),
+              ],
+            ),
+          ),
+          onSelected: (value) async {
+            await GStorage.setting.put(SettingBoxKey.pgcSkipType, value.index);
+            if (context.mounted) {
+              (context as Element).markNeedsBuild();
+            }
+          },
+          itemBuilder: (context) => SkipType.values
+              .map((e) => PopupMenuItem(value: e, child: Text(e.title)))
+              .toList(),
+        );
+      },
     ),
   ),
   SettingsModel(
@@ -184,6 +233,14 @@ List<SettingsModel> get extraSettings => [
     leading: Icon(Icons.account_circle_outlined),
     setKey: SettingBoxKey.horizontalMemberPage,
     defaultVal: false,
+  ),
+  SettingsModel(
+    settingsType: SettingsType.sw1tch,
+    title: '横屏在侧栏打开图片预览',
+    leading: const Icon(Icons.photo_outlined),
+    setKey: SettingBoxKey.horizontalPreview,
+    defaultVal: false,
+    onChanged: (value) => CustomGridView.horizontalPreview = value,
   ),
   SettingsModel(
     settingsType: SettingsType.normal,
@@ -330,14 +387,6 @@ List<SettingsModel> get extraSettings => [
     leading: Icon(Icons.local_parking),
     setKey: SettingBoxKey.continuePlayingPart,
     defaultVal: true,
-  ),
-  SettingsModel(
-    settingsType: SettingsType.sw1tch,
-    title: '横屏在侧栏打开图片预览',
-    leading: const Icon(Icons.photo_outlined),
-    setKey: SettingBoxKey.horizontalPreview,
-    defaultVal: false,
-    onChanged: (value) => CustomGridView.horizontalPreview = value,
   ),
   getBanwordModel(
     context: Get.context!,

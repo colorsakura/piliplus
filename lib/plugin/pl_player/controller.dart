@@ -361,8 +361,10 @@ class PlPlayerController {
   late double subtitleStrokeWidth = Pref.subtitleStrokeWidth;
   late int subtitleFontWeight = Pref.subtitleFontWeight;
 
+  late final pgcSkipType = Pref.pgcSkipType;
+  late final enablePgcSkip = Pref.pgcSkipType != SkipType.disable;
   // sponsor block
-  late final bool enableSponsorBlock = Pref.enableSponsorBlock;
+  late final bool enableSponsorBlock = Pref.enableSponsorBlock || enablePgcSkip;
   late final double blockLimit = Pref.blockLimit;
   late final blockSettings = Pref.blockSettings;
   late final List<Color> blockColor = Pref.blockColor;
@@ -1253,14 +1255,12 @@ class PlPlayerController {
 
   /// 暂停播放
   Future<void> pause({bool notify = true, bool isInterrupt = false}) async {
-    if (videoPlayerController?.state.playing ?? false) {
-      await _videoPlayerController?.playOrPause();
-      playerStatus.status.value = PlayerStatus.paused;
+    await _videoPlayerController?.pause();
+    playerStatus.status.value = PlayerStatus.paused;
 
-      // 主动暂停时让出音频焦点
-      if (!isInterrupt) {
-        audioSessionHandler?.setActive(false);
-      }
+    // 主动暂停时让出音频焦点
+    if (!isInterrupt) {
+      audioSessionHandler?.setActive(false);
     }
   }
 
