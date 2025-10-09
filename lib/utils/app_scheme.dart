@@ -668,8 +668,9 @@ abstract class PiliScheme {
           );
           return true;
         }
-        launchURL();
       }
+      launchURL();
+      return false;
     }
 
     final pathSegments = uri.pathSegments;

@@ -686,6 +686,24 @@ class ChatItem extends StatelessWidget {
 
   Widget msgTypeNotifyMsg_10(ThemeData theme, content) {
     List? modules = content['modules'] as List?;
+    List<Widget>? jumpItem([String index = '']) {
+      final String? uri = content['jump_uri$index'];
+      if (uri != null && uri.isNotEmpty) {
+        final String? text = content['jump_text$index'];
+        return [
+          Divider(color: theme.colorScheme.primary.withValues(alpha: 0.05)),
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => PiliScheme.routePushFromUrl(uri),
+            child: Text(
+              text?.isNotEmpty == true ? text! : '查看详情',
+            ),
+          ),
+        ];
+      }
+      return null;
+    }
+
     return Center(
       child: Container(
         constraints: const BoxConstraints(maxWidth: 400),
@@ -725,33 +743,9 @@ class ChatItem extends StatelessWidget {
                 ),
               ),
             ],
-            if ((content['jump_text'] as String?)?.isNotEmpty == true &&
-                (content['jump_uri'] as String?)?.isNotEmpty == true) ...[
-              Divider(color: theme.colorScheme.primary.withValues(alpha: 0.05)),
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () => PiliScheme.routePushFromUrl(content['jump_uri']),
-                child: Text(content['jump_text']),
-              ),
-            ],
-            if ((content['jump_text_2'] as String?)?.isNotEmpty == true &&
-                (content['jump_uri_2'] as String?)?.isNotEmpty == true) ...[
-              Divider(color: theme.colorScheme.primary.withValues(alpha: 0.05)),
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () => PiliScheme.routePushFromUrl(content['jump_uri_2']),
-                child: Text(content['jump_text_2']),
-              ),
-            ],
-            if ((content['jump_text_3'] as String?)?.isNotEmpty == true &&
-                (content['jump_uri_3'] as String?)?.isNotEmpty == true) ...[
-              Divider(color: theme.colorScheme.primary.withValues(alpha: 0.05)),
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () => PiliScheme.routePushFromUrl(content['jump_uri_3']),
-                child: Text(content['jump_text_3']),
-              ),
-            ],
+            ...?jumpItem(),
+            ...?jumpItem('_2'),
+            ...?jumpItem('_3'),
           ],
         ),
       ),
