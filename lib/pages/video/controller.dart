@@ -825,9 +825,6 @@ class VideoDetailController extends GetxController
           ?.stream
           .position
           .listen((position) {
-            if (!autoPlay.value) {
-              return;
-            }
             int currentPos = position.inSeconds;
             if (currentPos != _lastPos) {
               _lastPos = currentPos;
@@ -962,7 +959,7 @@ class VideoDetailController extends GetxController
         isSeek: isSeek,
       );
       if (isSkip) {
-        if (Pref.blockToast) {
+        if (autoPlay.value && Pref.blockToast) {
           _showBlockToast('已跳过${item.segmentType.shortTitle}片段');
         }
         if (_isBlock && Pref.blockTrack) {

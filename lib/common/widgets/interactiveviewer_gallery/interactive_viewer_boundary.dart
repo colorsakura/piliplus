@@ -18,7 +18,7 @@ class InteractiveViewerBoundary extends StatefulWidget {
     super.key,
     required this.child,
     required this.boundaryWidth,
-    this.controller,
+    required this.controller,
     this.onScaleChanged,
     this.onLeftBoundaryHit,
     this.onRightBoundaryHit,
@@ -43,7 +43,7 @@ class InteractiveViewerBoundary extends StatefulWidget {
   final double boundaryWidth;
 
   /// The [TransformationController] for the [InteractiveViewer].
-  final TransformationController? controller;
+  final TransformationController controller;
 
   /// Called when the scale changed after an interaction ended.
   final ScaleChanged? onScaleChanged;
@@ -68,7 +68,7 @@ class InteractiveViewerBoundary extends StatefulWidget {
 
 class InteractiveViewerBoundaryState extends State<InteractiveViewerBoundary>
     with SingleTickerProviderStateMixin {
-  TransformationController? _controller;
+  late TransformationController _controller;
 
   double? _scale;
 
@@ -85,8 +85,7 @@ class InteractiveViewerBoundaryState extends State<InteractiveViewerBoundary>
   @override
   void initState() {
     super.initState();
-
-    _controller = widget.controller ?? TransformationController();
+    _controller = widget.controller;
 
     _animateController = AnimationController(
       duration: const Duration(milliseconds: 300),
@@ -98,9 +97,7 @@ class InteractiveViewerBoundaryState extends State<InteractiveViewerBoundary>
 
   @override
   void dispose() {
-    _controller!.dispose();
     _animateController.dispose();
-
     super.dispose();
   }
 
@@ -183,7 +180,7 @@ class InteractiveViewerBoundaryState extends State<InteractiveViewerBoundary>
   }
 
   void _updateBoundaryDetection() {
-    final double scale = _controller!.value.row0[0];
+    final double scale = _controller.value.row0[0];
 
     if (_scale != scale) {
       // the scale changed
@@ -196,7 +193,7 @@ class InteractiveViewerBoundaryState extends State<InteractiveViewerBoundary>
       return;
     }
 
-    final double xOffset = _controller!.value.row0[3];
+    final double xOffset = _controller.value.row0[3];
     final double boundaryWidth = widget.boundaryWidth;
     final double boundaryEnd = boundaryWidth * scale;
     final double xPos = boundaryEnd + xOffset;
