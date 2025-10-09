@@ -169,7 +169,7 @@ class SpaceCard {
             json['live_fans_wearing'] as Map<String, dynamic>,
           ),
     spaceTag: (json['space_tag'] as List<dynamic>?)
-        ?.where((e) => (e?['title'] as String?)?.startsWith('IP') == true)
+        ?.where((e) => const ['location', 'real_name'].contains(e['type']))
         .map((e) => SpaceTag.fromJson(e as Map<String, dynamic>))
         .toList(),
     faceNftNew: json['face_nft_new'] as int?,

@@ -953,4 +953,6 @@ class Api {
       '/x/web-interface/popular/series/list';
 
   static const String popularPrecious = '/x/web-interface/popular/precious';
+
+  static const String userRealName = '/x/member/app/up/realname';
 }

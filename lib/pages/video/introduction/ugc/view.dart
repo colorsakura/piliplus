@@ -195,8 +195,8 @@ class _UgcIntroPanelState extends State<UgcIntroPanel> {
                       if (introController.enableAi) _aiBtn,
                     ],
                   ),
-                  if (videoDetail.argueInfo?.argueMsg?.isNotEmpty == true &&
-                      introController.showArgueMsg) ...[
+                  if (introController.showArgueMsg &&
+                      videoDetail.argueInfo?.argueMsg?.isNotEmpty == true) ...[
                     const SizedBox(height: 2),
                     Text.rich(
                       TextSpan(

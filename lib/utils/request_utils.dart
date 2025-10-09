@@ -24,6 +24,7 @@ import 'package:PiliPlus/pages/group_panel/view.dart';
 import 'package:PiliPlus/pages/later/controller.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/context_ext.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
@@ -617,5 +618,29 @@ abstract class RequestUtils {
         },
       )
       ..startCaptcha(registerData);
+  }
+
+  static Future<void> showUserRealName(String mid) async {
+    final res = await UserHttp.getUserRealName(mid);
+    if (res.isSuccess) {
+      final data = res.data;
+      final show = !data.name.isNullOrEmpty;
+      Get.dialog(
+        AlertDialog(
+          title: SelectableText(
+            show ? data.name! : data.rejectPage?.title ?? '',
+          ),
+          content: show ? null : Text(data.rejectPage?.text ?? ''),
+          actions: [
+            TextButton(
+              onPressed: Get.back,
+              child: const Text('关闭'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      res.toast();
+    }
   }
 }

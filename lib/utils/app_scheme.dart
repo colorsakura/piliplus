@@ -11,6 +11,7 @@ import 'package:PiliPlus/pages/video/reply_reply/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/url_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:app_links/app_links.dart';
@@ -102,6 +103,10 @@ abstract class PiliScheme {
             // bilibili://space/12345678?frommodule=XX&h5awaken=random
             String? mid = uriDigitRegExp.firstMatch(path)?.group(1);
             if (mid != null) {
+              if (path.startsWith('/realname')) {
+                RequestUtils.showUserRealName(mid);
+                return true;
+              }
               PageUtils.toDupNamed('/member?mid=$mid', off: off);
               return true;
             }
