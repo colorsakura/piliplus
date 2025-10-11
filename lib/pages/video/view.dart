@@ -56,7 +56,6 @@ import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -144,13 +143,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
     videoSourceInit();
     autoScreen();
-
-    if (videoDetailController.showReply) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        videoDetailController.scrollKey.currentState?.innerController
-            .addListener(innerScrollListener);
-      });
-    }
 
     WidgetsBinding.instance.addObserver(this);
   }
@@ -332,13 +324,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       tag: videoDetailController.heroTag,
     );
 
-    try {
-      if (videoDetailController.showReply) {
-        videoDetailController.scrollKey.currentState?.innerController
-            .removeListener(innerScrollListener);
-      }
-    } catch (_) {}
-
     if (!Get.previousRoute.startsWith('/video')) {
       if (Utils.isMobile) {
         ScreenBrightnessPlatform.instance.resetApplicationScreenBrightness();
@@ -517,25 +502,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         videoDetailController.minVideoHeight,
         videoDetailController.maxVideoHeight,
       );
-    }
-  }
-
-  void innerScrollListener() {
-    final ScrollDirection? direction = videoDetailController
-        .scrollKey
-        .currentState
-        ?.innerController
-        .positions
-        .firstOrNull
-        ?.userScrollDirection;
-    if (direction == ScrollDirection.forward) {
-      if (mounted) {
-        _videoReplyController.showFab();
-      }
-    } else if (direction == ScrollDirection.reverse) {
-      if (mounted) {
-        _videoReplyController.hideFab();
-      }
     }
   }
 
@@ -781,89 +747,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                       child:
                                           videoDetailController.playedTime ==
                                               null
-                                          ? PopupMenuButton<String>(
-                                              icon: Icon(
-                                                size: 22,
-                                                Icons.more_vert,
-                                                color: themeData
-                                                    .colorScheme
-                                                    .onSurface,
-                                              ),
-                                              onSelected: (String type) {
-                                                switch (type) {
-                                                  case 'later':
-                                                    introController.viewLater();
-                                                    break;
-                                                  case 'report':
-                                                    if (!Accounts
-                                                        .main
-                                                        .isLogin) {
-                                                      SmartDialog.showToast(
-                                                        '账号未登录',
-                                                      );
-                                                    } else {
-                                                      PageUtils.reportVideo(
-                                                        videoDetailController
-                                                            .aid,
-                                                      );
-                                                    }
-                                                    break;
-                                                  case 'note':
-                                                    videoDetailController
-                                                        .showNoteList(
-                                                          context,
-                                                        );
-                                                    break;
-                                                  case 'savePic':
-                                                    ImageUtils.downloadImg(
-                                                      context,
-                                                      [
-                                                        videoDetailController
-                                                            .cover
-                                                            .value,
-                                                      ],
-                                                    );
-                                                    break;
-                                                }
-                                              },
-                                              itemBuilder:
-                                                  (
-                                                    BuildContext context,
-                                                  ) => <PopupMenuEntry<String>>[
-                                                    const PopupMenuItem<String>(
-                                                      value: 'later',
-                                                      child: Text(
-                                                        '稍后再看',
-                                                      ),
-                                                    ),
-                                                    if (videoDetailController
-                                                            .epId ==
-                                                        null)
-                                                      const PopupMenuItem<
-                                                        String
-                                                      >(
-                                                        value: 'note',
-                                                        child: Text(
-                                                          '查看笔记',
-                                                        ),
-                                                      ),
-                                                    if (videoDetailController
-                                                        .cover
-                                                        .value
-                                                        .isNotEmpty)
-                                                      const PopupMenuItem<
-                                                        String
-                                                      >(
-                                                        value: 'savePic',
-                                                        child: Text(
-                                                          '保存封面',
-                                                        ),
-                                                      ),
-                                                    const PopupMenuItem<String>(
-                                                      value: 'report',
-                                                      child: Text('举报'),
-                                                    ),
-                                                  ],
+                                          ? _moreBtn(
+                                              themeData.colorScheme.onSurface,
                                             )
                                           : SizedBox(
                                               width: 42,
@@ -1363,62 +1248,14 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                 ],
               ),
               actions: [
-                PopupMenuButton<String>(
-                  icon: const Icon(
-                    size: 22,
-                    Icons.more_vert,
-                    color: Colors.white,
-                    shadows: [
-                      Shadow(
-                        blurRadius: 1.5,
-                        color: Colors.black,
-                      ),
-                    ],
-                  ),
-                  onSelected: (String type) {
-                    switch (type) {
-                      case 'later':
-                        introController.viewLater();
-                        break;
-                      case 'report':
-                        if (!Accounts.main.isLogin) {
-                          SmartDialog.showToast('账号未登录');
-                        } else {
-                          PageUtils.reportVideo(videoDetailController.aid);
-                        }
-                        break;
-                      case 'note':
-                        videoDetailController.showNoteList(context);
-                        break;
-                      case 'savePic':
-                        ImageUtils.downloadImg(
-                          context,
-                          [videoDetailController.cover.value],
-                        );
-                        break;
-                    }
-                  },
-                  itemBuilder: (BuildContext context) =>
-                      <PopupMenuEntry<String>>[
-                        const PopupMenuItem<String>(
-                          value: 'later',
-                          child: Text('稍后再看'),
-                        ),
-                        if (videoDetailController.epId == null)
-                          const PopupMenuItem<String>(
-                            value: 'note',
-                            child: Text('查看笔记'),
-                          ),
-                        if (videoDetailController.cover.value.isNotEmpty)
-                          const PopupMenuItem<String>(
-                            value: 'savePic',
-                            child: Text('保存封面'),
-                          ),
-                        const PopupMenuItem<String>(
-                          value: 'report',
-                          child: Text('举报'),
-                        ),
-                      ],
+                _moreBtn(
+                  Colors.white,
+                  shadows: const [
+                    Shadow(
+                      blurRadius: 1.5,
+                      color: Colors.black,
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -1441,6 +1278,49 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     }
     return const SizedBox.shrink();
   });
+
+  Widget _moreBtn(Color color, {List<Shadow>? shadows}) => PopupMenuButton(
+    icon: Icon(
+      size: 22,
+      Icons.more_vert,
+      color: color,
+      shadows: shadows,
+    ),
+    itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+      PopupMenuItem(
+        onTap: introController.viewLater,
+        child: const Text('稍后再看'),
+      ),
+      if (videoDetailController.epId == null)
+        PopupMenuItem(
+          onTap: () => videoDetailController.showNoteList(context),
+          child: const Text('查看笔记'),
+        ),
+      if (videoDetailController.cover.value.isNotEmpty)
+        PopupMenuItem(
+          onTap: () => ImageUtils.downloadImg(
+            context,
+            [videoDetailController.cover.value],
+          ),
+          child: const Text('保存封面'),
+        ),
+      if (videoDetailController.isUgc)
+        PopupMenuItem(
+          onTap: videoDetailController.toAudioPage,
+          child: const Text('听音频'),
+        ),
+      PopupMenuItem(
+        onTap: () {
+          if (!Accounts.main.isLogin) {
+            SmartDialog.showToast('账号未登录');
+          } else {
+            PageUtils.reportVideo(videoDetailController.aid);
+          }
+        },
+        child: const Text('举报'),
+      ),
+    ],
+  );
 
   Widget plPlayer({
     required double width,

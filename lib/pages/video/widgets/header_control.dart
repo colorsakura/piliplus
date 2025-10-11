@@ -1915,9 +1915,8 @@ class HeaderControlState extends State<HeaderControl> {
   @override
   Widget build(BuildContext context) {
     final isFullScreen = this.isFullScreen;
-    final showFSActionItem =
-        plPlayerController.showFSActionItem &&
-        (isFullScreen || plPlayerController.isDesktopPip);
+    final isFSOrPip = isFullScreen || plPlayerController.isDesktopPip;
+    final showFSActionItem = plPlayerController.showFSActionItem && isFSOrPip;
     return AppBar(
       elevation: 0,
       scrolledUnderElevation: 0,
@@ -2052,6 +2051,23 @@ class HeaderControlState extends State<HeaderControl> {
                   return const SizedBox.shrink();
                 },
               ),
+              if (!isFSOrPip && videoDetailCtr.isUgc)
+                SizedBox(
+                  width: 42,
+                  height: 34,
+                  child: IconButton(
+                    tooltip: '听音频',
+                    style: const ButtonStyle(
+                      padding: WidgetStatePropertyAll(EdgeInsets.zero),
+                    ),
+                    onPressed: videoDetailCtr.toAudioPage,
+                    icon: const Icon(
+                      Icons.headphones_outlined,
+                      size: 19,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
               if (plPlayerController.enableSponsorBlock == true)
                 SizedBox(
                   width: 42,
@@ -2100,56 +2116,61 @@ class HeaderControlState extends State<HeaderControl> {
                       )
                     : const SizedBox.shrink(),
               ),
-              SizedBox(
-                width: 42,
-                height: 34,
-                child: IconButton(
-                  tooltip: '发弹幕',
-                  style: const ButtonStyle(
-                    padding: WidgetStatePropertyAll(EdgeInsets.zero),
-                  ),
-                  onPressed: videoDetailCtr.showShootDanmakuSheet,
-                  icon: const Icon(
-                    Icons.comment_outlined,
-                    size: 19,
-                    color: Colors.white,
+              if (isFSOrPip) ...[
+                SizedBox(
+                  width: 42,
+                  height: 34,
+                  child: IconButton(
+                    tooltip: '发弹幕',
+                    style: const ButtonStyle(
+                      padding: WidgetStatePropertyAll(EdgeInsets.zero),
+                    ),
+                    onPressed: videoDetailCtr.showShootDanmakuSheet,
+                    icon: const Icon(
+                      Icons.comment_outlined,
+                      size: 19,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                width: 42,
-                height: 34,
-                child: Obx(
-                  () {
-                    final enableShowDanmaku =
-                        plPlayerController.enableShowDanmaku.value;
-                    return IconButton(
-                      tooltip: "${enableShowDanmaku ? '关闭' : '开启'}弹幕",
-                      style: const ButtonStyle(
-                        padding: WidgetStatePropertyAll(EdgeInsets.zero),
-                      ),
-                      onPressed: () {
-                        final newVal = !enableShowDanmaku;
-                        plPlayerController.enableShowDanmaku.value = newVal;
-                        if (!plPlayerController.tempPlayerConf) {
-                          setting.put(SettingBoxKey.enableShowDanmaku, newVal);
-                        }
-                      },
-                      icon: enableShowDanmaku
-                          ? const Icon(
-                              size: 20,
-                              CustomIcons.dm_on,
-                              color: Colors.white,
-                            )
-                          : const Icon(
-                              size: 20,
-                              CustomIcons.dm_off,
-                              color: Colors.white,
-                            ),
-                    );
-                  },
+                SizedBox(
+                  width: 42,
+                  height: 34,
+                  child: Obx(
+                    () {
+                      final enableShowDanmaku =
+                          plPlayerController.enableShowDanmaku.value;
+                      return IconButton(
+                        tooltip: "${enableShowDanmaku ? '关闭' : '开启'}弹幕",
+                        style: const ButtonStyle(
+                          padding: WidgetStatePropertyAll(EdgeInsets.zero),
+                        ),
+                        onPressed: () {
+                          final newVal = !enableShowDanmaku;
+                          plPlayerController.enableShowDanmaku.value = newVal;
+                          if (!plPlayerController.tempPlayerConf) {
+                            setting.put(
+                              SettingBoxKey.enableShowDanmaku,
+                              newVal,
+                            );
+                          }
+                        },
+                        icon: enableShowDanmaku
+                            ? const Icon(
+                                size: 20,
+                                CustomIcons.dm_on,
+                                color: Colors.white,
+                              )
+                            : const Icon(
+                                size: 20,
+                                CustomIcons.dm_off,
+                                color: Colors.white,
+                              ),
+                      );
+                    },
+                  ),
                 ),
-              ),
+              ],
               if (Platform.isAndroid || Utils.isDesktop)
                 SizedBox(
                   width: 42,
