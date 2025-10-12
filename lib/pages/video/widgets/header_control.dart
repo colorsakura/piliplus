@@ -1888,7 +1888,7 @@ class HeaderControlState extends State<HeaderControl> {
                         ],
                       ),
                     ),
-                    bgColor: null,
+                    bgColor: theme.colorScheme.surface,
                   ),
                 ),
                 ?_buildDanmakuList(ctr.staticDanmaku),
@@ -1912,8 +1912,10 @@ class HeaderControlState extends State<HeaderControl> {
         final item = list[index];
         final extra = item.content.extra! as VideoDanmaku;
         return ListTile(
+          dense: true,
+          contentPadding: const EdgeInsets.only(left: 6),
           onLongPress: () => Utils.copyText(item.content.text),
-          subtitle: Text(item.content.text),
+          title: Text(item.content.text * 10),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
