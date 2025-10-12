@@ -176,14 +176,19 @@ class _PgcIntroPageState extends State<PgcIntroPage> {
             child: Obx(() {
               final isFav = introController.isFav.value;
               return iconButton(
-                context: context,
                 size: 28,
                 iconSize: 26,
                 tooltip: '${isFav ? '取消' : ''}收藏',
                 onPressed: () => introController.onFavPugv(isFav),
-                icon: isFav ? Icons.star_rounded : Icons.star_border_rounded,
-                bgColor: isFav ? null : theme.colorScheme.onInverseSurface,
-                iconColor: isFav ? null : theme.colorScheme.onSurfaceVariant,
+                icon: isFav
+                    ? const Icon(Icons.star_rounded)
+                    : const Icon(Icons.star_border_rounded),
+                bgColor: isFav
+                    ? theme.colorScheme.secondaryContainer
+                    : theme.colorScheme.onInverseSurface,
+                iconColor: isFav
+                    ? theme.colorScheme.onSecondaryContainer
+                    : theme.colorScheme.onSurfaceVariant,
               );
             }),
           ),

@@ -129,7 +129,7 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
                   iconSize: 16,
                   context: context,
                   tooltip: '全部标签',
-                  icon: Icons.widgets,
+                  icon: const Icon(Icons.widgets),
                   onPressed: () => Get.to(const LiveAreaPage()),
                 ),
               ],

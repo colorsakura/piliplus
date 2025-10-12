@@ -89,7 +89,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
                 context: context,
                 onPressed: Get.back,
                 tooltip: '关闭',
-                icon: Icons.clear,
+                icon: const Icon(Icons.clear),
                 size: 32,
               ),
               const SizedBox(width: 16),

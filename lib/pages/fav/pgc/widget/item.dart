@@ -140,11 +140,9 @@ class FavPgcItem extends StatelessWidget {
             bottom: 0,
             child: iconButton(
               iconSize: 18,
-              context: context,
               onPressed: onUpdateStatus,
-              icon: Icons.more_vert,
+              icon: const Icon(Icons.more_vert),
               iconColor: theme.colorScheme.outline,
-              bgColor: Colors.transparent,
             ),
           ),
         ],

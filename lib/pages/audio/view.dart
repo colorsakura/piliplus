@@ -248,8 +248,7 @@ class _AudioPageState extends State<AudioPage> {
                                   trailing: isCurr
                                       ? null
                                       : iconButton(
-                                          context: context,
-                                          icon: Icons.clear,
+                                          icon: const Icon(Icons.clear),
                                           onPressed: () {
                                             if (index < _controller.index!) {
                                               _controller.index -= 1;
@@ -260,7 +259,6 @@ class _AudioPageState extends State<AudioPage> {
                                             (context as Element)
                                                 .markNeedsBuild();
                                           },
-                                          bgColor: Colors.transparent,
                                           iconColor: colorScheme.outline,
                                           size: 28,
                                           iconSize: 18,

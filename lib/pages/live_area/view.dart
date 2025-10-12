@@ -286,10 +286,15 @@ class _LiveAreaPageState extends State<LiveAreaPage> {
                   return iconButton(
                     size: 17,
                     iconSize: 13,
-                    context: context,
-                    icon: isFav ? MdiIcons.check : MdiIcons.plus,
-                    bgColor: isFav ? theme.colorScheme.onInverseSurface : null,
-                    iconColor: isFav ? theme.colorScheme.outline : null,
+                    icon: isFav
+                        ? const Icon(MdiIcons.check)
+                        : const Icon(MdiIcons.plus),
+                    bgColor: isFav
+                        ? theme.colorScheme.onInverseSurface
+                        : theme.colorScheme.secondaryContainer,
+                    iconColor: isFav
+                        ? theme.colorScheme.outline
+                        : theme.colorScheme.onSecondaryContainer,
                     onPressed: onPressed,
                   );
                 }
@@ -350,8 +355,7 @@ class _LiveAreaPageState extends State<LiveAreaPage> {
               return iconButton(
                 size: 16,
                 iconSize: 12,
-                context: context,
-                icon: Icons.horizontal_rule,
+                icon: const Icon(Icons.horizontal_rule),
                 bgColor: isDark
                     ? theme.colorScheme.error
                     : theme.colorScheme.errorContainer,

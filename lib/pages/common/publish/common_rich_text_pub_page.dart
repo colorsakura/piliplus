@@ -124,8 +124,7 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
             top: 34,
             right: 5,
             child: iconButton(
-              context: context,
-              icon: Icons.edit,
+              icon: const Icon(Icons.edit),
               onPressed: () => onCropImage(index),
               size: 24,
               iconSize: 14,
@@ -136,8 +135,7 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
           top: 5,
           right: 5,
           child: iconButton(
-            context: context,
-            icon: Icons.clear,
+            icon: const Icon(Icons.clear),
             onPressed: onClear,
             size: 24,
             iconSize: 14,

@@ -558,8 +558,7 @@ class _SavePanelState extends State<SavePanel> {
                     iconButton(
                       size: 42,
                       tooltip: '关闭',
-                      context: context,
-                      icon: Icons.clear,
+                      icon: const Icon(Icons.clear),
                       onPressed: Get.back,
                       bgColor: theme.colorScheme.onInverseSurface,
                       iconColor: theme.colorScheme.onSurfaceVariant,
@@ -569,8 +568,8 @@ class _SavePanelState extends State<SavePanel> {
                       tooltip: showBottom ? '隐藏' : '显示',
                       context: context,
                       icon: showBottom
-                          ? Icons.visibility_off
-                          : Icons.visibility,
+                          ? const Icon(Icons.visibility_off)
+                          : const Icon(Icons.visibility),
                       onPressed: () => setState(() {
                         showBottom = !showBottom;
                       }),
@@ -580,14 +579,14 @@ class _SavePanelState extends State<SavePanel> {
                         size: 42,
                         tooltip: '分享',
                         context: context,
-                        icon: Icons.share,
+                        icon: const Icon(Icons.share),
                         onPressed: () => _onSaveOrSharePic(true),
                       ),
                     iconButton(
                       size: 42,
                       tooltip: '保存',
                       context: context,
-                      icon: Icons.save_alt,
+                      icon: const Icon(Icons.save_alt),
                       onPressed: _onSaveOrSharePic,
                     ),
                   ],

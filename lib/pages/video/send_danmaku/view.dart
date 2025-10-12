@@ -334,16 +334,14 @@ class _SendDanmakuPanelState extends CommonTextPubPageState<SendDanmakuPanel> {
             () {
               final isEmoji = panelType.value == PanelType.emoji;
               return iconButton(
-                context: context,
                 tooltip: '弹幕样式',
                 onPressed: () {
                   updatePanelType(
                     isEmoji ? PanelType.keyboard : PanelType.emoji,
                   );
                 },
-                bgColor: Colors.transparent,
                 iconSize: 24,
-                icon: Icons.text_format,
+                icon: const Icon(Icons.text_format),
                 iconColor: isEmoji
                     ? themeData.colorScheme.primary
                     : themeData.colorScheme.onSurfaceVariant,
@@ -393,30 +391,26 @@ class _SendDanmakuPanelState extends CommonTextPubPageState<SendDanmakuPanel> {
           Obx(
             () => enablePublish.value
                 ? iconButton(
-                    context: context,
-                    bgColor: Colors.transparent,
                     iconSize: 22,
                     iconColor: themeData.colorScheme.onSurfaceVariant,
                     onPressed: () {
                       editController.clear();
                       enablePublish.value = false;
                     },
-                    icon: Icons.clear,
+                    icon: const Icon(Icons.clear),
                   )
                 : const SizedBox.shrink(),
           ),
           const SizedBox(width: 12),
           Obx(
             () => iconButton(
-              context: context,
               tooltip: '发送',
-              bgColor: Colors.transparent,
               iconSize: 22,
               iconColor: enablePublish.value
                   ? themeData.colorScheme.primary
                   : themeData.colorScheme.outline,
               onPressed: enablePublish.value ? onPublish : null,
-              icon: Icons.send,
+              icon: const Icon(Icons.send),
             ),
           ),
         ],

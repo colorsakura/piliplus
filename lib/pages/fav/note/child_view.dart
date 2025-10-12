@@ -79,7 +79,7 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
                       size: 32,
                       tooltip: '取消',
                       context: context,
-                      icon: Icons.clear,
+                      icon: const Icon(Icons.clear),
                       onPressed: _favNoteController.onDisable,
                     ),
                     const SizedBox(width: 12),

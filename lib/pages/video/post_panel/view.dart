@@ -76,7 +76,7 @@ class PostPanel extends CommonSlidePage {
               context: context,
               size: 26,
               tooltip: '设为当前',
-              icon: Icons.my_location,
+              icon: const Icon(Icons.my_location),
               onPressed: () {
                 updateSegment(
                   isFirst: isFirst,
@@ -90,7 +90,9 @@ class PostPanel extends CommonSlidePage {
               context: context,
               size: 26,
               tooltip: isFirst ? '视频开头' : '视频结尾',
-              icon: isFirst ? Icons.first_page : Icons.last_page,
+              icon: isFirst
+                  ? const Icon(Icons.first_page)
+                  : const Icon(Icons.last_page),
               onPressed: () {
                 updateSegment(
                   isFirst: isFirst,
@@ -104,7 +106,7 @@ class PostPanel extends CommonSlidePage {
               context: context,
               size: 26,
               tooltip: '编辑',
-              icon: Icons.edit,
+              icon: const Icon(Icons.edit),
               onPressed: () async {
                 final res = await showDialog<String>(
                   context: context,
@@ -222,7 +224,7 @@ class _PostPanelState extends State<PostPanel>
                 );
               });
             },
-            icon: Icons.add,
+            icon: const Icon(Icons.add),
           ),
           const SizedBox(width: 10),
           iconButton(
@@ -230,7 +232,7 @@ class _PostPanelState extends State<PostPanel>
             context: context,
             tooltip: '关闭',
             onPressed: Get.back,
-            icon: Icons.close,
+            icon: const Icon(Icons.close),
           ),
           const SizedBox(width: 16),
         ],
@@ -494,7 +496,7 @@ class _PostPanelState extends State<PostPanel>
             context: context,
             size: 26,
             tooltip: '移除',
-            icon: Icons.clear,
+            icon: const Icon(Icons.clear),
             onPressed: () {
               setState(() {
                 list.removeAt(index);
@@ -509,7 +511,7 @@ class _PostPanelState extends State<PostPanel>
             context: context,
             size: 26,
             tooltip: '预览',
-            icon: Icons.preview_outlined,
+            icon: const Icon(Icons.preview_outlined),
             onPressed: () async {
               final videoCtr = widget.plPlayerController.videoPlayerController;
               if (videoCtr != null) {

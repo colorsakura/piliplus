@@ -321,10 +321,9 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                         child: iconButton(
                           size: 24,
                           iconSize: 14,
-                          context: context,
                           bgColor: const Color(0xEEFFFFFF),
                           iconColor: Colors.black54,
-                          icon: Icons.clear,
+                          icon: const Icon(Icons.clear),
                           onPressed: () =>
                               _liveRoomController.fsSC.value = null,
                         ),

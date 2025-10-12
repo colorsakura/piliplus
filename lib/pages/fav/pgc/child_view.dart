@@ -85,7 +85,7 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
                       size: 32,
                       tooltip: '取消',
                       context: context,
-                      icon: Icons.clear,
+                      icon: const Icon(Icons.clear),
                       onPressed: _favPgcController.onDisable,
                     ),
                     const SizedBox(width: 12),

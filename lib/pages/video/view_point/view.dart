@@ -62,7 +62,7 @@ class _ViewPointsPageState extends State<ViewPointsPage>
           iconButton(
             context: context,
             size: 30,
-            icon: Icons.clear,
+            icon: const Icon(Icons.clear),
             tooltip: '关闭',
             onPressed: Get.back,
           ),

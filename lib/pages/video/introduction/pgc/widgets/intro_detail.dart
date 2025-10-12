@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/keep_alive_wrapper.dart';
 import 'package:PiliPlus/common/widgets/page/tabs.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
@@ -70,14 +69,12 @@ class _IntroDetailState extends State<PgcIntroPanel>
               },
             ),
           ),
-          iconButton(
-            context: context,
-            icon: Icons.clear,
+          IconButton(
+            tooltip: '关闭',
+            icon: const Icon(Icons.close, size: 20),
             onPressed: Get.back,
-            iconSize: 22,
-            bgColor: Colors.transparent,
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 2),
         ],
       ),
       children: [

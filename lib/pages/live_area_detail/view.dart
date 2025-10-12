@@ -101,9 +101,7 @@ class _LiveAreaDetailPageState extends State<LiveAreaDetailPage> {
                               ),
                             ),
                             iconButton(
-                              context: context,
-                              icon: Icons.menu,
-                              bgColor: Colors.transparent,
+                              icon: const Icon(Icons.menu),
                               onPressed: () =>
                                   _showTags(context, theme, bottom, response),
                             ),

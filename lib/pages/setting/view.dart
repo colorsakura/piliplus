@@ -23,7 +23,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 class _SettingsModel {
   final SettingType type;
   final String? subtitle;
-  final IconData icon;
+  final Icon icon;
 
   const _SettingsModel({
     required this.type,
@@ -48,40 +48,40 @@ class _SettingPageState extends State<SettingPage> {
     _SettingsModel(
       type: SettingType.privacySetting,
       subtitle: '黑名单、无痕模式',
-      icon: Icons.privacy_tip_outlined,
+      icon: Icon(Icons.privacy_tip_outlined),
     ),
     _SettingsModel(
       type: SettingType.recommendSetting,
       subtitle: '推荐来源（web/app）、刷新保留内容、过滤器',
-      icon: Icons.explore_outlined,
+      icon: Icon(Icons.explore_outlined),
     ),
     _SettingsModel(
       type: SettingType.videoSetting,
       subtitle: '画质、音质、解码、缓冲、音频输出等',
-      icon: Icons.video_settings_outlined,
+      icon: Icon(Icons.video_settings_outlined),
     ),
     _SettingsModel(
       type: SettingType.playSetting,
       subtitle: '双击/长按、全屏、后台播放、弹幕、字幕、底部进度条等',
-      icon: Icons.touch_app_outlined,
+      icon: Icon(Icons.touch_app_outlined),
     ),
     _SettingsModel(
       type: SettingType.styleSetting,
       subtitle: '横屏适配（平板）、侧栏、列宽、首页、动态红点、主题、字号、图片、帧率等',
-      icon: Icons.style_outlined,
+      icon: Icon(Icons.style_outlined),
     ),
     _SettingsModel(
       type: SettingType.extraSetting,
       subtitle: '震动、搜索、收藏、ai、评论、动态、代理、更新检查等',
-      icon: Icons.extension_outlined,
+      icon: Icon(Icons.extension_outlined),
     ),
     _SettingsModel(
       type: SettingType.webdavSetting,
-      icon: MdiIcons.databaseCogOutline,
+      icon: Icon(MdiIcons.databaseCogOutline),
     ),
     _SettingsModel(
       type: SettingType.about,
-      icon: Icons.info_outline,
+      icon: Icon(Icons.info_outline),
     ),
   ];
 
@@ -180,7 +180,7 @@ class _SettingPageState extends State<SettingPage> {
               (item) => ListTile(
                 tileColor: _getTileColor(theme, item.type),
                 onTap: () => _toPage(item.type),
-                leading: Icon(item.icon),
+                leading: item.icon,
                 title: Text(item.type.title, style: titleStyle),
                 subtitle: item.subtitle == null
                     ? null
@@ -204,7 +204,7 @@ class _SettingPageState extends State<SettingPage> {
         ListTile(
           tileColor: _getTileColor(theme, _items.last.type),
           onTap: () => _toPage(_items.last.type),
-          leading: Icon(_items.last.icon),
+          leading: _items.last.icon,
           title: Text(_items.last.type.title, style: titleStyle),
         ),
       ],

@@ -374,10 +374,8 @@ class LoginPageController extends GetxController
                     hintText: "请输入短信验证码",
                     hintStyle: const TextStyle(fontSize: 15),
                     suffixIcon: iconButton(
-                      context: Get.context!,
-                      icon: Icons.clear,
+                      icon: const Icon(Icons.clear),
                       size: 32,
-                      bgColor: Colors.transparent,
                       onPressed: textFieldController.clear,
                     ),
                     suffixIconConstraints: const BoxConstraints(

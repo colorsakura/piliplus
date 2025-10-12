@@ -1,5 +1,4 @@
 import 'package:PiliPlus/common/skeleton/video_reply.dart';
-import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
@@ -72,14 +71,12 @@ class _NoteListPageState extends State<NoteListPage>
                 ),
               ),
               actions: [
-                iconButton(
-                  context: context,
+                IconButton(
                   tooltip: '关闭',
-                  icon: Icons.clear,
+                  icon: const Icon(Icons.close, size: 20),
                   onPressed: Get.back,
-                  size: 32,
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 2),
               ],
             ),
           ),

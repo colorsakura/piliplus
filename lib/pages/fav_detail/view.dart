@@ -399,24 +399,25 @@ class _FavDetailPageState extends State<FavDetailPage> with GridMixin {
                         right: 6,
                         top: 6,
                         child: Obx(() {
-                          if (_favDetailController.isOwner) {
+                          if (_favDetailController.isOwner ||
+                              _favDetailController.loadingState.value
+                                  is! Success) {
                             return const SizedBox.shrink();
                           }
                           bool isFav = folderInfo.favState == 1;
                           return iconButton(
-                            context: context,
                             size: 28,
                             iconSize: 18,
                             tooltip: '${isFav ? '取消' : ''}收藏',
                             onPressed: () => _favDetailController.onFav(isFav),
                             icon: isFav
-                                ? Icons.favorite
-                                : Icons.favorite_border,
+                                ? const Icon(Icons.favorite)
+                                : const Icon(Icons.favorite_border),
                             bgColor: isFav
-                                ? null
+                                ? theme.colorScheme.secondaryContainer
                                 : theme.colorScheme.onInverseSurface,
                             iconColor: isFav
-                                ? null
+                                ? theme.colorScheme.onSecondaryContainer
                                 : theme.colorScheme.onSurfaceVariant,
                           );
                         }),

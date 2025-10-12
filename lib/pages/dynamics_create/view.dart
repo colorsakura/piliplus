@@ -171,8 +171,7 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
                           iconButton(
                             size: 22,
                             iconSize: 16,
-                            context: context,
-                            icon: Icons.clear,
+                            icon: const Icon(Icons.clear),
                             bgColor: theme.colorScheme.onInverseSurface,
                             iconColor: theme.colorScheme.onSurfaceVariant,
                             onPressed: () => topic.value = null,
@@ -804,12 +803,10 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
               right: 18,
               top: 2,
               child: iconButton(
-                context: context,
                 size: 30,
                 iconSize: 18,
-                icon: Icons.clear,
+                icon: const Icon(Icons.clear),
                 onPressed: () => _reserveCard.value = null,
-                bgColor: Colors.transparent,
                 iconColor: theme.colorScheme.onSurfaceVariant,
               ),
             ),

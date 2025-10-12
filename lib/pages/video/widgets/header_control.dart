@@ -1373,9 +1373,8 @@ class HeaderControlState extends State<HeaderControl> {
     bool isDanmaku = true,
   }) {
     return iconButton(
-      context: context,
       tooltip: '默认值: $def',
-      icon: Icons.refresh,
+      icon: const Icon(Icons.refresh),
       onPressed: () {
         onPressed();
         if (isDanmaku) {
@@ -1384,7 +1383,6 @@ class HeaderControlState extends State<HeaderControl> {
           plPlayerController.putSubtitleSettings();
         }
       },
-      bgColor: Colors.transparent,
       iconColor: theme.colorScheme.outline,
       size: 24,
       iconSize: 24,
@@ -1943,16 +1941,23 @@ class HeaderControlState extends State<HeaderControl> {
               SliverPersistentHeader(
                 pinned: true,
                 delegate: CustomSliverPersistentHeaderDelegate(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 7,
+                  child: Container(
+                    height: 45,
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: theme.colorScheme.outline.withValues(
+                            alpha: 0.1,
+                          ),
+                        ),
+                      ),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text('弹幕列表'),
-                        IconButton(
+                        iconButton(
                           onPressed: () => setState(() {}),
                           icon: const Icon(Icons.refresh),
                         ),
@@ -1965,6 +1970,7 @@ class HeaderControlState extends State<HeaderControl> {
               ?_buildDanmakuList(ctr.staticDanmaku),
               ?_buildDanmakuList(ctr.scrollDanmaku),
               ?_buildDanmakuList(ctr.specialDanmaku),
+              const SliverToBoxAdapter(child: SizedBox(height: 12)),
             ],
           ),
         ),
@@ -1985,12 +1991,15 @@ class HeaderControlState extends State<HeaderControl> {
           dense: true,
           contentPadding: const EdgeInsets.symmetric(horizontal: 14),
           onLongPress: () => Utils.copyText(item.content.text),
-          title: Text(item.content.text),
+          title: Text(
+            item.content.text,
+            style: const TextStyle(fontSize: 14),
+          ),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Builder(
-                builder: (context) => IconButton(
+                builder: (context) => iconButton(
                   onPressed: () async {
                     if (await HeaderControl.likeDanmaku(
                           extra,
@@ -2006,7 +2015,7 @@ class HeaderControlState extends State<HeaderControl> {
                 ),
               ),
               if (item.content.selfSend)
-                IconButton(
+                iconButton(
                   onPressed: () => HeaderControl.deleteDanmaku(
                     extra.id,
                     plPlayerController.cid!,
@@ -2014,7 +2023,7 @@ class HeaderControlState extends State<HeaderControl> {
                   icon: const Icon(Icons.delete_outline),
                 )
               else
-                IconButton(
+                iconButton(
                   onPressed: () => HeaderControl.reportDanmaku(
                     extra,
                     context,

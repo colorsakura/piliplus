@@ -212,11 +212,9 @@ class FavVideoCardH extends StatelessWidget {
               right: 0,
               bottom: -8,
               child: iconButton(
-                context: context,
-                icon: Icons.clear,
+                icon: const Icon(Icons.clear),
                 tooltip: '取消收藏',
                 iconColor: theme.colorScheme.outline,
-                bgColor: Colors.transparent,
                 onPressed: () => showDialog(
                   context: context,
                   builder: (context) {

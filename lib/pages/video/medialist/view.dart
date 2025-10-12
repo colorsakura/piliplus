@@ -75,19 +75,19 @@ class _MediaListPanelState extends State<MediaListPanel>
             title: Text(widget.panelTitle ?? '稍后再看'),
             backgroundColor: Colors.transparent,
             actions: [
-              mediumButton(
+              iconButton(
                 tooltip: widget.desc ? '顺序播放' : '倒序播放',
                 icon: widget.desc
-                    ? MdiIcons.sortAscending
-                    : MdiIcons.sortDescending,
+                    ? const Icon(MdiIcons.sortAscending)
+                    : const Icon(MdiIcons.sortDescending),
                 onPressed: () {
                   Get.back();
                   widget.onReverse();
                 },
               ),
-              mediumButton(
+              iconButton(
                 tooltip: '关闭',
-                icon: Icons.close,
+                icon: const Icon(Icons.close),
                 onPressed: Get.back,
               ),
               const SizedBox(width: 14),

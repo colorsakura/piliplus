@@ -258,11 +258,9 @@ class VideoCardHLater extends StatelessWidget {
             bottom: -8,
             child: iconButton(
               tooltip: '移除',
-              context: context,
               onPressed: () => ctr.toViewDel(context, index, videoItem.aid),
-              icon: Icons.clear,
+              icon: const Icon(Icons.clear),
               iconColor: theme.colorScheme.outline,
-              bgColor: Colors.transparent,
             ),
           ),
         ],

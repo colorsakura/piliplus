@@ -63,11 +63,9 @@ class MemberCheeseItem extends StatelessWidget {
             bottom: -8,
             child: iconButton(
               tooltip: '移除',
-              context: context,
               onPressed: onRemove,
-              icon: Icons.clear,
+              icon: const Icon(Icons.clear),
               iconColor: theme.colorScheme.outline,
-              bgColor: Colors.transparent,
             ),
           ),
         ],
