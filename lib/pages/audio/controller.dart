@@ -10,7 +10,6 @@ import 'package:PiliPlus/grpc/bilibili/app/listener/v1.pb.dart'
         PlaylistSource,
         PlayInfo,
         ThumbUpReq_ThumbType;
-import 'package:PiliPlus/grpc/bilibili/pagination.pb.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/ua_type.dart';
 import 'package:PiliPlus/pages/common/common_intro_controller.dart'
@@ -28,6 +27,7 @@ import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/utils/video_utils.dart';
 import 'package:fixnum/fixnum.dart' show Int64;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -41,6 +41,7 @@ class AudioController extends GetxController
   late List<Int64> subId;
   late int itemType;
   late final PlaylistSource from;
+  late final isVideo = itemType == 1;
 
   final Rx<DetailItem?> audioItem = Rx<DetailItem?>(null);
 
@@ -120,10 +121,10 @@ class AudioController extends GetxController
       subId: isInit ? subId : null,
       itemType: isInit ? itemType : null,
       from: isInit ? from : null,
-      pagination: isLoadPrev
-          ? Pagination(next: _prev)
+      next: isLoadPrev
+          ? _prev
           : isLoadNext
-          ? Pagination(next: _next)
+          ? _next
           : null,
     );
     if (res.isSuccess) {
@@ -174,7 +175,7 @@ class AudioController extends GetxController
     }
   }
 
-  Future<void> _onPlay(PlayURLResp data) async {
+  void _onPlay(PlayURLResp data) {
     final PlayInfo? playInfo = data.playerInfo.values.firstOrNull;
     if (playInfo != null) {
       if (playInfo.hasPlayDash()) {
@@ -188,7 +189,7 @@ class AudioController extends GetxController
           (e) => e.id <= cacheAudioQa,
           (a, b) => a.id > b.id ? a : b,
         );
-        _onOpenMedia(audio.baseUrl);
+        _onOpenMedia(VideoUtils.getCdnUrl(audio.baseUrl));
       } else if (playInfo.hasPlayUrl()) {
         final playUrl = playInfo.playUrl;
         final durls = playUrl.durl;
@@ -197,7 +198,7 @@ class AudioController extends GetxController
         }
         final durl = durls.first;
         position.value = Duration.zero;
-        _onOpenMedia(durl.url);
+        _onOpenMedia(VideoUtils.getDurlCdnUrl(durl));
       }
     }
   }
@@ -380,7 +381,7 @@ class AudioController extends GetxController
   void showReply() {
     MainReplyPage.toMainReplyPage(
       oid: oid.toInt(),
-      replyType: itemType == 1 ? 1 : 14,
+      replyType: isVideo ? 1 : 14,
     );
   }
 
@@ -388,7 +389,7 @@ class AudioController extends GetxController
     showDialog(
       context: context,
       builder: (_) {
-        final audioUrl = itemType == 1
+        final audioUrl = isVideo
             ? '${HttpString.baseUrl}/video/${IdUtils.av2bv(oid.toInt())}'
             : '${HttpString.baseUrl}/audio/au$oid';
         return AlertDialog(
@@ -452,7 +453,7 @@ class AudioController extends GetxController
                       useSafeArea: true,
                       builder: (context) => RepostPanel(
                         rid: oid.toInt(),
-                        dynType: itemType == 1 ? 8 : 256,
+                        dynType: isVideo ? 8 : 256,
                         pic: audioItem.arc.cover,
                         title: audioItem.arc.title,
                         uname: audioItem.owner.name,
@@ -461,7 +462,7 @@ class AudioController extends GetxController
                   }
                 },
               ),
-              if (itemType == 1)
+              if (isVideo)
                 ListTile(
                   dense: true,
                   title: const Text(
@@ -563,7 +564,7 @@ class AudioController extends GetxController
   // }
 
   @override
-  (Object, int) get getFavRidType => (oid, itemType == 1 ? 2 : 12);
+  (Object, int) get getFavRidType => (oid, isVideo ? 2 : 12);
 
   @override
   void updateFavCount(int count) {
