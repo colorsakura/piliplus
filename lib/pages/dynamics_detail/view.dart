@@ -198,8 +198,8 @@ class _DynamicDetailPageState extends CommonDynPageState<DynamicDetailPage> {
                 alignment: Alignment.bottomRight,
                 child: Padding(
                   padding: EdgeInsets.only(
-                    right: 14,
-                    bottom: padding.bottom + 14,
+                    right: kFloatingActionButtonMargin,
+                    bottom: padding.bottom + kFloatingActionButtonMargin,
                   ),
                   child: replyButton,
                 ),
@@ -243,7 +243,10 @@ class _DynamicDetailPageState extends CommonDynPageState<DynamicDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(right: 14, bottom: 14),
+                  padding: const EdgeInsets.only(
+                    right: kFloatingActionButtonMargin,
+                    bottom: kFloatingActionButtonMargin,
+                  ),
                   child: replyButton,
                 ),
                 Container(

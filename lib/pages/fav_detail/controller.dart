@@ -13,6 +13,9 @@ import 'package:PiliPlus/pages/fav_sort/view.dart';
 import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_key.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/services.dart' show ValueChanged;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -85,7 +88,14 @@ class FavDetailController
 
   AccountService accountService = Get.find<AccountService>();
 
-  late final RxBool isPlayAll = true.obs;
+  late double dx = 0;
+  late final RxBool isPlayAll = Pref.enablePlayAll.obs;
+
+  void setIsPlayAll(bool isPlayAll) {
+    if (this.isPlayAll.value == isPlayAll) return;
+    this.isPlayAll.value = isPlayAll;
+    GStorage.setting.put(SettingBoxKey.enablePlayAll, isPlayAll);
+  }
 
   @override
   void onInit() {

@@ -855,4 +855,7 @@ abstract class Pref {
   static PlayRepeat get audioPlayMode =>
       PlayRepeat.values[_setting.get(SettingBoxKey.audioPlayMode) ??
           PlayRepeat.listOrder.index];
+
+  static bool get enablePlayAll =>
+      _setting.get(SettingBoxKey.enablePlayAll, defaultValue: true);
 }

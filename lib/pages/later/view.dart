@@ -4,6 +4,7 @@ import 'package:PiliPlus/common/widgets/view_safe_area.dart';
 import 'package:PiliPlus/models/common/later_view_type.dart';
 import 'package:PiliPlus/models_new/later/data.dart';
 import 'package:PiliPlus/models_new/later/list.dart';
+import 'package:PiliPlus/pages/fav_detail/view.dart';
 import 'package:PiliPlus/pages/later/base_controller.dart';
 import 'package:PiliPlus/pages/later/controller.dart';
 import 'package:PiliPlus/utils/accounts.dart';
@@ -71,30 +72,40 @@ class _LaterPageState extends State<LaterPage>
           child: Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: _buildAppbar(enableMultiSelect),
-            floatingActionButton: Obx(
-              () => currCtr().loadingState.value.isSuccess
-                  ? AnimatedSlide(
-                      offset: _baseCtr.isPlayAll.value
-                          ? Offset.zero
-                          : const Offset(0.75, 0),
-                      duration: const Duration(milliseconds: 120),
-                      child: GestureDetector(
-                        onHorizontalDragUpdate: (details) =>
-                            _baseCtr.isPlayAll.value = details.delta.dx < 0,
-                        child: FloatingActionButton.extended(
-                          onPressed: () {
-                            if (_baseCtr.isPlayAll.value) {
-                              currCtr().toViewPlayAll();
-                            } else {
-                              _baseCtr.isPlayAll.value = true;
-                            }
-                          },
-                          label: const Text('播放全部'),
-                          icon: const Icon(Icons.playlist_play),
+            floatingActionButtonLocation: const CustomFabLocation(),
+            floatingActionButton: Padding(
+              padding: const EdgeInsets.only(
+                right: kFloatingActionButtonMargin,
+              ),
+              child: Obx(
+                () => currCtr().loadingState.value.isSuccess
+                    ? AnimatedSlide(
+                        offset: _baseCtr.isPlayAll.value
+                            ? Offset.zero
+                            : const Offset(0.75, 0),
+                        duration: const Duration(milliseconds: 120),
+                        child: GestureDetector(
+                          onHorizontalDragDown: (details) =>
+                              _baseCtr.dx = details.localPosition.dx,
+                          onHorizontalDragStart: (details) =>
+                              _baseCtr.setIsPlayAll(
+                                details.localPosition.dx < _baseCtr.dx,
+                              ),
+                          child: FloatingActionButton.extended(
+                            onPressed: () {
+                              if (_baseCtr.isPlayAll.value) {
+                                currCtr().toViewPlayAll();
+                              } else {
+                                _baseCtr.setIsPlayAll(true);
+                              }
+                            },
+                            label: const Text('播放全部'),
+                            icon: const Icon(Icons.playlist_play),
+                          ),
                         ),
-                      ),
-                    )
-                  : const SizedBox.shrink(),
+                      )
+                    : const SizedBox.shrink(),
+              ),
             ),
             body: ViewSafeArea(
               child: Column(

@@ -66,8 +66,8 @@ class _MemberOpusState extends State<MemberOpus>
         ),
         if (_controller.filter?.isNotEmpty == true)
           Positioned(
-            right: 16,
-            bottom: bottom + 16,
+            right: kFloatingActionButtonMargin,
+            bottom: bottom + kFloatingActionButtonMargin,
             child: FloatingActionButton.extended(
               onPressed: () => showDialog(
                 context: context,

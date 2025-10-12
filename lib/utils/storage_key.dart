@@ -140,7 +140,8 @@ abstract class SettingBoxKey {
       showFsScreenshotBtn = 'showFsScreenshotBtn',
       showFsLockBtn = 'showFsLockBtn',
       silentDownImg = 'silentDownImg',
-      showMemberShop = 'showMemberShop';
+      showMemberShop = 'showMemberShop',
+      enablePlayAll = 'enablePlayAll';
 
   static const String minimizeOnExit = 'minimizeOnExit',
       windowSize = 'windowSize',

@@ -143,8 +143,8 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
               ],
             ),
             Positioned(
-              right: 14,
-              bottom: 14 + bottom,
+              right: kFloatingActionButtonMargin,
+              bottom: kFloatingActionButtonMargin + bottom,
               child: SlideTransition(
                 position: _videoReplyController.anim,
                 child: FloatingActionButton(

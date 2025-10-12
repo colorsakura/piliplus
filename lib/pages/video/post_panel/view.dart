@@ -276,8 +276,8 @@ class _PostPanelState extends State<PostPanel>
       children: [
         child,
         Positioned(
-          right: 16,
-          bottom: 16 + bottom,
+          right: kFloatingActionButtonMargin,
+          bottom: kFloatingActionButtonMargin + bottom,
           child: FloatingActionButton(
             tooltip: '提交',
             onPressed: () => showDialog(

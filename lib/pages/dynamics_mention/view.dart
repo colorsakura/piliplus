@@ -196,10 +196,10 @@ class _DynMentionPanelState
               ),
               Obx(() {
                 return Positioned(
-                  right: 16,
+                  right: kFloatingActionButtonMargin,
                   bottom:
                       padding +
-                      16 +
+                      kFloatingActionButtonMargin +
                       (_controller.showBtn.value ? viewInset : 0),
                   child: AnimatedSlide(
                     offset: _controller.showBtn.value

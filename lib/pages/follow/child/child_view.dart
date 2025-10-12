@@ -69,8 +69,8 @@ class _FollowChildPageState extends State<FollowChildPage>
         children: [
           child,
           Positioned(
-            right: 16 + padding.right,
-            bottom: 16 + padding.bottom,
+            right: kFloatingActionButtonMargin + padding.right,
+            bottom: kFloatingActionButtonMargin + padding.bottom,
             child: FloatingActionButton.extended(
               onPressed: () => _followController
                 ..orderType.value =

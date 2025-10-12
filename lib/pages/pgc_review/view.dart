@@ -101,8 +101,10 @@ class _PgcReviewPageState extends State<PgcReviewPage>
           ],
         ),
         Positioned(
-          right: 16,
-          bottom: MediaQuery.viewPaddingOf(context).bottom + 16,
+          right: kFloatingActionButtonMargin,
+          bottom:
+              MediaQuery.viewPaddingOf(context).bottom +
+              kFloatingActionButtonMargin,
           child: FloatingActionButton(
             onPressed: () => showDialog(
               context: context,

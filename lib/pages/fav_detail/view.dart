@@ -58,31 +58,42 @@ class _FavDetailPageState extends State<FavDetailPage> with GridMixin {
           },
           child: Scaffold(
             resizeToAvoidBottomInset: false,
-            floatingActionButton: Obx(
-              () => _favDetailController.folderInfo.value.mediaCount > 0
-                  ? AnimatedSlide(
-                      offset: _favDetailController.isPlayAll.value
-                          ? Offset.zero
-                          : const Offset(0.75, 0),
-                      duration: const Duration(milliseconds: 120),
-                      child: GestureDetector(
-                        onHorizontalDragUpdate: (details) =>
-                            _favDetailController.isPlayAll.value =
-                                details.delta.dx < 0,
-                        child: FloatingActionButton.extended(
-                          onPressed: () {
-                            if (_favDetailController.isPlayAll.value) {
-                              _favDetailController.toViewPlayAll();
-                            } else {
-                              _favDetailController.isPlayAll.value = true;
-                            }
-                          },
-                          label: const Text('播放全部'),
-                          icon: const Icon(Icons.playlist_play),
+            floatingActionButtonLocation: const CustomFabLocation(),
+            floatingActionButton: Padding(
+              padding: const EdgeInsets.only(
+                right: kFloatingActionButtonMargin,
+              ),
+              child: Obx(
+                () => _favDetailController.folderInfo.value.mediaCount > 0
+                    ? AnimatedSlide(
+                        offset: _favDetailController.isPlayAll.value
+                            ? Offset.zero
+                            : const Offset(0.75, 0),
+                        duration: const Duration(milliseconds: 120),
+                        child: GestureDetector(
+                          onHorizontalDragDown: (details) =>
+                              _favDetailController.dx =
+                                  details.localPosition.dx,
+                          onHorizontalDragStart: (details) =>
+                              _favDetailController.setIsPlayAll(
+                                details.localPosition.dx <
+                                    _favDetailController.dx,
+                              ),
+                          child: FloatingActionButton.extended(
+                            onPressed: () {
+                              if (_favDetailController.isPlayAll.value) {
+                                _favDetailController.toViewPlayAll();
+                              } else {
+                                _favDetailController.setIsPlayAll(true);
+                              }
+                            },
+                            label: const Text('播放全部'),
+                            icon: const Icon(Icons.playlist_play),
+                          ),
                         ),
-                      ),
-                    )
-                  : const SizedBox.shrink(),
+                      )
+                    : const SizedBox.shrink(),
+              ),
             ),
             body: refreshIndicator(
               onRefresh: _favDetailController.onRefresh,
@@ -507,5 +518,20 @@ class _FavDetailPageState extends State<FavDetailPage> with GridMixin {
         onReload: _favDetailController.onReload,
       ),
     };
+  }
+}
+
+class CustomFabLocation extends StandardFabLocation with FabFloatOffsetY {
+  const CustomFabLocation();
+
+  @override
+  double getOffsetX(
+    ScaffoldPrelayoutGeometry scaffoldGeometry,
+    double adjustment,
+  ) {
+    return scaffoldGeometry.scaffoldSize.width -
+        scaffoldGeometry.minInsets.right -
+        scaffoldGeometry.floatingActionButtonSize.width +
+        adjustment;
   }
 }

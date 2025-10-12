@@ -122,8 +122,9 @@ class _WebDavSettingPageState extends State<WebDavSettingPage> {
             ],
           ),
           Positioned(
-            right: 16 + (showAppBar ? padding.right : 0),
-            bottom: 16 + padding.bottom,
+            right:
+                kFloatingActionButtonMargin + (showAppBar ? padding.right : 0),
+            bottom: kFloatingActionButtonMargin + padding.bottom,
             child: FloatingActionButton(
               child: const Icon(Icons.save),
               onPressed: () async {
