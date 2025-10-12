@@ -51,7 +51,6 @@ class AppBarAni extends StatelessWidget {
                 ),
         ),
         child: ViewSafeArea(
-          top: isTop && isFullScreen,
           left: isFullScreen,
           right: isFullScreen,
           child: child,

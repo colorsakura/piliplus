@@ -110,6 +110,13 @@ class AudioController extends GetxController
     });
   }
 
+  void _updateCurrItem(DetailItem item) {
+    audioItem.value = item;
+    hasLike.value = item.stat.hasLike_7;
+    coinNum.value = item.stat.hasCoin_8 ? 2 : 0;
+    hasFav.value = item.stat.hasFav;
+  }
+
   Future<void> _queryPlayList({
     bool isInit = false,
     bool isLoadPrev = false,
@@ -136,11 +143,7 @@ class AudioController extends GetxController
         final index = data.list.indexWhere((e) => e.item.oid == oid);
         if (index != -1) {
           this.index = index;
-          final item = data.list[index];
-          audioItem.value = item;
-          hasLike.value = item.stat.hasLike_7;
-          coinNum.value = item.stat.hasCoin_8 ? 2 : 0;
-          hasFav.value = item.stat.hasFav;
+          _updateCurrItem(data.list[index]);
           playlist = data.list;
         }
       } else if (isLoadPrev) {
@@ -356,6 +359,7 @@ class AudioController extends GetxController
         hasLike.value = true;
       }
       coinNum.value += coin;
+      GlobalData().afterCoin(coin);
     } else {
       res.toast();
     }
@@ -540,7 +544,7 @@ class AudioController extends GetxController
     itemType = item.itemType;
     _queryPlayUrl().then((res) {
       if (res) {
-        this.audioItem.value = audioItem;
+        _updateCurrItem(audioItem);
       }
     });
   }

@@ -5,6 +5,7 @@ import 'package:PiliPlus/common/widgets/progress_bar/segment_progress_bar.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/view.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -29,8 +30,10 @@ class BottomControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    Color primary = theme.colorScheme.primary;
+    final colorScheme = ColorScheme.of(context);
+    final primary = colorScheme.isLight
+        ? colorScheme.inversePrimary
+        : colorScheme.primary;
     final thumbGlowColor = primary.withAlpha(80);
     final bufferedBarColor = primary.withValues(alpha: 0.4);
     //阅读器限制
@@ -113,6 +116,7 @@ class BottomControl extends StatelessWidget {
                       thumbGlowColor: thumbGlowColor,
                       barHeight: 3.5,
                       thumbRadius: 7,
+                      thumbGlowRadius: 25,
                       onDragStart: onDragStart,
                       onDragUpdate: (e) => onDragUpdate(e, max),
                       onSeek: (e) => onSeek(e, max),
@@ -175,7 +179,7 @@ class BottomControl extends StatelessWidget {
                   if (videoDetailController.showDmTreandChart.value)
                     if (videoDetailController.dmTrend.value?.dataOrNull
                         case final list?)
-                      buildDmChart(theme, list, videoDetailController, 4.5),
+                      buildDmChart(primary, list, videoDetailController, 4.5),
                 ],
               ),
             ),

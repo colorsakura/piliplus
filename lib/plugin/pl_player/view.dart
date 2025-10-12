@@ -40,6 +40,7 @@ import 'package:PiliPlus/plugin/pl_player/widgets/forward_seek.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/mpv_convert_webp.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/play_pause_btn.dart';
 import 'package:PiliPlus/utils/duration_utils.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/image_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -793,9 +794,15 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   late final transformationController = TransformationController();
 
-  late ThemeData theme;
+  late ColorScheme colorScheme;
   late double maxWidth;
   late double maxHeight;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    colorScheme = ColorScheme.of(context);
+  }
 
   void _onInteractionStart(ScaleStartDetails details) {
     if (plPlayerController.controlsLock.value) return;
@@ -911,12 +918,12 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 borderRadius: const BorderRadius.all(
                   Radius.circular(6),
                 ),
-                color: theme.colorScheme.secondaryContainer,
+                color: colorScheme.secondaryContainer,
               ),
               child: Text(
                 '松开手指，取消进退',
                 style: TextStyle(
-                  color: theme.colorScheme.onSecondaryContainer,
+                  color: colorScheme.onSecondaryContainer,
                 ),
               ),
             ),
@@ -1172,10 +1179,11 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   @override
   Widget build(BuildContext context) {
-    theme = Theme.of(context);
     maxWidth = widget.maxWidth;
     maxHeight = widget.maxHeight;
-    final Color primary = theme.colorScheme.primary;
+    final primary = colorScheme.isLight
+        ? colorScheme.inversePrimary
+        : colorScheme.primary;
     late final thumbGlowColor = primary.withAlpha(80);
     late final bufferedBarColor = primary.withValues(alpha: 0.4);
     const TextStyle textStyle = TextStyle(
@@ -1508,7 +1516,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                     child: FilledButton.tonal(
                       style: FilledButton.styleFrom(
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        backgroundColor: theme.colorScheme.secondaryContainer
+                        backgroundColor: colorScheme.secondaryContainer
                             .withValues(alpha: 0.8),
                         visualDensity: VisualDensity.compact,
                         padding: const EdgeInsets.all(15),
@@ -1660,7 +1668,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         videoDetailController.showDmTreandChart.value)
                       if (videoDetailController.dmTrend.value?.dataOrNull
                           case final list?)
-                        buildDmChart(theme, list, videoDetailController),
+                        buildDmChart(primary, list, videoDetailController),
                   ],
                 );
               },
@@ -2040,12 +2048,11 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 }
 
 Widget buildDmChart(
-  ThemeData theme,
+  Color color,
   List<double> dmTrend,
   VideoDetailController videoDetailController, [
   double offset = 0,
 ]) {
-  final color = theme.colorScheme.primary;
   return IgnorePointer(
     child: Container(
       height: 12,
