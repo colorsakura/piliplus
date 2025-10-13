@@ -1064,16 +1064,16 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     plPlayerController.triggerFullScreen(status: !isFullScreen);
   }
 
-  void onTapUp(TapDownDetails? event) {
-    switch (event?.kind) {
+  void onTapUp(TapUpDetails event) {
+    switch (event.kind) {
       case ui.PointerDeviceKind.mouse when (Utils.isDesktop):
         onTapDesktop();
         break;
       default:
-        if (plPlayerController.enableTapDm && Utils.isMobile) {
+        if (kDebugMode && Utils.isMobile) {
           final ctr = plPlayerController.danmakuController;
           if (ctr != null) {
-            final item = ctr.findSingleDanmaku(event!.localPosition);
+            final item = ctr.findSingleDanmaku(event.localPosition);
             if (item == null) {
               if (_suspendedDm.value != null) {
                 _removeOverlay();
@@ -1254,7 +1254,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               onInteractionEnd: _onInteractionEnd,
               flipX: plPlayerController.flipX.value,
               flipY: plPlayerController.flipY.value,
-              onTap: onTapUp,
+              onTapUp: onTapUp,
               onDoubleTapDown: onDoubleTapDown,
               onLongPressStart: isLive
                   ? null
