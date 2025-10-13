@@ -1166,7 +1166,7 @@ packages:
     description:
       path: media_kit_video
       ref: "version_1.2.5"
-      resolved-ref: "2755671b0263378d216bf2b3fe9bada796e702e9"
+      resolved-ref: "8f15c273f3e5c05476d8b19881719a1bd906c4f2"
       url: "https://github.com/bggRGjQaUbCoE/media-kit.git"
     source: git
     version: "1.2.5"

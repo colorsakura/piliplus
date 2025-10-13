@@ -232,6 +232,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   @override
   void dispose() {
+    _tapGestureRecognizer.dispose();
+    _longPressRecognizer?.dispose();
+    _doubleTapGestureRecognizer.dispose();
     _listener?.cancel();
     _controlsListener?.cancel();
     animationController.dispose();
@@ -1064,8 +1067,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     plPlayerController.triggerFullScreen(status: !isFullScreen);
   }
 
-  void onTapUp(TapUpDetails event) {
-    switch (event.kind) {
+  void onTapUp(TapUpDetails details) {
+    switch (details.kind) {
       case ui.PointerDeviceKind.mouse when (Utils.isDesktop):
         onTapDesktop();
         break;
@@ -1073,14 +1076,14 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         if (kDebugMode && Utils.isMobile) {
           final ctr = plPlayerController.danmakuController;
           if (ctr != null) {
-            final item = ctr.findSingleDanmaku(event.localPosition);
+            final item = ctr.findSingleDanmaku(details.localPosition);
             if (item == null) {
               if (_suspendedDm.value != null) {
                 _removeOverlay();
                 break;
               }
             } else if (item != _suspendedDm.value?.item) {
-              _showOverlay(item, event, ctr);
+              _showOverlay(item, details, ctr);
               break;
             }
           }
@@ -1101,19 +1104,40 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     }
   }
 
+  LongPressGestureRecognizer? _longPressRecognizer;
+  final _tapGestureRecognizer = TapGestureRecognizer();
+  final _doubleTapGestureRecognizer = DoubleTapGestureRecognizer();
+
   void onPointerDown(PointerDownEvent event) {
-    final buttons = event.buttons;
-    final isSecondaryBtn = buttons == kSecondaryMouseButton;
-    if (isSecondaryBtn || buttons == kMiddleMouseButton) {
-      plPlayerController
-          .triggerFullScreen(
-            status: !isFullScreen,
-            inAppFullScreen: isSecondaryBtn,
-          )
-          .whenComplete(
-            () => plPlayerController.initialFocalPoint = Offset.zero,
-          );
+    if (Utils.isDesktop) {
+      final buttons = event.buttons;
+      final isSecondaryBtn = buttons == kSecondaryMouseButton;
+      if (isSecondaryBtn || buttons == kMiddleMouseButton) {
+        plPlayerController
+            .triggerFullScreen(
+              status: !isFullScreen,
+              inAppFullScreen: isSecondaryBtn,
+            )
+            .whenComplete(
+              () => plPlayerController.initialFocalPoint = Offset.zero,
+            );
+        return;
+      }
     }
+
+    if (!plPlayerController.isLive) {
+      (_longPressRecognizer ??= LongPressGestureRecognizer())
+        ..onLongPressStart = ((_) =>
+            plPlayerController.setLongPressStatus(true))
+        ..onLongPressEnd = ((_) => plPlayerController.setLongPressStatus(false))
+        ..addPointer(event);
+    }
+    _tapGestureRecognizer
+      ..onTapUp = onTapUp
+      ..addPointer(event);
+    _doubleTapGestureRecognizer
+      ..onDoubleTapDown = onDoubleTapDown
+      ..addPointer(event);
   }
 
   void _showControlsIfNeeded() {
@@ -1219,6 +1243,14 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     final isFullScreen = this.isFullScreen;
     final isLive = plPlayerController.isLive;
 
+    final gestureWidget = Listener(
+      behavior: HitTestBehavior.translucent,
+      onPointerDown: onPointerDown,
+      onPointerPanZoomUpdate: onPointerPanZoomUpdate,
+      onPointerPanZoomEnd: onPointerPanZoomEnd,
+      onPointerSignal: onPointerSignal,
+    );
+
     final child = Stack(
       fit: StackFit.passthrough,
       key: _playerKey,
@@ -1254,14 +1286,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               onInteractionEnd: _onInteractionEnd,
               flipX: plPlayerController.flipX.value,
               flipY: plPlayerController.flipY.value,
-              onTapUp: onTapUp,
-              onDoubleTapDown: onDoubleTapDown,
-              onLongPressStart: isLive
-                  ? null
-                  : (_) => plPlayerController.setLongPressStatus(true),
-              onLongPressEnd: isLive
-                  ? null
-                  : (_) => plPlayerController.setLongPressStatus(false),
+              gestureWidget: gestureWidget,
               enableDragSubtitle: plPlayerController.enableDragSubtitle,
               onUpdatePadding: plPlayerController.onUpdatePadding,
             );
@@ -1998,23 +2023,16 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       ],
     );
     if (!Utils.isMobile) {
-      return Listener(
-        behavior: HitTestBehavior.translucent,
-        onPointerDown: onPointerDown,
-        onPointerPanZoomUpdate: onPointerPanZoomUpdate,
-        onPointerPanZoomEnd: onPointerPanZoomEnd,
-        onPointerSignal: onPointerSignal,
-        child: Obx(
-          () => MouseRegion(
-            cursor: !plPlayerController.showControls.value && isFullScreen
-                ? SystemMouseCursors.none
-                : MouseCursor.defer,
-            onEnter: (_) => plPlayerController.controls = true,
-            onHover: (_) => plPlayerController.controls = true,
-            onExit: (_) => plPlayerController.controls =
-                widget.videoDetailController?.showSteinEdgeInfo.value ?? false,
-            child: child,
-          ),
+      return Obx(
+        () => MouseRegion(
+          cursor: !plPlayerController.showControls.value && isFullScreen
+              ? SystemMouseCursors.none
+              : MouseCursor.defer,
+          onEnter: (_) => plPlayerController.controls = true,
+          onHover: (_) => plPlayerController.controls = true,
+          onExit: (_) => plPlayerController.controls =
+              widget.videoDetailController?.showSteinEdgeInfo.value ?? false,
+          child: child,
         ),
       );
     }
@@ -2194,7 +2212,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   void _showOverlay(
     DanmakuItem<DanmakuExtra> item,
-    PositionedGestureDetails event,
+    TapUpDetails event,
     DanmakuController<DanmakuExtra> ctr,
   ) {
     _removeOverlay();
