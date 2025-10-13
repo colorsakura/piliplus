@@ -73,6 +73,7 @@ class AudioController extends GetxController
 
   String? _prev;
   String? _next;
+  bool get reachStart => _prev == null;
 
   @override
   void onInit() {

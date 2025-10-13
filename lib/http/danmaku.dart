@@ -76,7 +76,7 @@ abstract final class DanmakuHttp {
     required int id,
   }) async {
     final data = {
-      'op': isLike ? 2 : 1,
+      'op': isLike ? 1 : 2,
       'dmid': id,
       'oid': cid,
       'platform': 'web_player',

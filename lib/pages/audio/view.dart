@@ -179,9 +179,11 @@ class _AudioPageState extends State<AudioPage> {
                       onRefresh: () => _controller.loadPrev(context),
                       child: CustomScrollView(
                         controller: scrollController,
-                        physics: const AlwaysScrollableScrollPhysics(
-                          parent: ClampingScrollPhysics(),
-                        ),
+                        physics: _controller.reachStart
+                            ? const ClampingScrollPhysics()
+                            : const AlwaysScrollableScrollPhysics(
+                                parent: ClampingScrollPhysics(),
+                              ),
                         slivers: [
                           SliverPadding(
                             padding: EdgeInsets.only(

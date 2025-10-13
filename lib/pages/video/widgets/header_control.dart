@@ -71,14 +71,15 @@ class HeaderControl extends StatefulWidget {
       SmartDialog.showToast('请先登录');
       return false;
     }
+    final isLike = !extra.isLike;
     final res = await DanmakuHttp.danmakuLike(
-      isLike: extra.isLike,
+      isLike: isLike,
       cid: cid,
       id: extra.id,
     );
     if (res.isSuccess) {
-      extra.isLike = !extra.isLike;
-      SmartDialog.showToast('点赞成功');
+      extra.isLike = isLike;
+      SmartDialog.showToast('${isLike ? '' : '取消'}点赞成功');
       return true;
     } else {
       res.toast();
