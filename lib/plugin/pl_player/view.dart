@@ -172,7 +172,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     );
     videoController = plPlayerController.videoController!;
 
-    if (Utils.isMobile) {
+    if (isMobile) {
       Future.microtask(() async {
         try {
           FlutterVolumeController.updateShowSystemUI(true);
@@ -212,6 +212,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         } catch (_) {}
       });
     }
+
+    _tapGestureRecognizer = TapGestureRecognizer()..onTapUp = onTapUp;
+    _doubleTapGestureRecognizer = DoubleTapGestureRecognizer()
+      ..onDoubleTapDown = onDoubleTapDown;
   }
 
   Future<void> setBrightness(double value) async {
@@ -238,7 +242,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     _listener?.cancel();
     _controlsListener?.cancel();
     animationController.dispose();
-    if (Utils.isMobile) {
+    if (isMobile) {
       FlutterVolumeController.removeListener();
     }
     transformationController.dispose();
@@ -430,7 +434,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   videoDetailController.showVP.value =
                       !videoDetailController.showVP.value;
                 },
-                onSecondaryTap: Utils.isMobile
+                onSecondaryTap: isMobile
                     ? null
                     : () => videoDetailController.showVP.value =
                           !videoDetailController.showVP.value,
@@ -869,8 +873,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         final double tapPosition = details.localFocalPoint.dx;
         final double sectionWidth = maxWidth / 3;
         if (tapPosition < sectionWidth) {
-          if (Utils.isDesktop ||
-              !plPlayerController.enableSlideVolumeBrightness) {
+          if (!isMobile || !plPlayerController.enableSlideVolumeBrightness) {
             return;
           }
           // 左边区域
@@ -1073,7 +1076,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         onTapDesktop();
         break;
       default:
-        if (kDebugMode && Utils.isMobile) {
+        if (kDebugMode && isMobile) {
           final ctr = plPlayerController.danmakuController;
           if (ctr != null) {
             final item = ctr.findSingleDanmaku(details.localPosition);
@@ -1095,7 +1098,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   void onDoubleTapDown(TapDownDetails details) {
     switch (details.kind) {
-      case ui.PointerDeviceKind.mouse when Utils.isDesktop:
+      case ui.PointerDeviceKind.mouse when !isMobile:
         onDoubleTapDesktop();
         break;
       default:
@@ -1104,12 +1107,19 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     }
   }
 
+  final isMobile = Utils.isMobile;
   LongPressGestureRecognizer? _longPressRecognizer;
-  final _tapGestureRecognizer = TapGestureRecognizer();
-  final _doubleTapGestureRecognizer = DoubleTapGestureRecognizer();
+  LongPressGestureRecognizer get longPressRecognizer =>
+      (_longPressRecognizer ??= LongPressGestureRecognizer())
+        ..onLongPressStart = ((_) =>
+            plPlayerController.setLongPressStatus(true))
+        ..onLongPressEnd = ((_) =>
+            plPlayerController.setLongPressStatus(false));
+  late final TapGestureRecognizer _tapGestureRecognizer;
+  late final DoubleTapGestureRecognizer _doubleTapGestureRecognizer;
 
   void onPointerDown(PointerDownEvent event) {
-    if (Utils.isDesktop) {
+    if (!isMobile) {
       final buttons = event.buttons;
       final isSecondaryBtn = buttons == kSecondaryMouseButton;
       if (isSecondaryBtn || buttons == kMiddleMouseButton) {
@@ -1126,18 +1136,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     }
 
     if (!plPlayerController.isLive) {
-      (_longPressRecognizer ??= LongPressGestureRecognizer())
-        ..onLongPressStart = ((_) =>
-            plPlayerController.setLongPressStatus(true))
-        ..onLongPressEnd = ((_) => plPlayerController.setLongPressStatus(false))
-        ..addPointer(event);
+      longPressRecognizer.addPointer(event);
     }
-    _tapGestureRecognizer
-      ..onTapUp = onTapUp
-      ..addPointer(event);
-    _doubleTapGestureRecognizer
-      ..onDoubleTapDown = onDoubleTapDown
-      ..addPointer(event);
+    _tapGestureRecognizer.addPointer(event);
+    _doubleTapGestureRecognizer.addPointer(event);
   }
 
   void _showControlsIfNeeded() {
@@ -1246,9 +1248,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     final gestureWidget = Listener(
       behavior: HitTestBehavior.translucent,
       onPointerDown: onPointerDown,
-      onPointerPanZoomUpdate: onPointerPanZoomUpdate,
-      onPointerPanZoomEnd: onPointerPanZoomEnd,
-      onPointerSignal: onPointerSignal,
+      onPointerPanZoomUpdate: isMobile ? null : onPointerPanZoomUpdate,
+      onPointerPanZoomEnd: isMobile ? null : onPointerPanZoomEnd,
+      onPointerSignal: isMobile ? null : onPointerSignal,
     );
 
     final child = Stack(
@@ -1277,10 +1279,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               aspectRatio: videoFit.aspectRatio,
               dmWidget: widget.danmuWidget,
               transformationController: transformationController,
-              scaleEnabled:
-                  !Utils.isDesktop && !plPlayerController.controlsLock.value,
+              scaleEnabled: isMobile && !plPlayerController.controlsLock.value,
               enableShrinkVideoSize:
-                  !Utils.isDesktop && plPlayerController.enableShrinkVideoSize,
+                  isMobile && plPlayerController.enableShrinkVideoSize,
               onInteractionStart: _onInteractionStart, // TODO: refa gesture
               onInteractionUpdate: _onInteractionUpdate,
               onInteractionEnd: _onInteractionEnd,
@@ -1707,7 +1708,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                           ),
                         ),
                       ),
-                      if (Utils.isMobile)
+                      if (isMobile)
                         buildViewPointWidget(
                           videoDetailController,
                           plPlayerController,
@@ -2022,7 +2023,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         }),
       ],
     );
-    if (!Utils.isMobile) {
+    if (!isMobile) {
       return Obx(
         () => MouseRegion(
           cursor: !plPlayerController.showControls.value && isFullScreen
