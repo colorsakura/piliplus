@@ -968,7 +968,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     double width =
         clampDouble(maxHeight / maxWidth * 1.08, 0.5, 0.7) * maxWidth;
     if (maxWidth >= 560) {
-      width = min(width, maxWidth - 280);
+      width = maxWidth - clampDouble(maxWidth - width, 280, 425);
     }
     final videoWidth = isFullScreen ? maxWidth : width;
     final double height = width * 9 / 16;

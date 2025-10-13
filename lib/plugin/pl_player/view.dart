@@ -1110,7 +1110,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   final isMobile = Utils.isMobile;
   LongPressGestureRecognizer? _longPressRecognizer;
   LongPressGestureRecognizer get longPressRecognizer =>
-      (_longPressRecognizer ??= LongPressGestureRecognizer())
+      _longPressRecognizer ??= LongPressGestureRecognizer()
         ..onLongPressStart = ((_) =>
             plPlayerController.setLongPressStatus(true))
         ..onLongPressEnd = ((_) =>
