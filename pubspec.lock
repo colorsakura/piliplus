@@ -223,7 +223,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "2a56c72b1a9a7e06f4ec2d03bfa2d6cb4d5cee12"
+      resolved-ref: "454790117e05e96782b05ee3d28d0283741b3cde"
       url: "https://github.com/bggRGjQaUbCoE/canvas_danmaku.git"
     source: git
     version: "0.2.6"
@@ -1166,7 +1166,7 @@ packages:
     description:
       path: media_kit_video
       ref: "version_1.2.5"
-      resolved-ref: "5ae9c2de261d673536e3dd4d4548adee2470f980"
+      resolved-ref: cd4837c13db556ed4e33b13fdddbb77199f167d8
       url: "https://github.com/bggRGjQaUbCoE/media-kit.git"
     source: git
     version: "1.2.5"

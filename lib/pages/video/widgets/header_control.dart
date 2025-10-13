@@ -78,6 +78,7 @@ class HeaderControl extends StatefulWidget {
     );
     if (res.isSuccess) {
       extra.isLike = !extra.isLike;
+      SmartDialog.showToast('点赞成功');
       return true;
     } else {
       res.toast();
@@ -2011,7 +2012,7 @@ class HeaderControlState extends State<HeaderControl> {
                   },
                   icon: extra.isLike
                       ? const Icon(Icons.thumb_up_off_alt_sharp)
-                      : const Icon(Icons.thumb_up_off_alt_rounded),
+                      : const Icon(Icons.thumb_up_off_alt_outlined),
                 ),
               ),
               if (item.content.selfSend)

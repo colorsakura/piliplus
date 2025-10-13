@@ -324,6 +324,7 @@ class PlPlayerController {
   }
 
   /// 弹幕权重
+  late final enableTapDm = Pref.enableTapDm;
   late int danmakuWeight = Pref.danmakuWeight;
   late RuleFilter filters = Pref.danmakuFilterRule;
   // 关联弹幕控制器
