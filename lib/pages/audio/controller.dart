@@ -310,9 +310,18 @@ class AudioController extends GetxController
       itemType: itemType,
     );
     if (res.isSuccess) {
+      final data = res.data;
       hasLike.value = true;
-      coinNum.value = 2;
+      if (data.coinOk && !hasCoin) {
+        coinNum.value = 2;
+        GlobalData().afterCoin(2);
+      }
       hasFav.value = true;
+      if (!hasCoin) {
+        SmartDialog.showToast('投币失败');
+      } else {
+        SmartDialog.showToast('三连成功');
+      }
     } else {
       res.toast();
     }
