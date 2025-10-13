@@ -11,6 +11,7 @@ import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
 import 'package:PiliPlus/models_new/search/search_rcmd/data.dart';
 import 'package:PiliPlus/models_new/search/search_trending/data.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
@@ -53,7 +54,7 @@ class SearchHttp {
     int? pubBegin,
     int? pubEnd,
   }) async {
-    var params = {
+    var params = await WbiSign.makSign({
       'search_type': searchType.name,
       'keyword': keyword,
       'page': page,
@@ -65,7 +66,7 @@ class SearchHttp {
       'category_id': ?categoryId,
       'pubtime_begin_s': ?pubBegin,
       'pubtime_end_s': ?pubEnd,
-    };
+    });
     var res = await Request().get(
       Api.searchByType,
       queryParameters: params,
@@ -117,7 +118,7 @@ class SearchHttp {
     int? pubBegin,
     int? pubEnd,
   }) async {
-    var params = {
+    var params = await WbiSign.makSign({
       'keyword': keyword,
       'page': page,
       if (order?.isNotEmpty == true) 'order': order,
@@ -128,7 +129,7 @@ class SearchHttp {
       'category_id': ?categoryId,
       'pubtime_begin_s': ?pubBegin,
       'pubtime_end_s': ?pubEnd,
-    };
+    });
     var res = await Request().get(
       Api.searchAll,
       queryParameters: params,

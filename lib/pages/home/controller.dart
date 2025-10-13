@@ -9,6 +9,7 @@ import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
+import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -79,7 +80,10 @@ class HomeController extends GetxController
 
   Future<void> querySearchDefault() async {
     try {
-      var res = await Request().get(Api.searchDefault);
+      var res = await Request().get(
+        Api.searchDefault,
+        queryParameters: await WbiSign.makSign({'web_location': 333.1365}),
+      );
       if (res.data['code'] == 0) {
         defaultSearch.value = res.data['data']?['name'] ?? '';
         // defaultSearch.value = res.data['data']?['show_name'] ?? '';

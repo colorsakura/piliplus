@@ -262,9 +262,9 @@ class Api {
       'https://s.search.bilibili.com/main/suggest';
 
   // 分类搜索
-  static const String searchByType = '/x/web-interface/search/type';
+  static const String searchByType = '/x/web-interface/wbi/search/type';
 
-  static const String searchAll = '/x/web-interface/search/all/v2';
+  static const String searchAll = '/x/web-interface/wbi/search/all/v2';
 
   // 记录视频播放进度
   // https://github.com/SocialSisterYi/bilibili-API-collect/blob/master/docs/video/report.md

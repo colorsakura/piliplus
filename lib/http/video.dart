@@ -828,11 +828,11 @@ class VideoHttp {
     assert(aid != null || bvid != null);
     var res = await Request().get(
       Api.playInfo,
-      queryParameters: {
+      queryParameters: await WbiSign.makSign({
         'aid': ?aid,
         'bvid': ?bvid,
         'cid': cid,
-      },
+      }),
     );
     if (res.data['code'] == 0) {
       return {
