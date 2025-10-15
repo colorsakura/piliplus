@@ -106,11 +106,6 @@ class PLVideoPlayer extends StatefulWidget {
 
 class _PLVideoPlayerState extends State<PLVideoPlayer>
     with WidgetsBindingObserver, TickerProviderStateMixin {
-  @pragma("vm:prefer-inline")
-  bool get isMobile => kDebugMode || Utils.isMobile;
-  @pragma("vm:prefer-inline")
-  bool get isDesktop => !kDebugMode && Utils.isDesktop;
-
   late AnimationController animationController;
   late VideoController videoController;
   late final CommonIntroController introController = widget.introController!;
@@ -182,7 +177,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     );
     videoController = plPlayerController.videoController!;
 
-    if (isMobile) {
+    if (Utils.isMobile) {
       Future.microtask(() async {
         try {
           FlutterVolumeController.updateShowSystemUI(true);
@@ -223,7 +218,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       });
     }
 
-    _tapGestureRecognizer = isMobile
+    _tapGestureRecognizer = plPlayerController.enableTapDm
         ? ImmediateTapGestureRecognizer(
             onTapDown: _onTapDown,
             onTapUp: _onTapUp,
@@ -285,7 +280,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     _listener?.cancel();
     _controlsListener?.cancel();
     animationController.dispose();
-    if (isMobile) {
+    if (Utils.isMobile) {
       FlutterVolumeController.removeListener();
     }
     transformationController.dispose();
@@ -479,7 +474,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   videoDetailController.showVP.value =
                       !videoDetailController.showVP.value;
                 },
-                onSecondaryTap: isMobile
+                onSecondaryTap: Utils.isMobile
                     ? null
                     : () => videoDetailController.showVP.value =
                           !videoDetailController.showVP.value,
@@ -918,7 +913,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         final double tapPosition = details.localFocalPoint.dx;
         final double sectionWidth = maxWidth / 3;
         if (tapPosition < sectionWidth) {
-          if (isDesktop || !plPlayerController.enableSlideVolumeBrightness) {
+          if (Utils.isDesktop ||
+              !plPlayerController.enableSlideVolumeBrightness) {
             return;
           }
           // 左边区域
@@ -1117,7 +1113,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   void _onTapUp(TapUpDetails details) {
     switch (details.kind) {
-      case ui.PointerDeviceKind.mouse when isDesktop:
+      case ui.PointerDeviceKind.mouse when Utils.isDesktop:
         onTapDesktop();
         break;
       default:
@@ -1132,7 +1128,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   }
 
   void _onTapDown(TapDownDetails details) {
-    if (isMobile) {
+    if (Utils.isMobile) {
       final ctr = plPlayerController.danmakuController;
       if (ctr != null) {
         final pos = details.localPosition;
@@ -1152,7 +1148,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   void _onDoubleTapDown(TapDownDetails details) {
     switch (details.kind) {
-      case ui.PointerDeviceKind.mouse when isDesktop:
+      case ui.PointerDeviceKind.mouse when Utils.isDesktop:
         onDoubleTapDesktop();
         break;
       default:
@@ -1171,7 +1167,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   late final DoubleTapGestureRecognizer _doubleTapGestureRecognizer;
 
   void _onPointerDown(PointerDownEvent event) {
-    if (isDesktop) {
+    if (Utils.isDesktop) {
       final buttons = event.buttons;
       final isSecondaryBtn = buttons == kSecondaryMouseButton;
       if (isSecondaryBtn || buttons == kMiddleMouseButton) {
@@ -1304,10 +1300,11 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         _videoWidget,
 
         if (widget.danmuWidget case final danmaku?)
-          Positioned.fill(child: danmaku),
+          Positioned.fill(top: 4, child: danmaku),
 
         if (!isLive)
           Positioned.fill(
+            top: 4,
             child: IgnorePointer(
               ignoring: !plPlayerController.enableDragSubtitle,
               child: Obx(
@@ -1321,15 +1318,20 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             ),
           ),
 
-        Builder(
-          builder: (context) {
-            _refreshDmCallback = () => ((context) as Element).markNeedsBuild();
-            if (_dmOffset != null && _suspendedDm != null) {
-              return _buildDmAction(_suspendedDm!, _dmOffset!);
-            }
-            return const SizedBox.shrink();
-          },
-        ),
+        if (plPlayerController.enableTapDm)
+          Builder(
+            builder: (context) {
+              _refreshDmCallback = () {
+                if (context.mounted) {
+                  ((context) as Element).markNeedsBuild();
+                }
+              };
+              if (_dmOffset != null && _suspendedDm != null) {
+                return _buildDmAction(_suspendedDm!, _dmOffset!);
+              }
+              return const SizedBox.shrink();
+            },
+          ),
 
         /// 长按倍速 toast
         if (!isLive)
@@ -1741,7 +1743,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                           ),
                         ),
                       ),
-                      if (isMobile)
+                      if (Utils.isMobile)
                         buildViewPointWidget(
                           videoDetailController,
                           plPlayerController,
@@ -1963,7 +1965,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           }),
       ],
     );
-    if (isDesktop) {
+    if (Utils.isDesktop) {
       return Obx(
         () => MouseRegion(
           cursor: !plPlayerController.showControls.value && isFullScreen
