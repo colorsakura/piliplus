@@ -1145,6 +1145,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             _removeDmAction();
           }
         } else if (item != _suspendedDm) {
+          if (item.content.extra == null) {
+            _removeDmAction();
+            return;
+          }
           _suspendedDm?.suspend = false;
           _suspendedDm = item..suspend = true;
           _dmOffset = pos;
