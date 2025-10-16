@@ -805,6 +805,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               ),
         onTap: () =>
             plPlayerController.triggerFullScreen(status: !isFullScreen),
+        onSecondaryTap: () => plPlayerController.triggerFullScreen(
+          status: !isFullScreen,
+          inAppFullScreen: true,
+        ),
       ),
     };
 
