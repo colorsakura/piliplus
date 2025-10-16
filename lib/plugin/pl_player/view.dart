@@ -7,7 +7,6 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/custom_icon.dart';
 import 'package:PiliPlus/common/widgets/gesture/immediate_tap_gesture_recognizer.dart';
 import 'package:PiliPlus/common/widgets/gesture/mouse_interactive_viewer.dart';
-import 'package:PiliPlus/common/widgets/image/flutter_svg_provider.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/audio_video_progress_bar.dart';
@@ -26,6 +25,8 @@ import 'package:PiliPlus/models_new/video/video_detail/ugc_season.dart';
 import 'package:PiliPlus/models_new/video/video_shot/data.dart';
 import 'package:PiliPlus/pages/common/common_intro_controller.dart';
 import 'package:PiliPlus/pages/danmaku/dnamaku_model.dart';
+import 'package:PiliPlus/pages/live_room/widgets/bottom_control.dart'
+    as live_bottom;
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/controller.dart';
 import 'package:PiliPlus/pages/video/post_panel/popup_menu_text.dart';
@@ -62,6 +63,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
@@ -2217,40 +2219,15 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     );
   }
 
-  BoxDecoration _getDmTipBg(DanmakuItem item, double dx) {
+  String _getDmTipBg(DanmakuItem item) {
     const offset = 65;
-    const size = Size(_overlayWidth, _overlayHeight);
     if (item.xPosition >= maxWidth - offset) {
-      return const BoxDecoration(
-        image: DecorationImage(
-          filterQuality: FilterQuality.low,
-          image: SvgImageProvider(
-            'assets/images/dm_tip/player_dm_tip_right.svg',
-            size: size,
-          ),
-        ),
-      );
+      return 'right';
     }
     if (item.xPosition + item.width <= offset) {
-      return const BoxDecoration(
-        image: DecorationImage(
-          filterQuality: FilterQuality.low,
-          image: SvgImageProvider(
-            'assets/images/dm_tip/player_dm_tip_left.svg',
-            size: size,
-          ),
-        ),
-      );
+      return 'left';
     }
-    return const BoxDecoration(
-      image: DecorationImage(
-        filterQuality: FilterQuality.low,
-        image: SvgImageProvider(
-          'assets/images/dm_tip/player_dm_tip_center.svg',
-          size: size,
-        ),
-      ),
-    );
+    return 'center';
   }
 
   Widget _buildDmAction(
@@ -2276,8 +2253,12 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           maxWidth - _overlaySpacing,
         );
 
-    // TODO LiveDanmaku
-    final extra = item.content.extra as VideoDanmaku;
+    if (right > (maxWidth - item.xPosition)) {
+      _removeDmAction();
+      return const Positioned(left: 0, top: 0, child: SizedBox.shrink());
+    }
+
+    final extra = item.content.extra;
 
     return Positioned(
       right: right,
@@ -2285,63 +2266,113 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       child: SizedBox(
         width: _overlayWidth,
         height: _overlayHeight,
-        child: DecoratedBox(
-          decoration: _getDmTipBg(item, dx),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _dmActionItem(
-                  Icon(
-                    size: 20,
-                    extra.isLike
-                        ? CustomIcons.player_dm_tip_like_solid
-                        : CustomIcons.player_dm_tip_like,
-                    color: Colors.white,
-                  ),
-                  onTap: () => HeaderControl.likeDanmaku(
-                    extra,
-                    plPlayerController.cid!,
-                  ),
-                ),
-                _dmActionItem(
-                  const Icon(
-                    size: 19,
-                    CustomIcons.player_dm_tip_copy,
-                    color: Colors.white,
-                  ),
-                  onTap: () => Utils.copyText(item.content.text),
-                ),
-                if (item.content.selfSend)
-                  _dmActionItem(
-                    const Icon(
-                      size: 20,
-                      CustomIcons.player_dm_tip_recall,
-                      color: Colors.white,
-                    ),
-                    onTap: () => HeaderControl.deleteDanmaku(
-                      extra.id,
-                      plPlayerController.cid!,
-                    ),
-                  )
-                else
-                  _dmActionItem(
-                    const Icon(
-                      size: 20,
-                      CustomIcons.player_dm_tip_back,
-                      color: Colors.white,
-                    ),
-                    onTap: () => HeaderControl.reportDanmaku(
-                      extra,
-                      context,
-                      plPlayerController,
-                    ),
-                  ),
-              ],
+        child: Stack(
+          children: [
+            SvgPicture.asset(
+              'assets/images/dm_tip/player_dm_tip_${_getDmTipBg(item)}.svg',
+              clipBehavior: Clip.none,
+              width: _overlayWidth,
+              height: _overlayHeight,
             ),
-          ),
+            Positioned.fill(
+              top: 4,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: extra is VideoDanmaku
+                    ? [
+                        _dmActionItem(
+                          extra.isLike
+                              ? const Icon(
+                                  size: 20,
+                                  CustomIcons.player_dm_tip_like_solid,
+                                  color: Colors.white,
+                                )
+                              : const Icon(
+                                  size: 20,
+                                  CustomIcons.player_dm_tip_like,
+                                  color: Colors.white,
+                                ),
+                          onTap: () => HeaderControl.likeDanmaku(
+                            extra,
+                            plPlayerController.cid!,
+                          ),
+                        ),
+                        _dmActionItem(
+                          const Icon(
+                            size: 19,
+                            CustomIcons.player_dm_tip_copy,
+                            color: Colors.white,
+                          ),
+                          onTap: () => Utils.copyText(item.content.text),
+                        ),
+                        if (item.content.selfSend)
+                          _dmActionItem(
+                            const Icon(
+                              size: 20,
+                              CustomIcons.player_dm_tip_recall,
+                              color: Colors.white,
+                            ),
+                            onTap: () => HeaderControl.deleteDanmaku(
+                              extra.id,
+                              plPlayerController.cid!,
+                            ),
+                          )
+                        else
+                          _dmActionItem(
+                            const Icon(
+                              size: 20,
+                              CustomIcons.player_dm_tip_back,
+                              color: Colors.white,
+                            ),
+                            onTap: () => HeaderControl.reportDanmaku(
+                              context,
+                              extra: extra,
+                              ctr: plPlayerController,
+                            ),
+                          ),
+                      ]
+                    : extra is LiveDanmaku
+                    ? [
+                        _dmActionItem(
+                          const Icon(
+                            size: 20,
+                            MdiIcons.accountOutline,
+                            color: Colors.white,
+                          ),
+                          onTap: () => Get.toNamed('/member?mid=${extra.mid}'),
+                        ),
+                        _dmActionItem(
+                          const Icon(
+                            size: 19,
+                            CustomIcons.player_dm_tip_copy,
+                            color: Colors.white,
+                          ),
+                          onTap: () => Utils.copyText(item.content.text),
+                        ),
+                        _dmActionItem(
+                          const Icon(
+                            size: 20,
+                            CustomIcons.player_dm_tip_back,
+                            color: Colors.white,
+                          ),
+                          onTap: () => HeaderControl.reportLiveDanmaku(
+                            context,
+                            roomId:
+                                (widget.bottomControl
+                                        as live_bottom.BottomControl)
+                                    .liveRoomCtr
+                                    .roomId,
+                            msg: item.content.text,
+                            extra: extra,
+                            ctr: plPlayerController,
+                          ),
+                        ),
+                      ]
+                    : throw UnimplementedError(),
+              ),
+            ),
+          ],
         ),
       ),
     );
