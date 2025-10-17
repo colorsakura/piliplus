@@ -1,4 +1,4 @@
-name: Build for Linux
+name: Build for Linux x64
 
 on:
   pull_request:
@@ -181,25 +181,25 @@ jobs:
           rpmbuild --define "_topdir $RPM_BUILD_ROOT" -bb "$RPM_BUILD_ROOT/SPECS/piliplus.spec"
 
           printf "移动生成的 RPM...\n"
-          find "$RPM_BUILD_ROOT/RPMS" -name "*.rpm" -exec mv {} "PiliPlus_linux_${{ env.version }}.rpm" \;
+          find "$RPM_BUILD_ROOT/RPMS" -name "*.rpm" -exec mv {} "PiliPlus_linux_${{ env.version }}_amd64.rpm" \;
 
-          printf "完成: PiliPlus_linux_%s.rpm\n" "${{ env.version }}"
+          printf "完成: PiliPlus_linux_%s_amd64.rpm\n" "${{ env.version }}"
         shell: bash
 
       - name: Upload linux targz package
         uses: actions/upload-artifact@v4
         with:
-          name: Linux_targz_packege
+          name: Linux_targz_amd64_packege
           path: PiliPlus_linux_*.tar.gz
 
       - name: Upload linux deb package
         uses: actions/upload-artifact@v4
         with:
-          name: Linux_deb_package
+          name: Linux_deb_amd64_package
           path: PiliPlus_linux_*.deb
       
       - name: Upload linux rpm package
         uses: actions/upload-artifact@v4
         with:
-          name: Linux_rpm_package
+          name: Linux_rpm_amd64_package
           path: PiliPlus_linux_*.rpm
