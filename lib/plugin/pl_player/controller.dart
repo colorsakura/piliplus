@@ -1254,14 +1254,12 @@ class PlPlayerController {
 
   /// 暂停播放
   Future<void> pause({bool notify = true, bool isInterrupt = false}) async {
-    if (videoPlayerController?.state.playing ?? false) {
-      _videoPlayerController!.playOrPause();
-      playerStatus.status.value = PlayerStatus.paused;
+    await _videoPlayerController?.pause();
+    playerStatus.status.value = PlayerStatus.paused;
 
-      // 主动暂停时让出音频焦点
-      if (!isInterrupt) {
-        audioSessionHandler?.setActive(false);
-      }
+    // 主动暂停时让出音频焦点
+    if (!isInterrupt) {
+      audioSessionHandler?.setActive(false);
     }
   }
 
