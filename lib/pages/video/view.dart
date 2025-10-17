@@ -198,7 +198,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   }
 
   // 播放器状态监听
-  Future<void> playerListener(PlayerStatus? status) async {
+  Future<void> playerListener(PlayerStatus status) async {
     try {
       if (videoDetailController.scrollCtr.hasClients) {
         bool isPlaying = status == PlayerStatus.playing;

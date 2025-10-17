@@ -231,7 +231,7 @@ Widget defaultUser({
     width: 38,
     height: 38,
     child: IconButton(
-      tooltip: '默认用户头像',
+      tooltip: '点击登录',
       style: ButtonStyle(
         padding: const WidgetStatePropertyAll(EdgeInsets.zero),
         backgroundColor: WidgetStatePropertyAll(

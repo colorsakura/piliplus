@@ -2192,9 +2192,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     );
   }
 
-  static const _overlaySpacing = 10.0;
-  static const _overlayItemWidth = 40.0;
-  static const _overlayHeight = 35.0;
+  static const _overlaySpacing = 5.0;
+  static const _actionItemWidth = 40.0;
+  static const _actionItemHeight = 35.0 - _triangleHeight;
 
   DanmakuItem<DanmakuExtra>? _suspendedDm;
   Offset? _dmOffset;
@@ -2215,8 +2215,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         onTap();
       },
       child: SizedBox(
-        height: _overlayHeight,
-        width: _overlayItemWidth,
+        width: _actionItemWidth,
+        height: _actionItemHeight,
         child: Center(
           child: child,
         ),
@@ -2250,12 +2250,12 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
     final seekOffset = _getValidOffset(item.content.text);
 
-    final overlayWidth = _overlayItemWidth * (seekOffset == null ? 3 : 4);
+    final overlayWidth = _actionItemWidth * (seekOffset == null ? 3 : 4);
 
     final dy = item.content.type == DanmakuItemType.bottom
         ? maxHeight - item.yPosition - item.height
         : item.yPosition;
-    final top = dy + item.height + 4;
+    final top = dy + item.height + _triangleHeight + 2;
 
     final realLeft = dx + overlayWidth / 2;
 
@@ -2277,112 +2277,114 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     return Positioned(
       right: right,
       top: top,
-      child: CustomPaint(
-        painter: _DanmakuTipPainter(offset: triangleOffset),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: switch (extra) {
-            null => throw UnimplementedError(),
-            VideoDanmaku() => [
-              _dmActionItem(
-                extra.isLike
-                    ? const Icon(
-                        size: 20,
-                        CustomIcons.player_dm_tip_like_solid,
-                        color: Colors.white,
-                      )
-                    : const Icon(
-                        size: 20,
-                        CustomIcons.player_dm_tip_like,
-                        color: Colors.white,
-                      ),
-                onTap: () => HeaderControl.likeDanmaku(
-                  extra,
-                  plPlayerController.cid!,
+      child: RepaintBoundary(
+        child: CustomPaint(
+          painter: _DanmakuTipPainter(offset: triangleOffset),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: switch (extra) {
+              null => throw UnimplementedError(),
+              VideoDanmaku() => [
+                _dmActionItem(
+                  extra.isLike
+                      ? const Icon(
+                          size: 20,
+                          CustomIcons.player_dm_tip_like_solid,
+                          color: Colors.white,
+                        )
+                      : const Icon(
+                          size: 20,
+                          CustomIcons.player_dm_tip_like,
+                          color: Colors.white,
+                        ),
+                  onTap: () => HeaderControl.likeDanmaku(
+                    extra,
+                    plPlayerController.cid!,
+                  ),
                 ),
-              ),
-              _dmActionItem(
-                const Icon(
-                  size: 19,
-                  CustomIcons.player_dm_tip_copy,
-                  color: Colors.white,
+                _dmActionItem(
+                  const Icon(
+                    size: 19,
+                    CustomIcons.player_dm_tip_copy,
+                    color: Colors.white,
+                  ),
+                  onTap: () => Utils.copyText(item.content.text),
                 ),
-                onTap: () => Utils.copyText(item.content.text),
-              ),
-              if (item.content.selfSend)
+                if (item.content.selfSend)
+                  _dmActionItem(
+                    const Icon(
+                      size: 20,
+                      CustomIcons.player_dm_tip_recall,
+                      color: Colors.white,
+                    ),
+                    onTap: () => HeaderControl.deleteDanmaku(
+                      extra.id,
+                      plPlayerController.cid!,
+                    ),
+                  )
+                else
+                  _dmActionItem(
+                    const Icon(
+                      size: 20,
+                      CustomIcons.player_dm_tip_back,
+                      color: Colors.white,
+                    ),
+                    onTap: () => HeaderControl.reportDanmaku(
+                      context,
+                      extra: extra,
+                      ctr: plPlayerController,
+                    ),
+                  ),
+                if (seekOffset != null)
+                  _dmActionItem(
+                    const Icon(
+                      size: 18,
+                      Icons.gps_fixed_outlined,
+                      color: Colors.white,
+                    ),
+                    onTap: () => plPlayerController.seekTo(
+                      Duration(seconds: seekOffset),
+                      isSeek: false,
+                    ),
+                  ),
+              ],
+              LiveDanmaku() => [
                 _dmActionItem(
                   const Icon(
                     size: 20,
-                    CustomIcons.player_dm_tip_recall,
+                    MdiIcons.accountOutline,
                     color: Colors.white,
                   ),
-                  onTap: () => HeaderControl.deleteDanmaku(
-                    extra.id,
-                    plPlayerController.cid!,
+                  onTap: () => Get.toNamed('/member?mid=${extra.mid}'),
+                ),
+                _dmActionItem(
+                  const Icon(
+                    size: 19,
+                    CustomIcons.player_dm_tip_copy,
+                    color: Colors.white,
                   ),
-                )
-              else
+                  onTap: () => Utils.copyText(item.content.text),
+                ),
                 _dmActionItem(
                   const Icon(
                     size: 20,
                     CustomIcons.player_dm_tip_back,
                     color: Colors.white,
                   ),
-                  onTap: () => HeaderControl.reportDanmaku(
+                  onTap: () => HeaderControl.reportLiveDanmaku(
                     context,
+                    roomId: (widget.bottomControl as live_bottom.BottomControl)
+                        .liveRoomCtr
+                        .roomId,
+                    msg: item.content.text,
                     extra: extra,
                     ctr: plPlayerController,
                   ),
                 ),
-              if (seekOffset != null)
-                _dmActionItem(
-                  const Icon(
-                    size: 20,
-                    Icons.gps_fixed_outlined,
-                    color: Colors.white,
-                  ),
-                  onTap: () => plPlayerController.seekTo(
-                    Duration(seconds: seekOffset),
-                    isSeek: false,
-                  ),
-                ),
-            ],
-            LiveDanmaku() => [
-              _dmActionItem(
-                const Icon(
-                  size: 20,
-                  MdiIcons.accountOutline,
-                  color: Colors.white,
-                ),
-                onTap: () => Get.toNamed('/member?mid=${extra.mid}'),
-              ),
-              _dmActionItem(
-                const Icon(
-                  size: 19,
-                  CustomIcons.player_dm_tip_copy,
-                  color: Colors.white,
-                ),
-                onTap: () => Utils.copyText(item.content.text),
-              ),
-              _dmActionItem(
-                const Icon(
-                  size: 20,
-                  CustomIcons.player_dm_tip_back,
-                  color: Colors.white,
-                ),
-                onTap: () => HeaderControl.reportLiveDanmaku(
-                  context,
-                  roomId: (widget.bottomControl as live_bottom.BottomControl)
-                      .liveRoomCtr
-                      .roomId,
-                  msg: item.content.text,
-                  extra: extra,
-                  ctr: plPlayerController,
-                ),
-              ),
-            ],
-          },
+              ],
+            },
+          ),
         ),
       ),
     );
@@ -2732,6 +2734,8 @@ Widget buildViewPointWidget(
   );
 }
 
+const double _triangleHeight = 5.6;
+
 class _DanmakuTipPainter extends CustomPainter {
   final double offset;
 
@@ -2747,11 +2751,10 @@ class _DanmakuTipPainter extends CustomPainter {
     final strokePaint = Paint()
       ..color = const Color(0x7EFFFFFF)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5;
+      ..strokeWidth = 1.25;
 
     final radius = size.height / 2;
-    final triangleHeight = size.height / 6;
-    final triangleBase = triangleHeight * 2 / 3;
+    const triangleBase = _triangleHeight * 2 / 3;
 
     final triangleCenterX = (size.width / 2 + offset).clamp(
       radius + triangleBase,
@@ -2760,7 +2763,7 @@ class _DanmakuTipPainter extends CustomPainter {
     final path = Path()
       // triangle (exceed)
       ..moveTo(triangleCenterX - triangleBase, 0)
-      ..lineTo(triangleCenterX, -triangleHeight)
+      ..lineTo(triangleCenterX, -_triangleHeight)
       ..lineTo(triangleCenterX + triangleBase, 0)
       // top
       ..lineTo(size.width - radius, 0)
