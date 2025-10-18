@@ -226,6 +226,9 @@ class PlayerFocus extends StatelessWidget {
             return true;
 
           case LogicalKeyboardKey.keyW:
+            if (HardwareKeyboard.instance.isMetaPressed) {
+              return true;
+            }
             introController?.actionCoinVideo();
             return true;
 
