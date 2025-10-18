@@ -309,6 +309,8 @@ class PlPlayerController {
     }
   }
 
+  late bool shouldSetPip = false;
+
   void enterPip({bool isAuto = false}) {
     if (videoController != null) {
       final state = videoController!.player.state;
@@ -317,6 +319,14 @@ class PlPlayerController {
         width: state.width ?? width,
         height: state.height ?? height,
       );
+    }
+  }
+
+  void disableAutoEnterPip() {
+    if (shouldSetPip) {
+      Utils.channel.invokeMethod('setPipAutoEnterEnabled', {
+        'autoEnable': false,
+      });
     }
   }
 
@@ -567,6 +577,8 @@ class PlPlayerController {
               }
             }
           });
+        } else {
+          shouldSetPip = true;
         }
       });
     }
@@ -1008,8 +1020,12 @@ class PlPlayerController {
     subscriptions = {
       videoPlayerController!.stream.playing.listen((event) {
         if (event) {
+          if (shouldSetPip) {
+            enterPip(isAuto: true);
+          }
           playerStatus.status.value = PlayerStatus.playing;
         } else {
+          disableAutoEnterPip();
           playerStatus.status.value = PlayerStatus.paused;
         }
         videoPlayerServiceHandler?.onStatusChange(
@@ -1699,10 +1715,12 @@ class PlPlayerController {
       final previousRoute = Get.previousRoute;
       if (!previousRoute.startsWith('/video') &&
           !previousRoute.startsWith('/liveRoom')) {
+        disableAutoEnterPip();
         pause();
       }
       return;
     }
+    disableAutoEnterPip();
     setPlayCallBack(null);
     dmState.clear();
     _playerCount = 0;

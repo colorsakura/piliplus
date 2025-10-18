@@ -570,7 +570,7 @@ packages:
     description:
       path: "."
       ref: version-3
-      resolved-ref: "929e9ec1312d9d1b4755d7589dd53db5b4d6d50d"
+      resolved-ref: a66ec0b9dabde6b5880a3f4f3425e57842a38e51
       url: "https://github.com/bggRGjQaUbCoE/floating.git"
     source: git
     version: "3.0.0"

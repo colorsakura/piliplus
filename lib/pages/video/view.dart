@@ -275,17 +275,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         }
       }
     }
-    if (Platform.isAndroid &&
-        plPlayerController!.autoPiP &&
-        await Utils.sdkInt >= 12) {
-      if (isPlaying) {
-        plPlayerController!.enterPip(isAuto: true);
-      } else {
-        Utils.channel.invokeMethod('setPipAutoEnterEnabled', {
-          'autoEnable': false,
-        });
-      }
-    }
   }
 
   // 继续播放或重新播放
