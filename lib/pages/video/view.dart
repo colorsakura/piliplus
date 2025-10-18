@@ -902,6 +902,56 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     },
   );
 
+  Widget childSplit(double ratio) {
+    final double videoHeight = maxHeight - padding.vertical;
+    final double width = videoHeight * ratio;
+    final videoWidth = isFullScreen ? maxWidth : width;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: videoWidth,
+          height: videoHeight,
+          child: videoPlayer(
+            width: videoWidth,
+            height: videoHeight,
+          ),
+        ),
+        Offstage(
+          offstage: isFullScreen,
+          child: SizedBox(
+            width: maxWidth - width - padding.horizontal,
+            height: maxHeight - padding.top,
+            child: Scaffold(
+              key: videoDetailController.childKey,
+              resizeToAvoidBottomInset: false,
+              backgroundColor: Colors.transparent,
+              body: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildTabbar(),
+                  Expanded(
+                    child: videoTabBarView(
+                      controller: videoDetailController.tabCtr,
+                      children: [
+                        videoIntro(
+                          width: maxWidth - width,
+                          height: maxHeight,
+                        ),
+                        if (videoDetailController.showReply) videoReplyPanel(),
+                        if (_shouldShowSeasonPanel) seasonPanel,
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget childWhenDisabledLandscapeInner(
     bool isFullScreen,
     EdgeInsets padding,
@@ -974,6 +1024,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     final videoWidth = isFullScreen ? maxWidth : width;
     final double height = width * 9 / 16;
     final videoHeight = isFullScreen ? maxHeight : height;
+    if (height > maxHeight) {
+      return childSplit(16 / 9);
+    }
     final introHeight = maxHeight - height - padding.top;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1081,54 +1134,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       if (videoDetailController.isVertical.value &&
           enableVerticalExpand &&
           !isPortrait) {
-        final double videoHeight = maxHeight - padding.vertical;
-        final double width = videoHeight * 9 / 16;
-        final videoWidth = isFullScreen ? maxWidth : width;
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: videoWidth,
-              height: videoHeight,
-              child: videoPlayer(
-                width: videoWidth,
-                height: videoHeight,
-              ),
-            ),
-            Offstage(
-              offstage: isFullScreen,
-              child: SizedBox(
-                width: maxWidth - width - padding.horizontal,
-                height: maxHeight - padding.top,
-                child: Scaffold(
-                  key: videoDetailController.childKey,
-                  resizeToAvoidBottomInset: false,
-                  backgroundColor: Colors.transparent,
-                  body: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      buildTabbar(),
-                      Expanded(
-                        child: videoTabBarView(
-                          controller: videoDetailController.tabCtr,
-                          children: [
-                            videoIntro(
-                              width: maxWidth - width,
-                              height: maxHeight,
-                            ),
-                            if (videoDetailController.showReply)
-                              videoReplyPanel(),
-                            if (_shouldShowSeasonPanel) seasonPanel,
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        );
+        return childSplit(9 / 16);
       }
       final shouldShowSeasonPanel = _shouldShowSeasonPanel;
       final double height = maxHeight / 2.5;
