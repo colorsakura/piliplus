@@ -568,7 +568,7 @@ class PlPlayerController {
 
     if (Platform.isAndroid && autoPiP) {
       Utils.sdkInt.then((sdkInt) {
-        if (sdkInt < 12) {
+        if (sdkInt < 31) {
           Utils.channel.setMethodCallHandler((call) async {
             if (call.method == 'onUserLeaveHint') {
               if (playerStatus.playing &&
