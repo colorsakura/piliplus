@@ -87,6 +87,9 @@ class PlayerFocus extends StatelessWidget {
 
     final isKeyQ = key == LogicalKeyboardKey.keyQ;
     if (isKeyQ || key == LogicalKeyboardKey.keyR) {
+      if (HardwareKeyboard.instance.isMetaPressed) {
+        return true;
+      }
       if (!plPlayerController.isLive) {
         if (event is KeyDownEvent) {
           introController!.onStartTriple();
