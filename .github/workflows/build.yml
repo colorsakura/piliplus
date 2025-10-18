@@ -1,0 +1,75 @@
+name: Build
+
+on:
+    pull_request:
+        types:
+            - opened
+            - synchronize
+            - reopened
+            - ready_for_review
+        paths-ignore:
+            - "**.md"
+    workflow_dispatch:
+        inputs:
+            build_android:
+                description: "Build Android"
+                required: false
+                default: true
+                type: boolean
+
+            build_ios:
+                description: "Build iOS"
+                required: false
+                default: true
+                type: boolean
+
+            build_mac:
+                description: "Build Mac"
+                required: false
+                default: true
+                type: boolean
+
+            build_win_x64:
+                description: "Build Win-x64"
+                required: false
+                default: true
+                type: boolean
+
+            build_linux_x64:
+                description: "Build Linux-x64"
+                required: false
+                default: true
+                type: boolean
+
+            build_linux_arm64:
+                description: "Build Linux-arm64"
+                required: false
+                default: true
+                type: boolean
+
+jobs:
+    android:
+        if: ${{ github.event_name == 'pull_request' || github.event.inputs.build_android == 'true' }}
+        uses: ./.github/workflows/android.yml
+        with:
+            sign: ${{ github.event_name != 'pull_request' }}
+
+    ios:
+        if: ${{ github.event_name == 'pull_request' || github.event.inputs.build_ios == 'true' }}
+        uses: ./.github/workflows/ios.yml
+
+    mac:
+        if: ${{ github.event_name == 'pull_request' || github.event.inputs.build_mac == 'true' }}
+        uses: ./.github/workflows/mac.yml
+
+    win_x64:
+        if: ${{ github.event_name == 'pull_request' || github.event.inputs.build_win_x64 == 'true' }}
+        uses: ./.github/workflows/win_x64.yml
+
+    linux_x64:
+        if: ${{ github.event_name == 'pull_request' || github.event.inputs.build_linux_x64 == 'true' }}
+        uses: ./.github/workflows/linux_x64.yml
+
+    linux_arm64:
+        if: ${{ github.event_name == 'pull_request' || github.event.inputs.build_linux_arm64 == 'true' }}
+        uses: ./.github/workflows/linux_arm64.yml

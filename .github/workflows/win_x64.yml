@@ -1,29 +1,17 @@
 name: Build for Windows x64
 
 on:
-  pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - ready_for_review
-    paths-ignore:
-      - "**.md"
+  workflow_call:
   workflow_dispatch:
-    inputs:
-      branch:
-        required: false
-        default: "main"
 
 jobs:
   build-windows-app:
-    name: Release Windows
+    name: Release Windows x64
     runs-on: windows-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
         with:
-          ref: ${{ github.event.inputs.branch }}
           fetch-depth: 0
 
       - name: Setup flutter
@@ -55,12 +43,12 @@ jobs:
           mkdir -p Release/PiliPlus-Win
           mkdir -p PiliPlus-Win-Setup
           mv build/windows/x64/runner/Release/* Release/PiliPlus-Win/
-          mv dist/**/*.exe PiliPlus-Win-Setup/PiliPlus-${{env.version}}-Windows-x64-Setup.exe
+          mv dist/**/*.exe PiliPlus-Win-Setup/PiliPlus_windows_${{env.version}}_x64_setup.exe
 
       - name: Upload windows file release
         uses: actions/upload-artifact@v4
         with:
-          name: windows-x64-release
+          name: PiliPlus_windows_${{env.version}}_x64
           path: Release
 
       - name: Upload windows setup release

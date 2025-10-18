@@ -1,29 +1,17 @@
 name: Build for Linux x64
 
 on:
-  pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - ready_for_review
-    paths-ignore:
-      - "**.md"
+  workflow_call:
   workflow_dispatch:
-    inputs:
-      branch:
-        required: false
-        default: "main"
 
 jobs:
   build-linux-app:
-    name: Release Linux
+    name: Release Linux x64
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
-          ref: ${{ github.event.inputs.branch }}
           fetch-depth: 0
 
       - name: Install dependencies
@@ -106,13 +94,13 @@ jobs:
           dpkg-deb --build --verbose --root-owner-group "PiliPlus_linux_${{ env.version }}_amd64"
           printf "完成: PiliPlus_linux_%s_amd64.deb\n" "${{ env.version }}"
         shell: bash
-      
+
       - name: Packege rpm
         run: |
           printf "建立 RPM 构建目录...\n"
           RPM_BUILD_ROOT="$PWD/rpm_build"
           mkdir -p "$RPM_BUILD_ROOT/BUILD" "$RPM_BUILD_ROOT/RPMS" "$RPM_BUILD_ROOT/SOURCES" "$RPM_BUILD_ROOT/SPECS" "$RPM_BUILD_ROOT/SRPMS"
-          
+
           printf "准备源码归档（仅包含运行时与元数据）...\n"
           DATE="$(date '+%a %b %d %Y')"
           SRC_DIR="$PWD/piliplus-${{ env.version }}"
@@ -197,7 +185,7 @@ jobs:
         with:
           name: Linux_deb_amd64_package
           path: PiliPlus_linux_*.deb
-      
+
       - name: Upload linux rpm package
         uses: actions/upload-artifact@v4
         with:
