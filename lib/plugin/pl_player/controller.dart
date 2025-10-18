@@ -309,7 +309,12 @@ class PlPlayerController {
     }
   }
 
-  late bool shouldSetPip = false;
+  late bool _shouldSetPip = false;
+  bool get _isVideoPage {
+    final currentRoute = Get.currentRoute;
+    return currentRoute.startsWith('/video') ||
+        currentRoute.startsWith('/liveRoom');
+  }
 
   void enterPip({bool isAuto = false}) {
     if (videoController != null) {
@@ -323,7 +328,7 @@ class PlPlayerController {
   }
 
   void disableAutoEnterPip() {
-    if (shouldSetPip) {
+    if (_shouldSetPip) {
       Utils.channel.invokeMethod('setPipAutoEnterEnabled', {
         'autoEnable': false,
       });
@@ -571,14 +576,13 @@ class PlPlayerController {
         if (sdkInt < 31) {
           Utils.channel.setMethodCallHandler((call) async {
             if (call.method == 'onUserLeaveHint') {
-              if (playerStatus.playing &&
-                  Get.currentRoute.startsWith('/video')) {
+              if (playerStatus.playing && _isVideoPage) {
                 enterPip();
               }
             }
           });
         } else {
-          shouldSetPip = true;
+          _shouldSetPip = true;
         }
       });
     }
@@ -1020,8 +1024,12 @@ class PlPlayerController {
     subscriptions = {
       videoPlayerController!.stream.playing.listen((event) {
         if (event) {
-          if (shouldSetPip) {
-            enterPip(isAuto: true);
+          if (_shouldSetPip) {
+            if (_isVideoPage) {
+              enterPip(isAuto: true);
+            } else {
+              disableAutoEnterPip();
+            }
           }
           playerStatus.status.value = PlayerStatus.playing;
         } else {
@@ -1712,9 +1720,7 @@ class PlPlayerController {
     if (!isCloseAll && _playerCount > 1) {
       _playerCount -= 1;
       _heartDuration = 0;
-      final previousRoute = Get.previousRoute;
-      if (!previousRoute.startsWith('/video') &&
-          !previousRoute.startsWith('/liveRoom')) {
+      if (!_isVideoPage) {
         disableAutoEnterPip();
         pause();
       }
