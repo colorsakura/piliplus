@@ -2149,6 +2149,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   }
 
   void _onPopInvokedWithResult(bool didPop, result) {
+    if (didPop) {
+      videoDetailController.plPlayerController.disableAutoEnterPipIfNeeded();
+    }
     if (plPlayerController?.controlsLock.value == true) {
       plPlayerController?.onLockControl(false);
       return;
