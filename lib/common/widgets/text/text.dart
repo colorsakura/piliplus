@@ -174,6 +174,7 @@ class Text extends StatelessWidget {
     this.textWidthBasis,
     this.textHeightBehavior,
     this.selectionColor,
+    this.onShowMore,
   }) : textSpan = null,
        assert(
          textScaler == null || textScaleFactor == null,
@@ -211,6 +212,7 @@ class Text extends StatelessWidget {
     this.textWidthBasis,
     this.textHeightBehavior,
     this.selectionColor,
+    this.onShowMore,
   }) : data = null,
        assert(
          textScaler == null || textScaleFactor == null,
@@ -349,6 +351,8 @@ class Text extends StatelessWidget {
   /// (semi-transparent grey).
   final Color? selectionColor;
 
+  final VoidCallback? onShowMore;
+
   @override
   Widget build(BuildContext context) {
     final DefaultTextStyle defaultTextStyle = DefaultTextStyle.of(context);
@@ -435,6 +439,7 @@ class Text extends StatelessWidget {
           text: data,
           children: textSpan != null ? <InlineSpan>[textSpan!] : null,
         ),
+        onShowMore: onShowMore,
       );
     }
     if (semanticsLabel != null || semanticsIdentifier != null) {

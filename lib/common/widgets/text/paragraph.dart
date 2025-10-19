@@ -78,6 +78,7 @@ class RenderParagraph extends RenderBox
     Color? selectionColor,
     SelectionRegistrar? registrar,
     required Color primary,
+    VoidCallback? onShowMore,
   }) : assert(text.debugAssertIsValid()),
        assert(
          maxLines == null ||
@@ -93,6 +94,7 @@ class RenderParagraph extends RenderBox
        _softWrap = softWrap,
        _overflow = overflow,
        _selectionColor = selectionColor,
+       _onShowMore = onShowMore,
        _textPainter = TextPainter(
          text: text,
          textAlign: textAlign,
@@ -294,6 +296,8 @@ class RenderParagraph extends RenderBox
     _disposeSelectableFragments();
     _textPainter.dispose();
     _textIntrinsicsCache?.dispose();
+    _tapGestureRecognizer?.dispose();
+    _tapGestureRecognizer = null;
     _morePainter?.dispose();
     _morePainter = null;
     super.dispose();
@@ -553,6 +557,16 @@ class RenderParagraph extends RenderBox
   @override
   @protected
   bool hitTestChildren(BoxHitTestResult result, {required Offset position}) {
+    if (_morePainter case final textPainter?) {
+      late final height = _textPainter.height;
+      if (position.dx < textPainter.width &&
+          position.dy > height &&
+          position.dy < height + textPainter.height) {
+        result.add(HitTestEntry(_moreTextSpan));
+        return true;
+      }
+    }
+
     final GlyphInfo? glyph = _textPainter.getClosestGlyphForOffset(position);
     // The hit-test can't fall through the horizontal gaps between visually
     // adjacent characters on the same line, even with a large letter-spacing or
@@ -680,9 +694,20 @@ class RenderParagraph extends RenderBox
     }
   }
 
+  VoidCallback? _onShowMore;
+  set onShowMore(VoidCallback? onShowMore) {
+    _onShowMore = onShowMore;
+    _tapGestureRecognizer?.onTap = onShowMore;
+  }
+
+  TapGestureRecognizer? _tapGestureRecognizer;
+  TapGestureRecognizer get _effectiveTapRecognizer =>
+      _tapGestureRecognizer ??= TapGestureRecognizer()..onTap = _onShowMore;
+
   TextSpan get _moreTextSpan => TextSpan(
     style: text.style!.copyWith(color: _primary),
     text: '查看更多',
+    recognizer: _effectiveTapRecognizer,
   );
   TextPainter? _morePainter;
 

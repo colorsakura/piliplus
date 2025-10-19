@@ -114,6 +114,7 @@ class RichText extends MultiChildRenderObjectWidget {
     this.textHeightBehavior,
     this.selectionRegistrar,
     this.selectionColor,
+    this.onShowMore,
   }) : assert(maxLines == null || maxLines > 0),
        assert(selectionRegistrar == null || selectionColor != null),
        assert(
@@ -228,6 +229,8 @@ class RichText extends MultiChildRenderObjectWidget {
   /// widgets.
   final Color? selectionColor;
 
+  final VoidCallback? onShowMore;
+
   @override
   RenderParagraph createRenderObject(BuildContext context) {
     assert(textDirection != null || debugCheckHasDirectionality(context));
@@ -246,6 +249,7 @@ class RichText extends MultiChildRenderObjectWidget {
       registrar: selectionRegistrar,
       selectionColor: selectionColor,
       primary: Theme.of(context).colorScheme.primary,
+      onShowMore: onShowMore,
     );
   }
 
@@ -266,7 +270,8 @@ class RichText extends MultiChildRenderObjectWidget {
       ..locale = locale ?? Localizations.maybeLocaleOf(context)
       ..registrar = selectionRegistrar
       ..selectionColor = selectionColor
-      ..primary = Theme.of(context).colorScheme.primary;
+      ..primary = Theme.of(context).colorScheme.primary
+      ..onShowMore = onShowMore;
   }
 
   @override
