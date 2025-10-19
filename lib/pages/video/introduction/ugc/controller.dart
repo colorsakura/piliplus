@@ -287,7 +287,7 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
 
     if (GlobalData().coins != null && GlobalData().coins! < 1) {
       SmartDialog.showToast('硬币不足');
-      return;
+      // return;
     }
 
     PayCoinsPage.toPayCoinsPage(
