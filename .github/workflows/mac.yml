@@ -2,6 +2,12 @@ name: Build for Mac
 
 on:
   workflow_call:
+    inputs:
+      tag:
+        description: "tag"
+        required: false
+        default: ""
+        type: string
   workflow_dispatch:
 
 jobs:
@@ -36,8 +42,17 @@ jobs:
       - name: Rename DMG
         run: mv PiliPlus*.dmg PiliPlus_macos_${{ env.version }}.dmg
 
+      - name: Release
+        if: ${{ github.event.inputs.tag != '' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag }}
+          name: ${{ github.event.inputs.tag }}
+          files: |
+            PiliPlus_macos_*.dmg
+
       - name: Upload macos release
         uses: actions/upload-artifact@v4
         with:
-          name: macos-release
+          name: macOS-release
           path: PiliPlus_macos_*.dmg

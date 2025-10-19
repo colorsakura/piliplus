@@ -2,6 +2,12 @@ name: Build for Windows x64
 
 on:
   workflow_call:
+    inputs:
+      tag:
+        description: "tag"
+        required: false
+        default: ""
+        type: string
   workflow_dispatch:
 
 jobs:
@@ -45,14 +51,30 @@ jobs:
           mv build/windows/x64/runner/Release/* Release/PiliPlus-Win/
           mv dist/**/*.exe PiliPlus-Win-Setup/PiliPlus_windows_${{env.version}}_x64_setup.exe
 
+      - name: Compress
+        if: ${{ github.event.inputs.tag != '' }}
+        run: |
+          Compress-Archive -Path "Release/PiliPlus-Win" -DestinationPath "PiliPlus_windows_${{env.version}}_x64.zip"
+        shell: pwsh
+
+      - name: Release
+        if: ${{ github.event.inputs.tag != '' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag }}
+          name: ${{ github.event.inputs.tag }}
+          files: |
+            PiliPlus_windows_*.zip
+            PiliPlus-Win-Setup/PiliPlus_windows_*.exe
+
       - name: Upload windows file release
         uses: actions/upload-artifact@v4
         with:
-          name: PiliPlus_windows_${{env.version}}_x64
+          name: Windows-file-x64-release
           path: Release
 
       - name: Upload windows setup release
         uses: actions/upload-artifact@v4
         with:
-          name: windows-setup-x64-release
+          name: Windows-setup-x64-release
           path: PiliPlus-Win-Setup

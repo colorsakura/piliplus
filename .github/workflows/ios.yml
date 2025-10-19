@@ -2,6 +2,12 @@ name: Build for iOS
 
 on:
   workflow_call:
+    inputs:
+      tag:
+        description: "tag"
+        required: false
+        default: ""
+        type: string
   workflow_dispatch:
 
 jobs:
@@ -30,8 +36,17 @@ jobs:
           ln -sf ./build/ios/iphoneos Payload
           zip -r9 PiliPlus_ios_${{env.version}}.ipa Payload/runner.app
 
+      - name: Release
+        if: ${{ github.event.inputs.tag != '' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag }}
+          name: ${{ github.event.inputs.tag }}
+          files: |
+            PiliPlus_ios_*.ipa
+
       - name: Upload ios release
         uses: actions/upload-artifact@v4
         with:
-          name: ios-release
+          name: iOS-release
           path: PiliPlus_ios_*.ipa

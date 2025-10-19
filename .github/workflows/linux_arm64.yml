@@ -2,6 +2,12 @@ name: Build for Linux Arm64
 
 on:
   workflow_call:
+    inputs:
+      tag:
+        description: "tag"
+        required: false
+        default: ""
+        type: string
   workflow_dispatch:
 
 jobs:
@@ -173,6 +179,17 @@ jobs:
 
           printf "完成: PiliPlus_linux_%s_arm64.rpm\n" "${{ env.version }}"
         shell: bash
+
+      - name: Release
+        if: ${{ github.event.inputs.tag != '' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag }}
+          name: ${{ github.event.inputs.tag }}
+          files: |
+            PiliPlus_linux_*.tar.gz
+            PiliPlus_linux_*.deb
+            PiliPlus_linux_*.rpm
 
       - name: Upload linux targz package
         uses: actions/upload-artifact@v4
