@@ -557,13 +557,15 @@ class RenderParagraph extends RenderBox
   @override
   @protected
   bool hitTestChildren(BoxHitTestResult result, {required Offset position}) {
-    if (_morePainter case final textPainter?) {
-      late final height = _textPainter.height;
-      if (position.dx < textPainter.width &&
-          position.dy > height &&
-          position.dy < height + textPainter.height) {
-        result.add(HitTestEntry(_moreTextSpan));
-        return true;
+    if (_tapGestureRecognizer != null) {
+      if (_morePainter case final textPainter?) {
+        late final height = _textPainter.height;
+        if (position.dx < textPainter.width &&
+            position.dy > height &&
+            position.dy < height + textPainter.height) {
+          result.add(HitTestEntry(_moreTextSpan));
+          return true;
+        }
       }
     }
 
@@ -696,18 +698,18 @@ class RenderParagraph extends RenderBox
 
   VoidCallback? _onShowMore;
   set onShowMore(VoidCallback? onShowMore) {
-    _onShowMore = onShowMore;
-    _tapGestureRecognizer?.onTap = onShowMore;
+    if (_onShowMore != onShowMore) {
+      _onShowMore = onShowMore;
+      _tapGestureRecognizer?.onTap = onShowMore;
+    }
   }
 
   TapGestureRecognizer? _tapGestureRecognizer;
-  TapGestureRecognizer get _effectiveTapRecognizer =>
-      _tapGestureRecognizer ??= TapGestureRecognizer()..onTap = _onShowMore;
 
   TextSpan get _moreTextSpan => TextSpan(
     style: text.style!.copyWith(color: _primary),
     text: '查看更多',
-    recognizer: _effectiveTapRecognizer,
+    recognizer: _tapGestureRecognizer,
   );
   TextPainter? _morePainter;
 
@@ -734,6 +736,9 @@ class RenderParagraph extends RenderBox
         size.height < textSize.height || _textPainter.didExceedMaxLines;
 
     if (didOverflowHeight) {
+      if (_onShowMore != null) {
+        _tapGestureRecognizer ??= TapGestureRecognizer()..onTap = _onShowMore;
+      }
       _morePainter ??= TextPainter(
         text: _moreTextSpan,
         textDirection: textDirection,

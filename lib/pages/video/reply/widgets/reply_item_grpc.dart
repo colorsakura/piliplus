@@ -274,6 +274,7 @@ class ReplyItemGrpc extends StatelessWidget {
         Padding(
           padding: padding,
           child: custom_text.Text.rich(
+            primary: theme.colorScheme.primary,
             style: TextStyle(
               height: 1.75,
               fontSize: theme.textTheme.bodyMedium!.fontSize,

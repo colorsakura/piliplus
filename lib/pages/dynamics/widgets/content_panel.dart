@@ -86,6 +86,7 @@ Widget content(
                   richNodes,
                   maxLines: isSave ? null : 6,
                   onShowMore: () => PageUtils.pushDynDetail(item, isPush: true),
+                  primary: theme.colorScheme.primary,
                 ),
         if (pics?.isNotEmpty == true)
           CustomGridView(
