@@ -1171,7 +1171,11 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   LongPressGestureRecognizer? _longPressRecognizer;
   LongPressGestureRecognizer get longPressRecognizer => _longPressRecognizer ??=
-      LongPressGestureRecognizer(duration: const Duration(milliseconds: 300))
+      LongPressGestureRecognizer(
+          duration: plPlayerController.enableTapDm
+              ? const Duration(milliseconds: 300)
+              : null,
+        )
         ..onLongPressStart = ((_) =>
             plPlayerController.setLongPressStatus(true))
         ..onLongPressEnd = (_) => plPlayerController.setLongPressStatus(false);
@@ -1318,7 +1322,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
         if (!isLive)
           Positioned.fill(
-            top: 4,
             child: IgnorePointer(
               ignoring: !plPlayerController.enableDragSubtitle,
               child: Obx(

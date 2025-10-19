@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/grpc/bilibili/app/listener/v1.pb.dart' show DetailItem;
 import 'package:PiliPlus/models_new/live/live_room_info_h5/data.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart';
 import 'package:PiliPlus/models_new/video/video_detail/data.dart';
@@ -29,15 +30,19 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
   static final List<MediaItem> _item = [];
   bool enableBackgroundPlay = Pref.enableBackgroundPlay;
 
+  Function? onPlay;
+  Function? onPause;
+  Function(Duration position)? onSeek;
+
   @override
   Future<void> play() async {
-    PlPlayerController.playIfExists();
+    onPlay?.call() ?? PlPlayerController.playIfExists();
     // player.play();
   }
 
   @override
   Future<void> pause() async {
-    await PlPlayerController.pauseIfExists();
+    await (onPause?.call() ?? PlPlayerController.pauseIfExists());
     // player.pause();
   }
 
@@ -48,7 +53,8 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
         updatePosition: position,
       ),
     );
-    await PlPlayerController.seekToIfExists(position, isSeek: false);
+    await (onSeek?.call(position) ??
+        PlPlayerController.seekToIfExists(position, isSeek: false));
     // await player.seekTo(position);
   }
 
@@ -178,6 +184,14 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
         artist: artist,
         duration: Duration(seconds: data.duration ?? 0),
         artUri: Uri.parse(cover ?? ''),
+      );
+    } else if (data is DetailItem) {
+      mediaItem = MediaItem(
+        id: id,
+        title: data.arc.title,
+        artist: data.owner.name,
+        duration: Duration(seconds: data.arc.duration.toInt()),
+        artUri: Uri.parse(data.arc.cover),
       );
     }
     if (mediaItem == null) return;

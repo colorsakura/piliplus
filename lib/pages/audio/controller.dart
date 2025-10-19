@@ -20,6 +20,8 @@ import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/triple_mixin.dart';
 import 'package:PiliPlus/pages/video/pay_coins/view.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
+import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
+import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
@@ -114,6 +116,22 @@ class AudioController extends GetxController
         _queryPlayUrl();
       }
     });
+    videoPlayerServiceHandler
+      ?..onPlay = onPlay
+      ..onPause = onPause
+      ..onSeek = onSeek;
+  }
+
+  Future<void> onPlay() async {
+    await player?.play();
+  }
+
+  Future<void> onPause() async {
+    await player?.pause();
+  }
+
+  Future<void> onSeek(Duration duration) async {
+    await player?.seek(duration);
   }
 
   void _updateCurrItem(DetailItem item) {
@@ -121,6 +139,11 @@ class AudioController extends GetxController
     hasLike.value = item.stat.hasLike_7;
     coinNum.value = item.stat.hasCoin_8 ? 2 : 0;
     hasFav.value = item.stat.hasFav;
+    videoPlayerServiceHandler?.onVideoDetailChange(
+      item,
+      (subId.firstOrNull ?? oid).toInt(),
+      hashCode.toString(),
+    );
   }
 
   Future<void> _queryPlayList({
@@ -240,20 +263,30 @@ class AudioController extends GetxController
         if (position.inSeconds != this.position.value.inSeconds) {
           this.position.value = position;
           _videoDetailController?.playedTime = position;
+          videoPlayerServiceHandler?.onPositionChange(position);
         }
       }),
       player!.stream.duration.listen((duration) {
         this.duration.value = duration;
       }),
       player!.stream.playing.listen((playing) {
+        PlayerStatus playerStatus;
         if (playing) {
           animController.forward();
+          playerStatus = PlayerStatus.playing;
         } else {
           animController.reverse();
+          playerStatus = PlayerStatus.paused;
         }
+        videoPlayerServiceHandler?.onStatusChange(playerStatus, false, false);
       }),
       player!.stream.completed.listen((completed) {
         _videoDetailController?.playedTime = duration.value;
+        videoPlayerServiceHandler?.onStatusChange(
+          PlayerStatus.completed,
+          false,
+          false,
+        );
         if (completed) {
           switch (playMode.value) {
             case PlayRepeat.pause:
@@ -614,6 +647,11 @@ class AudioController extends GetxController
   @override
   void onClose() {
     // _cancelTimer();
+    videoPlayerServiceHandler
+      ?..onPlay = null
+      ..onPause = null
+      ..onSeek = null
+      ..onVideoDetailDispose(hashCode.toString());
     _subscriptions?.forEach((e) => e.cancel());
     _subscriptions = null;
     player?.dispose();
