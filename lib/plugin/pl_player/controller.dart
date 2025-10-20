@@ -246,8 +246,10 @@ class PlPlayerController {
   bool get isVertical => _isVertical;
 
   /// 弹幕开关
-  late final RxBool enableShowDanmaku = Pref.enableShowDanmaku.obs;
-  late final RxBool enableShowLiveDanmaku = Pref.enableShowLiveDanmaku.obs;
+  late final RxBool _enableShowDanmaku = Pref.enableShowDanmaku.obs;
+  late final RxBool _enableShowLiveDanmaku = Pref.enableShowLiveDanmaku.obs;
+  RxBool get enableShowDanmaku =>
+      isLive ? _enableShowLiveDanmaku : _enableShowDanmaku;
 
   late final bool autoPiP = Pref.autoPiP;
   bool get isPipMode =>

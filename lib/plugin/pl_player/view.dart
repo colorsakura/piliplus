@@ -287,7 +287,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       FlutterVolumeController.removeListener();
     }
     transformationController.dispose();
-    _refreshDmCallback = null;
     _removeDmAction();
     super.dispose();
   }
@@ -1130,22 +1129,23 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         if (_suspendedDm == null) {
           plPlayerController.controls = !plPlayerController.showControls.value;
         } else {
-          _dmOffset = details.localPosition;
-          _refreshDmCallback?.call();
+          _dmOffset.value = details.localPosition;
         }
         break;
     }
   }
 
   void _onTapDown(TapDownDetails details) {
+    if (!plPlayerController.enableShowDanmaku.value) {
+      _removeDmAction();
+      return;
+    }
     final ctr = plPlayerController.danmakuController;
     if (ctr != null) {
       final pos = details.localPosition;
       final item = ctr.findSingleDanmaku(pos);
       if (item == null) {
-        if (_suspendedDm != null) {
-          _removeDmAction();
-        }
+        _removeDmAction();
       } else if (item != _suspendedDm) {
         if (item.content.extra == null) {
           _removeDmAction();
@@ -1153,7 +1153,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         }
         _suspendedDm?.suspend = false;
         _suspendedDm = item..suspend = true;
-        _dmOffset = pos;
       }
     }
   }
@@ -1336,15 +1335,15 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           ),
 
         if (plPlayerController.enableTapDm)
-          Builder(
-            builder: (context) {
-              _refreshDmCallback = () {
-                if (context.mounted) {
-                  ((context) as Element).markNeedsBuild();
-                }
-              };
-              if (_dmOffset != null && _suspendedDm != null) {
-                return _buildDmAction(_suspendedDm!, _dmOffset!);
+          Obx(
+            () {
+              if (!plPlayerController.enableShowDanmaku.value) {
+                _removeDmAction();
+                return const SizedBox.shrink();
+              }
+              final dmOffset = _dmOffset.value;
+              if (dmOffset != null && _suspendedDm != null) {
+                return _buildDmAction(_suspendedDm!, dmOffset);
               }
               return const SizedBox.shrink();
             },
@@ -2200,14 +2199,14 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   static const _actionItemHeight = 35.0 - _triangleHeight;
 
   DanmakuItem<DanmakuExtra>? _suspendedDm;
-  Offset? _dmOffset;
-  void Function()? _refreshDmCallback;
+  late final Rxn<Offset> _dmOffset = Rxn<Offset>();
 
   void _removeDmAction() {
-    _suspendedDm?.suspend = false;
-    _suspendedDm = null;
-    _dmOffset = null;
-    _refreshDmCallback?.call();
+    if (_suspendedDm != null) {
+      _suspendedDm?.suspend = false;
+      _suspendedDm = null;
+      _dmOffset.value = null;
+    }
   }
 
   Widget _dmActionItem(

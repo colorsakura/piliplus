@@ -75,7 +75,7 @@ class BottomControl extends StatelessWidget {
           Obx(
             () {
               final enableShowLiveDanmaku =
-                  plPlayerController.enableShowLiveDanmaku.value;
+                  plPlayerController.enableShowDanmaku.value;
               return ComBtn(
                 tooltip: "${enableShowLiveDanmaku ? '关闭' : '开启'}弹幕",
                 icon: enableShowLiveDanmaku
@@ -91,7 +91,7 @@ class BottomControl extends StatelessWidget {
                       ),
                 onTap: () {
                   final newVal = !enableShowLiveDanmaku;
-                  plPlayerController.enableShowLiveDanmaku.value = newVal;
+                  plPlayerController.enableShowDanmaku.value = newVal;
                   if (!plPlayerController.tempPlayerConf) {
                     GStorage.setting.put(
                       SettingBoxKey.enableShowLiveDanmaku,

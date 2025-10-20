@@ -2078,8 +2078,8 @@ class HeaderControlState extends State<HeaderControl> {
                         }
                       },
                       icon: extra.isLike
-                          ? const Icon(Icons.thumb_up_off_alt_sharp)
-                          : const Icon(Icons.thumb_up_off_alt_outlined),
+                          ? const Icon(CustomIcons.player_dm_tip_like_solid)
+                          : const Icon(CustomIcons.player_dm_tip_like),
                     ),
                     if (extra.like > 0)
                       Positioned(
@@ -2103,7 +2103,7 @@ class HeaderControlState extends State<HeaderControl> {
                     extra.id,
                     plPlayerController.cid!,
                   ),
-                  icon: const Icon(Icons.delete_outline),
+                  icon: const Icon(CustomIcons.player_dm_tip_recall),
                 )
               else
                 iconButton(
@@ -2112,7 +2112,7 @@ class HeaderControlState extends State<HeaderControl> {
                     extra: extra,
                     ctr: plPlayerController,
                   ),
-                  icon: const Icon(Icons.report_problem_outlined),
+                  icon: const Icon(CustomIcons.player_dm_tip_back),
                 ),
             ],
           ),

@@ -791,7 +791,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                 Obx(
                   () {
                     final enableShowLiveDanmaku =
-                        plPlayerController.enableShowLiveDanmaku.value;
+                        plPlayerController.enableShowDanmaku.value;
                     return SizedBox(
                       width: 34,
                       height: 34,
@@ -801,8 +801,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                         ),
                         onPressed: () {
                           final newVal = !enableShowLiveDanmaku;
-                          plPlayerController.enableShowLiveDanmaku.value =
-                              newVal;
+                          plPlayerController.enableShowDanmaku.value = newVal;
                           if (!plPlayerController.tempPlayerConf) {
                             GStorage.setting.put(
                               SettingBoxKey.enableShowLiveDanmaku,
@@ -1035,7 +1034,7 @@ class _LiveDanmakuState extends State<LiveDanmaku> {
     return Obx(
       () {
         return AnimatedOpacity(
-          opacity: plPlayerController.enableShowLiveDanmaku.value
+          opacity: plPlayerController.enableShowDanmaku.value
               ? plPlayerController.danmakuOpacity.value
               : 0,
           duration: const Duration(milliseconds: 100),
