@@ -817,7 +817,10 @@ class _AudioPageState extends State<AudioPage> {
                     ),
                     if (audioItem.arc.hasDesc()) ...[
                       const SizedBox(height: 10),
-                      SelectableText(audioItem.arc.desc),
+                      SelectableText(
+                        audioItem.arc.desc,
+                        scrollPhysics: const NeverScrollableScrollPhysics(),
+                      ),
                     ],
                   ],
                 ),

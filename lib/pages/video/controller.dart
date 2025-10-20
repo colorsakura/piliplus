@@ -3,6 +3,8 @@ import 'dart:ui';
 
 import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/segment_progress_bar.dart';
+import 'package:PiliPlus/grpc/bilibili/app/listener/v1.pbenum.dart'
+    show PlaylistSource;
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/init.dart';
@@ -1749,16 +1751,33 @@ class VideoDetailController extends GetxController
   }
 
   void toAudioPage() {
+    int? id;
+    int? extraId;
+    PlaylistSource from = PlaylistSource.UP_ARCHIVE;
+    if (isPlayAll) {
+      id = args['mediaId'];
+      extraId = sourceType.extraId;
+      from = sourceType.playlistSource;
+    } else if (isUgc) {
+      try {
+        final ctr = Get.find<UgcIntroController>(tag: heroTag);
+        id = ctr.videoDetail.value.ugcSeason?.id;
+        if (id != null) {
+          extraId = 8;
+          from = PlaylistSource.MEDIA_LIST;
+        }
+      } catch (_) {}
+    }
     AudioPage.toAudioPage(
       itemType: 1,
-      id: args['mediaId'],
+      id: id,
       oid: aid,
       subId: [cid.value],
-      from: sourceType.playlistSource,
+      from: from,
       heroTag: autoPlay.value ? heroTag : null,
       start: playedTime,
       audioUrl: audioUrl,
-      extraId: sourceType.extraId,
+      extraId: extraId,
     );
   }
 }

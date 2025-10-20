@@ -1156,7 +1156,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         _removeDmAction();
       } else if (item != _suspendedDm) {
         if (item.content.extra == null) {
-          assert(false, 'empty extra: $item');
           _removeDmAction();
           return;
         }
