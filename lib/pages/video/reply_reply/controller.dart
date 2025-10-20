@@ -166,7 +166,7 @@ class VideoReplyReplyController extends ReplyController
   }) {
     assert(replyItem != null && index != null);
 
-    final (bool inputDisable, String? hint) = replyHint;
+    final (bool inputDisable, bool canUploadPic, String? hint) = replyHint;
     if (inputDisable) {
       return;
     }

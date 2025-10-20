@@ -33,6 +33,7 @@ class ReplyPage extends CommonRichTextPubPage {
   final int replyType;
   final ReplyInfo? replyItem;
   final String? hint;
+  final bool canUploadPic;
 
   const ReplyPage({
     super.key,
@@ -45,6 +46,7 @@ class ReplyPage extends CommonRichTextPubPage {
     required this.replyType,
     this.replyItem,
     this.hint,
+    this.canUploadPic = true,
   });
 
   @override
@@ -183,8 +185,12 @@ class _ReplyPageState extends CommonRichTextPubPageState<ReplyPage> {
               ToolbarIconButton(
                 tooltip: '图片',
                 selected: false,
-                icon: const Icon(Icons.image, size: 22),
-                onPressed: onPickImage,
+                icon: widget.canUploadPic
+                    ? const Icon(Icons.image, size: 22)
+                    : const Icon(Icons.image_not_supported, size: 22),
+                onPressed: widget.canUploadPic
+                    ? onPickImage
+                    : () => SmartDialog.showToast('当前评论区不支持发送图片'),
               ),
             ],
             const SizedBox(width: 8),

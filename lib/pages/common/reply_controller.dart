@@ -1,6 +1,6 @@
 import 'package:PiliPlus/common/widgets/text_field/controller.dart';
 import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
-    show MainListReply, ReplyInfo, SubjectControl, Mode;
+    show MainListReply, ReplyInfo, SubjectControl, Mode, EditorIconState;
 import 'package:PiliPlus/grpc/bilibili/pagination.pb.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/reply.dart';
@@ -101,8 +101,11 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
     onReload();
   }
 
-  (bool inputDisable, String? hint) get replyHint {
+  (bool inputDisable, bool canUploadPic, String? hint) get replyHint {
     bool inputDisable = false;
+    bool canUploadPic =
+        subjectControl?.uploadPictureIconState !=
+        EditorIconState.EditorIconState_DISABLE;
     String? hint;
     try {
       if (subjectControl != null && subjectControl!.hasRootText()) {
@@ -116,7 +119,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
         }
       }
     } catch (_) {}
-    return (inputDisable, hint);
+    return (inputDisable, canUploadPic, hint);
   }
 
   void onReply(
@@ -135,7 +138,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
 
     assert(replyItem != null || (oid != null && replyType != null));
 
-    final (bool inputDisable, String? hint) = replyHint;
+    final (bool inputDisable, bool canUploadPic, String? hint) = replyHint;
     if (inputDisable) {
       return;
     }
@@ -153,6 +156,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
                 replyType: replyItem?.type.toInt() ?? replyType!,
                 replyItem: replyItem,
                 items: savedReplies[key],
+                canUploadPic: canUploadPic,
                 onSave: (reply) {
                   if (reply.isEmpty) {
                     savedReplies.remove(key);
