@@ -460,12 +460,14 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     final isFullScreen = this.isFullScreen;
     final bottomHeight = 70 + padding.bottom;
     final topPadding = padding.top + kToolbarHeight;
-    final videoHeight = maxHeight - bottomHeight - topPadding;
+    final videoHeight = isFullScreen
+        ? maxHeight - padding.top
+        : maxHeight - bottomHeight - topPadding;
     return Stack(
       clipBehavior: Clip.none,
       children: [
         Positioned.fill(
-          top: isFullScreen ? 0 : topPadding,
+          top: isFullScreen ? padding.top : topPadding,
           bottom: isFullScreen ? 0 : bottomHeight,
           child: videoPlayerPanel(
             width: maxWidth,
