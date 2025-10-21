@@ -22,6 +22,7 @@ import 'package:PiliPlus/pages/common/multi_select/multi_select_controller.dart'
 import 'package:PiliPlus/pages/dynamics_tab/controller.dart';
 import 'package:PiliPlus/pages/group_panel/view.dart';
 import 'package:PiliPlus/pages/later/controller.dart';
+import 'package:PiliPlus/pages/login/geetest/geetest_webview_dialog.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -484,26 +485,32 @@ abstract class RequestUtils {
     String vVoucher,
     ValueChanged<String> onSuccess,
   ) async {
+    if (Platform.isLinux) {
+      return;
+    }
+
     final res = await ValidateHttp.gaiaVgateRegister(vVoucher);
     if (!res['status']) {
       SmartDialog.showToast("${res['msg']}");
       return;
     }
 
-    if (res['data'] == null) {
+    final resData = res['data'];
+    if (resData == null) {
       SmartDialog.showToast("null data");
       return;
     }
 
     CaptchaDataModel captchaData = CaptchaDataModel();
 
-    String? geeGt = res['data']?['geetest']?['gt'];
-    String? geeChallenge = res['data']?['geetest']?['challenge'];
-    captchaData.token = res['data']?['token'];
+    final geetest = resData?['geetest'];
+    String? gt = geetest?['gt'];
+    String? challenge = geetest?['challenge'];
+    captchaData.token = resData?['token'];
 
     bool isGeeArgumentValid() {
-      return geeGt?.isNotEmpty == true &&
-          geeChallenge?.isNotEmpty == true &&
+      return gt?.isNotEmpty == true &&
+          challenge?.isNotEmpty == true &&
           captchaData.token?.isNotEmpty == true;
     }
 
@@ -512,9 +519,47 @@ abstract class RequestUtils {
       return;
     }
 
+    Future<void> gaiaVgateValidate() async {
+      final res = await ValidateHttp.gaiaVgateValidate(
+        challenge: captchaData.geetest?.challenge,
+        seccode: captchaData.seccode,
+        token: captchaData.token,
+        validate: captchaData.validate,
+      );
+      if (res['status']) {
+        if (res['data']?['is_valid'] == 1) {
+          final griskId = res['data']?['grisk_id'];
+          if (griskId != null) {
+            onSuccess(griskId);
+          }
+        } else {
+          SmartDialog.showToast('invalid');
+        }
+      } else {
+        SmartDialog.showToast(res['msg']);
+      }
+    }
+
+    if (Utils.isDesktop) {
+      final json = await Get.dialog<Map<String, dynamic>>(
+        GeetestWebviewDialog(gt!, challenge!),
+      );
+      if (json != null) {
+        captchaData
+          ..validate = json['geetest_validate']
+          ..seccode = json['geetest_seccode']
+          ..geetest = GeetestData(
+            challenge: json['geetest_challenge'],
+            gt: gt,
+          );
+        gaiaVgateValidate();
+      }
+      return;
+    }
+
     var registerData = Gt3RegisterData(
-      challenge: geeChallenge,
-      gt: geeGt,
+      challenge: challenge,
+      gt: gt,
       success: true,
     );
 
@@ -529,28 +574,15 @@ abstract class RequestUtils {
           if (code == "1") {
             // 发送 message["result"] 中的数据向 B 端的业务服务接口进行查询
             SmartDialog.showToast('验证成功');
+            final result = message['result'];
             captchaData
-              ..validate = message['result']?['geetest_validate']
-              ..seccode = message['result']?['geetest_seccode'];
-            String? challenge = message['result']?['geetest_challenge'];
-            final res = await ValidateHttp.gaiaVgateValidate(
-              challenge: challenge,
-              seccode: captchaData.seccode,
-              token: captchaData.token,
-              validate: captchaData.validate,
-            );
-            if (res['status']) {
-              if (res['data']?['is_valid'] == 1) {
-                final griskId = res['data']?['grisk_id'];
-                if (griskId != null) {
-                  onSuccess(griskId);
-                }
-              } else {
-                SmartDialog.showToast('invalid');
-              }
-            } else {
-              SmartDialog.showToast(res['msg']);
-            }
+              ..validate = result?['geetest_validate']
+              ..seccode = result?['geetest_seccode']
+              ..geetest = GeetestData(
+                challenge: result?['geetest_challenge'],
+                gt: gt!,
+              );
+            gaiaVgateValidate();
           } else {
             // 终端用户完成验证失败，自动重试 If the verification fails, it will be automatically retried.
             if (kDebugMode) debugPrint("Captcha result code : $code");

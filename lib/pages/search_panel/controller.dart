@@ -71,11 +71,21 @@ class SearchPanelController<R extends SearchNumData<T>, T>
 
   @override
   List<T>? getDataList(R response) {
-    searchResultController?.count[searchType.index] = response.numResults ?? 0;
     return response.list;
   }
 
+  @override
+  bool customHandleResponse(bool isRefresh, Success<R> response) {
+    if (isRefresh) {
+      searchResultController?.count[searchType.index] =
+          response.response.numResults ?? 0;
+    }
+    return false;
+  }
+
   final qvId = Utils.generateRandomString(32);
+
+  String? gaiaVtoken;
 
   @override
   Future<LoadingState<R>> customGetData() => SearchHttp.searchByType<R>(
@@ -91,6 +101,11 @@ class SearchPanelController<R extends SearchNumData<T>, T>
     pubBegin: pubBegin,
     pubEnd: pubEnd,
     qvId: qvId,
+    gaiaVtoken: gaiaVtoken,
+    onSuccess: (String gaiaVtoken) {
+      this.gaiaVtoken = gaiaVtoken;
+      queryData(page == 1);
+    },
   );
 
   @override

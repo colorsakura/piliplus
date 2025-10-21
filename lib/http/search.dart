@@ -12,6 +12,7 @@ import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
 import 'package:PiliPlus/models_new/search/search_rcmd/data.dart';
 import 'package:PiliPlus/models_new/search/search_trending/data.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -56,6 +57,8 @@ class SearchHttp {
     int? pubBegin,
     int? pubEnd,
     required String qvId,
+    String? gaiaVtoken,
+    required ValueChanged<String> onSuccess,
   }) async {
     var params = await WbiSign.makSign({
       'search_type': searchType.name,
@@ -78,15 +81,16 @@ class SearchHttp {
       'from_spmid': 333.337,
       'platform': 'pc',
       'source_tag': 3,
-      'gaia_vtoken': '',
       'qv_id': qvId,
       'web_location': 1430654,
+      'gaia_vtoken': ?gaiaVtoken,
     });
     var res = await Request().get(
       Api.searchByType,
       queryParameters: params,
       options: Options(
         headers: {
+          if (gaiaVtoken != null) 'cookie': 'x-bili-gaia-vtoken=$gaiaVtoken',
           'user-agent': UaType.pc.ua,
           'origin': 'https://search.bilibili.com',
           'referer':
@@ -98,7 +102,9 @@ class SearchHttp {
     if (resData is Map) {
       if (resData['code'] == 0) {
         final Map<String, dynamic> dataData = resData['data'];
-        if (dataData.containsKey('v_voucher')) {
+        final vVoucher = dataData['v_voucher'];
+        if (vVoucher != null) {
+          RequestUtils.validate(vVoucher, onSuccess);
           return const Error('触发风控');
         }
         dynamic data;
