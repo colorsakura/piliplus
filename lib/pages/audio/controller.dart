@@ -583,13 +583,13 @@ class AudioController extends GetxController
     return false;
   }
 
-  void playIndex(int index) {
-    if (index == this.index) return;
+  void playIndex(int index, {List<Int64>? subId}) {
+    if (index == this.index && subId == null) return;
     this.index = index;
     final audioItem = playlist![index];
     final item = audioItem.item;
     oid = item.oid;
-    subId = item.subId;
+    this.subId = subId ?? item.subId;
     itemType = item.itemType;
     _queryPlayUrl().then((res) {
       if (res) {
