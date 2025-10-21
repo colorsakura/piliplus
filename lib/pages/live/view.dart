@@ -17,6 +17,7 @@ import 'package:PiliPlus/pages/live/widgets/live_item_app.dart';
 import 'package:PiliPlus/pages/live_area/view.dart';
 import 'package:PiliPlus/pages/live_follow/view.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -125,6 +126,25 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
                         data.second!.cardData!.areaEntranceV3!.list!.length + 1,
                   ),
                 ),
+                iconButton(
+                  size: 26,
+                  iconSize: 16,
+                  context: context,
+                  tooltip: '游戏赛事',
+                  icon: const Icon(Icons.gamepad),
+                  onPressed: () {
+                    final isDark = theme.brightness.isDark;
+                    Get.toNamed(
+                      '/webview',
+                      parameters: {
+                        'uaType': 'mob',
+                        'url':
+                            'https://www.bilibili.com/h5/match/data/home?navhide=1&native.theme=${isDark ? 2 : 1}&night=${isDark ? 1 : 0}',
+                      },
+                    );
+                  },
+                ),
+                const SizedBox(width: 8),
                 iconButton(
                   size: 26,
                   iconSize: 16,
