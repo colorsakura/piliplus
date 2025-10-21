@@ -876,6 +876,23 @@ class VideoHttp {
     return null;
   }
 
+  static bool _canAddRank(Map i) {
+    if (!GlobalData().blackMids.contains(i['owner']['mid']) &&
+        !RecommendFilter.filterTitle(i['title']) &&
+        !RecommendFilter.filterLikeRatio(
+          i['stat']['like'],
+          i['stat']['view'],
+        )) {
+      if (enableFilter &&
+          i['tname'] != null &&
+          zoneRegExp.hasMatch(i['tname'])) {
+        return false;
+      }
+      return true;
+    }
+    return false;
+  }
+
   // 视频排行
   static Future<LoadingState<List<HotVideoItemModel>>> getRankVideoList(
     int rid,
@@ -890,18 +907,16 @@ class VideoHttp {
     if (res.data['code'] == 0) {
       List<HotVideoItemModel> list = <HotVideoItemModel>[];
       for (var i in res.data['data']['list']) {
-        if (!GlobalData().blackMids.contains(i['owner']['mid']) &&
-            !RecommendFilter.filterTitle(i['title']) &&
-            !RecommendFilter.filterLikeRatio(
-              i['stat']['like'],
-              i['stat']['view'],
-            )) {
-          if (enableFilter &&
-              i['tname'] != null &&
-              zoneRegExp.hasMatch(i['tname'])) {
-            continue;
-          }
+        if (_canAddRank(i)) {
           list.add(HotVideoItemModel.fromJson(i));
+          final List? others = i['others'];
+          if (others != null && others.isNotEmpty) {
+            for (var j in others) {
+              if (_canAddRank(j)) {
+                list.add(HotVideoItemModel.fromJson(j));
+              }
+            }
+          }
         }
       }
       return Success(list);
