@@ -56,6 +56,10 @@ class AudioPage extends StatefulWidget {
   );
 }
 
+extension _ListOrderExt on ListOrder {
+  String get title => const ['无序', '正序', '倒序', '随机'][value];
+}
+
 class _AudioPageState extends State<AudioPage> {
   final _controller = Get.put(
     AudioController(),
@@ -75,15 +79,30 @@ class _AudioPageState extends State<AudioPage> {
     final padding = MediaQuery.viewPaddingOf(context);
     return Scaffold(
       appBar: AppBar(
-        actions: _controller.isVideo
-            ? [
-                IconButton(
-                  onPressed: _showMore,
-                  icon: const Icon(Icons.more_vert),
-                ),
-                const SizedBox(width: 5),
-              ]
-            : null,
+        actions: [
+          Builder(
+            builder: (context) {
+              return PopupMenuButton<ListOrder>(
+                tooltip: '排序',
+                icon: const Icon(Icons.sort),
+                initialValue: _controller.order,
+                onSelected: (value) {
+                  _controller.onChangeOrder(value);
+                  (context as Element).markNeedsBuild();
+                },
+                itemBuilder: (context) => ListOrder.values
+                    .map((e) => PopupMenuItem(value: e, child: Text(e.title)))
+                    .toList(),
+              );
+            },
+          ),
+          if (_controller.isVideo)
+            IconButton(
+              onPressed: _showMore,
+              icon: const Icon(Icons.more_vert),
+            ),
+          const SizedBox(width: 5),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.only(
