@@ -33,7 +33,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:screen_brightness_platform_interface/screen_brightness_platform_interface.dart';
@@ -351,38 +350,16 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     );
   }
 
-  SystemUiOverlayStyle _systemOverlayStyleForBrightness(
-    Brightness brightness, [
-    Color? backgroundColor,
-  ]) {
-    final SystemUiOverlayStyle style = brightness == Brightness.dark
-        ? SystemUiOverlayStyle.light
-        : SystemUiOverlayStyle.dark;
-    // For backward compatibility, create an overlay style without system navigation bar settings.
-    return SystemUiOverlayStyle(
-      statusBarColor: backgroundColor,
-      statusBarBrightness: style.statusBarBrightness,
-      statusBarIconBrightness: style.statusBarIconBrightness,
-      systemStatusBarContrastEnforced: style.systemStatusBarContrastEnforced,
-    );
-  }
-
   Widget get childWhenDisabled {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: _systemOverlayStyleForBrightness(
-        Brightness.dark,
-        Theme.of(context).useMaterial3 ? const Color(0x00000000) : null,
-      ),
-      child: ColoredBox(
-        color: Colors.black,
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
+    return Obx(() {
+      final isFullScreen = this.isFullScreen;
+      return Stack(
+        clipBehavior: Clip.none,
+        children: [
+          const SizedBox.expand(child: ColoredBox(color: Colors.black)),
+          if (!isFullScreen)
             Obx(
               () {
-                if (isFullScreen) {
-                  return const SizedBox.shrink();
-                }
                 final appBackground = _liveRoomController
                     .roomInfoH5
                     .value
@@ -407,34 +384,31 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                 );
               },
             ),
-            if (isPortrait)
-              Obx(
-                () {
-                  if (_liveRoomController.isPortrait.value) {
-                    return _buildPP;
-                  }
-                  return _buildPH;
-                },
-              )
-            else
-              _buildBodyH,
-          ],
-        ),
-      ),
-    );
+          Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: _buildAppBar(isFullScreen),
+            body: isPortrait
+                ? Obx(
+                    () {
+                      if (_liveRoomController.isPortrait.value) {
+                        return _buildPP(isFullScreen);
+                      }
+                      return _buildPH(isFullScreen);
+                    },
+                  )
+                : _buildBodyH(isFullScreen),
+          ),
+        ],
+      );
+    });
   }
 
-  Widget get _buildPH {
-    final isFullScreen = this.isFullScreen;
+  Widget _buildPH(bool isFullScreen) {
     final height = maxWidth * 9 / 16;
-    final videoHeight = isFullScreen ? maxHeight : height;
+    final videoHeight = isFullScreen ? maxHeight - padding.top : height;
     final bottomHeight = maxHeight - padding.top - height - kToolbarHeight;
     return Column(
       children: [
-        Offstage(
-          offstage: isFullScreen,
-          child: _buildAppBar,
-        ),
         SizedBox(
           width: maxWidth,
           height: videoHeight,
@@ -456,18 +430,15 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     );
   }
 
-  Widget get _buildPP {
-    final isFullScreen = this.isFullScreen;
+  Widget _buildPP(bool isFullScreen) {
     final bottomHeight = 70 + padding.bottom;
-    final topPadding = padding.top + kToolbarHeight;
     final videoHeight = isFullScreen
         ? maxHeight - padding.top
-        : maxHeight - bottomHeight - topPadding;
+        : maxHeight - bottomHeight;
     return Stack(
       clipBehavior: Clip.none,
       children: [
         Positioned.fill(
-          top: isFullScreen ? padding.top : topPadding,
           bottom: isFullScreen ? 0 : bottomHeight,
           child: videoPlayerPanel(
             width: maxWidth,
@@ -475,15 +446,6 @@ class _LiveRoomPageState extends State<LiveRoomPage>
             isFullScreen,
             needDm: isFullScreen,
             alignment: isFullScreen ? Alignment.center : Alignment.topCenter,
-          ),
-        ),
-        Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          child: Offstage(
-            offstage: isFullScreen,
-            child: _buildAppBar,
           ),
         ),
         Positioned(
@@ -514,9 +476,10 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     );
   }
 
-  PreferredSizeWidget get _buildAppBar {
+  PreferredSizeWidget _buildAppBar(bool isFullScreen) {
     final color = Theme.of(context).colorScheme.onSurfaceVariant;
     return AppBar(
+      toolbarHeight: isFullScreen ? 0 : null,
       backgroundColor: Colors.transparent,
       foregroundColor: Colors.white,
       titleTextStyle: const TextStyle(color: Colors.white),
@@ -677,56 +640,41 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     );
   }
 
-  Widget get _buildBodyH {
+  Widget _buildBodyH(bool isFullScreen) {
     double videoWidth =
         clampDouble(maxHeight / maxWidth * 1.08, 0.56, 0.7) * maxWidth;
     final rigthWidth = min(400.0, maxWidth - videoWidth - padding.horizontal);
-    videoWidth = maxWidth - rigthWidth;
+    videoWidth = maxWidth - rigthWidth - padding.horizontal;
     final videoHeight = maxHeight - padding.top;
-    return Obx(
-      () {
-        final isFullScreen = this.isFullScreen;
-        final width = isFullScreen ? maxWidth : videoWidth;
-        final height = isFullScreen ? maxHeight : videoHeight;
-        return Column(
-          children: [
-            Offstage(
-              offstage: isFullScreen,
-              child: _buildAppBar,
+    final width = isFullScreen ? maxWidth : videoWidth;
+    final height = isFullScreen ? maxHeight - padding.top : videoHeight;
+    return Padding(
+      padding: isFullScreen
+          ? EdgeInsets.zero
+          : EdgeInsets.only(left: padding.left, right: padding.right),
+      child: Row(
+        children: [
+          Container(
+            width: width,
+            height: height,
+            margin: EdgeInsets.only(bottom: padding.bottom),
+            child: videoPlayerPanel(
+              isFullScreen,
+              fill: Colors.transparent,
+              width: width,
+              height: height,
             ),
-            Expanded(
-              child: Padding(
-                padding: isFullScreen
-                    ? EdgeInsets.zero
-                    : EdgeInsets.only(left: padding.left, right: padding.right),
-                child: Row(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(bottom: padding.bottom),
-                      width: width,
-                      height: height,
-                      child: videoPlayerPanel(
-                        isFullScreen,
-                        fill: Colors.transparent,
-                        width: width,
-                        height: height,
-                      ),
-                    ),
-                    Offstage(
-                      offstage: isFullScreen,
-                      child: SizedBox(
-                        width: rigthWidth,
-                        height: videoHeight,
-                        child: _buildBottomWidget,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+          ),
+          Offstage(
+            offstage: isFullScreen,
+            child: SizedBox(
+              width: rigthWidth,
+              height: videoHeight,
+              child: _buildBottomWidget,
             ),
-          ],
-        );
-      },
+          ),
+        ],
+      ),
     );
   }
 

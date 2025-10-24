@@ -1256,18 +1256,20 @@ class PlPlayerController {
     }
 
     await _videoPlayerController?.setRate(speed);
-    if (danmakuController != null) {
-      DanmakuOption currentOption = danmakuController!.option;
-      double defaultDuration = currentOption.duration * lastPlaybackSpeed;
-      double defaultStaticDuration =
-          currentOption.staticDuration * lastPlaybackSpeed;
-      DanmakuOption updatedOption = currentOption.copyWith(
-        duration: defaultDuration / speed,
-        staticDuration: defaultStaticDuration / speed,
-      );
-      danmakuController!.updateOption(updatedOption);
-    }
     _playbackSpeed.value = speed;
+    if (danmakuController != null) {
+      try {
+        DanmakuOption currentOption = danmakuController!.option;
+        double defaultDuration = currentOption.duration * lastPlaybackSpeed;
+        double defaultStaticDuration =
+            currentOption.staticDuration * lastPlaybackSpeed;
+        DanmakuOption updatedOption = currentOption.copyWith(
+          duration: defaultDuration / speed,
+          staticDuration: defaultStaticDuration / speed,
+        );
+        danmakuController!.updateOption(updatedOption);
+      } catch (_) {}
+    }
   }
 
   // 还原默认速度
@@ -1591,7 +1593,7 @@ class PlPlayerController {
         if ((mode == FullScreenMode.vertical ||
             (mode == FullScreenMode.auto && isVertical) ||
             (mode == FullScreenMode.ratio &&
-                (isVertical || size.height / size.width < 1.25)))) {
+                (isVertical || size.height / size.width < kScreenRatio)))) {
           await verticalScreenForTwoSeconds();
         } else {
           await landscape();
@@ -1740,10 +1742,10 @@ class PlPlayerController {
       }
       return;
     }
+    _playerCount = 0;
     disableAutoEnterPip();
     setPlayCallBack(null);
     dmState.clear();
-    _playerCount = 0;
     _clearPreview();
     Utils.channel.setMethodCallHandler(null);
     _timer?.cancel();

@@ -181,7 +181,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
             if (!(mode == FullScreenMode.vertical ||
                 (mode == FullScreenMode.auto && isVertical) ||
                 (mode == FullScreenMode.ratio &&
-                    (isVertical || maxHeight / maxWidth < 1.25)))) {
+                    (isVertical || maxHeight / maxWidth < kScreenRatio)))) {
               landscape();
             }
           });
@@ -581,9 +581,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                     if (shouldShow)
                       AppBar(
                         backgroundColor: themeData.colorScheme.surface
-                            .withValues(
-                              alpha: scrollRatio,
-                            ),
+                            .withValues(alpha: scrollRatio),
                         toolbarHeight: 0,
                         systemOverlayStyle: Platform.isAndroid
                             ? SystemUiOverlayStyle(
@@ -605,7 +603,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
             onlyOneScrollInBody: true,
             pinnedHeaderSliverHeightBuilder: () {
               double pinnedHeight = this.isFullScreen || !isPortrait
-                  ? maxHeight - (isPortrait ? padding.top : 0)
+                  ? maxHeight - padding.top
                   : videoDetailController.isExpanding ||
                         videoDetailController.isCollapsing
                   ? animHeight
@@ -632,7 +630,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
             },
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               final height = isFullScreen || !isPortrait
-                  ? maxHeight - (isPortrait ? padding.top : 0)
+                  ? maxHeight - padding.top
                   : videoDetailController.isExpanding ||
                         videoDetailController.isCollapsing
                   ? animHeight
@@ -875,13 +873,10 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       final isFullScreen = this.isFullScreen;
       return Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: isFullScreen
-            ? null
-            : AppBar(backgroundColor: Colors.black, toolbarHeight: 0),
-        extendBodyBehindAppBar: true,
+        appBar: AppBar(backgroundColor: Colors.black, toolbarHeight: 0),
         body: Padding(
           padding: !isFullScreen
-              ? padding.copyWith(bottom: 0)
+              ? padding.copyWith(top: 0, bottom: 0)
               : EdgeInsets.zero,
           child: childWhenDisabledLandscapeInner(isFullScreen, padding),
         ),
@@ -893,6 +888,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     final double videoHeight = maxHeight - padding.vertical;
     final double width = videoHeight * ratio;
     final videoWidth = isFullScreen ? maxWidth : width;
+    final introWidth = maxWidth - width - padding.horizontal;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -907,7 +903,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         Offstage(
           offstage: isFullScreen,
           child: SizedBox(
-            width: maxWidth - width - padding.horizontal,
+            width: introWidth,
             height: maxHeight - padding.top,
             child: Scaffold(
               key: videoDetailController.childKey,
@@ -922,7 +918,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                       controller: videoDetailController.tabCtr,
                       children: [
                         videoIntro(
-                          width: maxWidth - width,
+                          width: introWidth,
                           height: maxHeight,
                         ),
                         if (videoDetailController.showReply) videoReplyPanel(),
@@ -1010,7 +1006,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     }
     final videoWidth = isFullScreen ? maxWidth : width;
     final double height = width * 9 / 16;
-    final videoHeight = isFullScreen ? maxHeight : height;
+    final videoHeight = isFullScreen ? maxHeight - padding.top : height;
     if (height > maxHeight) {
       return childSplit(16 / 9);
     }
@@ -1101,12 +1097,11 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     final isFullScreen = this.isFullScreen;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: isFullScreen
-          ? null
-          : AppBar(backgroundColor: Colors.black, toolbarHeight: 0),
-      extendBodyBehindAppBar: true,
+      appBar: AppBar(backgroundColor: Colors.black, toolbarHeight: 0),
       body: Padding(
-        padding: !isFullScreen ? padding.copyWith(bottom: 0) : EdgeInsets.zero,
+        padding: !isFullScreen
+            ? padding.copyWith(top: 0, bottom: 0)
+            : EdgeInsets.zero,
         child: childWhenDisabledAlmostSquareInner(isFullScreen, padding),
       ),
     );
@@ -1125,7 +1120,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       }
       final shouldShowSeasonPanel = _shouldShowSeasonPanel;
       final double height = maxHeight / 2.5;
-      final videoHeight = isFullScreen ? maxHeight : height;
+      final videoHeight = isFullScreen ? maxHeight - padding.top : height;
       final bottomHeight = maxHeight - height - padding.top;
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1376,7 +1371,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       child = plPlayer(width: maxWidth, height: maxHeight, isPipMode: true);
     } else if (!videoDetailController.horizontalScreen) {
       child = childWhenDisabled;
-    } else if (maxWidth > maxHeight * 1.25) {
+    } else if (maxWidth > maxHeight * kScreenRatio) {
       child = childWhenDisabledLandscape;
     } else if (maxWidth * (9 / 16) < (2 / 5) * maxHeight) {
       child = childWhenDisabled;
@@ -1748,7 +1743,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                 showEpisodes: showEpisodes,
                 onShowMemberPage: onShowMemberPage,
                 isPortrait: isPortrait,
-                isHorizontal: isHorizontal ?? width! > height! * 1.25,
+                isHorizontal: isHorizontal ?? width! > height! * kScreenRatio,
               ),
               if (needRelated &&
                   videoDetailController
