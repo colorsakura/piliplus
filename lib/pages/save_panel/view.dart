@@ -501,28 +501,24 @@ class _SavePanelState extends State<SavePanel> {
                                             GestureDetector(
                                               onTap: () => Utils.copyText(uri),
                                               child: Container(
-                                                width: 100,
-                                                height: 100,
-                                                padding: const EdgeInsets.all(
+                                                width: 88,
+                                                height: 88,
+                                                margin: const EdgeInsets.all(
                                                   12,
                                                 ),
-                                                child: Container(
-                                                  color: Get.isDarkMode
-                                                      ? Colors.white
-                                                      : theme
-                                                            .colorScheme
-                                                            .surface,
-                                                  padding: const EdgeInsets.all(
-                                                    3,
-                                                  ),
-                                                  child: PrettyQrView.data(
-                                                    data: uri,
-                                                    decoration:
-                                                        const PrettyQrDecoration(
-                                                          shape:
-                                                              PrettyQrSquaresSymbol(),
-                                                        ),
-                                                  ),
+                                                padding: const EdgeInsets.all(
+                                                  3,
+                                                ),
+                                                color: Get.isDarkMode
+                                                    ? Colors.white
+                                                    : theme.colorScheme.surface,
+                                                child: PrettyQrView.data(
+                                                  data: uri,
+                                                  decoration:
+                                                      const PrettyQrDecoration(
+                                                        shape:
+                                                            PrettyQrSquaresSymbol(),
+                                                      ),
                                                 ),
                                               ),
                                             ),

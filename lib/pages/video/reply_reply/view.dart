@@ -47,13 +47,13 @@ class VideoReplyReplyPanel extends CommonSlidePage {
   @override
   State<VideoReplyReplyPanel> createState() => _VideoReplyReplyPanelState();
 
-  static Future<void>? toReply(
-    int oid,
-    int rootId,
+  static Future<void>? toReply({
+    required int oid,
+    required int rootId,
     String? rpIdStr,
-    int type,
+    required int type,
     Uri? uri,
-  ) {
+  }) {
     final rpId = rpIdStr == null ? null : int.tryParse(rpIdStr);
     return Get.to(
       arguments: {
