@@ -152,13 +152,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       WakelockPlus.enable();
     }
     wakeLock = player?.stream.playing.listen(
-      (value) {
-        if (value) {
-          WakelockPlus.enable();
-        } else {
-          WakelockPlus.disable();
-        }
-      },
+      (v) => WakelockPlus.toggle(enable: v),
     );
 
     _controlsListener = plPlayerController.showControls.listen((bool val) {
@@ -234,11 +228,13 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
       _danmakuListener = plPlayerController.enableShowDanmaku.listen((value) {
         if (!value) _removeDmAction();
-        (_tapGestureRecognizer as ImmediateTapGestureRecognizer).onTapDown =
-            value ? _onTapDown : null;
+        _tapGestureRecognizer.onTapDown = value ? _onTapDown : null;
       });
     } else {
-      _tapGestureRecognizer = TapGestureRecognizer()..onTapUp = _onTapUp;
+      _tapGestureRecognizer = ImmediateTapGestureRecognizer(
+        onTapUp: _onTapUp,
+        allowedButtonsFilter: (buttons) => buttons == kPrimaryButton,
+      );
     }
 
     _doubleTapGestureRecognizer = DoubleTapGestureRecognizer()
@@ -1160,12 +1156,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       final item = ctr.findSingleDanmaku(pos);
       if (item == null) {
         _suspendedDm?.suspend = false;
-        _suspendedDm = null;
         _dmOffset.value = null;
       } else if (item != _suspendedDm) {
         _suspendedDm?.suspend = false;
         if (item.content.extra == null) {
-          _suspendedDm = null;
           _dmOffset.value = null;
           return;
         }
@@ -1197,7 +1191,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         ..onLongPressEnd = ((_) => plPlayerController.setLongPressStatus(false))
         ..onLongPressCancel = (() =>
             plPlayerController.setLongPressStatus(false));
-  late final OneSequenceGestureRecognizer _tapGestureRecognizer;
+  late final ImmediateTapGestureRecognizer _tapGestureRecognizer;
   late final DoubleTapGestureRecognizer _doubleTapGestureRecognizer;
   StreamSubscription<bool>? _danmakuListener;
 
