@@ -69,7 +69,7 @@ class VideoReplyReplyPanel extends CommonSlidePage {
               onPressed: uri == null
                   ? null
                   : () => PiliScheme.routePush(uri, businessId: type),
-              icon: const Icon(Icons.open_in_new),
+              icon: const Icon(Icons.open_in_browser),
             ),
           ],
         ),
