@@ -180,7 +180,7 @@ class PlayerFocus extends StatelessWidget {
           return true;
 
         case LogicalKeyboardKey.keyP:
-          if (Utils.isDesktop && hasPlayer) {
+          if (Utils.isDesktop && hasPlayer && !isFullScreen) {
             plPlayerController
               ..toggleDesktopPip()
               ..controlsLock.value = false;

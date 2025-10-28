@@ -110,7 +110,7 @@ class LiveHeaderControl extends StatelessWidget {
               );
             },
           ),
-          if (Platform.isAndroid || Utils.isDesktop)
+          if (Platform.isAndroid || (Utils.isDesktop && !isFullScreen))
             ComBtn(
               tooltip: '画中画',
               onTap: () async {

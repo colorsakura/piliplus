@@ -169,27 +169,28 @@ class BottomControl extends StatelessWidget {
               ),
             ),
           ),
-          ComBtn(
-            height: 30,
-            tooltip: isFullScreen ? '退出全屏' : '全屏',
-            icon: isFullScreen
-                ? const Icon(
-                    Icons.fullscreen_exit,
-                    size: 24,
-                    color: Colors.white,
-                  )
-                : const Icon(
-                    Icons.fullscreen,
-                    size: 24,
-                    color: Colors.white,
-                  ),
-            onTap: () =>
-                plPlayerController.triggerFullScreen(status: !isFullScreen),
-            onSecondaryTap: () => plPlayerController.triggerFullScreen(
-              status: !isFullScreen,
-              inAppFullScreen: true,
+          if (!plPlayerController.isDesktopPip)
+            ComBtn(
+              height: 30,
+              tooltip: isFullScreen ? '退出全屏' : '全屏',
+              icon: isFullScreen
+                  ? const Icon(
+                      Icons.fullscreen_exit,
+                      size: 24,
+                      color: Colors.white,
+                    )
+                  : const Icon(
+                      Icons.fullscreen,
+                      size: 24,
+                      color: Colors.white,
+                    ),
+              onTap: () =>
+                  plPlayerController.triggerFullScreen(status: !isFullScreen),
+              onSecondaryTap: () => plPlayerController.triggerFullScreen(
+                status: !isFullScreen,
+                inAppFullScreen: true,
+              ),
             ),
-          ),
         ],
       ),
     );

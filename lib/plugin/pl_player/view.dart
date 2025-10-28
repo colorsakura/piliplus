@@ -843,7 +843,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       BottomControlType.subtitle,
       BottomControlType.speed,
       if (flag) BottomControlType.qa,
-      BottomControlType.fullscreen,
+      if (!plPlayerController.isDesktopPip) BottomControlType.fullscreen,
     ];
 
     return Row(

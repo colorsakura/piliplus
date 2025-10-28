@@ -281,6 +281,8 @@ class PlPlayerController {
   }
 
   Future<void> enterDesktopPip() async {
+    if (isFullScreen.value) return;
+
     isDesktopPip = true;
 
     _lastWindowBounds = await windowManager.getBounds();
@@ -1572,6 +1574,7 @@ class PlPlayerController {
     bool isManualFS = true,
     FullScreenMode? mode,
   }) async {
+    if (isDesktopPip) return;
     if (isFullScreen.value == status) return;
 
     if (fsProcessing) {
