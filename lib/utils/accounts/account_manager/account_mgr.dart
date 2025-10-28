@@ -163,7 +163,9 @@ class AccountManager extends Interceptor {
       );
     }
 
-    options.headers.addAll(account.headers);
+    options.headers
+      ..addAll(account.headers)
+      ..['referer'] ??= HttpString.baseUrl;
 
     // app端不需要管理cookie
     if (path.startsWith(HttpString.appBaseUrl)) {
