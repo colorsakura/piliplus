@@ -346,7 +346,10 @@ abstract class RequestUtils {
                 if (!isManual)
                   TextButton(
                     onPressed: Get.back,
-                    child: const Text('关闭'),
+                    child: Text(
+                      '关闭',
+                      style: TextStyle(color: Get.theme.colorScheme.outline),
+                    ),
                   ),
               ],
             ),
