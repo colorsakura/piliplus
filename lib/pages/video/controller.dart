@@ -105,6 +105,7 @@ class VideoDetailController extends GetxController
   // 是否开始自动播放 存在多p的情况下，第二p需要为true
   final RxBool autoPlay = true.obs;
 
+  final videoPlayerKey = GlobalKey();
   final childKey = GlobalKey<ScaffoldState>();
 
   PlPlayerController plPlayerController = PlPlayerController.getInstance()
@@ -1087,7 +1088,7 @@ class VideoDetailController extends GetxController
     if ((autoPlay.value ||
             (plPlayerController.preInitPlayer &&
                 !plPlayerController.processing)) &&
-        childKey.currentState?.mounted == true) {
+        videoPlayerKey.currentState?.mounted == true) {
       return playerInit();
     }
   }

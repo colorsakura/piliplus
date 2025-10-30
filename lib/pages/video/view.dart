@@ -114,7 +114,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
             ((videoDetail.pages?.length ?? 0) > 1));
   }
 
-  final videoPlayerKey = GlobalKey();
   final videoReplyPanelKey = GlobalKey();
   final videoRelatedKey = GlobalKey();
   final videoIntroKey = GlobalKey();
@@ -1323,7 +1322,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     required double height,
     bool isPipMode = false,
   }) => Obx(
-    key: videoPlayerKey,
+    key: videoDetailController.videoPlayerKey,
     () =>
         videoDetailController.videoState.value is! Success ||
             !videoDetailController.autoPlay.value ||
