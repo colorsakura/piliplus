@@ -20,19 +20,19 @@ on:
             build_ios:
                 description: "Build iOS"
                 required: false
-                default: true
+                default: false
                 type: boolean
 
             build_mac:
                 description: "Build Mac"
                 required: false
-                default: true
+                default: false
                 type: boolean
 
             build_win_x64:
                 description: "Build Win-x64"
                 required: false
-                default: true
+                default: false
                 type: boolean
 
             build_linux_x64:
