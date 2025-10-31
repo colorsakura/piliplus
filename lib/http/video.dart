@@ -33,7 +33,7 @@ import 'package:PiliPlus/utils/recommend_filter.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show kDebugMode, compute;
 
 /// view层根据 status 判断渲染逻辑
 class VideoHttp {
@@ -256,8 +256,11 @@ class VideoHttp {
         );
       }
       return Error(_parseVideoErr(res.data['code'], res.data['message']));
-    } catch (err) {
-      return Error(err.toString());
+    } catch (e, s) {
+      if (kDebugMode) {
+        rethrow;
+      }
+      return Error('$e\n\n$s');
     }
   }
 

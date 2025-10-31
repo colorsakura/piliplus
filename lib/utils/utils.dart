@@ -25,6 +25,13 @@ abstract class Utils {
   static final bool isDesktop =
       Platform.isWindows || Platform.isMacOS || Platform.isLinux;
 
+  static int? safeToInt(dynamic value) => switch (value) {
+    int e => e,
+    String e => int.tryParse(e),
+    num e => e.toInt(),
+    _ => null,
+  };
+
   static Future<bool> get isWiFi async {
     try {
       return Utils.isMobile &&
