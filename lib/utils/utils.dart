@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -24,6 +25,32 @@ abstract class Utils {
   @pragma("vm:platform-const")
   static final bool isDesktop =
       Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+
+  static Future<void> saveBytes2File({
+    required String name,
+    required Uint8List bytes,
+    required List<String> allowedExtensions,
+    FileType type = FileType.custom,
+  }) async {
+    try {
+      final path = await FilePicker.platform.saveFile(
+        allowedExtensions: allowedExtensions,
+        type: type,
+        fileName: name,
+        bytes: Utils.isDesktop ? null : bytes,
+      );
+      if (path == null) {
+        SmartDialog.showToast("取消保存");
+        return;
+      }
+      if (Utils.isDesktop) {
+        await File(path).writeAsBytes(bytes);
+      }
+      SmartDialog.showToast("已保存");
+    } catch (e) {
+      SmartDialog.showToast("保存失败: $e");
+    }
+  }
 
   static int? safeToInt(dynamic value) => switch (value) {
     int e => e,

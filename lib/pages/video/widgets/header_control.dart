@@ -42,7 +42,6 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/utils/video_utils.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:dio/dio.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -1058,20 +1057,11 @@ class HeaderControlState extends State<HeaderControl> {
                             );
                             final name =
                                 '${introController.videoDetail.value.title}-${videoDetailCtr.bvid}-${videoDetailCtr.cid.value}-${item.lanDoc}.json';
-                            final path = await FilePicker.platform.saveFile(
+                            Utils.saveBytes2File(
+                              name: name,
+                              bytes: bytes,
                               allowedExtensions: const ['json'],
-                              type: FileType.custom,
-                              fileName: name,
-                              bytes: Utils.isDesktop ? null : bytes,
                             );
-                            if (path == null) {
-                              SmartDialog.showToast("取消保存");
-                              return;
-                            }
-                            if (Utils.isDesktop) {
-                              await File(path).writeAsBytes(bytes);
-                            }
-                            SmartDialog.showToast("已保存");
                           }
                         } catch (e) {
                           if (kDebugMode) rethrow;

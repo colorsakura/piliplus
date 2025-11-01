@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io' show File;
 
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
@@ -303,21 +304,20 @@ class _WhisperDetailPageState
                     );
                   } else {
                     try {
-                      XFile? pickedFile = await imagePicker.pickImage(
+                      final XFile? pickedFile = await imagePicker.pickImage(
                         source: ImageSource.gallery,
                         imageQuality: 100,
                       );
                       if (pickedFile != null) {
+                        final path = pickedFile.path;
                         SmartDialog.showLoading(msg: '正在上传图片');
                         final result = await MsgHttp.uploadBfs(
-                          path: pickedFile.path,
+                          path: path,
                           biz: 'im',
                         );
                         if (result['status']) {
                           String mimeType =
-                              lookupMimeType(
-                                pickedFile.path,
-                              )?.split('/').getOrNull(1) ??
+                              lookupMimeType(path)?.split('/').getOrNull(1) ??
                               'jpg';
                           UploadBfsResData data = result['data'];
                           Map picMsg = {
@@ -329,10 +329,16 @@ class _WhisperDetailPageState
                             'size': data.imgSize,
                           };
                           SmartDialog.showLoading(msg: '正在发送');
-                          await _whisperDetailController.sendMsg(
-                            picMsg: picMsg,
-                            onClearText: editController.clear,
-                          );
+                          await _whisperDetailController
+                              .sendMsg(
+                                picMsg: picMsg,
+                                onClearText: editController.clear,
+                              )
+                              .whenComplete(() {
+                                if (Utils.isMobile) {
+                                  File(path).tryDel();
+                                }
+                              });
                         } else {
                           SmartDialog.dismiss();
                           SmartDialog.showToast(result['msg']);

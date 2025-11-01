@@ -18,7 +18,6 @@ import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/update.dart';
 import 'package:PiliPlus/utils/utils.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart' hide ListTile;
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -339,30 +338,17 @@ Future<void> showInportExportDialog<T>(
           ListTile(
             dense: true,
             title: const Text('导出文件至本地', style: style),
-            onTap: () async {
+            onTap: () {
               Get.back();
               final res = utf8.encode(toJson());
               final name =
                   'piliplus_${label}_${context.isTablet ? 'pad' : 'phone'}_'
                   '${DateFormat('yyyyMMddHHmmss').format(DateTime.now())}.json';
-              try {
-                final path = await FilePicker.platform.saveFile(
-                  allowedExtensions: ['json'],
-                  type: FileType.custom,
-                  fileName: name,
-                  bytes: Utils.isDesktop ? null : res,
-                );
-                if (path == null) {
-                  SmartDialog.showToast("取消保存");
-                  return;
-                }
-                if (Utils.isDesktop) {
-                  await File(path).writeAsBytes(res);
-                }
-                SmartDialog.showToast("已保存");
-              } catch (e) {
-                SmartDialog.showToast("保存失败: $e");
-              }
+              Utils.saveBytes2File(
+                name: name,
+                bytes: res,
+                allowedExtensions: const ['json'],
+              );
             },
           ),
         ListTile(

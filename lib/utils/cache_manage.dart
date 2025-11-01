@@ -18,9 +18,8 @@ abstract class CacheManage {
         final dir = Directory('${tempDirectory.path}/libCachedImageData');
         if (dir.existsSync()) {
           return await getTotalSizeOfFilesInDir(dir, maxSize);
-        } else {
-          return 0;
         }
+        return 0;
       }
 
       if (tempDirectory.existsSync()) {
