@@ -72,6 +72,7 @@ class _WhisperDetailPageState
           ),
         ),
         title: GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: () {
             if (_whisperDetailController.mid != null) {
               feedBack();
@@ -79,6 +80,7 @@ class _WhisperDetailPageState
             }
           },
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               NetworkImgLayer(
                 width: 34,

@@ -191,6 +191,7 @@ class _DynTopicPageState extends State<DynTopicPage> with DynMixin {
                       '/member?mid=${response.topicCreator!.uid}',
                     ),
                     child: Row(
+                      spacing: 10,
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         NetworkImgLayer(
@@ -199,7 +200,6 @@ class _DynTopicPageState extends State<DynTopicPage> with DynMixin {
                           src: response.topicCreator!.face!,
                           type: ImageType.avatar,
                         ),
-                        const SizedBox(width: 10),
                         Flexible(
                           child: Text(
                             response.topicCreator!.name!,
