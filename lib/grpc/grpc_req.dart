@@ -171,9 +171,9 @@ class GrpcReq {
           final msgBytes = base64Decode(msg);
           try {
             final grpcMsg = Status.fromBuffer(msgBytes);
-            final details = grpcMsg.details.map(
-              (e) => Status.fromBuffer(e.value),
-            );
+            final details = grpcMsg.details
+                .map((e) => Status.fromBuffer(e.value))
+                .toList();
             code = details.firstOrNull?.code;
             // UNKNOWN : -400 : msg
             final errMsg = details.map((e) => e.message).join('\n');
