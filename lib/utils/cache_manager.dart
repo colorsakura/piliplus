@@ -7,13 +7,13 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:path_provider/path_provider.dart';
 
-abstract class CacheManage {
+abstract class CacheManager {
   // 获取缓存目录
   static Future<int> loadApplicationCache([
     final num maxSize = double.infinity,
   ]) async {
     try {
-      Directory tempDirectory = await getTemporaryDirectory();
+      final Directory tempDirectory = await getTemporaryDirectory();
       if (Utils.isDesktop) {
         final dir = Directory('${tempDirectory.path}/libCachedImageData');
         if (dir.existsSync()) {
@@ -62,7 +62,7 @@ abstract class CacheManage {
   // 清除 Library/Caches 目录及文件缓存
   static Future<void> clearLibraryCache() async {
     try {
-      var tempDirectory = await getTemporaryDirectory();
+      final Directory tempDirectory = await getTemporaryDirectory();
       if (Utils.isDesktop) {
         final dir = Directory('${tempDirectory.path}/libCachedImageData');
         if (dir.existsSync()) {

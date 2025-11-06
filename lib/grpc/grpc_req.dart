@@ -50,7 +50,6 @@ class GrpcReq {
         platform: _device,
       ).writeToBuffer(),
     );
-    options = Options(headers: headers, responseType: ResponseType.bytes);
   }
 
   static final Map<String, String> headers = {
@@ -112,7 +111,7 @@ class GrpcReq {
     'x-bili-exps-bin': '',
   };
 
-  static Options options = Options(
+  static final Options options = Options(
     headers: headers,
     responseType: ResponseType.bytes,
   );
@@ -147,8 +146,8 @@ class GrpcReq {
       options: options,
     );
 
-    if (response.data is Map) {
-      return Error(response.data['message']);
+    if (response.data case final Map map) {
+      return Error(map['message']);
     }
 
     if (response.headers.value('Grpc-Status') == '0') {

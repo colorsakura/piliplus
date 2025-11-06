@@ -190,7 +190,7 @@ class _WhisperDetailPageState
                     eInfos: _whisperDetailController.eInfos,
                     onLongPress:
                         item.senderUid.toInt() ==
-                            _whisperDetailController.accountService.mid
+                            _whisperDetailController.account.mid
                         ? () => onLongPress(index, item)
                         : null,
                   );

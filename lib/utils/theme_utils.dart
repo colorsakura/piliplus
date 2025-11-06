@@ -2,7 +2,6 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:flex_seed_scheme/flex_seed_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -104,7 +103,6 @@ abstract class ThemeUtils {
       // ignore: deprecated_member_use
       sliderTheme: const SliderThemeData(year2023: false),
       tooltipTheme: TooltipThemeData(
-        preferBelow: Utils.isDesktop,
         textStyle: const TextStyle(
           color: Colors.white,
           fontSize: 14,

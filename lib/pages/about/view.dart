@@ -10,7 +10,7 @@ import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/services/logger.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
-import 'package:PiliPlus/utils/cache_manage.dart';
+import 'package:PiliPlus/utils/cache_manager.dart';
 import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
 import 'package:PiliPlus/utils/login_utils.dart';
@@ -58,8 +58,8 @@ class _AboutPageState extends State<AboutPage> {
   }
 
   Future<void> getCacheSize() async {
-    cacheSize.value = CacheManage.formatSize(
-      await CacheManage.loadApplicationCache(),
+    cacheSize.value = CacheManager.formatSize(
+      await CacheManager.loadApplicationCache(),
     );
   }
 
@@ -215,7 +215,7 @@ Commit Hash: ${BuildConfig.commitHash}''',
                   onConfirm: () async {
                     SmartDialog.showLoading(msg: '正在清除...');
                     try {
-                      await CacheManage.clearLibraryCache();
+                      await CacheManager.clearLibraryCache();
                       SmartDialog.showToast('清除成功');
                     } catch (err) {
                       SmartDialog.showToast(err.toString());
@@ -242,9 +242,7 @@ Commit Hash: ${BuildConfig.commitHash}''',
             onTap: () => showInportExportDialog<Map>(
               context,
               title: '登录信息',
-              toJson: () => const JsonEncoder.withIndent(
-                '    ',
-              ).convert(Accounts.account.toMap()),
+              toJson: () => Utils.jsonEncoder.convert(Accounts.account.toMap()),
               fromJson: (json) async {
                 final res = json.map(
                   (key, value) => MapEntry(key, LoginAccount.fromJson(value)),
@@ -304,6 +302,7 @@ Commit Hash: ${BuildConfig.commitHash}''',
                           GStorage.video.clear(),
                           GStorage.historyWord.clear(),
                           Accounts.clear(),
+                          GStorage.watchProgress.clear(),
                         ]);
                         SmartDialog.showToast('重置成功');
                       },
@@ -377,7 +376,7 @@ Future<void> showInportExportDialog<T>(
             late final String formatText;
             try {
               json = jsonDecode(text);
-              formatText = const JsonEncoder.withIndent('    ').convert(json);
+              formatText = Utils.jsonEncoder.convert(json);
             } catch (e) {
               SmartDialog.showToast('解析json失败：$e');
               return;

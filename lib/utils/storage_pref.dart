@@ -220,7 +220,7 @@ abstract class Pref {
 
   static String get defaultDecode => _setting.get(
     SettingBoxKey.defaultDecode,
-    defaultValue: VideoDecodeFormatType.values.last.codes.first,
+    defaultValue: VideoDecodeFormatType.AVC.codes.first,
   );
 
   static String get secondDecode => _setting.get(
@@ -868,4 +868,6 @@ abstract class Pref {
 
   static bool get setSystemBrightness =>
       _setting.get(SettingBoxKey.setSystemBrightness, defaultValue: false);
+
+  static String? get downloadPath => _setting.get(SettingBoxKey.downloadPath);
 }

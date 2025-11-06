@@ -46,7 +46,7 @@ class _DynTopicPageState extends State<DynTopicPage> with DynMixin {
       resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          if (_controller.accountService.isLogin.value) {
+          if (_controller.isLogin) {
             CreateDynPanel.onCreateDyn(
               context,
               topic: Pair(
@@ -321,7 +321,7 @@ class _DynTopicPageState extends State<DynTopicPage> with DynMixin {
                   PopupMenuItem(
                     child: const Text('举报'),
                     onTap: () {
-                      if (!_controller.accountService.isLogin.value) {
+                      if (!_controller.isLogin) {
                         SmartDialog.showToast('账号未登录');
                         return;
                       }

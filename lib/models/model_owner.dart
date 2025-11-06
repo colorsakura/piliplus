@@ -25,4 +25,10 @@ class Owner implements BaseOwner {
     name = json["name"];
     face = json['face'];
   }
+
+  Map<String, dynamic> toJson() => {
+    'mid': mid,
+    'name': name,
+    'face': face,
+  };
 }

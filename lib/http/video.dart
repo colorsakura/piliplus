@@ -229,18 +229,19 @@ class VideoHttp {
         switch (videoType) {
           case VideoType.ugc:
             data = PlayUrlModel.fromJson(res.data['data']);
-
+            break;
           case VideoType.pugv:
-            var result = res.data['data'];
+            final result = res.data['data'];
             data = PlayUrlModel.fromJson(result)
               ..lastPlayTime =
                   result?['play_view_business_info']?['user_status']?['watch_progress']?['current_watch_progress'];
-
+            break;
           case VideoType.pgc:
-            var result = res.data['result'];
+            final result = res.data['result'];
             data = PlayUrlModel.fromJson(result['video_info'])
               ..lastPlayTime =
                   result?['play_view_business_info']?['user_status']?['watch_progress']?['current_watch_progress'];
+            break;
         }
         return Success(data);
       } else if (epid != null && videoType == VideoType.ugc) {

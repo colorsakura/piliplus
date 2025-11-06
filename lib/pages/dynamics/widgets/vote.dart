@@ -88,7 +88,7 @@ class _VotePanelState extends State<VotePanel> {
                   itemCount: _voteInfo.options.length,
                   itemBuilder: (context, index) => _buildOptions(index),
                   separatorBuilder: (context, index) =>
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 6),
                 ),
         ),
       ),
