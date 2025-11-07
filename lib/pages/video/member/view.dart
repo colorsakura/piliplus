@@ -11,6 +11,8 @@ import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/member/info.dart';
 import 'package:PiliPlus/models_new/space/space_archive/item.dart';
 import 'package:PiliPlus/models_new/video/video_detail/episode.dart';
+import 'package:PiliPlus/pages/fan/view.dart';
+import 'package:PiliPlus/pages/follow/view.dart';
 import 'package:PiliPlus/pages/member_video/widgets/video_card_h_member_video.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
@@ -289,12 +291,14 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
                     : '',
                 onTap: () {
                   if (index == 0) {
-                    Get.toNamed(
-                      '/fan?mid=${widget.mid}&name=${memberInfoModel.name}',
+                    FansPage.toFansPage(
+                      mid: widget.mid,
+                      name: memberInfoModel.name,
                     );
                   } else if (index == 2) {
-                    Get.toNamed(
-                      '/follow?mid=${widget.mid}&name=${memberInfoModel.name}',
+                    FollowPage.toFollowPage(
+                      mid: widget.mid,
+                      name: memberInfoModel.name,
                     );
                   }
                 },
