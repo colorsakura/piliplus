@@ -569,7 +569,7 @@ abstract class Pref {
       _setting.get(SettingBoxKey.enableLog, defaultValue: true);
 
   static bool get disableAudioCDN =>
-      _setting.get(SettingBoxKey.disableAudioCDN, defaultValue: true);
+      _setting.get(SettingBoxKey.disableAudioCDN, defaultValue: false);
 
   static int get minDurationForRcmd =>
       _setting.get(SettingBoxKey.minDurationForRcmd, defaultValue: 0);
