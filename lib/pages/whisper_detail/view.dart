@@ -300,7 +300,10 @@ class _WhisperDetailPageState
                   if (enablePublish) {
                     _whisperDetailController.sendMsg(
                       message: editController.rawText,
-                      onClearText: editController.clear,
+                      onClearText: () {
+                        editController.clear();
+                        this.enablePublish.value = false;
+                      },
                     );
                   } else {
                     try {
