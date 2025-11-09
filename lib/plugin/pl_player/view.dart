@@ -204,14 +204,22 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         try {
           _brightnessValue.value =
               await ScreenBrightnessPlatform.instance.application;
-          _listener = ScreenBrightnessPlatform
-              .instance
-              .onApplicationScreenBrightnessChanged
-              .listen((double value) {
-                if (mounted) {
-                  _brightnessValue.value = value;
-                }
-              });
+
+          void listener(double value) {
+            if (mounted) {
+              _brightnessValue.value = value;
+            }
+          }
+
+          _listener = Platform.isIOS || plPlayerController.setSystemBrightness
+              ? ScreenBrightnessPlatform
+                    .instance
+                    .onSystemScreenBrightnessChanged
+                    .listen(listener)
+              : ScreenBrightnessPlatform
+                    .instance
+                    .onApplicationScreenBrightnessChanged
+                    .listen(listener);
         } catch (_) {}
       });
     }
@@ -264,9 +272,15 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   Future<void> setBrightness(double value) async {
     try {
-      await ScreenBrightnessPlatform.instance.setApplicationScreenBrightness(
-        value,
-      );
+      if (Platform.isIOS || plPlayerController.setSystemBrightness) {
+        await ScreenBrightnessPlatform.instance.setSystemScreenBrightness(
+          value,
+        );
+      } else {
+        await ScreenBrightnessPlatform.instance.setApplicationScreenBrightness(
+          value,
+        );
+      }
     } catch (_) {}
     _brightnessIndicator.value = true;
     _brightnessTimer?.cancel();

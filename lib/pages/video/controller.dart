@@ -110,6 +110,7 @@ class VideoDetailController extends GetxController
 
   PlPlayerController plPlayerController = PlPlayerController.getInstance()
     ..setCurrBrightness(-1.0);
+  bool get setSystemBrightness => plPlayerController.setSystemBrightness;
 
   late VideoItem firstVideo;
   late AudioItem firstAudio;

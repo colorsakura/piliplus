@@ -326,7 +326,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     );
 
     if (!Get.previousRoute.startsWith('/video')) {
-      if (Utils.isMobile) {
+      if (Platform.isAndroid && !videoDetailController.setSystemBrightness) {
         ScreenBrightnessPlatform.instance.resetApplicationScreenBrightness();
       }
       PlPlayerController.setPlayCallBack(null);
@@ -371,7 +371,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
     WidgetsBinding.instance.removeObserver(this);
 
-    if (Utils.isMobile) {
+    if (Platform.isAndroid && !videoDetailController.setSystemBrightness) {
       ScreenBrightnessPlatform.instance.resetApplicationScreenBrightness();
     }
 
@@ -418,7 +418,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
     introController.startTimer();
 
-    if (Utils.isMobile && mounted) {
+    if (mounted &&
+        Platform.isAndroid &&
+        !videoDetailController.setSystemBrightness) {
       if (videoDetailController.brightness != null) {
         plPlayerController?.setCurrBrightness(
           videoDetailController.brightness!,

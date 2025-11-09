@@ -98,6 +98,7 @@ class PlPlayerController {
   final RxDouble _currentVolume = RxDouble(
     Utils.isDesktop ? Pref.desktopVolume : 1.0,
   );
+  final setSystemBrightness = Pref.setSystemBrightness;
   final RxDouble _currentBrightness = (-1.0).obs;
 
   final RxBool _showControls = false.obs;
