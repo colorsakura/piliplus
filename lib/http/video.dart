@@ -828,7 +828,13 @@ class VideoHttp {
     }
   }
 
-  static Future playInfo({String? aid, String? bvid, required int cid}) async {
+  static Future playInfo({
+    String? aid,
+    String? bvid,
+    required int cid,
+    dynamic seasonId,
+    dynamic epId,
+  }) async {
     assert(aid != null || bvid != null);
     var res = await Request().get(
       Api.playInfo,
@@ -836,6 +842,8 @@ class VideoHttp {
         'aid': ?aid,
         'bvid': ?bvid,
         'cid': cid,
+        'season_id': ?seasonId,
+        'ep_id': ?epId,
       }),
     );
     if (res.data['code'] == 0) {
@@ -848,32 +856,31 @@ class VideoHttp {
     }
   }
 
+  static String _subtitleTimecode(num seconds) {
+    int h = seconds ~/ 3600;
+    seconds %= 3600;
+    int m = seconds ~/ 60;
+    seconds %= 60;
+    String sms = seconds.toStringAsFixed(3).padLeft(6, '0');
+    return h == 0
+        ? "${m.toString().padLeft(2, '0')}:$sms"
+        : "${h.toString().padLeft(2, '0')}:${m.toString().padLeft(2, '0')}:$sms";
+  }
+
+  static String processList(List list) {
+    final sb = StringBuffer('WEBVTT\n\n')
+      ..writeAll(
+        list.map(
+          (item) =>
+              '${item?['sid'] ?? 0}\n${_subtitleTimecode(item['from'])} --> ${_subtitleTimecode(item['to'])}\n${item['content'].trim()}',
+        ),
+        '\n\n',
+      );
+    return sb.toString();
+  }
+
   static Future<String?> vttSubtitles(String subtitleUrl) async {
-    String subtitleTimecode(num seconds) {
-      int h = seconds ~/ 3600;
-      seconds %= 3600;
-      int m = seconds ~/ 60;
-      seconds %= 60;
-      String sms = seconds.toStringAsFixed(3).padLeft(6, '0');
-      return h == 0
-          ? "${m.toString().padLeft(2, '0')}:$sms"
-          : "${h.toString().padLeft(2, '0')}:${m.toString().padLeft(2, '0')}:$sms";
-    }
-
-    String processList(List list) {
-      final sb = StringBuffer('WEBVTT\n\n')
-        ..writeAll(
-          list.map(
-            (item) =>
-                '${item?['sid'] ?? 0}\n${subtitleTimecode(item['from'])} --> ${subtitleTimecode(item['to'])}\n${item['content'].trim()}',
-          ),
-          '\n\n',
-        );
-      return sb.toString();
-    }
-
     var res = await Request().get("https:$subtitleUrl");
-
     if (res.data?['body'] case List list) {
       return compute<List, String>(processList, list);
     }

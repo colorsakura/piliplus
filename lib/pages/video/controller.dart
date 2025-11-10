@@ -1477,7 +1477,7 @@ class VideoDetailController extends GetxController
   }
 
   RxList<Subtitle> subtitles = RxList<Subtitle>();
-  late final Map<int, String> _vttSubtitles = {};
+  late final Map<int, String> vttSubtitles = {};
   late final RxInt vttSubtitlesIndex = (-1).obs;
   late final RxBool showVP = true.obs;
   late final RxList<Segment> viewPointList = <Segment>[].obs;
@@ -1493,17 +1493,18 @@ class VideoDetailController extends GetxController
     }
 
     void setSub(String subtitle) {
+      final sub = subtitles[index - 1];
       plPlayerController.videoPlayerController?.setSubtitleTrack(
         SubtitleTrack.data(
           subtitle,
-          title: subtitles[index - 1].lanDoc,
-          language: subtitles[index - 1].lan,
+          title: sub.lanDoc,
+          language: sub.lan,
         ),
       );
       vttSubtitlesIndex.value = index;
     }
 
-    String? subtitle = _vttSubtitles[index - 1];
+    String? subtitle = vttSubtitles[index - 1];
     if (subtitle != null) {
       setSub(subtitle);
     } else {
@@ -1511,7 +1512,7 @@ class VideoDetailController extends GetxController
         subtitles[index - 1].subtitleUrl!,
       );
       if (result != null) {
-        _vttSubtitles[index - 1] = result;
+        vttSubtitles[index - 1] = result;
         setSub(result);
       }
     }
@@ -1548,12 +1549,17 @@ class VideoDetailController extends GetxController
   late bool continuePlayingPart = Pref.continuePlayingPart;
 
   Future<void> _queryPlayInfo() async {
-    _vttSubtitles.clear();
+    vttSubtitles.clear();
     vttSubtitlesIndex.value = 0;
     if (plPlayerController.showViewPoints) {
       viewPointList.clear();
     }
-    var res = await VideoHttp.playInfo(bvid: bvid, cid: cid.value);
+    var res = await VideoHttp.playInfo(
+      bvid: bvid,
+      cid: cid.value,
+      seasonId: seasonId,
+      epId: epId,
+    );
     if (res['status']) {
       PlayInfoData playInfo = res['data'];
       // interactive video
@@ -1699,6 +1705,11 @@ class VideoDetailController extends GetxController
     // danmaku
     savedDanmaku = null;
 
+    // subtitle
+    subtitles.clear();
+    vttSubtitlesIndex.value = -1;
+    vttSubtitles.clear();
+
     if (!isFileSource) {
       // language
       languages.value = null;
@@ -1708,11 +1719,6 @@ class VideoDetailController extends GetxController
       if (plPlayerController.showDmChart) {
         dmTrend.value = null;
       }
-
-      // subtitle
-      subtitles.clear();
-      vttSubtitlesIndex.value = -1;
-      _vttSubtitles.clear();
 
       // view point
       if (plPlayerController.showViewPoints) {

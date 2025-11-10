@@ -666,20 +666,30 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   return [
                     PopupMenuItem<int>(
                       value: 0,
+                      height: 35,
                       onTap: () => videoDetailController.setSubtitle(0),
                       child: const Text(
                         "关闭字幕",
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                        ),
                       ),
                     ),
                     ...videoDetailController.subtitles.indexed.map((e) {
                       return PopupMenuItem<int>(
                         value: e.$1 + 1,
+                        height: 35,
                         onTap: () =>
                             videoDetailController.setSubtitle(e.$1 + 1),
                         child: Text(
                           "${e.$2.lanDoc}",
-                          style: const TextStyle(color: Colors.white),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                          ),
                         ),
                       );
                     }),
@@ -870,10 +880,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         BottomControlType.viewPoints,
       if (isNotFileSource || anySeason) BottomControlType.episode,
       if (flag) BottomControlType.fit,
-      if (isNotFileSource) ...[
-        BottomControlType.aiTranslate,
-        BottomControlType.subtitle,
-      ],
+      if (isNotFileSource) BottomControlType.aiTranslate,
+      BottomControlType.subtitle,
       BottomControlType.speed,
       if (isNotFileSource && flag) BottomControlType.qa,
       if (!plPlayerController.isDesktopPip) BottomControlType.fullscreen,
