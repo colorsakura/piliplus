@@ -324,7 +324,7 @@ class HeaderControlState extends State<HeaderControl> {
                   leading: const Icon(Icons.hourglass_top_outlined, size: 20),
                   title: const Text('定时关闭', style: titleStyle),
                 ),
-                if (!isFileSource)
+                if (!isFileSource) ...[
                   ListTile(
                     dense: true,
                     onTap: () {
@@ -337,7 +337,6 @@ class HeaderControlState extends State<HeaderControl> {
                     ),
                     title: const Text('播放地址', style: titleStyle),
                   ),
-                if (!isFileSource)
                   ListTile(
                     dense: true,
                     onTap: () {
@@ -350,6 +349,7 @@ class HeaderControlState extends State<HeaderControl> {
                     leading: const Icon(Icons.refresh_outlined, size: 20),
                     title: const Text('重载视频', style: titleStyle),
                   ),
+                ],
                 ListTile(
                   dense: true,
                   leading: const Icon(

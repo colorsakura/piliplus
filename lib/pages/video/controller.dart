@@ -1226,6 +1226,7 @@ class VideoDetailController extends GetxController
   final Rx<List<LanguageItem>?> languages = Rx<List<LanguageItem>?>(null);
   final Rx<String?> currLang = Rx<String?>(null);
   void setLanguage(String language) {
+    if (currLang.value == language) return;
     if (!isLoginVideo) {
       SmartDialog.showToast('账号未登录');
       return;

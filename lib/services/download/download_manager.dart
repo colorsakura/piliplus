@@ -93,8 +93,7 @@ class DownloadManager {
         _status = DownloadStatus.completed;
         onTaskComplete();
       }
-      closeAndDelete(delete: isFailed);
-      _complete();
+      closeAndDelete(delete: isFailed).whenComplete(_complete);
       return;
     }
 
