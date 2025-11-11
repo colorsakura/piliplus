@@ -654,25 +654,29 @@ abstract class PageUtils {
       barrierLabel: '',
       barrierDismissible: true,
       pageBuilder: (buildContext, animation, secondaryAnimation) {
-        return Get.context!.isPortrait
-            ? SafeArea(
-                child: Column(
-                  children: [
-                    const Spacer(flex: 3),
-                    Expanded(flex: 7, child: child),
-                    if (isFullScreen() && padding != null)
-                      SizedBox(height: padding),
-                  ],
-                ),
-              )
-            : SafeArea(
-                child: Row(
-                  children: [
-                    const Spacer(),
-                    Expanded(child: child),
-                  ],
-                ),
-              );
+        if (Get.context!.isPortrait) {
+          return SafeArea(
+            child: FractionallySizedBox(
+              heightFactor: 0.7,
+              widthFactor: 1.0,
+              alignment: Alignment.bottomCenter,
+              child: isFullScreen() && padding != null
+                  ? Padding(
+                      padding: EdgeInsets.only(bottom: padding),
+                      child: child,
+                    )
+                  : child,
+            ),
+          );
+        }
+        return SafeArea(
+          child: FractionallySizedBox(
+            widthFactor: 0.5,
+            heightFactor: 1.0,
+            alignment: Alignment.centerRight,
+            child: child,
+          ),
+        );
       },
       transitionDuration: const Duration(milliseconds: 350),
       transitionBuilder: (context, animation, secondaryAnimation, child) {

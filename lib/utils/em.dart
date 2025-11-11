@@ -1,5 +1,3 @@
-import 'package:html/parser.dart' show parse;
-
 abstract class Em {
   static final _exp = RegExp('<[^>]*>([^<]*)</[^>]*>');
 
@@ -19,16 +17,18 @@ abstract class Em {
       },
       onNonMatch: (String str) {
         if (str != '') {
-          str = decodeHtmlEntities(str);
+          str = str
+              .replaceAll('&lt;', '<')
+              .replaceAll('&gt;', '>')
+              .replaceAll('&quot;', '"')
+              .replaceAll('&apos;', "'")
+              .replaceAll('&nbsp;', " ")
+              .replaceAll('&amp;', "&");
           res.add((isEm: false, text: str));
         }
         return '';
       },
     );
     return res;
-  }
-
-  static String decodeHtmlEntities(String title) {
-    return parse(title).body?.text ?? title;
   }
 }

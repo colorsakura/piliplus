@@ -324,18 +324,19 @@ class HeaderControlState extends State<HeaderControl> {
                   leading: const Icon(Icons.hourglass_top_outlined, size: 20),
                   title: const Text('定时关闭', style: titleStyle),
                 ),
-                ListTile(
-                  dense: true,
-                  onTap: () {
-                    Get.back();
-                    videoDetailCtr.editPlayUrl();
-                  },
-                  leading: const Icon(
-                    Icons.link,
-                    size: 20,
+                if (!isFileSource)
+                  ListTile(
+                    dense: true,
+                    onTap: () {
+                      Get.back();
+                      videoDetailCtr.editPlayUrl();
+                    },
+                    leading: const Icon(
+                      Icons.link,
+                      size: 20,
+                    ),
+                    title: const Text('播放地址', style: titleStyle),
                   ),
-                  title: const Text('播放地址', style: titleStyle),
-                ),
                 if (!isFileSource)
                   ListTile(
                     dense: true,

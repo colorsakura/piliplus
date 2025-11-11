@@ -878,7 +878,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       if (plPlayerController.isAnim) BottomControlType.superResolution,
       if (isNotFileSource && plPlayerController.showViewPoints)
         BottomControlType.viewPoints,
-      if (isNotFileSource || anySeason) BottomControlType.episode,
+      if (isNotFileSource && anySeason) BottomControlType.episode,
       if (flag) BottomControlType.fit,
       if (isNotFileSource) BottomControlType.aiTranslate,
       BottomControlType.subtitle,
