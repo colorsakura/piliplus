@@ -40,7 +40,11 @@ dependencies:
   # 动态取色
   dynamic_color: ^1.8.1
 
-  get: ^4.6.6
+  # get: ^4.7.2
+  get:
+    git:
+      url: https://github.com/bggRGjQaUbCoE/getx.git
+      ref: version_4.7.2
 
   # 网络
   dio: ^5.7.0
