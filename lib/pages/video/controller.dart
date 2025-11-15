@@ -1125,7 +1125,7 @@ class VideoDetailController extends GetxController
       currentDecodeFormats = VideoDecodeFormatType.fromString(video.codecs!);
     }
     firstVideo = video;
-    videoUrl = VideoUtils.getCdnUrl(firstVideo);
+    videoUrl = VideoUtils.getCdnUrl(firstVideo.playUrls);
 
     /// 根据currentAudioQa 重新设置audioUrl
     if (currentAudioQa != null) {
@@ -1133,7 +1133,7 @@ class VideoDetailController extends GetxController
         (i) => i.id == currentAudioQa!.code,
         orElse: () => data.dash!.audio!.first,
       );
-      audioUrl = VideoUtils.getCdnUrl(firstAudio);
+      audioUrl = VideoUtils.getCdnUrl(firstAudio.playUrls, isAudio: true);
     }
 
     playerInit();
@@ -1308,7 +1308,7 @@ class VideoDetailController extends GetxController
       }
       if (data.dash == null && data.durl != null) {
         final first = data.durl!.first;
-        videoUrl = first.backupUrl?.lastOrNull ?? first.url!;
+        videoUrl = VideoUtils.getCdnUrl(first.playUrls);
         audioUrl = '';
 
         // 实际为FLV/MP4格式，但已被淘汰，这里仅做兜底处理
@@ -1395,7 +1395,7 @@ class VideoDetailController extends GetxController
       );
       setVideoHeight();
 
-      videoUrl = VideoUtils.getCdnUrl(firstVideo);
+      videoUrl = VideoUtils.getCdnUrl(firstVideo.playUrls);
 
       /// 优先顺序 设置中指定质量 -> 当前可选的最高质量
       AudioItem? firstAudio;
@@ -1414,7 +1414,7 @@ class VideoDetailController extends GetxController
           (e) => e.id == closestNumber,
           orElse: () => audioList.first,
         );
-        audioUrl = VideoUtils.getCdnUrl(firstAudio);
+        audioUrl = VideoUtils.getCdnUrl(firstAudio.playUrls, isAudio: true);
         if (firstAudio.id case final int id?) {
           currentAudioQa = AudioQuality.fromCode(id);
         }
@@ -2001,13 +2001,14 @@ class VideoDetailController extends GetxController
     );
     SmartDialog.dismiss();
     if (res.isSuccess) {
-      final PlayUrlModel data = res.data;
+      final data = res.data;
       final first = data.durl?.firstOrNull;
-      final url = first?.backupUrl?.lastOrNull ?? first?.url;
-      if (url == null || url.isEmpty) {
+      if (first == null || first.playUrls.isEmpty) {
         SmartDialog.showToast('不支持投屏');
         return;
       }
+      final url = VideoUtils.getCdnUrl(first.playUrls);
+
       String? title;
       try {
         if (isUgc) {
