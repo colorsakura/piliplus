@@ -109,6 +109,26 @@ class VideoCardV extends StatelessWidget {
                                 videoItem.duration,
                               ),
                             ),
+                          Positioned(
+                            bottom: 6,
+                            left: 7,
+                            child: Row(
+                              spacing: 5,
+                              children: [
+                                StatWidget(
+                                  type: StatType.play,
+                                  value: videoItem.stat.view,
+                                  iconSize: 10,
+                                ),
+                                if (videoItem.goto != 'picture')
+                                  StatWidget(
+                                    type: StatType.danmaku,
+                                    value: videoItem.stat.danmu,
+                                    iconSize: 10,
+                                  ),
+                              ],
+                            ),
+                          ),
                         ],
                       );
                     },
