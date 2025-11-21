@@ -99,51 +99,51 @@ class VideoCardV extends StatelessWidget {
                             height: maxHeight,
                             radius: 0,
                           ),
-                          if (videoItem.duration > 0)
-                            Positioned(
-                              bottom: 6,
-                              right: 7,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    StatType.play.iconData,
-                                    semanticLabel: StatType.play.label,
-                                    size: 10,
-                                    color: Theme.of(context).colorScheme.outline
-                                        .withValues(alpha: 0.8),
-                                  ),
-                                  const SizedBox(width: 2),
-                                  Text(
-                                    DurationUtils.formatDuration(
-                                      videoItem.duration,
-                                    ),
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
                           Positioned(
                             bottom: 6,
                             left: 7,
-                            child: Row(
-                              spacing: 5,
-                              children: [
-                                StatWidget(
-                                  type: StatType.play,
-                                  value: videoItem.stat.view,
-                                  iconSize: 10,
-                                ),
-                                if (videoItem.goto != 'picture')
-                                  StatWidget(
-                                    type: StatType.danmaku,
-                                    value: videoItem.stat.danmu,
-                                    iconSize: 10,
+                            right: 7,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 4,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withValues(alpha: 0.6),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    spacing: 5,
+                                    children: [
+                                      StatWidget(
+                                        type: StatType.play,
+                                        value: videoItem.stat.view,
+                                        iconSize: 10,
+                                      ),
+                                      if (videoItem.goto != 'picture')
+                                        StatWidget(
+                                          type: StatType.danmaku,
+                                          value: videoItem.stat.danmu,
+                                          iconSize: 10,
+                                        ),
+                                    ],
                                   ),
-                              ],
+                                  if (videoItem.duration > 0)
+                                    Text(
+                                      DurationUtils.formatDuration(
+                                        videoItem.duration,
+                                      ),
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
