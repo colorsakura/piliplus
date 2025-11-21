@@ -100,13 +100,30 @@ class VideoCardV extends StatelessWidget {
                             radius: 0,
                           ),
                           if (videoItem.duration > 0)
-                            PBadge(
+                            Positioned(
                               bottom: 6,
                               right: 7,
-                              size: PBadgeSize.small,
-                              type: PBadgeType.gray,
-                              text: DurationUtils.formatDuration(
-                                videoItem.duration,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    StatType.play.iconData,
+                                    semanticLabel: StatType.play.label,
+                                    size: 10,
+                                    color: Theme.of(context).colorScheme.outline
+                                        .withValues(alpha: 0.8),
+                                  ),
+                                  const SizedBox(width: 2),
+                                  Text(
+                                    DurationUtils.formatDuration(
+                                      videoItem.duration,
+                                    ),
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           Positioned(
@@ -235,17 +252,6 @@ class VideoCardV extends StatelessWidget {
   Widget videoStat(BuildContext context, ThemeData theme) {
     return Row(
       children: [
-        StatWidget(
-          type: StatType.play,
-          value: videoItem.stat.view,
-        ),
-        if (videoItem.goto != 'picture') ...[
-          const SizedBox(width: 4),
-          StatWidget(
-            type: StatType.danmaku,
-            value: videoItem.stat.danmu,
-          ),
-        ],
         if (videoItem is RecVideoItemModel) ...[
           const Spacer(),
           Text.rich(
