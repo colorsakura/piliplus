@@ -100,17 +100,16 @@ class VideoCardV extends StatelessWidget {
                             radius: 0,
                           ),
                           Positioned(
-                            bottom: 6,
-                            left: 7,
-                            right: 7,
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 4,
                                 vertical: 2,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.black.withValues(alpha: 0.6),
-                                borderRadius: BorderRadius.circular(4),
+                                color: Colors.black.withValues(alpha: 0.2),
                               ),
                               child: Row(
                                 mainAxisAlignment:
@@ -122,13 +121,13 @@ class VideoCardV extends StatelessWidget {
                                       StatWidget(
                                         type: StatType.play,
                                         value: videoItem.stat.view,
-                                        iconSize: 10,
+                                        iconSize: 12,
                                       ),
                                       if (videoItem.goto != 'picture')
                                         StatWidget(
                                           type: StatType.danmaku,
                                           value: videoItem.stat.danmu,
-                                          iconSize: 10,
+                                          iconSize: 12,
                                         ),
                                     ],
                                   ),
