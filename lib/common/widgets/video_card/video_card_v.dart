@@ -77,6 +77,9 @@ class VideoCardV extends StatelessWidget {
       children: [
         Card(
           clipBehavior: Clip.hardEdge,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4),
+          ),
           child: InkWell(
             onTap: () => onPushDetail(Utils.makeHeroTag(videoItem.aid)),
             onLongPress: onLongPress,
@@ -97,7 +100,7 @@ class VideoCardV extends StatelessWidget {
                             src: videoItem.cover,
                             width: maxWidth,
                             height: maxHeight,
-                            radius: 0,
+                            radius: 4,
                           ),
                           Positioned(
                             bottom: 0,
@@ -122,12 +125,14 @@ class VideoCardV extends StatelessWidget {
                                         type: StatType.play,
                                         value: videoItem.stat.view,
                                         iconSize: 12,
+                                        color: Colors.white,
                                       ),
                                       if (videoItem.goto != 'picture')
                                         StatWidget(
                                           type: StatType.danmaku,
                                           value: videoItem.stat.danmu,
                                           iconSize: 12,
+                                          color: Colors.white,
                                         ),
                                     ],
                                   ),
