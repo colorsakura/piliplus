@@ -5,7 +5,6 @@ import 'package:PiliPlus/models/home/rcmd/result.dart';
 import 'package:PiliPlus/models/model_video.dart';
 import 'package:PiliPlus/models_new/space/space_archive/item.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
-import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/pages/video/ai_conclusion/view.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
 import 'package:PiliPlus/utils/accounts.dart';
@@ -294,16 +293,14 @@ class VideoPopupMenu extends StatelessWidget {
       ];
     }
 
-    List<_VideoCustomAction> dislikeActions = [];
-
-    // Add main "不感兴趣" option
-    dislikeActions.add(
-      _VideoCustomAction(
+    List<_VideoCustomAction> dislikeActions = [_VideoCustomAction(
         '不感兴趣',
         const Icon(MdiIcons.thumbDownOutline, size: 16),
         () {}, // This will be a parent item that doesn't do anything when clicked directly
-      ),
-    );
+      )]
+
+    // Add main "不感兴趣" option
+    ;
 
     // Add dislike reasons if available
     if (tp.dislikeReasons != null) {
@@ -611,7 +608,7 @@ class VideoPopupMenu extends StatelessWidget {
                   size: iconSize,
                 ),
                 position: PopupMenuPosition.under,
-                itemBuilder: (context) => _buildPopupMenuItems(context),
+                itemBuilder: _buildPopupMenuItems,
               ),
       ),
     );
