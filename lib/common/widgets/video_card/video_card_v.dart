@@ -164,6 +164,17 @@ class VideoCardV extends StatelessWidget {
             ),
           ),
         ),
+        if (videoItem.goto == 'av')
+          Positioned(
+            right: -5,
+            bottom: -2,
+            child: VideoPopupMenu(
+              size: 29,
+              iconSize: 17,
+              videoItem: videoItem,
+              onRemove: onRemove,
+            ),
+          ),
       ],
     );
   }
@@ -234,17 +245,6 @@ class VideoCardV extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (videoItem.goto == 'av')
-                  Positioned(
-                    right: -5,
-                    bottom: -2,
-                    child: VideoPopupMenu(
-                      size: 29,
-                      iconSize: 17,
-                      videoItem: videoItem,
-                      onRemove: onRemove,
-                    ),
-                  ),
               ],
             ),
           ],
