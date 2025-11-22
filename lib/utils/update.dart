@@ -110,6 +110,8 @@ abstract class Update {
                   downloadBtn('rpm', ext: 'rpm'),
                   downloadBtn('deb', ext: 'deb'),
                   downloadBtn('targz', ext: 'tar.gz'),
+                ] else if (Platform.isAndroid) ...[
+                  downloadBtn('apk', ext: 'apk'),
                 ] else
                   downloadBtn('Github'),
               ],
