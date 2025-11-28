@@ -19,6 +19,7 @@ import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:dio_http2_adapter/dio_http2_adapter.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
+import 'package:native_dio_adapter/native_dio_adapter.dart';
 
 class Request {
   static const _gzipDecoder = GZipDecoder();
@@ -99,24 +100,6 @@ class Request {
    */
   Request._internal() {
     final enableHttp2 = Pref.enableHttp2;
-    //BaseOptions、Options、RequestOptions 都可以配置参数，优先级别依次递增，且可以根据优先级别覆盖参数
-    BaseOptions options = BaseOptions(
-      //请求基地址,可以包含子路径
-      baseUrl: HttpString.apiBaseUrl,
-      //连接服务器超时时间，单位是毫秒.
-      connectTimeout: const Duration(milliseconds: 10000),
-      //响应流上前后两次接受到数据的间隔，单位为毫秒。
-      receiveTimeout: const Duration(milliseconds: 10000),
-      //Http请求头.
-      headers: {
-        'user-agent': 'Dart/3.6 (dart:io)', // Http2Adapter不会自动添加标头
-        if (!enableHttp2) 'connection': 'keep-alive',
-        'accept-encoding': 'br,gzip',
-      },
-      responseDecoder: _responseDecoder, // Http2Adapter没有自动解压
-      persistentConnection: true,
-    );
-
     final bool enableSystemProxy;
     late final String systemProxyHost;
     late final int? systemProxyPort;
@@ -128,20 +111,67 @@ class Request {
       enableSystemProxy = false;
     }
 
-    final http11Adapter = IOHttpClientAdapter(
-      createHttpClient: enableSystemProxy
-          ? () => HttpClient()
-              ..idleTimeout = const Duration(seconds: 15)
-              ..autoUncompress = false
-              ..findProxy = ((_) => 'PROXY $systemProxyHost:$systemProxyPort')
-              ..badCertificateCallback = (cert, host, port) => true
-          : () => HttpClient()
-              ..idleTimeout = const Duration(seconds: 15)
-              ..autoUncompress = false, // Http2Adapter没有自动解压, 统一行为
-    );
+    // Initialize dio based on platform to avoid reassignment error
+    if (Platform.isAndroid) {
+      // For Android, use NativeAdapter which leverages Cronet
+      dio = Dio(
+        BaseOptions(
+          //请求基地址,可以包含子路径
+          baseUrl: HttpString.apiBaseUrl,
+          //连接服务器超时时间，单位是毫秒.
+          connectTimeout: const Duration(milliseconds: 10000),
+          //响应流上前后两次接受到数据的间隔，单位为毫秒。
+          receiveTimeout: const Duration(milliseconds: 10000),
+          //Http请求头.
+          headers: {
+            'user-agent': 'Dart/3.6 (dart:io)', // Http2Adapter不会自动添加标头
+            if (!enableHttp2) 'connection': 'keep-alive',
+            'accept-encoding': 'br,gzip',
+          },
+          persistentConnection: true,
+        ),
+      );
 
-    dio = Dio(options)
-      ..httpClientAdapter = enableHttp2
+      dio.httpClientAdapter = NativeAdapter();
+
+      // Note: NativeAdapter handles proxy/certificate settings differently
+      // Cronet handles system proxy automatically in most cases
+      // If custom proxy handling is needed specifically for Android with Cronet,
+      // it might require platform-specific implementation
+    } else {
+      // For other platforms, use the original behavior with custom response decoder
+      dio = Dio(
+        BaseOptions(
+          //请求基地址,可以包含子路径
+          baseUrl: HttpString.apiBaseUrl,
+          //连接服务器超时时间，单位是毫秒.
+          connectTimeout: const Duration(milliseconds: 10000),
+          //响应流上前后两次接受到数据的间隔，单位为毫秒。
+          receiveTimeout: const Duration(milliseconds: 10000),
+          //Http请求头.
+          headers: {
+            'user-agent': 'Dart/3.6 (dart:io)', // Http2Adapter不会自动添加标头
+            if (!enableHttp2) 'connection': 'keep-alive',
+            'accept-encoding': 'br,gzip',
+          },
+          responseDecoder: _responseDecoder, // Http2Adapter没有自动解压
+          persistentConnection: true,
+        ),
+      );
+
+      final http11Adapter = IOHttpClientAdapter(
+        createHttpClient: enableSystemProxy
+            ? () => HttpClient()
+                ..idleTimeout = const Duration(seconds: 15)
+                ..autoUncompress = false
+                ..findProxy = ((_) => 'PROXY $systemProxyHost:$systemProxyPort')
+                ..badCertificateCallback = (cert, host, port) => true
+            : () => HttpClient()
+                ..idleTimeout = const Duration(seconds: 15)
+                ..autoUncompress = false, // Http2Adapter没有自动解压, 统一行为
+      );
+
+      dio.httpClientAdapter = enableHttp2
           ? Http2Adapter(
               ConnectionManager(
                 idleTimeout: const Duration(seconds: 15),
@@ -164,6 +194,7 @@ class Request {
               fallbackAdapter: http11Adapter,
             )
           : http11Adapter;
+    }
 
     // 先于其他Interceptor
     dio.interceptors.add(RetryInterceptor(Pref.retryCount, Pref.retryDelay));
@@ -277,8 +308,8 @@ class Request {
 
   static List<int> responseBytesDecoder(
     List<int> responseBytes,
-    Map<String, List<String>> headers,
-  ) => switch (headers['content-encoding']?.firstOrNull) {
+    Map<String, List<String>>? headers,
+  ) => switch (headers?['content-encoding']?.firstOrNull) {
     'gzip' => _gzipDecoder.decodeBytes(responseBytes),
     'br' => _brotliDecoder.convert(responseBytes),
     _ => responseBytes,
