@@ -160,15 +160,18 @@ class _HomePageState extends State<HomePage>
       stream: _homeController.searchBarStream?.stream.distinct(),
       initialData: true,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return AnimatedOpacity(
-          opacity: snapshot.data ? 1 : 0,
-          duration: const Duration(milliseconds: 300),
-          child: AnimatedContainer(
-            curve: Curves.easeInOutCubicEmphasized,
-            duration: const Duration(milliseconds: 500),
-            height: snapshot.data ? 52 : 0,
-            padding: const EdgeInsets.fromLTRB(14, 6, 14, 0),
-            child: searchBarAndUser(theme),
+        return AnimatedSlide(
+          offset: snapshot.data ? Offset.zero : const Offset(0, -1),
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOutCubicEmphasized,
+          child: AnimatedOpacity(
+            opacity: snapshot.data ? 1 : 0,
+            duration: const Duration(milliseconds: 300),
+            child: Container(
+              height: 52,
+              padding: const EdgeInsets.fromLTRB(14, 6, 14, 0),
+              child: searchBarAndUser(theme),
+            ),
           ),
         );
       },
