@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
@@ -77,6 +76,9 @@ class VideoCardV extends StatelessWidget {
       children: [
         Card(
           clipBehavior: Clip.hardEdge,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4),
+          ),
           child: InkWell(
             onTap: () => onPushDetail(Utils.makeHeroTag(videoItem.aid)),
             onLongPress: onLongPress,
@@ -85,7 +87,7 @@ class VideoCardV extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AspectRatio(
-                  aspectRatio: StyleString.aspectRatio,
+                  aspectRatio: 16 / 11,
                   child: LayoutBuilder(
                     builder: (context, boxConstraints) {
                       double maxWidth = boxConstraints.maxWidth;
@@ -99,16 +101,59 @@ class VideoCardV extends StatelessWidget {
                             height: maxHeight,
                             radius: 0,
                           ),
-                          if (videoItem.duration > 0)
-                            PBadge(
-                              bottom: 6,
-                              right: 7,
-                              size: PBadgeSize.small,
-                              type: PBadgeType.gray,
-                              text: DurationUtils.formatDuration(
-                                videoItem.duration,
+                          Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 4,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.2),
+                                    blurRadius: 12,
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    spacing: 5,
+                                    children: [
+                                      StatWidget(
+                                        type: StatType.play,
+                                        value: videoItem.stat.view,
+                                        iconSize: 12,
+                                        color: Colors.white,
+                                      ),
+                                      if (videoItem.goto != 'picture')
+                                        StatWidget(
+                                          type: StatType.danmaku,
+                                          value: videoItem.stat.danmu,
+                                          iconSize: 12,
+                                          color: Colors.white,
+                                        ),
+                                    ],
+                                  ),
+                                  if (videoItem.duration > 0)
+                                    Text(
+                                      DurationUtils.formatDuration(
+                                        videoItem.duration,
+                                      ),
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                ],
                               ),
                             ),
+                          ),
                         ],
                       );
                     },
@@ -200,7 +245,6 @@ class VideoCardV extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (videoItem.goto == 'av') const SizedBox(width: 10),
               ],
             ),
           ],
@@ -215,17 +259,6 @@ class VideoCardV extends StatelessWidget {
   Widget videoStat(BuildContext context, ThemeData theme) {
     return Row(
       children: [
-        StatWidget(
-          type: StatType.play,
-          value: videoItem.stat.view,
-        ),
-        if (videoItem.goto != 'picture') ...[
-          const SizedBox(width: 4),
-          StatWidget(
-            type: StatType.danmaku,
-            value: videoItem.stat.danmu,
-          ),
-        ],
         if (videoItem is RecVideoItemModel) ...[
           const Spacer(),
           Text.rich(
@@ -242,25 +275,7 @@ class VideoCardV extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 2),
         ],
-        // deprecated
-        //  else if (videoItem is RecVideoItemAppModel &&
-        //     videoItem.desc != null &&
-        //     videoItem.desc!.contains(' · ')) ...[
-        //   const Spacer(),
-        //   Text.rich(
-        //     maxLines: 1,
-        //     TextSpan(
-        //         style: TextStyle(
-        //           fontSize: theme.textTheme.labelSmall!.fontSize,
-        //           color: theme.colorScheme.outline.withValues(alpha: 0.8),
-        //         ),
-        //         text: Utils.shortenChineseDateString(
-        //             videoItem.desc!.split(' · ').last)),
-        //   ),
-        //   const SizedBox(width: 2),
-        // ]
       ],
     );
   }

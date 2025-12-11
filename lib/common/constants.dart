@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class StyleString {
-  static const double cardSpace = 8;
+  static const double cardSpace = 4;
   static const double safeSpace = 12;
   static const BorderRadius mdRadius = BorderRadius.all(imgRadius);
-  static const Radius imgRadius = Radius.circular(10);
+  static const Radius imgRadius = Radius.circular(4);
   static const double aspectRatio = 16 / 10;
   static const bottomSheetRadius = BorderRadius.vertical(
     top: Radius.circular(18),
@@ -13,7 +13,7 @@ class StyleString {
 
 class Constants {
   static const appName = 'PiliPlus';
-  static const sourceCodeUrl = 'https://github.com/bggRGjQaUbCoE/PiliPlus';
+  static const sourceCodeUrl = 'https://github.com/colorsakura/piliplus';
 
   // 27eb53fc9058f8c3  移动端 Android
   // 4409e2ce8ffd12b8  HD版
