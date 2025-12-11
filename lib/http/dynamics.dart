@@ -19,6 +19,7 @@ import 'package:PiliPlus/models_new/dynamic/dyn_reserve_info/data.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_topic_feed/topic_card_list.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_topic_top/top_details.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_topic_top/topic_item.dart';
+import 'package:PiliPlus/models_new/followee_votes/vote.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
@@ -385,7 +386,7 @@ class DynamicsHttp {
   static Future<LoadingState<VoteInfo>> doVote({
     required int voteId,
     required List<int> votes,
-    bool anonymity = false,
+    bool anonymous = false,
     int? dynamicId,
   }) async {
     final csrf = Accounts.main.csrf;
@@ -393,7 +394,7 @@ class DynamicsHttp {
       'vote_id': voteId,
       'votes': votes,
       'voter_uid': Accounts.main.mid,
-      'status': anonymity ? 1 : 0,
+      'status': anonymous ? 1 : 0,
       'op_bit': 0,
       'dynamic_id': dynamicId ?? 0,
       'csrf_token': csrf,
@@ -650,6 +651,26 @@ class DynamicsHttp {
     );
     if (res.data['code'] == 0) {
       return Success(ReserveInfoData.fromJson(res.data['data']));
+    } else {
+      return Error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<List<FolloweeVote>?>> followeeVotes({
+    required dynamic voteId,
+  }) async {
+    final res = await Request().get(
+      Api.followeeVotes,
+      queryParameters: {
+        'vote_id': voteId,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return Success(
+        (res.data['data']?['votes'] as List?)
+            ?.map((e) => FolloweeVote.fromJson(e))
+            .toList(),
+      );
     } else {
       return Error(res.data['message']);
     }
