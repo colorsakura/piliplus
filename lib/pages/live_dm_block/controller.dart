@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 
 class LiveDmBlockController extends GetxController
     with GetSingleTickerProviderStateMixin {
-  final roomId = Get.parameters['roomId'];
+  final roomId = Get.parameters['roomId']!;
 
   @override
   void onInit() {
@@ -128,7 +128,7 @@ class LiveDmBlockController extends GetxController
     assert(item is ShieldUserList || item is String);
     if (item is ShieldUserList) {
       var res = await LiveHttp.liveShieldUser(
-        uid: item.uid,
+        uid: item.uid!,
         roomid: roomId,
         type: 0,
       );

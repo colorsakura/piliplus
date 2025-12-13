@@ -72,8 +72,8 @@ abstract final class LiveHttp {
   }
 
   static Future<LoadingState<RoomPlayInfoData>> liveRoomInfo({
-    roomId,
-    qn,
+    required Object roomId,
+    Object? qn,
     bool onlyAudio = false,
   }) async {
     var res = await Request().get(
@@ -83,7 +83,7 @@ abstract final class LiveHttp {
         'protocol': '0,1',
         'format': '0,1,2',
         'codec': '0,1,2',
-        'qn': qn,
+        'qn': ?qn,
         'platform': 'web',
         'ptype': 8,
         'dolby': 5,
@@ -99,7 +99,9 @@ abstract final class LiveHttp {
     }
   }
 
-  static Future liveRoomInfoH5({roomId, qn}) async {
+  static Future<LoadingState<RoomInfoH5Data>> liveRoomInfoH5({
+    required Object roomId,
+  }) async {
     var res = await Request().get(
       Api.liveRoomInfoH5,
       queryParameters: {
@@ -113,7 +115,7 @@ abstract final class LiveHttp {
     }
   }
 
-  static Future liveRoomDanmaPrefetch({roomId}) async {
+  static Future liveRoomDanmaPrefetch({required Object roomId}) async {
     var res = await Request().get(
       Api.liveRoomDmPrefetch,
       queryParameters: {'roomid': roomId},
@@ -131,7 +133,9 @@ abstract final class LiveHttp {
     }
   }
 
-  static Future liveRoomGetDanmakuToken({roomId}) async {
+  static Future<LoadingState<LiveDmInfoData>> liveRoomGetDanmakuToken({
+    required Object roomId,
+  }) async {
     var res = await Request().get(
       Api.liveRoomDmToken,
       queryParameters: await WbiSign.makSign({
@@ -479,7 +483,7 @@ abstract final class LiveHttp {
   }
 
   static Future<LoadingState<ShieldInfo?>> getLiveInfoByUser(
-    dynamic roomId,
+    Object roomId,
   ) async {
     var res = await Request().get(
       Api.getLiveInfoByUser,
@@ -559,9 +563,9 @@ abstract final class LiveHttp {
     }
   }
 
-  static Future liveShieldUser({
-    required dynamic uid,
-    required dynamic roomid,
+  static Future<LoadingState<ShieldUserList>> liveShieldUser({
+    required Object uid,
+    required Object roomid,
     required int type,
   }) async {
     final csrf = Accounts.main.csrf;
@@ -585,9 +589,9 @@ abstract final class LiveHttp {
 
   static Future<LoadingState<Null>> liveLikeReport({
     required int clickTime,
-    required dynamic roomId,
-    required dynamic uid,
-    required dynamic anchorId,
+    required Object roomId,
+    required Object uid,
+    Object? anchorId,
   }) async {
     var res = await Request().post(
       Api.liveLikeReport,
@@ -595,7 +599,7 @@ abstract final class LiveHttp {
         'click_time': clickTime,
         'room_id': roomId,
         'uid': uid,
-        'anchor_id': anchorId,
+        'anchor_id': ?anchorId,
         'web_location': 444.8,
         'csrf': Accounts.heartbeat.csrf,
       }),
