@@ -136,9 +136,6 @@ abstract class Pref {
     ).toList();
   }
 
-  static bool get hiddenSettingUnlocked =>
-      _setting.get(SettingBoxKey.hiddenSettingUnlocked, defaultValue: false);
-
   static bool get feedBackEnable =>
       _setting.get(SettingBoxKey.feedBackEnable, defaultValue: false);
 
