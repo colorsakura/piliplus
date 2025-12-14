@@ -2680,7 +2680,7 @@ class HeaderControlState extends State<HeaderControl>
                       : const SizedBox.shrink(),
                 ),
               ],
-              if (isFSOrPip || Utils.isDesktop) ...[
+              if (isFullScreen || Utils.isDesktop) ...[
                 SizedBox(
                   width: 42,
                   height: 34,
