@@ -5,7 +5,7 @@ typedef PopupMenuItemSelected<T> = bool Function(T value);
 
 class PopupMenuText<T> extends StatelessWidget {
   final String title;
-  final T Function() value;
+  final ValueGetter<T> value;
   final PopupMenuItemSelected<T> onSelected;
   final PopupMenuItemBuilder<T> itemBuilder;
   final String Function(T) getSelectTitle;
