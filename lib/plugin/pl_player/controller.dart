@@ -227,6 +227,12 @@ class PlPlayerController {
   late bool isDesktopPip = false;
   late Rect _lastWindowBounds;
 
+  late final RxBool isAlwaysOnTop = false.obs;
+  Future<void> setAlwaysOnTop(bool value) {
+    isAlwaysOnTop.value = value;
+    return windowManager.setAlwaysOnTop(value);
+  }
+
   Offset initialFocalPoint = Offset.zero;
 
   Future<void> exitDesktopPip() {
@@ -235,18 +241,8 @@ class PlPlayerController {
       windowManager.setTitleBarStyle(TitleBarStyle.normal),
       windowManager.setMinimumSize(const Size(400, 700)),
       windowManager.setBounds(_lastWindowBounds),
-      windowManager.setAlwaysOnTop(false),
+      setAlwaysOnTop(false),
       windowManager.setAspectRatio(0),
-      setting.putAll({
-        SettingBoxKey.windowSize: [
-          _lastWindowBounds.width,
-          _lastWindowBounds.height,
-        ],
-        SettingBoxKey.windowPosition: [
-          _lastWindowBounds.left,
-          _lastWindowBounds.top,
-        ],
-      }),
     ]);
   }
 
@@ -270,9 +266,9 @@ class PlPlayerController {
     }
 
     await windowManager.setMinimumSize(size);
+    setAlwaysOnTop(true);
     windowManager
       ..setSize(size)
-      ..setAlwaysOnTop(true)
       ..setAspectRatio(width / height);
   }
 
@@ -1716,6 +1712,7 @@ class PlPlayerController {
       }
       return;
     }
+
     _playerCount = 0;
     _stopListenerForVideoFit();
     _stopListenerForEnterFullScreen();
@@ -1739,6 +1736,10 @@ class PlPlayerController {
 
     // playerStatus.close();
     // dataStatus.status.close();
+
+    if (Utils.isDesktop && isAlwaysOnTop.value) {
+      windowManager.setAlwaysOnTop(false);
+    }
 
     await removeListeners();
     if (playerStatus.playing) {
