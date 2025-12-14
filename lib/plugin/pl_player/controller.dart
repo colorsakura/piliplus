@@ -1712,6 +1712,7 @@ class PlPlayerController {
       }
       return;
     }
+
     _playerCount = 0;
     _stopListenerForVideoFit();
     _stopListenerForEnterFullScreen();
@@ -1735,6 +1736,10 @@ class PlPlayerController {
 
     // playerStatus.close();
     // dataStatus.status.close();
+
+    if (Utils.isDesktop && isAlwaysOnTop.value) {
+      windowManager.setAlwaysOnTop(false);
+    }
 
     await removeListeners();
     if (playerStatus.playing) {
