@@ -107,7 +107,7 @@ abstract class Pref {
 
   static List<Pair<SegmentType, SkipType>> get blockSettings {
     final list = _setting.get(SettingBoxKey.blockSettings) as List?;
-    if (list == null) {
+    if (list == null || list.length != SegmentType.values.length) {
       return SegmentType.values
           .map((i) => Pair(first: i, second: SkipType.skipOnce))
           .toList();
@@ -116,8 +116,7 @@ abstract class Pref {
         .map(
           (item) => Pair(
             first: item,
-            second: SkipType
-                .values[list.getOrNull(item.index) ?? SkipType.skipOnce.index],
+            second: SkipType.values[list[item.index]],
           ),
         )
         .toList();
@@ -125,7 +124,7 @@ abstract class Pref {
 
   static List<Color> get blockColor {
     final list = _setting.get(SettingBoxKey.blockColor) as List?;
-    if (list == null) {
+    if (list == null || list.length != SegmentType.values.length) {
       return SegmentType.values.map((i) => i.color).toList();
     }
     return SegmentType.values.map(
