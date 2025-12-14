@@ -191,10 +191,7 @@ class VideoPopupMenu extends StatelessWidget {
                       goto: item.goto!,
                     );
                     SmartDialog.dismiss();
-                    SmartDialog.showToast(
-                      res['status'] ? (r?.toast ?? f?.toast) : res['msg'],
-                    );
-                    if (res['status']) {
+                    if (res.isSuccess) {
                       onRemove?.call();
                     }
                   },
@@ -246,7 +243,7 @@ class VideoPopupMenu extends StatelessWidget {
                                 );
                                 SmartDialog.dismiss();
                                 SmartDialog.showToast(
-                                  res['status'] ? "成功" : res['msg'],
+                                  res.isSuccess ? "成功" : res.toString(),
                                 );
                                 Navigator.of(context).pop();
                               },
@@ -290,9 +287,9 @@ class VideoPopupMenu extends StatelessWidget {
                                   );
                                   SmartDialog.dismiss();
                                   SmartDialog.showToast(
-                                    res['status'] ? "点踩成功" : res['msg'],
+                                    res.isSuccess ? "点踩成功" : res.toString(),
                                   );
-                                  if (res['status']) {
+                                  if (res.isSuccess) {
                                     onRemove?.call();
                                   }
                                 },
@@ -313,7 +310,7 @@ class VideoPopupMenu extends StatelessWidget {
                                   );
                                   SmartDialog.dismiss();
                                   SmartDialog.showToast(
-                                    res['status'] ? "取消踩" : res['msg'],
+                                    res.isSuccess ? "取消踩" : res.toString(),
                                   );
                                 },
                                 style: FilledButton.styleFrom(
@@ -362,10 +359,10 @@ class VideoPopupMenu extends StatelessWidget {
                         act: 5,
                         reSrc: 11,
                       );
-                      if (res['status']) {
+                      if (res.isSuccess) {
                         onRemove?.call();
                       }
-                      SmartDialog.showToast(res['msg'] ?? '成功');
+                      SmartDialog.showToast(res.toString() ?? '成功');
                     },
                     child: const Text('确认'),
                   ),
@@ -536,11 +533,11 @@ class VideoPopupMenu extends StatelessWidget {
                       goto: item.goto!,
                     );
                     SmartDialog.dismiss();
-                    SmartDialog.showToast(
-                      res['status'] ? (r?.toast ?? f?.toast) : res['msg'],
-                    );
-                    if (res['status']) {
-                      onRemove?.call();
+                    if (res.isSuccess) {SmartDialog.showToast(
+                      r?.toast ?? f!.toast!,
+                                    );
+                      onRemove?.call();} else {
+                                    res.toast();
                     }
                   },
                 );
@@ -590,7 +587,7 @@ class VideoPopupMenu extends StatelessWidget {
                                 );
                                 SmartDialog.dismiss();
                                 SmartDialog.showToast(
-                                  res['status'] ? "成功" : res['msg'],
+                                  res.isSuccess ? "成功" : res.toString(),
                                 );
                                 Get.back();
                               },
@@ -631,12 +628,12 @@ class VideoPopupMenu extends StatelessWidget {
                                     bvid: videoItem.bvid!,
                                     type: true,
                                   );
-                                  SmartDialog.dismiss();
+                                  SmartDialog.dismiss();if (res.isSuccess) {
                                   SmartDialog.showToast(
-                                    res['status'] ? "点踩成功" : res['msg'],
-                                  );
-                                  if (res['status']) {
-                                    onRemove?.call();
+                                    '点踩成功');
+                                                  onRemove?.call();
+                                  } else {
+                                  res.toast();
                                   }
                                 },
                                 style: FilledButton.styleFrom(
@@ -650,13 +647,13 @@ class VideoPopupMenu extends StatelessWidget {
                                   SmartDialog.showLoading(
                                     msg: '正在提交',
                                   );
-                                  var res = await VideoHttp.dislikeVideo(
+                                  final res = await VideoHttp.dislikeVideo(
                                     bvid: videoItem.bvid!,
                                     type: false,
                                   );
                                   SmartDialog.dismiss();
                                   SmartDialog.showToast(
-                                    res['status'] ? "取消踩" : res['msg'],
+                                    res.isSuccess ? '取消踩' : res.toString(),
                                   );
                                 },
                                 style: FilledButton.styleFrom(
@@ -705,10 +702,11 @@ class VideoPopupMenu extends StatelessWidget {
                         act: 5,
                         reSrc: 11,
                       );
-                      if (res['status']) {
+                      if (res.isSuccess) {
                         onRemove?.call();
-                      }
-                      SmartDialog.showToast(res['msg'] ?? '成功');
+                      }else {
+                      res.toast();
+                                    }
                     },
                     child: const Text('确认'),
                   ),
