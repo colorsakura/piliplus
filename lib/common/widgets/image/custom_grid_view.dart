@@ -29,6 +29,8 @@ import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/material.dart'
     hide CustomMultiChildLayout, MultiChildLayoutDelegate;
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 
 class ImageModel {
   ImageModel({
@@ -74,6 +76,7 @@ class CustomGridView extends StatelessWidget {
   final bool fullScreen;
 
   static bool horizontalPreview = Pref.horizontalPreview;
+  static final _regex = RegExp(r'/(videoV|dynamicDetail)');
 
   void onTap(BuildContext context, int index) {
     final imgList = picArr.map(
@@ -90,6 +93,7 @@ class CustomGridView extends StatelessWidget {
     ).toList();
     if (horizontalPreview &&
         !fullScreen &&
+        Get.currentRoute.startsWith(_regex) &&
         !context.mediaQuerySize.isPortrait) {
       final scaffoldState = Scaffold.maybeOf(context);
       if (scaffoldState != null) {

@@ -227,12 +227,9 @@ class _PayCoinsPageState extends State<PayCoinsPage>
     final isPortrait = size.isPortrait;
     return isPortrait
         ? _buildBody(isPortrait)
-        : Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: math.min(525, size.width * 0.6),
-              ),
-              child: _buildBody(isPortrait),
+        : _buildBody(isPortrait).constraintWidth(
+            constraints: BoxConstraints(
+              maxWidth: math.min(525, size.width * 0.6),
             ),
           );
   }

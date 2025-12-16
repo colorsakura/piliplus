@@ -612,13 +612,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget tabViewOuter(Widget child) {
     return SingleChildScrollView(
       padding: padding,
-      child: Align(
-        alignment: Alignment.topCenter,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 600),
-          child: child,
-        ),
-      ),
+      child: child.constraintWidth(),
     );
   }
 }

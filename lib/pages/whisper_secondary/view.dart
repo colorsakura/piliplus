@@ -78,7 +78,7 @@ class _WhisperSecPageState extends State<WhisperSecPage> {
             ),
           ],
         ),
-      ),
+      ).constraintWidth(),
     );
   }
 

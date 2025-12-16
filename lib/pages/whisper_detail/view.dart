@@ -130,10 +130,7 @@ class _WhisperDetailPageState
         ],
       ),
       body: Padding(
-        padding: EdgeInsets.only(
-          left: padding.left,
-          right: padding.right,
-        ),
+        padding: EdgeInsets.only(left: padding.left, right: padding.right),
         child: Column(
           children: [
             Expanded(
@@ -161,7 +158,7 @@ class _WhisperDetailPageState
               SizedBox(height: padding.bottom),
           ],
         ),
-      ),
+      ).constraintWidth(),
     );
   }
 

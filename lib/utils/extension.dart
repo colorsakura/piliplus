@@ -275,3 +275,17 @@ extension GetExt on GetInterface {
   S putOrFind<S>(InstanceBuilderCallback<S> dep, {String? tag}) =>
       GetInstance().putOrFind(dep, tag: tag);
 }
+
+extension WidgetExt on Widget {
+  Widget constraintWidth({
+    BoxConstraints constraints = const BoxConstraints(maxWidth: 625),
+  }) {
+    return Align(
+      alignment: Alignment.topCenter,
+      child: ConstrainedBox(
+        constraints: constraints,
+        child: this,
+      ),
+    );
+  }
+}

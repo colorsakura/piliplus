@@ -79,28 +79,25 @@ class FollowItem extends StatelessWidget {
                 ),
               ),
               if (isOwner ?? false)
-                SizedBox(
-                  height: 34,
-                  child: FilledButton.tonal(
-                    onPressed: () => RequestUtils.actionRelationMod(
-                      context: context,
-                      mid: item.mid,
-                      isFollow: item.attribute != -1,
-                      callback: callback,
-                    ),
-                    style: FilledButton.styleFrom(
-                      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                      foregroundColor: item.attribute == -1
-                          ? null
-                          : colorScheme.outline,
-                      backgroundColor: item.attribute == -1
-                          ? null
-                          : colorScheme.onInverseSurface,
-                    ),
-                    child: Text(
-                      '${item.attribute == -1 ? '' : '已'}关注',
-                      style: const TextStyle(fontSize: 12),
-                    ),
+                FilledButton.tonal(
+                  onPressed: () => RequestUtils.actionRelationMod(
+                    context: context,
+                    mid: item.mid,
+                    isFollow: item.attribute != -1,
+                    callback: callback,
+                  ),
+                  style: FilledButton.styleFrom(
+                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    foregroundColor: item.attribute == -1
+                        ? null
+                        : colorScheme.outline,
+                    backgroundColor: item.attribute == -1
+                        ? null
+                        : colorScheme.onInverseSurface,
+                  ),
+                  child: Text(
+                    '${item.attribute == -1 ? '' : '已'}关注',
+                    style: const TextStyle(fontSize: 12),
                   ),
                 ),
             ],

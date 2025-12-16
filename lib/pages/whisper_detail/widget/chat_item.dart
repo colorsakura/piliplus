@@ -13,6 +13,7 @@ import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
 import 'package:PiliPlus/utils/duration_utils.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/image_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -754,20 +755,15 @@ class ChatItem extends StatelessWidget {
 
   Widget msgTypePictureCard_13(dynamic content) {
     final url = content['jump_url'];
-    return Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 400.0),
-        child: ClipRRect(
-          borderRadius: StyleString.mdRadius,
-          child: GestureDetector(
-            onTap: url == null ? null : () => PiliScheme.routePushFromUrl(url),
-            child: CachedNetworkImage(
-              imageUrl: ImageUtils.thumbnailUrl(content['pic_url']),
-            ),
-          ),
+    return ClipRRect(
+      borderRadius: StyleString.mdRadius,
+      child: GestureDetector(
+        onTap: url == null ? null : () => PiliScheme.routePushFromUrl(url),
+        child: CachedNetworkImage(
+          imageUrl: ImageUtils.thumbnailUrl(content['pic_url']),
         ),
       ),
-    );
+    ).constraintWidth(constraints: const BoxConstraints(maxWidth: 400.0));
   }
 
   Widget def(Color textColor, {err}) {

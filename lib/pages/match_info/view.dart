@@ -57,7 +57,7 @@ class _MatchInfoPageState extends CommonDynPageState<MatchInfoPage> {
             ],
           ),
         ),
-      ),
+      ).constraintWidth(),
       floatingActionButton: SlideTransition(
         position: fabAnim,
         child: replyButton,
@@ -220,7 +220,7 @@ class _MatchInfoPageState extends CommonDynPageState<MatchInfoPage> {
               replyType: controller.replyType,
               firstFloor: replyItem,
             ),
-          ),
+          ).constraintWidth(),
         ),
       );
     });
