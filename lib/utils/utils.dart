@@ -21,6 +21,9 @@ abstract class Utils {
 
   static const jsonEncoder = JsonEncoder.withIndent('    ');
 
+  static String themeUrl(bool isDark) =>
+      'native.theme=${isDark ? 2 : 1}&night=${isDark ? 1 : 0}';
+
   static Future<void> saveBytes2File({
     required String name,
     required Uint8List bytes,

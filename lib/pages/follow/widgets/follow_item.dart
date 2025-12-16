@@ -87,7 +87,9 @@ class FollowItem extends StatelessWidget {
                     callback: callback,
                   ),
                   style: FilledButton.styleFrom(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    visualDensity: .compact,
+                    tapTargetSize: .shrinkWrap,
+                    padding: const .symmetric(horizontal: 15),
                     foregroundColor: item.attribute == -1
                         ? null
                         : colorScheme.outline,

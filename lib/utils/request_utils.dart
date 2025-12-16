@@ -337,7 +337,7 @@ abstract final class RequestUtils {
                         '/webview',
                         parameters: {
                           'url':
-                              'https://www.bilibili.com/h5/comment/appeal?native.theme=2&night=${Get.isDarkMode ? 1 : 0}',
+                              'https://www.bilibili.com/h5/comment/appeal?${Utils.themeUrl(Get.isDarkMode)}',
                         },
                       );
                     },

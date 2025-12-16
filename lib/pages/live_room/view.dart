@@ -520,13 +520,14 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                         type: ImageType.avatar,
                         src: roomInfoH5.anchorInfo!.baseInfo!.face,
                       ),
-                      Expanded(
+                      Flexible(
                         child: Column(
                           spacing: 1,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               spacing: 10,
+                              mainAxisSize: .min,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Flexible(
@@ -543,6 +544,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                             ),
                             Row(
                               spacing: 10,
+                              mainAxisSize: .min,
                               children: [
                                 _liveRoomController.watchedWidget,
                                 _liveRoomController.timeWidget,
