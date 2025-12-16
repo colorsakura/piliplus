@@ -13,11 +13,11 @@ import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
 import 'package:PiliPlus/utils/duration_utils.dart';
-import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/extension/widget_ext.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/image_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/utils/platform_utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -89,7 +89,9 @@ class ChatItem extends StatelessWidget {
                         Feedback.forLongPress(context);
                         onLongPress!();
                       },
-                      onSecondaryTap: Utils.isMobile ? null : onLongPress,
+                      onSecondaryTap: PlatformUtils.isMobile
+                          ? null
+                          : onLongPress,
                       child: Row(
                         mainAxisAlignment: isOwner
                             ? MainAxisAlignment.end

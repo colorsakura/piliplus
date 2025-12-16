@@ -6,7 +6,7 @@ import 'package:PiliPlus/pages/video/widgets/header_control.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/common_btn.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/utils/platform_utils.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -121,7 +121,7 @@ class _LiveHeaderControlState extends State<LiveHeaderControl>
           child,
           ...?timeBatteryWidgets,
           const SizedBox(width: 10),
-          if (Utils.isDesktop && !plPlayerController.isDesktopPip)
+          if (PlatformUtils.isDesktop && !plPlayerController.isDesktopPip)
             Obx(() {
               final isAlwaysOnTop = plPlayerController.isAlwaysOnTop.value;
               return ComBtn(
@@ -141,7 +141,7 @@ class _LiveHeaderControlState extends State<LiveHeaderControl>
                 onTap: () => plPlayerController.setAlwaysOnTop(!isAlwaysOnTop),
               );
             }),
-          if (isFullScreen || Utils.isDesktop)
+          if (isFullScreen || PlatformUtils.isDesktop)
             ComBtn(
               height: 30,
               tooltip: '发弹幕',
@@ -152,12 +152,12 @@ class _LiveHeaderControlState extends State<LiveHeaderControl>
               ),
               onTap: widget.onSendDanmaku,
             ),
-          if (Platform.isAndroid || (Utils.isDesktop && !isFullScreen))
+          if (Platform.isAndroid || (PlatformUtils.isDesktop && !isFullScreen))
             ComBtn(
               height: 30,
               tooltip: '画中画',
               onTap: () async {
-                if (Utils.isDesktop) {
+                if (PlatformUtils.isDesktop) {
                   plPlayerController.toggleDesktopPip();
                   return;
                 }
