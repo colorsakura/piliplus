@@ -678,7 +678,7 @@ Widget moduleBlockedItem(
   ModuleBlocked moduleBlocked,
   double maxWidth,
 ) {
-  late final isDarkMode = Get.isDarkMode;
+  late final isDarkMode = theme.brightness.isDark;
 
   BoxDecoration? bgImg() {
     return moduleBlocked.bgImg == null
