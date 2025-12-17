@@ -550,7 +550,7 @@ class _MediaPageState extends CommonPageState<MinePage, MineController>
                   return FavFolderItem(
                     heroTag: Utils.generateRandomString(8),
                     item: response.list[index],
-                    callback: () => Future.delayed(
+                    onPop: () => Future.delayed(
                       const Duration(milliseconds: 150),
                       controller.onRefresh,
                     ),

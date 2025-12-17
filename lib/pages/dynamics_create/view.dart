@@ -754,7 +754,7 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
     TopicItem? res = await SelectTopicPanel.onSelectTopic(
       context,
       offset: _topicOffset,
-      callback: (offset) => _topicOffset = offset,
+      onCachePos: (offset) => _topicOffset = offset,
     );
     if (res != null) {
       topic.value = Pair(first: res.id, second: res.name);

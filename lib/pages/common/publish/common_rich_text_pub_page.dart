@@ -273,7 +273,7 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
     final res = await DynMentionPanel.onDynMention(
       context,
       offset: _mentionOffset,
-      callback: (offset) => _mentionOffset = offset,
+      onCachePos: (offset) => _mentionOffset = offset,
     );
     if (res != null) {
       if (res is MentionItem) {

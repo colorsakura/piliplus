@@ -11,8 +11,8 @@ import 'package:PiliPlus/models/dynamics/article_content_model.dart'
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/vote.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
-import 'package:PiliPlus/utils/extension/context_ext.dart';
 import 'package:PiliPlus/utils/extension/string_ext.dart';
+import 'package:PiliPlus/utils/extension/theme_ext.dart';
 import 'package:PiliPlus/utils/image_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -149,12 +149,11 @@ class OpusContent extends StatelessWidget {
       return const SliverToBoxAdapter();
     }
 
-    late final highlight = Highlight()..registerLanguages(builtinAllLanguages);
-    late final isDarkMode = context.isDarkMode;
-
     final colorScheme = Theme.of(context).colorScheme;
-
+    late final isDarkMode = colorScheme.isDark;
     late final surfaceLuminance = colorScheme.surface.computeLuminance();
+
+    late final highlight = Highlight()..registerLanguages(builtinAllLanguages);
 
     return SliverList.separated(
       itemCount: opus.length,

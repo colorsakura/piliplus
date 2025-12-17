@@ -23,12 +23,12 @@ class SendDanmakuPanel extends CommonTextPubPage {
   final dynamic bvid;
   final dynamic progress;
 
-  final ValueChanged<DanmakuContentItem<DanmakuExtra>> callback;
+  final ValueChanged<DanmakuContentItem<DanmakuExtra>> onSuccess;
   final bool darkVideoPage;
 
   // config
-  final ({int? mode, int? fontsize, Color? color})? dmConfig;
-  final ValueChanged<({int mode, int fontsize, Color color})>? onSaveDmConfig;
+  final ({int? mode, int? fontSize, Color? color})? dmConfig;
+  final ValueChanged<({int mode, int fontSize, Color color})>? onSaveDmConfig;
 
   const SendDanmakuPanel({
     super.key,
@@ -37,7 +37,7 @@ class SendDanmakuPanel extends CommonTextPubPage {
     this.cid,
     this.bvid,
     this.progress,
-    required this.callback,
+    required this.onSuccess,
     required this.darkVideoPage,
     this.dmConfig,
     this.onSaveDmConfig,
@@ -49,7 +49,7 @@ class SendDanmakuPanel extends CommonTextPubPage {
 
 class _SendDanmakuPanelState extends CommonTextPubPageState<SendDanmakuPanel> {
   late final RxInt _mode;
-  late final RxInt _fontsize;
+  late final RxInt _fontSize;
   late final Rx<Color> _color;
 
   final List<Color> _colorList = [
@@ -73,7 +73,7 @@ class _SendDanmakuPanelState extends CommonTextPubPageState<SendDanmakuPanel> {
   void initState() {
     super.initState();
     _mode = (widget.dmConfig?.mode ?? 1).obs;
-    _fontsize = (widget.dmConfig?.fontsize ?? 25).obs;
+    _fontSize = (widget.dmConfig?.fontSize ?? 25).obs;
     _color = (widget.dmConfig?.color ?? Colors.white).obs;
     if (Pref.userInfoCache?.vipStatus == 1) {
       _colorList.add(Colors.transparent);
@@ -84,7 +84,7 @@ class _SendDanmakuPanelState extends CommonTextPubPageState<SendDanmakuPanel> {
   void dispose() {
     widget.onSaveDmConfig?.call((
       mode: _mode.value,
-      fontsize: _fontsize.value,
+      fontSize: _fontSize.value,
       color: _color.value,
     ));
     super.dispose();
@@ -316,15 +316,15 @@ class _SendDanmakuPanelState extends CommonTextPubPageState<SendDanmakuPanel> {
     );
   }
 
-  Widget _buildFontSizeItem(int fontsize, String title) {
+  Widget _buildFontSizeItem(int fontSize, String title) {
     return Obx(
       () => Expanded(
         child: GestureDetector(
-          onTap: () => _fontsize.value = fontsize,
+          onTap: () => _fontSize.value = fontSize,
           child: Container(
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: _fontsize.value == fontsize
+              color: _fontSize.value == fontSize
                   ? themeData.colorScheme.secondaryContainer
                   : themeData.colorScheme.onInverseSurface,
               borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -333,7 +333,7 @@ class _SendDanmakuPanelState extends CommonTextPubPageState<SendDanmakuPanel> {
             child: Text(
               title,
               style: TextStyle(
-                color: _fontsize.value == fontsize
+                color: _fontSize.value == fontSize
                     ? themeData.colorScheme.onSecondaryContainer
                     : themeData.colorScheme.outline,
               ),
@@ -447,7 +447,7 @@ class _SendDanmakuPanelState extends CommonTextPubPageState<SendDanmakuPanel> {
         title: const Text('Color Picker'),
         content: SlideColorPicker(
           color: _color.value,
-          callback: (Color? color) {
+          onChanged: (Color? color) {
             if (color != null) {
               _color.value = color;
             }
@@ -468,7 +468,7 @@ class _SendDanmakuPanelState extends CommonTextPubPageState<SendDanmakuPanel> {
       progress: widget.progress,
       msg: editController.text,
       mode: _mode.value,
-      fontsize: _fontsize.value,
+      fontSize: _fontSize.value,
       color: isColorful ? null : _color.value.toARGB32() & 0xFFFFFF,
       colorful: isColorful,
     );
@@ -484,7 +484,7 @@ class _SendDanmakuPanelState extends CommonTextPubPageState<SendDanmakuPanel> {
           mid: PlPlayerController.instance!.midHash,
         );
       }
-      widget.callback(
+      widget.onSuccess(
         DanmakuContentItem(
           editController.text,
           color: isColorful ? Colors.white : _color.value,

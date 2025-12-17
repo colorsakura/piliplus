@@ -20,7 +20,7 @@ class RepostPanel extends CommonRichTextPubPage {
     super.key,
     this.item,
     this.dynIdStr,
-    this.callback,
+    this.onSuccess,
     // video
     this.rid,
     this.dynType,
@@ -38,7 +38,7 @@ class RepostPanel extends CommonRichTextPubPage {
 
   final DynamicItemModel? item;
   final String? dynIdStr;
-  final VoidCallback? callback;
+  final VoidCallback? onSuccess;
 
   @override
   State<RepostPanel> createState() => _RepostPanelState();
@@ -432,7 +432,7 @@ class _RepostPanelState extends CommonRichTextPubPageState<RepostPanel> {
       hasPub = true;
       Get.back();
       SmartDialog.showToast('转发成功');
-      widget.callback?.call();
+      widget.onSuccess?.call();
       var id = result['data']?['dyn_id'];
       RequestUtils.insertCreatedDyn(id);
       RequestUtils.checkCreatedDyn(

@@ -829,7 +829,7 @@ class _UgcIntroPanelState extends State<UgcIntroPanel> {
                               context: context,
                               mid: item.mid,
                               isFollow: false,
-                              callback: (val) {
+                              afterMod: (val) {
                                 introController.staffRelations['${item.mid}'] =
                                     true;
                               },
