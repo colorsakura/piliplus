@@ -4,7 +4,7 @@ import 'package:PiliPlus/grpc/url.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:fixnum/fixnum.dart';
 
-class DmGrpc {
+abstract final class DmGrpc {
   static Future<LoadingState<DmSegMobileReply>> dmSegMobile({
     required int cid,
     required int segmentIndex,

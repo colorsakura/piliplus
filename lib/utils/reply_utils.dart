@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-class ReplyUtils {
+abstract final class ReplyUtils {
   static void onCheckReply({
     required ReplyInfo replyInfo,
     required bool biliSendCommAntifraud,

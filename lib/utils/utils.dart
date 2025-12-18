@@ -14,7 +14,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 
-abstract class Utils {
+abstract final class Utils {
   static final random = Random();
 
   static const channel = MethodChannel(Constants.appName);

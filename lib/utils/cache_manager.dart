@@ -6,7 +6,7 @@ import 'package:PiliPlus/utils/platform_utils.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:path_provider/path_provider.dart';
 
-abstract class CacheManager {
+abstract final class CacheManager {
   // 获取缓存目录
   @pragma('vm:notify-debugger-on-exception')
   static Future<int> loadApplicationCache([

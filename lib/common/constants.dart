@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class StyleString {
+abstract final class StyleString {
   static const double cardSpace = 8;
   static const double safeSpace = 12;
   static const BorderRadius mdRadius = BorderRadius.all(imgRadius);
@@ -9,9 +9,13 @@ class StyleString {
   static const bottomSheetRadius = BorderRadius.vertical(
     top: Radius.circular(18),
   );
+  static const dialogFixedConstraints = BoxConstraints(
+    minWidth: 420,
+    maxWidth: 420,
+  );
 }
 
-class Constants {
+abstract final class Constants {
   static const appName = 'PiliPlus';
   static const sourceCodeUrl = 'https://github.com/bggRGjQaUbCoE/PiliPlus';
 

@@ -191,9 +191,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
                           builder: (_) {
                             return AlertDialog(
                               clipBehavior: Clip.hardEdge,
-                              contentPadding: const EdgeInsets.symmetric(
-                                vertical: 12,
-                              ),
+                              contentPadding: const .symmetric(vertical: 12),
                               content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [

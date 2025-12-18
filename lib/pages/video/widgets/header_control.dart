@@ -1440,10 +1440,6 @@ class HeaderControlState extends State<HeaderControl>
         return AlertDialog(
           title: const Text('播放信息'),
           contentPadding: const EdgeInsets.only(top: 16),
-          constraints: const BoxConstraints(
-            minWidth: 280,
-            maxWidth: 425,
-          ),
           content: Material(
             type: MaterialType.transparency,
             child: ListTileTheme(

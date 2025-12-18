@@ -17,7 +17,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
-class SearchHttp {
+abstract final class SearchHttp {
   // 获取搜索建议
   static Future<LoadingState<SearchSuggestModel>> searchSuggest({
     required String term,

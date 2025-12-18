@@ -984,15 +984,8 @@ class ReplyItemGrpc extends StatelessWidget {
                 context: context,
                 builder: (context) {
                   return Dialog(
-                    constraints: const BoxConstraints(
-                      minWidth: 280,
-                      maxWidth: 425,
-                    ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 16,
-                      ),
+                      padding: const .symmetric(horizontal: 20, vertical: 16),
                       child: SelectableText(
                         message,
                         style: const TextStyle(fontSize: 15, height: 1.7),

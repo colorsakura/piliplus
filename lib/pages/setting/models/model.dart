@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/pages/setting/widgets/normal_item.dart';
 import 'package:PiliPlus/pages/setting/widgets/select_dialog.dart';
 import 'package:PiliPlus/pages/setting/widgets/switch_item.dart';
@@ -108,7 +109,7 @@ class SwitchModel extends SettingsModel {
   );
 }
 
-SettingsModel getBanwordModel({
+SettingsModel getBanWordModel({
   required String title,
   required String key,
   required ValueChanged<RegExp> onChanged,
@@ -119,10 +120,12 @@ SettingsModel getBanwordModel({
     title: title,
     getSubtitle: () => banWord.isEmpty ? "点击添加" : banWord,
     onTap: (context, setState) {
+      String editValue = banWord;
       showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
+            constraints: StyleString.dialogFixedConstraints,
             title: Text(title),
             content: Column(
               mainAxisSize: MainAxisSize.min,
@@ -131,11 +134,11 @@ SettingsModel getBanwordModel({
                 const Text('使用|隔开，如：尝试|测试'),
                 TextFormField(
                   autofocus: true,
-                  initialValue: banWord,
+                  initialValue: editValue,
                   textInputAction: TextInputAction.newline,
                   minLines: 1,
                   maxLines: 4,
-                  onChanged: (value) => banWord = value,
+                  onChanged: (value) => editValue = value,
                 ),
               ],
             ),
@@ -153,6 +156,7 @@ SettingsModel getBanwordModel({
                 child: const Text('保存'),
                 onPressed: () {
                   Get.back();
+                  banWord = editValue;
                   setState();
                   onChanged(RegExp(banWord, caseSensitive: false));
                   SmartDialog.showToast('已保存');

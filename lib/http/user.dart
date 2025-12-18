@@ -20,7 +20,7 @@ import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:dio/dio.dart';
 
-class UserHttp {
+abstract final class UserHttp {
   static Future<dynamic> userStat({required int mid}) async {
     var res = await Request().get(Api.userStat, queryParameters: {'vmid': mid});
     if (res.data['code'] == 0) {

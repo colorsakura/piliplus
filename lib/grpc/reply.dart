@@ -7,7 +7,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:fixnum/fixnum.dart';
 
-class ReplyGrpc {
+abstract final class ReplyGrpc {
   static bool antiGoodsReply = Pref.antiGoodsReply;
   static RegExp replyRegExp = RegExp(
     Pref.banWordForReply,

@@ -5,7 +5,7 @@ import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-abstract class ThemeUtils {
+abstract final class ThemeUtils {
   static ThemeData getThemeData({
     required ColorScheme colorScheme,
     required bool isDynamic,
@@ -91,6 +91,7 @@ abstract class ThemeUtils {
           fontWeight: fontWeight,
         ),
         backgroundColor: colorScheme.surface,
+        constraints: const BoxConstraints(minWidth: 280, maxWidth: 420),
       ),
       bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: colorScheme.surface,

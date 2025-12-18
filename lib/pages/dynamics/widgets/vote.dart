@@ -205,10 +205,6 @@ class _VotePanelState extends State<VotePanel> {
                         clipBehavior: .hardEdge,
                         title: const Text('关注的人的投票'),
                         contentPadding: const .only(top: 10, bottom: 12),
-                        constraints: const BoxConstraints(
-                          minWidth: 280,
-                          maxWidth: 420,
-                        ),
                         content: SingleChildScrollView(
                           child: Column(
                             mainAxisSize: .min,

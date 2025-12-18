@@ -20,7 +20,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:protobuf/protobuf.dart' show GeneratedMessage;
 
-class GrpcReq {
+abstract final class GrpcReq {
   static String? _accessKey = Accounts.main.accessKey;
   static const _build = 2001100;
   static const _versionName = '2.0.1';

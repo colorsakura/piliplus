@@ -15,7 +15,7 @@ import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:encrypt/encrypt.dart';
 
-class LoginHttp {
+abstract final class LoginHttp {
   static final String deviceId = LoginUtils.genDeviceId();
   static String get buvid => LoginUtils.buvid;
   static final Map<String, String> headers = {

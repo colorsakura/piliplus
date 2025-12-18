@@ -1,6 +1,6 @@
 import 'package:PiliPlus/http/constants.dart';
 
-class Api {
+abstract final class Api {
   // 推荐视频
   static const String recommendListApp =
       '${HttpString.appBaseUrl}/x/v2/feed/index';
