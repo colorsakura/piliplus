@@ -8,7 +8,6 @@ import 'package:PiliPlus/grpc/bilibili/metadata/locale.pb.dart';
 import 'package:PiliPlus/grpc/bilibili/metadata/network.pb.dart' as network;
 import 'package:PiliPlus/utils/login_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
-import 'package:dio/dio.dart';
 
 abstract final class GrpcHeaders {
   static const _build = 2001100;
@@ -22,7 +21,6 @@ abstract final class GrpcHeaders {
   static String get _sessionId => Utils.generateRandomString(8);
 
   static final Map<String, String> _base = {
-    Headers.contentTypeHeader: 'application/grpc',
     'grpc-encoding': 'gzip',
     'gzip-accept-encoding': 'gzip,identity',
     'user-agent': Constants.userAgent,

@@ -13,7 +13,10 @@ import 'package:protobuf/protobuf.dart' show GeneratedMessage;
 abstract final class GrpcReq {
   static const _isolateSize = 256 * 1024;
 
-  static final options = Options(responseType: ResponseType.bytes);
+  static final options = Options(
+    contentType: 'application/grpc',
+    responseType: ResponseType.bytes,
+  );
 
   static Uint8List compressProtobuf(Uint8List proto) {
     proto = const GZipEncoder().encodeBytes(proto);
