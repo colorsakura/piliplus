@@ -94,8 +94,6 @@ class _AboutPageState extends State<AboutPage> {
                       constraints: StyleString.dialogFixedConstraints,
                       content: TextField(
                         autofocus: true,
-                        minLines: 1,
-                        maxLines: 4,
                         onSubmitted: (value) {
                           Get.back();
                           if (value.isNotEmpty) {
