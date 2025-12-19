@@ -1657,6 +1657,10 @@ class VideoDetailController extends GetxController
 
   @override
   void onClose() {
+    cancelSkipTimer();
+    positionSubscription?.cancel();
+    positionSubscription = null;
+    cid.close();
     if (isFileSource) {
       cacheLocalProgress();
     }

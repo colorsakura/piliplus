@@ -1846,6 +1846,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             plPlayerController,
             maxWidth,
             maxHeight,
+            () => mounted,
           ),
 
         if (isFullScreen || plPlayerController.isDesktopPip) ...[
@@ -2537,6 +2538,7 @@ Widget buildSeekPreviewWidget(
   PlPlayerController plPlayerController,
   double maxWidth,
   double maxHeight,
+  ValueGetter<bool> isMounted,
 ) {
   return Obx(
     () {
@@ -2591,6 +2593,7 @@ Widget buildSeekPreviewWidget(
                   onSetSize: (xSize, ySize) => data
                     ..imgXSize = imgXSize = xSize
                     ..imgYSize = imgYSize = ySize,
+                  isMounted: isMounted,
                 ),
               );
             },
@@ -2615,6 +2618,7 @@ class VideoShotImage extends StatefulWidget {
     required this.imgYSize,
     required this.height,
     required this.onSetSize,
+    required this.isMounted,
   });
 
   final Map<String, ui.Image?> imageCache;
@@ -2625,6 +2629,7 @@ class VideoShotImage extends StatefulWidget {
   final double imgYSize;
   final double height;
   final Function(double imgXSize, double imgYSize) onSetSize;
+  final ValueGetter<bool> isMounted;
 
   @override
   State<VideoShotImage> createState() => _VideoShotImageState();
@@ -2707,7 +2712,9 @@ class _VideoShotImageState extends State<VideoShotImage> {
       widget.imageCache[url] = null;
       _getImg(url).then((image) {
         if (image != null) {
-          widget.imageCache[url] = image;
+          if (widget.isMounted()) {
+            widget.imageCache[url] = image;
+          }
           if (mounted) {
             _image = image;
             _initSizeIfNeeded();

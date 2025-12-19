@@ -1721,7 +1721,9 @@ class PlPlayerController {
     disableAutoEnterPip();
     setPlayCallBack(null);
     dmState.clear();
-    _clearPreview();
+    if (showSeekPreview) {
+      _clearPreview();
+    }
     Utils.channel.setMethodCallHandler(null);
     _timer?.cancel();
     _timerForSeek?.cancel();
@@ -1744,6 +1746,9 @@ class PlPlayerController {
     }
 
     await removeListeners();
+    subscriptions.clear();
+    _positionListeners.clear();
+    _statusListeners.clear();
     if (playerStatus.playing) {
       WakelockPlus.disable();
     }
@@ -1779,7 +1784,7 @@ class PlPlayerController {
     );
   }
 
-  final Map<String, ui.Image?> previewCache = {};
+  late final Map<String, ui.Image?> previewCache = {};
   LoadingState<VideoShotData>? videoShot;
   late final RxBool showPreview = false.obs;
   late final showSeekPreview = Pref.showSeekPreview;
