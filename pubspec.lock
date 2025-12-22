@@ -530,10 +530,10 @@ packages:
     description:
       path: "."
       ref: mod
-      resolved-ref: "4c03c3413a915fa82f58d4591bfe3b62709a6edf"
+      resolved-ref: e9f51575d0103880f4d0ad64f314bc57d0b49cf1
       url: "https://github.com/bggRGjQaUbCoE/flutter_file_picker.git"
     source: git
-    version: "10.3.7"
+    version: "10.3.8"
   file_selector_linux:
     dependency: transitive
     description:
@@ -897,10 +897,10 @@ packages:
     dependency: transitive
     description:
       name: image
-      sha256: "48c11d0943b93b6fb29103d956ff89aafeae48f6058a3939649be2093dcff0bf"
+      sha256: "492bd52f6c4fbb6ee41f781ff27765ce5f627910e1e0cbecfa3d9add5562604c"
       url: "https://pub.dev"
     source: hosted
-    version: "4.7.1"
+    version: "4.7.2"
   image_cropper:
     dependency: "direct main"
     description:
@@ -1536,10 +1536,10 @@ packages:
     dependency: transitive
     description:
       name: sentry
-      sha256: "10a0bc25f5f21468e3beeae44e561825aaa02cdc6829438e73b9b64658ff88d9"
+      sha256: "9b2fe138df1a104f6e41d8ebf2b1e4fe39d4370d2200eb4eea29913d38b8b33b"
       url: "https://pub.dev"
     source: hosted
-    version: "9.8.0"
+    version: "9.9.1"
   share_plus:
     dependency: "direct main"
     description:
