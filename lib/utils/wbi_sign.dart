@@ -86,7 +86,7 @@ abstract final class WbiSign {
 
       _localCache
         ..put(LocalCacheKey.mixinKey, mixinKey)
-        ..put(LocalCacheKey.timeStamp, DateTime.now().millisecondsSinceEpoch);
+        ..put(LocalCacheKey.timeStamp, nowDate.millisecondsSinceEpoch);
 
       return mixinKey;
     } catch (_) {
