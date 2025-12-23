@@ -47,9 +47,9 @@ class _HomePageState extends State<HomePage>
                 width: double.infinity,
                 child: TabBar(
                   controller: _homeController.tabController,
-                  tabs: [
-                    for (var i in _homeController.tabs) Tab(text: i.label),
-                  ],
+                  tabs: _homeController.tabs
+                      .map((e) => Tab(text: e.label))
+                      .toList(),
                   isScrollable: true,
                   dividerColor: Colors.transparent,
                   dividerHeight: 0,
