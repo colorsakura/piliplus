@@ -13,9 +13,12 @@ import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/app_sign.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
-import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/extension/file_ext.dart';
+import 'package:PiliPlus/utils/extension/iterable_ext.dart';
+import 'package:PiliPlus/utils/extension/theme_ext.dart';
 import 'package:PiliPlus/utils/image_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/platform_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -347,12 +350,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
     dynamic datum,
   }) async {
     final accessKey = Accounts.main.accessKey;
-    if (accessKey.isNullOrEmpty) {
+    if (accessKey == null || accessKey.isEmpty) {
       SmartDialog.showToast('请退出账号后重新登录');
       return;
     }
-    Map<String, String> data = {
-      'access_key': accessKey!,
+    final data = <String, String>{
+      'access_key': accessKey,
       'build': '2001100',
       'c_locale': 'zh_CN',
       'channel': 'master',
@@ -360,7 +363,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
       'platform': 'android',
       's_locale': 'zh_CN',
       'statistics': Constants.statistics,
-      'ts': (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString(),
       if (type == ProfileType.uname)
         'uname': _textController.text
       else if (type == ProfileType.sign)
@@ -488,7 +490,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           return;
         }
         String? imagePath = pickedFile.path;
-        if (Utils.isMobile) {
+        if (PlatformUtils.isMobile) {
           final croppedFile = await ImageCropper.platform.cropImage(
             sourcePath: imagePath,
             uiSettings: [
@@ -497,15 +499,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 toolbarColor: theme.colorScheme.secondaryContainer,
                 toolbarWidgetColor: theme.colorScheme.onSecondaryContainer,
                 statusBarLight: theme.colorScheme.isLight,
-                aspectRatioPresets: [CropAspectRatioPresetCustom()],
+                aspectRatioPresets: const [CropAspectRatioPresetCustom()],
                 lockAspectRatio: true,
                 hideBottomControls: true,
                 cropStyle: CropStyle.circle,
-                initAspectRatio: CropAspectRatioPresetCustom(),
+                initAspectRatio: const CropAspectRatioPresetCustom(),
               ),
               IOSUiSettings(
                 title: '裁剪',
-                aspectRatioPresets: [CropAspectRatioPresetCustom()],
+                aspectRatioPresets: const [CropAspectRatioPresetCustom()],
                 cropStyle: CropStyle.circle,
                 aspectRatioLockEnabled: true,
                 resetAspectRatioEnabled: false,
@@ -540,7 +542,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 } else {
                   SmartDialog.showToast(res.data['message']);
                 }
-                if (Utils.isMobile && imagePath != null) {
+                if (PlatformUtils.isMobile && imagePath != null) {
                   File(imagePath).tryDel();
                 }
               });
@@ -553,8 +555,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
 }
 
 class CropAspectRatioPresetCustom implements CropAspectRatioPresetData {
+  const CropAspectRatioPresetCustom();
+
   @override
-  (int, int)? get data => (1, 1);
+  (int, int) get data => const (1, 1);
 
   @override
   String get name => '1x1 (customized)';

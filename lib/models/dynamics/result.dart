@@ -5,7 +5,7 @@ import 'package:PiliPlus/models/common/dynamic/dynamics_type.dart';
 import 'package:PiliPlus/models/dynamics/article_content_model.dart';
 import 'package:PiliPlus/models/model_avatar.dart';
 import 'package:PiliPlus/models_new/live/live_feed_index/watched_show.dart';
-import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/extension/iterable_ext.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 
@@ -1109,9 +1109,17 @@ class Emoji {
   late num size;
 
   Emoji.fromJson(Map<String, dynamic> json) {
-    url = json['webp_url'] ?? json['gif_url'] ?? json['icon_url'];
+    url =
+        _parseString(json['webp_url']) ??
+        _parseString(json['gif_url']) ??
+        _parseString(json['icon_url']);
     size = json['size'] ?? 1;
   }
+}
+
+String? _parseString(String? value) {
+  if (value == null || value.isEmpty) return null;
+  return value;
 }
 
 class DynamicNoneModel {

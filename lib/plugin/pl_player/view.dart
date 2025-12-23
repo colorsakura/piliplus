@@ -12,7 +12,6 @@ import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/audio_video_progress_bar.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/segment_progress_bar.dart';
 import 'package:PiliPlus/common/widgets/view_safe_area.dart';
-import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/models/common/sponsor_block/action_type.dart';
 import 'package:PiliPlus/models/common/sponsor_block/post_segment_model.dart';
 import 'package:PiliPlus/models/common/sponsor_block/segment_type.dart';
@@ -23,7 +22,6 @@ import 'package:PiliPlus/models_new/video/video_detail/episode.dart' as ugc;
 import 'package:PiliPlus/models_new/video/video_detail/episode.dart';
 import 'package:PiliPlus/models_new/video/video_detail/section.dart';
 import 'package:PiliPlus/models_new/video/video_detail/ugc_season.dart';
-import 'package:PiliPlus/models_new/video/video_shot/data.dart';
 import 'package:PiliPlus/pages/common/common_intro_controller.dart';
 import 'package:PiliPlus/pages/danmaku/danmaku_model.dart';
 import 'package:PiliPlus/pages/live_room/widgets/bottom_control.dart'
@@ -49,16 +47,16 @@ import 'package:PiliPlus/plugin/pl_player/widgets/forward_seek.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/mpv_convert_webp.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/play_pause_btn.dart';
 import 'package:PiliPlus/utils/duration_utils.dart';
-import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/extension/theme_ext.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/image_utils.dart';
 import 'package:PiliPlus/utils/path_utils.dart';
+import 'package:PiliPlus/utils/platform_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:collection/collection.dart';
-import 'package:dio/dio.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
@@ -185,7 +183,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     );
     videoController = plPlayerController.videoController!;
 
-    if (Utils.isMobile) {
+    if (PlatformUtils.isMobile) {
       Future.microtask(() async {
         try {
           FlutterVolumeController.updateShowSystemUI(true);
@@ -312,7 +310,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     _listener?.cancel();
     _controlsListener?.cancel();
     animationController.dispose();
-    if (Utils.isMobile) {
+    if (PlatformUtils.isMobile) {
       FlutterVolumeController.removeListener();
     }
     transformationController.dispose();
@@ -505,7 +503,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   videoDetailController.showVP.value =
                       !videoDetailController.showVP.value;
                 },
-                onSecondaryTap: Utils.isMobile
+                onSecondaryTap: PlatformUtils.isMobile
                     ? null
                     : () => videoDetailController.showVP.value =
                           !videoDetailController.showVP.value,
@@ -540,8 +538,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             final List<SectionItem> sections = videoDetail.ugcSeason!.sections!;
             for (int i = 0; i < sections.length; i++) {
               final List<EpisodeItem> episodesList = sections[i].episodes!;
-              for (int j = 0; j < episodesList.length; j++) {
-                if (episodesList[j].cid == plPlayerController.cid) {
+              for (var item in episodesList) {
+                if (item.cid == currentCid) {
                   index = i;
                   episodes = episodesList;
                   break;
@@ -981,7 +979,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         final double tapPosition = details.localFocalPoint.dx;
         final double sectionWidth = maxWidth / 3;
         if (tapPosition < sectionWidth) {
-          if (Utils.isDesktop ||
+          if (PlatformUtils.isDesktop ||
               !plPlayerController.enableSlideVolumeBrightness) {
             return;
           }
@@ -1115,7 +1113,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           final double volume = clampDouble(
             plPlayerController.volume.value - delta.dy / level,
             0.0,
-            1.0,
+            PlPlayerController.maxVolume,
           );
           plPlayerController.setVolume(volume);
         },
@@ -1182,7 +1180,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   void _onTapUp(TapUpDetails details) {
     switch (details.kind) {
-      case ui.PointerDeviceKind.mouse when Utils.isDesktop:
+      case ui.PointerDeviceKind.mouse when PlatformUtils.isDesktop:
         onTapDesktop();
         break;
       default:
@@ -1218,7 +1216,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   void _onDoubleTapDown(TapDownDetails details) {
     switch (details.kind) {
-      case ui.PointerDeviceKind.mouse when Utils.isDesktop:
+      case ui.PointerDeviceKind.mouse when PlatformUtils.isDesktop:
         onDoubleTapDesktop();
         break;
       default:
@@ -1244,7 +1242,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   StreamSubscription<bool>? _danmakuListener;
 
   void _onPointerDown(PointerDownEvent event) {
-    if (Utils.isDesktop) {
+    if (PlatformUtils.isDesktop) {
       final buttons = event.buttons;
       final isSecondaryBtn = buttons == kSecondaryMouseButton;
       if (isSecondaryBtn || buttons == kMiddleMouseButton) {
@@ -1339,7 +1337,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           final double volume = clampDouble(
             plPlayerController.volume.value - event.localPanDelta.dy / level,
             0.0,
-            1.0,
+            PlPlayerController.maxVolume,
           );
           plPlayerController.setVolume(volume);
         },
@@ -1357,7 +1355,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       final volume = clampDouble(
         plPlayerController.volume.value + offset,
         0.0,
-        1.0,
+        PlPlayerController.maxVolume,
       );
       plPlayerController.setVolume(volume);
     }
@@ -1769,9 +1767,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                               .inSeconds;
                           final int buffer =
                               plPlayerController.bufferedSeconds.value;
-                          if (value > max || max <= 0) {
-                            return const SizedBox.shrink();
-                          }
                           return ProgressBar(
                             progress: Duration(seconds: value),
                             buffered: Duration(seconds: buffer),
@@ -1827,7 +1822,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                           ),
                         ),
                       ),
-                      if (Utils.isMobile)
+                      if (PlatformUtils.isMobile)
                         buildViewPointWidget(
                           videoDetailController,
                           plPlayerController,
@@ -1851,6 +1846,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             plPlayerController,
             maxWidth,
             maxHeight,
+            () => mounted,
           ),
 
         if (isFullScreen || plPlayerController.isDesktopPip) ...[
@@ -2049,7 +2045,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           }),
       ],
     );
-    if (Utils.isDesktop) {
+    if (PlatformUtils.isDesktop) {
       return Obx(
         () => MouseRegion(
           cursor: !plPlayerController.showControls.value && isFullScreen
@@ -2106,7 +2102,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 return Transform.flip(
                   flipX: plPlayerController.flipX.value,
                   flipY: plPlayerController.flipY.value,
-                  filterQuality: FilterQuality.low,
                   child: FittedBox(
                     fit: videoFit.boxFit,
                     alignment: widget.alignment,
@@ -2542,6 +2537,7 @@ Widget buildSeekPreviewWidget(
   PlPlayerController plPlayerController,
   double maxWidth,
   double maxHeight,
+  ValueGetter<bool> isMounted,
 ) {
   return Obx(
     () {
@@ -2550,11 +2546,11 @@ Widget buildSeekPreviewWidget(
       }
 
       try {
-        VideoShotData data = plPlayerController.videoShot!.data;
+        final data = plPlayerController.videoShot!.data;
 
         final double scale =
             plPlayerController.isFullScreen.value &&
-                (Utils.isDesktop || !plPlayerController.isVertical)
+                (PlatformUtils.isDesktop || !plPlayerController.isVertical)
             ? 4
             : 3;
         double height = 27 * scale;
@@ -2592,20 +2588,18 @@ Widget buildSeekPreviewWidget(
                   imgXSize: imgXSize,
                   imgYSize: imgYSize,
                   height: height,
-                  image: plPlayerController.previewCache?[url]?.target,
-                  onCacheImg: (img) =>
-                      (plPlayerController.previewCache ??= {})[url] ??=
-                          WeakReference(img),
+                  imageCache: plPlayerController.previewCache,
                   onSetSize: (xSize, ySize) => data
                     ..imgXSize = imgXSize = xSize
                     ..imgYSize = imgYSize = ySize,
+                  isMounted: isMounted,
                 ),
               );
             },
           ),
         );
       } catch (e) {
-        if (kDebugMode) debugPrint('seek preview: $e');
+        if (kDebugMode) rethrow;
         return const SizedBox.shrink();
       }
     },
@@ -2615,26 +2609,26 @@ Widget buildSeekPreviewWidget(
 class VideoShotImage extends StatefulWidget {
   const VideoShotImage({
     super.key,
-    this.image,
+    required this.imageCache,
     required this.url,
     required this.x,
     required this.y,
     required this.imgXSize,
     required this.imgYSize,
     required this.height,
-    required this.onCacheImg,
     required this.onSetSize,
+    required this.isMounted,
   });
 
-  final ui.Image? image;
+  final Map<String, ui.Image?> imageCache;
   final String url;
   final int x;
   final int y;
   final double imgXSize;
   final double imgYSize;
   final double height;
-  final ValueChanged<ui.Image> onCacheImg;
   final Function(double imgXSize, double imgYSize) onSetSize;
+  final ValueGetter<bool> isMounted;
 
   @override
   State<VideoShotImage> createState() => _VideoShotImageState();
@@ -2643,26 +2637,22 @@ class VideoShotImage extends StatefulWidget {
 Future<ui.Image?> _getImg(String url) async {
   final cacheManager = DefaultCacheManager();
   final cacheKey = Utils.getFileName(url, fileExt: false);
-  final fileInfo = await cacheManager.getFileFromCache(cacheKey);
-  if (fileInfo != null) {
-    final bytes = await fileInfo.file.readAsBytes();
-    return _loadImg(bytes);
-  } else {
-    final res = await Request().get<Uint8List>(
+  try {
+    final fileInfo = await cacheManager.getSingleFile(
       url,
-      options: Options(responseType: ResponseType.bytes),
+      key: cacheKey,
+      headers: Constants.baseHeaders,
     );
-    if (res.statusCode == 200) {
-      final Uint8List data = res.data;
-      cacheManager.putFile(cacheKey, data, fileExtension: 'jpg');
-      return _loadImg(data);
-    }
+    return _loadImg(fileInfo.path);
+  } catch (_) {
+    return null;
   }
-  return null;
 }
 
-Future<ui.Image?> _loadImg(Uint8List bytes) async {
-  final codec = await ui.instantiateImageCodec(bytes);
+Future<ui.Image?> _loadImg(String path) async {
+  final codec = await ui.instantiateImageCodecFromBuffer(
+    await ImmutableBuffer.fromFilePath(path),
+  );
   final frame = await codec.getNextFrame();
   codec.dispose();
   return frame.image;
@@ -2712,19 +2702,27 @@ class _VideoShotImageState extends State<VideoShotImage> {
     _rrect = RRect.fromRectAndRadius(_dstRect, const Radius.circular(10));
   }
 
-  Future<void> _loadImg() async {
-    _image = widget.image;
+  void _loadImg() {
+    final url = widget.url;
+    _image = widget.imageCache[url];
     if (_image != null) {
       _initSizeIfNeeded();
-      setState(() {});
-    } else {
-      final image = await _getImg(widget.url);
-      if (mounted && image != null) {
-        _image = image;
-        widget.onCacheImg(image);
-        _initSizeIfNeeded();
-        setState(() {});
-      }
+    } else if (!widget.imageCache.containsKey(url)) {
+      widget.imageCache[url] = null;
+      _getImg(url).then((image) {
+        if (image != null) {
+          if (widget.isMounted()) {
+            widget.imageCache[url] = image;
+          }
+          if (mounted) {
+            _image = image;
+            _initSizeIfNeeded();
+            setState(() {});
+          }
+        } else {
+          widget.imageCache.remove(url);
+        }
+      });
     }
   }
 
@@ -2823,7 +2821,7 @@ Widget buildViewPointWidget(
           }
           // if (kDebugMode) debugPrint('${item.title},,${item.from}');
         } catch (e) {
-          if (kDebugMode) debugPrint('$e');
+          if (kDebugMode) rethrow;
         }
       },
     ),

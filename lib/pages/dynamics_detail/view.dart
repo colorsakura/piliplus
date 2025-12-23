@@ -9,7 +9,7 @@ import 'package:PiliPlus/pages/dynamics/widgets/author_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/dynamic_panel.dart';
 import 'package:PiliPlus/pages/dynamics_detail/controller.dart';
 import 'package:PiliPlus/pages/dynamics_repost/view.dart';
-import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/extension/get_ext.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/num_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
@@ -278,7 +278,7 @@ class _DynamicDetailPageState extends CommonDynPageState<DynamicDetailPage> {
                                 useSafeArea: true,
                                 builder: (context) => RepostPanel(
                                   item: controller.dynItem,
-                                  callback: () {
+                                  onSuccess: () {
                                     if (forward != null) {
                                       int count = forward.count ?? 0;
                                       forward.count = count + 1;

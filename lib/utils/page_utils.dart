@@ -18,8 +18,9 @@ import 'package:PiliPlus/pages/share/view.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/menu_row.dart';
 import 'package:PiliPlus/services/shutdown_timer_service.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
-import 'package:PiliPlus/utils/context_ext.dart';
-import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/extension/context_ext.dart';
+import 'package:PiliPlus/utils/extension/extension.dart';
+import 'package:PiliPlus/utils/extension/string_ext.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
@@ -34,7 +35,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:url_launcher/url_launcher.dart';
 
-abstract class PageUtils {
+abstract final class PageUtils {
   static final RouteObserver<PageRoute> routeObserver =
       RouteObserver<PageRoute>();
 
@@ -61,7 +62,6 @@ abstract class PageUtils {
   }) async {
     // if (kDebugMode) debugPrint(content.toString());
 
-    int? selectedIndex;
     List<UserModel> userList = <UserModel>[];
 
     final shareListRes = await ImGrpc.shareList(size: 3);
@@ -76,11 +76,10 @@ abstract class PageUtils {
         ),
       );
     } else if (context.mounted) {
-      UserModel? userModel = await Navigator.of(context).push(
+      final UserModel? userModel = await Navigator.of(context).push(
         GetPageRoute(page: () => const ContactPage()),
       );
       if (userModel != null) {
-        selectedIndex = 0;
         userList.add(userModel);
       }
     }
@@ -91,7 +90,6 @@ abstract class PageUtils {
         builder: (context) => SharePanel(
           content: content,
           userList: userList,
-          selectedIndex: selectedIndex,
         ),
         useSafeArea: true,
         enableDrag: false,
@@ -423,10 +421,7 @@ abstract class PageUtils {
             }
           }
           // redirectUrl from jumpUrl
-          if (await UrlUtils.parseRedirectUrl(
-                archive.jumpUrl.http2https,
-                false,
-              )
+          if (await UrlUtils.parseRedirectUrl(archive.jumpUrl.http2https, false)
               case final redirectUrl?) {
             if (viewPgcFromUri(redirectUrl)) {
               return;
@@ -658,8 +653,8 @@ abstract class PageUtils {
     Get.generalDialog(
       barrierLabel: '',
       barrierDismissible: true,
-      pageBuilder: (buildContext, animation, secondaryAnimation) {
-        if (Get.context!.isPortrait) {
+      pageBuilder: (context, animation, secondaryAnimation) {
+        if (context.isPortrait) {
           return SafeArea(
             child: FractionallySizedBox(
               heightFactor: 0.7,
@@ -685,7 +680,7 @@ abstract class PageUtils {
       },
       transitionDuration: const Duration(milliseconds: 350),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
-        Offset begin = Get.context!.isPortrait
+        Offset begin = context.isPortrait
             ? const Offset(0.0, 1.0)
             : const Offset(1.0, 0.0);
         var tween = Tween(

@@ -25,8 +25,9 @@ import 'package:PiliPlus/pages/video/introduction/ugc/widgets/page.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
 import 'package:PiliPlus/utils/duration_utils.dart';
-import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/extension/scroll_controller_ext.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
+import 'package:PiliPlus/utils/platform_utils.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/foundation.dart';
@@ -168,14 +169,24 @@ class _EpisodePanelState extends State<EpisodePanel>
     _isReversed = List.filled(widget.list.length, false);
 
     if (widget.type == EpisodeType.season && Accounts.main.isLogin) {
-      _favState = LoadingState<bool>.loading().obs;
-      VideoHttp.videoRelation(bvid: widget.bvid).then(
-        (result) {
-          if (result case Success(:var response)) {
-            _favState!.value = Success(response.seasonFav ?? false);
-          }
-        },
-      );
+      final favState =
+          widget.ugcIntroController?.seasonFavState[widget.seasonId];
+      if (favState != null) {
+        _favState = Success(favState).obs;
+      } else {
+        _favState = LoadingState<bool>.loading().obs;
+        VideoHttp.videoRelation(bvid: widget.bvid).then(
+          (result) {
+            if (!mounted) return;
+            if (result case Success(:var response)) {
+              final seasonFav = response.seasonFav ?? false;
+              _favState!.value = Success(seasonFav);
+              widget.ugcIntroController?.seasonFavState[widget.seasonId] =
+                  seasonFav;
+            }
+          },
+        );
+      }
     }
   }
 
@@ -457,7 +468,7 @@ class _EpisodePanelState extends State<EpisodePanel>
               });
             },
             onLongPress: onLongPress,
-            onSecondaryTap: Utils.isMobile ? null : onLongPress,
+            onSecondaryTap: PlatformUtils.isMobile ? null : onLongPress,
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: StyleString.safeSpace,
@@ -587,6 +598,8 @@ class _EpisodePanelState extends State<EpisodePanel>
           if (result.isSuccess) {
             SmartDialog.showToast('${response ? '取消' : ''}订阅成功');
             _favState!.value = Success(!response);
+            widget.ugcIntroController?.seasonFavState[widget.seasonId] =
+                !response;
           } else {
             result.toast();
           }

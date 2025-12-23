@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' show min;
 import 'dart:ui';
 
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/segment_progress_bar.dart';
 import 'package:PiliPlus/grpc/bilibili/app/listener/v1.pbenum.dart'
@@ -54,10 +55,12 @@ import 'package:PiliPlus/plugin/pl_player/models/heart_beat_type.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
 import 'package:PiliPlus/services/download/download_service.dart';
 import 'package:PiliPlus/utils/accounts.dart';
-import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/duration_utils.dart';
-import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/extension/context_ext.dart';
+import 'package:PiliPlus/utils/extension/iterable_ext.dart';
+import 'package:PiliPlus/utils/extension/size_ext.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/platform_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -1012,7 +1015,7 @@ class VideoDetailController extends GetxController
     }
   }
 
-  ({int mode, int fontsize, Color color})? dmConfig;
+  ({int mode, int fontSize, Color color})? dmConfig;
   String? savedDanmaku;
 
   /// 发送弹幕
@@ -1025,7 +1028,7 @@ class VideoDetailController extends GetxController
     if (isPlaying) {
       await plPlayerController.pause();
     }
-    await Navigator.of(Get.context!).push(
+    await Get.key.currentState!.push(
       GetDialogRoute(
         pageBuilder: (buildContext, animation, secondaryAnimation) {
           return SendDanmakuPanel(
@@ -1034,7 +1037,7 @@ class VideoDetailController extends GetxController
             progress: plPlayerController.position.value.inMilliseconds,
             initialValue: savedDanmaku,
             onSave: (danmaku) => savedDanmaku = danmaku,
-            callback: (danmakuModel) {
+            onSuccess: (danmakuModel) {
               savedDanmaku = null;
               plPlayerController.danmakuController?.addDanmaku(danmakuModel);
             },
@@ -1169,7 +1172,7 @@ class VideoDetailController extends GetxController
       seasonId: isUgc ? null : seasonId,
       pgcType: isUgc ? null : pgcType,
       videoType: videoType,
-      callback: () async {
+      onInit: () async {
         if (videoState.value is! Success) {
           videoState.value = const Success(null);
         }
@@ -1606,7 +1609,7 @@ class VideoDetailController extends GetxController
             subtitles.first.lan.startsWith('ai') ? 0 : 1,
           SubtitlePrefType.auto =>
             !subtitles.first.lan.startsWith('ai') ||
-                    (Utils.isMobile &&
+                    (PlatformUtils.isMobile &&
                         (await FlutterVolumeController.getVolume() ?? 0.0) <=
                             0.0)
                 ? 1
@@ -1654,6 +1657,10 @@ class VideoDetailController extends GetxController
 
   @override
   void onClose() {
+    cancelSkipTimer();
+    positionSubscription?.cancel();
+    positionSubscription = null;
+    cid.close();
     if (isFileSource) {
       cacheLocalProgress();
     }
@@ -1889,7 +1896,9 @@ class VideoDetailController extends GetxController
         (e) => e.cid == (seasonCid ?? cid.value),
       );
       final size = context.mediaQuerySize;
-      final maxChildSize = Utils.isMobile && !size.isPortrait ? 1.0 : 0.7;
+      final maxChildSize = PlatformUtils.isMobile && !size.isPortrait
+          ? 1.0
+          : 0.7;
       showModalBottomSheet(
         context: context,
         useSafeArea: true,
@@ -1938,7 +1947,7 @@ class VideoDetailController extends GetxController
     showDialog(
       context: Get.context!,
       builder: (context) => AlertDialog(
-        constraints: const BoxConstraints(maxWidth: 425, minWidth: 425),
+        constraints: StyleString.dialogFixedConstraints,
         title: const Text('播放地址'),
         content: Column(
           spacing: 20,

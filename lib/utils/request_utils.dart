@@ -11,7 +11,6 @@ import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
-import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/validate.dart';
 import 'package:PiliPlus/http/video.dart';
@@ -24,9 +23,10 @@ import 'package:PiliPlus/pages/group_panel/view.dart';
 import 'package:PiliPlus/pages/later/controller.dart';
 import 'package:PiliPlus/pages/login/geetest/geetest_webview_dialog.dart';
 import 'package:PiliPlus/utils/accounts.dart';
-import 'package:PiliPlus/utils/context_ext.dart';
-import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/extension/context_ext.dart';
+import 'package:PiliPlus/utils/extension/string_ext.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
+import 'package:PiliPlus/utils/platform_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
@@ -63,13 +63,11 @@ abstract final class RequestUtils {
   // 16：番剧（id 为 epid）
   // 17：番剧
   // https://github.com/SocialSisterYi/bilibili-API-collect/tree/master/docs/message/private_msg_content.md
-  static Future<void> pmShare({
+  static Future<bool> pmShare({
     required int receiverId,
     required Map content,
     String? message,
   }) async {
-    SmartDialog.showLoading();
-
     final ownerMid = Accounts.main.mid;
     final contentRes = await ImGrpc.sendMsg(
       senderUid: ownerMid,
@@ -82,33 +80,26 @@ abstract final class RequestUtils {
 
     if (contentRes.isSuccess) {
       if (message?.isNotEmpty == true) {
-        var msgRes = await MsgHttp.sendMsg(
+        final msgRes = await ImGrpc.sendMsg(
           senderUid: ownerMid,
           receiverId: receiverId,
           content: jsonEncode({"content": message}),
-          msgType: 1,
+          msgType: MsgType.EN_MSG_TYPE_TEXT,
         );
-        Get.back();
-        if (msgRes['status']) {
-          SmartDialog.showToast('分享成功');
-        } else {
-          SmartDialog.showToast('内容分享成功，但消息分享失败: ${msgRes['msg']}');
-        }
+        return msgRes.isSuccess;
       } else {
-        Get.back();
-        SmartDialog.showToast('分享成功');
+        return true;
       }
     } else {
-      SmartDialog.showToast('分享失败: ${(contentRes as Error).errMsg}');
+      return false;
     }
-    SmartDialog.dismiss();
   }
 
   static Future<void> actionRelationMod({
     required BuildContext context,
     required dynamic mid,
     required bool isFollow,
-    required ValueChanged<int>? callback,
+    required ValueChanged<int>? afterMod,
     Map? followStatus,
   }) async {
     if (mid == null) {
@@ -123,7 +114,7 @@ abstract final class RequestUtils {
       );
       if (res.isSuccess) {
         SmartDialog.showToast('关注成功');
-        callback?.call(2);
+        afterMod?.call(2);
       } else {
         res.toast();
       }
@@ -160,7 +151,7 @@ abstract final class RequestUtils {
                       );
                       if (res.isSuccess) {
                         SmartDialog.showToast('$text成功');
-                        callback?.call(isSpecialFollowed ? 2 : -10);
+                        afterMod?.call(isSpecialFollowed ? 2 : -10);
                       } else {
                         res.toast();
                       }
@@ -205,7 +196,7 @@ abstract final class RequestUtils {
                       );
                       followStatus!['tag'] = result?.toList();
                       if (result != null) {
-                        callback?.call(result.contains(-10) ? -10 : 2);
+                        afterMod?.call(result.contains(-10) ? -10 : 2);
                       }
                     },
                     title: const Text(
@@ -224,7 +215,7 @@ abstract final class RequestUtils {
                       );
                       if (res.isSuccess) {
                         SmartDialog.showToast('取消关注成功');
-                        callback?.call(0);
+                        afterMod?.call(0);
                       } else {
                         res.toast();
                       }
@@ -336,7 +327,7 @@ abstract final class RequestUtils {
                         '/webview',
                         parameters: {
                           'url':
-                              'https://www.bilibili.com/h5/comment/appeal?native.theme=2&night=${Get.isDarkMode ? 1 : 0}',
+                              'https://www.bilibili.com/h5/comment/appeal?${Utils.themeUrl(Get.isDarkMode)}',
                         },
                       );
                     },
@@ -542,7 +533,7 @@ abstract final class RequestUtils {
       }
     }
 
-    if (Utils.isDesktop) {
+    if (PlatformUtils.isDesktop) {
       final json = await Get.dialog<Map<String, dynamic>>(
         GeetestWebviewDialog(gt!, challenge!),
       );

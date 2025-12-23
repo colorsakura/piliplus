@@ -30,6 +30,7 @@ import 'package:PiliPlus/utils/cache_manager.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/image_utils.dart';
 import 'package:PiliPlus/utils/path_utils.dart';
+import 'package:PiliPlus/utils/platform_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
@@ -45,7 +46,7 @@ import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 List<SettingsModel> get extraSettings => [
-  if (Utils.isDesktop) ...[
+  if (PlatformUtils.isDesktop) ...[
     SwitchModel(
       title: '退出时最小化',
       leading: const Icon(Icons.exit_to_app),
@@ -425,7 +426,7 @@ List<SettingsModel> get extraSettings => [
     setKey: SettingBoxKey.continuePlayingPart,
     defaultVal: true,
   ),
-  getBanwordModel(
+  getBanWordModel(
     title: '评论关键词过滤',
     key: SettingBoxKey.banWordForReply,
     onChanged: (value) {
@@ -433,7 +434,7 @@ List<SettingsModel> get extraSettings => [
       ReplyGrpc.enableFilter = value.pattern.isNotEmpty;
     },
   ),
-  getBanwordModel(
+  getBanWordModel(
     title: '动态关键词过滤',
     key: SettingBoxKey.banWordForDyn,
     onChanged: (value) {
@@ -873,7 +874,6 @@ List<SettingsModel> get extraSettings => [
     onTap: (context, setState) async {
       final result = await showDialog<double>(
         context: context,
-
         builder: (context) {
           return SlideDialog(
             title: '连接重试次数',
@@ -899,7 +899,6 @@ List<SettingsModel> get extraSettings => [
     onTap: (context, setState) async {
       final result = await showDialog<double>(
         context: context,
-
         builder: (context) {
           return SlideDialog(
             title: '连接重试间隔',
@@ -927,7 +926,6 @@ List<SettingsModel> get extraSettings => [
     onTap: (context, setState) async {
       final result = await showDialog<int>(
         context: context,
-
         builder: (context) {
           return SelectDialog<int>(
             title: '评论展示',
@@ -952,7 +950,6 @@ List<SettingsModel> get extraSettings => [
     onTap: (context, setState) async {
       final result = await showDialog<int>(
         context: context,
-
         builder: (context) {
           return SelectDialog<int>(
             title: '动态展示',
@@ -977,7 +974,6 @@ List<SettingsModel> get extraSettings => [
     onTap: (context, setState) async {
       final result = await showDialog<MemberTabType>(
         context: context,
-
         builder: (context) {
           return SelectDialog<MemberTabType>(
             title: '用户页默认展示TAB',
@@ -1193,7 +1189,6 @@ Future<void> audioNormalization(
       String param = '';
       await showDialog(
         context: context,
-
         builder: (context) {
           return AlertDialog(
             title: const Text('自定义参数'),
