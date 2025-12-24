@@ -619,17 +619,17 @@ class Vote {
   Vote({
     this.joinNum,
     this.voteId,
-    this.desc,
+    this.title,
   });
 
   int? joinNum;
   int? voteId;
-  String? desc;
+  String? title;
 
   Vote.fromJson(Map<String, dynamic> json) {
     joinNum = Utils.safeToInt(json['join_num']);
     voteId = Utils.safeToInt(json['vote_id']);
-    desc = json['desc'];
+    title = json['title'];
   }
 }
 
