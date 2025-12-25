@@ -455,6 +455,7 @@ abstract final class Pref {
       _setting.get(SettingBoxKey.enableCommAntifraud, defaultValue: false);
 
   static bool get biliSendCommAntifraud =>
+      Platform.isAndroid &&
       _setting.get(SettingBoxKey.biliSendCommAntifraud, defaultValue: false);
 
   static bool get enableCreateDynAntifraud =>
@@ -658,7 +659,7 @@ abstract final class Pref {
 
   static bool get dynamicColor =>
       !Platform.isIOS &&
-      _setting.get(SettingBoxKey.dynamicColor, defaultValue: !Platform.isIOS);
+      _setting.get(SettingBoxKey.dynamicColor, defaultValue: true);
 
   static bool get autoClearCache =>
       _setting.get(SettingBoxKey.autoClearCache, defaultValue: false);

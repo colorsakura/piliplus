@@ -629,7 +629,7 @@ class Vote {
   Vote.fromJson(Map<String, dynamic> json) {
     joinNum = Utils.safeToInt(json['join_num']);
     voteId = Utils.safeToInt(json['vote_id']);
-    title = json['title'];
+    title = _parseString(json['title']) ?? _parseString(json['desc']);
   }
 }
 
