@@ -5,6 +5,7 @@ import 'package:PiliPlus/models_new/download/download_info.dart';
 import 'package:PiliPlus/pages/common/multi_select/base.dart'
     show BaseMultiSelectMixin;
 import 'package:PiliPlus/services/download/download_service.dart';
+import 'package:PiliPlus/utils/extension/iterable_ext.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';

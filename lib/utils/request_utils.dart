@@ -34,7 +34,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart' hide ContextExtensionss;
+import 'package:get/get.dart';
 import 'package:gt3_flutter_plugin/gt3_flutter_plugin.dart';
 
 abstract final class RequestUtils {
@@ -310,9 +310,10 @@ abstract final class RequestUtils {
           }
           var res = await DynamicsHttp.dynamicDetail(id: id, clearCookie: true);
           final isSuccess = res.isSuccess;
-          Get.dialog(
+          showDialog(
+            context: Get.context!,
             barrierDismissible: isManual,
-            AlertDialog(
+            builder: (context) => AlertDialog(
               title: const Text('动态检查结果'),
               content: SelectableText(
                 '${isSuccess ? '无账号状态下找到了你的动态，动态正常！' : '你的动态被shadow ban（仅自己可见）！'}${dynText != null ? ' \n\n动态内容: $dynText' : ''}',
@@ -534,8 +535,9 @@ abstract final class RequestUtils {
     }
 
     if (PlatformUtils.isDesktop) {
-      final json = await Get.dialog<Map<String, dynamic>>(
-        GeetestWebviewDialog(gt!, challenge!),
+      final json = await showDialog<Map<String, dynamic>>(
+        context: Get.context!,
+        builder: (context) => GeetestWebviewDialog(gt!, challenge!),
       );
       if (json != null) {
         captchaData
@@ -543,7 +545,7 @@ abstract final class RequestUtils {
           ..seccode = json['geetest_seccode']
           ..geetest = GeetestData(
             challenge: json['geetest_challenge'],
-            gt: gt,
+            gt: gt!,
           );
         gaiaVgateValidate();
       }
@@ -651,8 +653,9 @@ abstract final class RequestUtils {
     if (res.isSuccess) {
       final data = res.data;
       final show = !data.name.isNullOrEmpty;
-      Get.dialog(
-        AlertDialog(
+      showDialog(
+        context: Get.context!,
+        builder: (context) => AlertDialog(
           title: SelectableText(
             show ? data.name! : data.rejectPage?.title ?? '',
           ),

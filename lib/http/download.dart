@@ -11,7 +11,6 @@ import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/extension/iterable_ext.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/video_utils.dart';
-import 'package:get/get_utils/get_utils.dart';
 
 abstract final class DownloadHttp {
   static const String referer = "https://www.bilibili.com/";

@@ -23,10 +23,16 @@ class PgcReviewPage extends StatefulWidget {
 
 class _PgcReviewPageState extends State<PgcReviewPage>
     with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-  late final _tabController = TabController(
-    length: PgcReviewType.values.length,
-    vsync: this,
-  );
+  late final TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(
+      length: PgcReviewType.values.length,
+      vsync: this,
+    );
+  }
 
   @override
   void dispose() {

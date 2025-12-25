@@ -67,7 +67,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart' hide ContextExtensionss;
+import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:screen_brightness_platform_interface/screen_brightness_platform_interface.dart';
@@ -177,6 +177,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         animationController.reverse();
       }
     });
+    transformationController = TransformationController();
     animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 100),
@@ -914,7 +915,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   bool get isFullScreen => plPlayerController.isFullScreen.value;
 
-  late final transformationController = TransformationController();
+  late final TransformationController transformationController;
 
   late ColorScheme colorScheme;
   late double maxWidth;
@@ -2149,8 +2150,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     WebpPreset preset = WebpPreset.def;
 
     final success =
-        await Get.dialog<bool>(
-          AlertDialog(
+        await showDialog<bool>(
+          context: Get.context!,
+          builder: (context) => AlertDialog(
             title: const Text('动态截图'),
             content: Column(
               spacing: 12,

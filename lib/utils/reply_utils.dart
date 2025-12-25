@@ -99,9 +99,10 @@ abstract final class ReplyUtils {
       await Future.delayed(const Duration(seconds: 8));
     }
     void showReplyCheckResult(String message, {bool isBan = false}) {
-      Get.dialog(
+      showDialog(
+        context: Get.context!,
         barrierDismissible: isManual,
-        AlertDialog(
+        builder: (context) => AlertDialog(
           title: const Text('评论检查结果'),
           content: SelectableText(message),
           actions: [

@@ -27,6 +27,7 @@ import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/services/download/download_service.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/cache_manager.dart';
+import 'package:PiliPlus/utils/extension/num_ext.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/image_utils.dart';
 import 'package:PiliPlus/utils/path_utils.dart';
@@ -795,8 +796,10 @@ List<SettingsModel> get extraSettings => [
             return;
           }
           final quickFavId = Pref.quickFavId;
-          Get.dialog(
-            AlertDialog(
+          if (!context.mounted) return;
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
               clipBehavior: Clip.hardEdge,
               title: const Text('选择默认收藏夹'),
               contentPadding: const EdgeInsets.only(top: 5, bottom: 18),

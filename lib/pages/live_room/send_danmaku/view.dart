@@ -10,7 +10,7 @@ import 'package:PiliPlus/pages/live_emote/view.dart';
 import 'package:PiliPlus/pages/live_room/controller.dart';
 import 'package:flutter/material.dart' hide TextField;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart' hide MultipartFile;
+import 'package:get/get.dart';
 
 class LiveSendDmPanel extends CommonRichTextPubPage {
   final bool fromEmote;

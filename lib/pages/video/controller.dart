@@ -40,6 +40,7 @@ import 'package:PiliPlus/models_new/video/video_pbp/data.dart';
 import 'package:PiliPlus/models_new/video/video_play_info/subtitle.dart';
 import 'package:PiliPlus/models_new/video/video_stein_edgeinfo/data.dart';
 import 'package:PiliPlus/pages/audio/view.dart';
+import 'package:PiliPlus/pages/common/publish/publish_route.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/pages/video/download_panel/view.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/controller.dart';
@@ -58,6 +59,7 @@ import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/duration_utils.dart';
 import 'package:PiliPlus/utils/extension/context_ext.dart';
 import 'package:PiliPlus/utils/extension/iterable_ext.dart';
+import 'package:PiliPlus/utils/extension/num_ext.dart';
 import 'package:PiliPlus/utils/extension/size_ext.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/platform_utils.dart';
@@ -71,8 +73,7 @@ import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
-import 'package:get/get.dart' hide ContextExtensionss;
-import 'package:get/get_navigation/src/dialog/dialog_route.dart';
+import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:media_kit/media_kit.dart';
@@ -165,8 +166,9 @@ class VideoDetailController extends GetxController
   late final scrollKey = GlobalKey<ExtendedNestedScrollViewState>();
   late final RxBool isVertical = false.obs;
   late final RxDouble scrollRatio = 0.0.obs;
-  late final ScrollController scrollCtr = ScrollController()
-    ..addListener(scrollListener);
+  ScrollController? _scrollCtr;
+  ScrollController get scrollCtr =>
+      _scrollCtr ??= ScrollController()..addListener(scrollListener);
   late bool isExpanding = false;
   late bool isCollapsing = false;
   AnimationController? animController;
@@ -216,9 +218,7 @@ class VideoDetailController extends GetxController
           } else {
             // current maxVideoHeight
             final currentHeight = (maxVideoHeight - scrollCtr.offset)
-                .toPrecision(
-                  2,
-                );
+                .toPrecision(2);
             double minVideoHeightPrecise = minVideoHeight.toPrecision(2);
             if (currentHeight == minVideoHeightPrecise) {
               isExpanding = true;
@@ -1029,7 +1029,7 @@ class VideoDetailController extends GetxController
       await plPlayerController.pause();
     }
     await Get.key.currentState!.push(
-      GetDialogRoute(
+      PublishRoute(
         pageBuilder: (buildContext, animation, secondaryAnimation) {
           return SendDanmakuPanel(
             cid: cid.value,
@@ -1044,18 +1044,6 @@ class VideoDetailController extends GetxController
             darkVideoPage: plPlayerController.darkVideoPage,
             dmConfig: dmConfig,
             onSaveDmConfig: (dmConfig) => this.dmConfig = dmConfig,
-          );
-        },
-        transitionDuration: const Duration(milliseconds: 500),
-        transitionBuilder: (context, animation, secondaryAnimation, child) {
-          return SlideTransition(
-            position: animation.drive(
-              Tween(
-                begin: const Offset(0.0, 1.0),
-                end: Offset.zero,
-              ).chain(CurveTween(curve: Curves.linear)),
-            ),
-            child: child,
           );
         },
       ),
@@ -1667,8 +1655,8 @@ class VideoDetailController extends GetxController
     introScrollCtr?.dispose();
     introScrollCtr = null;
     tabCtr.dispose();
-    scrollCtr
-      ..removeListener(scrollListener)
+    _scrollCtr
+      ?..removeListener(scrollListener)
       ..dispose();
     animController?.dispose();
     super.onClose();

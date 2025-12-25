@@ -25,10 +25,7 @@ class LaterPage extends StatefulWidget {
 class _LaterPageState extends State<LaterPage>
     with SingleTickerProviderStateMixin {
   final LaterBaseController _baseCtr = Get.put(LaterBaseController());
-  late final TabController _tabController = TabController(
-    length: LaterViewType.values.length,
-    vsync: this,
-  );
+  late final TabController _tabController;
 
   LaterController currCtr([int? index]) {
     final type = LaterViewType.values[index ?? _tabController.index];
@@ -46,7 +43,10 @@ class _LaterPageState extends State<LaterPage>
   @override
   void initState() {
     super.initState();
-    _tabController.addListener(listener);
+    _tabController = TabController(
+      length: LaterViewType.values.length,
+      vsync: this,
+    )..addListener(listener);
   }
 
   @override

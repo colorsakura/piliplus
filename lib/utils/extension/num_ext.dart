@@ -1,3 +1,5 @@
+import 'dart:math' show pow;
+
 import 'package:flutter/widgets.dart';
 
 extension ImageExtension on num {
@@ -12,4 +14,11 @@ extension ImageExtension on num {
 extension IntExt on int? {
   int? operator +(int other) => this == null ? null : this! + other;
   int? operator -(int other) => this == null ? null : this! - other;
+}
+
+extension DoubleExt on double {
+  double toPrecision(int fractionDigits) {
+    var mod = pow(10, fractionDigits.toDouble()).toDouble();
+    return ((this * mod).round().toDouble() / mod);
+  }
 }

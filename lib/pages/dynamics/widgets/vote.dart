@@ -12,10 +12,11 @@ import 'package:PiliPlus/models/dynamics/vote_model.dart';
 import 'package:PiliPlus/models_new/followee_votes/vote.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
+import 'package:PiliPlus/utils/extension/iterable_ext.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/num_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart' hide ContextExtensionss;
+import 'package:get/get.dart';
 
 class VotePanel extends StatefulWidget {
   final VoteInfo voteInfo;

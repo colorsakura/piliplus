@@ -137,8 +137,9 @@ class LoginPageController extends GetxController
     }
 
     if (PlatformUtils.isDesktop) {
-      Get.dialog<Map<String, dynamic>>(
-        GeetestWebviewDialog(geeGt, geeChallenge),
+      showDialog<Map<String, dynamic>>(
+        context: Get.context!,
+        builder: (context) => GeetestWebviewDialog(geeGt, geeChallenge),
       ).then((res) {
         if (res != null) {
           updateCaptchaData(res);
@@ -341,8 +342,9 @@ class LoginPageController extends GetxController
 
         TextEditingController textFieldController = TextEditingController();
         String captchaKey = '';
-        Get.dialog(
-          AlertDialog(
+        showDialog(
+          context: Get.context!,
+          builder: (context) => AlertDialog(
             titlePadding: const EdgeInsets.only(
               left: 16,
               top: 18,

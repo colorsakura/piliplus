@@ -86,11 +86,7 @@ class EpisodePanel extends CommonSlidePage {
 class _EpisodePanelState extends State<EpisodePanel>
     with TickerProviderStateMixin, CommonSlideMixin {
   // tab
-  late final TabController _tabController = TabController(
-    initialIndex: widget.initialTabIndex,
-    length: widget.list.length,
-    vsync: this,
-  )..addListener(listener);
+  late final TabController _tabController;
   late final RxInt _currentTabIndex = _tabController.index.obs;
 
   late final showTitle = widget.showTitle;
@@ -154,6 +150,12 @@ class _EpisodePanelState extends State<EpisodePanel>
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(
+      initialIndex: widget.initialTabIndex,
+      length: widget.list.length,
+      vsync: this,
+    )..addListener(listener);
+
     _currentItemIndex = _findCurrentItemIndex;
     _itemScrollController = List.generate(
       widget.list.length,

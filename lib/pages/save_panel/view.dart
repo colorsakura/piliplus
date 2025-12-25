@@ -8,6 +8,7 @@ import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show ReplyInfo;
 import 'package:PiliPlus/models/common/video/video_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
+import 'package:PiliPlus/pages/common/publish/publish_route.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/dynamic_panel.dart';
 import 'package:PiliPlus/pages/music/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/controller.dart';
@@ -23,7 +24,7 @@ import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart' hide ContextExtensionss;
+import 'package:get/get.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:share_plus/share_plus.dart';
@@ -43,25 +44,25 @@ class SavePanel extends StatefulWidget {
   State<SavePanel> createState() => _SavePanelState();
 
   static void toSavePanel({dynamic upMid, dynamic item}) {
-    Get.generalDialog(
-      barrierLabel: '',
-      barrierDismissible: true,
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return SavePanel(upMid: upMid, item: item);
-      },
-      transitionDuration: const Duration(milliseconds: 255),
-      transitionBuilder: (context, animation, secondaryAnimation, child) {
-        return FadeTransition(
-          opacity: animation.drive(
-            Tween<double>(
-              begin: 0,
-              end: 1,
-            ).chain(CurveTween(curve: Curves.easeInOut)),
-          ),
-          child: child,
-        );
-      },
-      routeSettings: RouteSettings(arguments: Get.arguments),
+    Get.key.currentState!.push(
+      PublishRoute(
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return SavePanel(upMid: upMid, item: item);
+        },
+        transitionDuration: const Duration(milliseconds: 255),
+        transitionBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(
+            opacity: animation.drive(
+              Tween<double>(
+                begin: 0,
+                end: 1,
+              ).chain(CurveTween(curve: Curves.easeInOut)),
+            ),
+            child: child,
+          );
+        },
+        settings: RouteSettings(arguments: Get.arguments),
+      ),
     );
   }
 }

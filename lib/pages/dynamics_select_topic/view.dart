@@ -12,7 +12,7 @@ import 'package:PiliPlus/pages/search/controller.dart' show DebounceStreamState;
 import 'package:PiliPlus/utils/extension/context_ext.dart';
 import 'package:PiliPlus/utils/extension/scroll_controller_ext.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart' hide ContextExtensionss;
+import 'package:get/get.dart';
 
 class SelectTopicPanel extends StatefulWidget {
   const SelectTopicPanel({

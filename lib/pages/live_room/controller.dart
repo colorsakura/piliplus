@@ -13,6 +13,7 @@ import 'package:PiliPlus/models_new/live/live_dm_info/data.dart';
 import 'package:PiliPlus/models_new/live/live_room_info_h5/data.dart';
 import 'package:PiliPlus/models_new/live/live_room_play_info/codec.dart';
 import 'package:PiliPlus/models_new/live/live_superchat/item.dart';
+import 'package:PiliPlus/pages/common/publish/publish_route.dart';
 import 'package:PiliPlus/pages/danmaku/danmaku_model.dart';
 import 'package:PiliPlus/pages/live_room/send_danmaku/view.dart';
 import 'package:PiliPlus/pages/video/widgets/header_control.dart';
@@ -96,8 +97,7 @@ class LiveRoomController extends GetxController {
   late final RxList<SuperChatItem> superChatMsg = <SuperChatItem>[].obs;
   RxBool disableAutoScroll = false.obs;
   LiveMessageStream? _msgStream;
-  late final ScrollController scrollController = ScrollController()
-    ..addListener(listener);
+  late final ScrollController scrollController;
   late final RxInt pageIndex = 0.obs;
   PageController? pageController;
 
@@ -152,6 +152,7 @@ class LiveRoomController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    scrollController = ScrollController()..addListener(listener);
     final account = Accounts.heartbeat;
     isLogin = account.isLogin;
     mid = account.mid;
@@ -246,8 +247,9 @@ class LiveRoomController extends GetxController {
   }
 
   void _showDialog(String title) {
-    Get.dialog(
-      AlertDialog(
+    showDialog(
+      context: Get.context!,
+      builder: (_) => AlertDialog(
         title: Text(title),
         actions: [
           TextButton(
@@ -523,38 +525,28 @@ class LiveRoomController extends GetxController {
       SmartDialog.showToast('账号未登录');
       return;
     }
-    Get.generalDialog(
-      barrierLabel: '',
-      barrierDismissible: true,
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return LiveSendDmPanel(
-          fromEmote: fromEmote,
-          liveRoomController: this,
-          items: savedDanmaku,
-          autofocus: !fromEmote,
-          onSave: (msg) {
-            if (msg.isEmpty) {
-              savedDanmaku?.clear();
-              savedDanmaku = null;
-            } else {
-              savedDanmaku = msg.toList();
-            }
-          },
-        );
-      },
-      transitionDuration: fromEmote
-          ? const Duration(milliseconds: 400)
-          : const Duration(milliseconds: 500),
-      transitionBuilder: (context, animation, secondaryAnimation, child) {
-        var tween = Tween(
-          begin: const Offset(0.0, 1.0),
-          end: Offset.zero,
-        ).chain(CurveTween(curve: Curves.linear));
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
-      },
+    Get.key.currentState!.push(
+      PublishRoute(
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return LiveSendDmPanel(
+            fromEmote: fromEmote,
+            liveRoomController: this,
+            items: savedDanmaku,
+            autofocus: !fromEmote,
+            onSave: (msg) {
+              if (msg.isEmpty) {
+                savedDanmaku?.clear();
+                savedDanmaku = null;
+              } else {
+                savedDanmaku = msg.toList();
+              }
+            },
+          );
+        },
+        transitionDuration: fromEmote
+            ? const Duration(milliseconds: 400)
+            : const Duration(milliseconds: 500),
+      ),
     );
   }
 }
