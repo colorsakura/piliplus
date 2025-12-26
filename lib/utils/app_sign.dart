@@ -9,12 +9,13 @@ abstract final class AppSign {
     String appkey = Constants.appKey,
     String appsec = Constants.appSec,
   }) {
-    assert(
-      params['appkey'] == null,
-      'appkey-appsec should be provided in appSign',
-    );
+    // retry error
+    // assert(
+    //   params['appkey'] == null,
+    //   'appkey-appsec should be provided in appSign',
+    // );
     params['appkey'] = appkey;
-    params['ts'] ??= (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString();
+    params['ts'] = (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString();
     final sorted = params.entries.toList()
       ..sort((a, b) => a.key.compareTo(b.key));
     params['sign'] = md5
