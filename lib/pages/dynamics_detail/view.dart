@@ -113,10 +113,7 @@ class _DynamicDetailPageState extends CommonDynPageState<DynamicDetailPage> {
               ),
             ),
             buildReplyHeader(theme),
-            Obx(
-              key: controller.replyKey,
-              () => replyList(theme, controller.loadingState.value),
-            ),
+            Obx(() => replyList(theme, controller.loadingState.value)),
           ],
         ),
       );
