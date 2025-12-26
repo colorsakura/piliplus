@@ -222,6 +222,7 @@ class _MusicDetailPageState extends CommonDynPageState<MusicDetailPage> {
           color: color,
         ),
         style: TextButton.styleFrom(
+          tapTargetSize: .padded,
           padding: const EdgeInsets.symmetric(horizontal: 15),
           foregroundColor: outline,
         ),

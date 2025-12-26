@@ -204,8 +204,7 @@ class _PgcIndexPageState extends State<PgcIndexPage>
         GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () => _ctr.isExpand.value = !_ctr.isExpand.value,
-          child: Container(
-            alignment: Alignment.center,
+          child: Center(
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [

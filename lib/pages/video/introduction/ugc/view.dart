@@ -209,13 +209,15 @@ class _UgcIntroPanelState extends State<UgcIntroPanel> {
                         children: [
                           WidgetSpan(
                             alignment: PlaceholderAlignment.middle,
-                            child: Icon(
-                              size: 13,
-                              Icons.error_outline,
-                              color: theme.colorScheme.outline,
+                            child: Padding(
+                              padding: const .only(right: 2),
+                              child: Icon(
+                                size: 13,
+                                Icons.error_outline,
+                                color: theme.colorScheme.outline,
+                              ),
                             ),
                           ),
-                          const WidgetSpan(child: SizedBox(width: 2)),
                           TextSpan(
                             text: '${videoDetail.argueInfo!.argueMsg}',
                           ),

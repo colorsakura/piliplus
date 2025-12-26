@@ -196,9 +196,10 @@ class _WhisperBlockPageState extends State<WhisperBlockPage> {
                 decoration: InputDecoration(
                   isDense: true,
                   hintText: '请输入',
+                  visualDensity: .standard,
                   hintStyle: const TextStyle(fontSize: 14),
                   contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 14,
+                    horizontal: 12,
                     vertical: 6,
                   ),
                   border: const OutlineInputBorder(

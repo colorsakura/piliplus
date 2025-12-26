@@ -1100,33 +1100,36 @@ class HeaderControlState extends State<HeaderControl>
                               plPlayerController.superResolutionType.value,
                           child: Padding(
                             padding: const EdgeInsets.all(4),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  widget
-                                      .controller
-                                      .superResolutionType
-                                      .value
-                                      .title,
-                                  strutStyle: const StrutStyle(
-                                    leading: 0,
-                                    height: 1,
+                            child: Text.rich(
+                              style: TextStyle(
+                                height: 1,
+                                fontSize: 14,
+                                color: theme.colorScheme.secondary,
+                              ),
+                              strutStyle: const StrutStyle(
+                                leading: 0,
+                                height: 1,
+                                fontSize: 14,
+                              ),
+                              TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: widget
+                                        .controller
+                                        .superResolutionType
+                                        .value
+                                        .title,
                                   ),
-                                  style: TextStyle(
-                                    height: 1,
-                                    fontSize: 14,
-                                    color: theme.colorScheme.secondary,
+                                  WidgetSpan(
+                                    alignment: .middle,
+                                    child: Icon(
+                                      MdiIcons.unfoldMoreHorizontal,
+                                      size: 14,
+                                      color: theme.colorScheme.secondary,
+                                    ),
                                   ),
-                                ),
-                                Icon(
-                                  MdiIcons.unfoldMoreHorizontal,
-                                  size: MediaQuery.textScalerOf(
-                                    context,
-                                  ).scale(14),
-                                  color: theme.colorScheme.secondary,
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                           onSelected: (value) {

@@ -285,10 +285,7 @@ abstract class CommonDynPageState<T extends StatefulWidget> extends State<T>
       builder: (context) => Align(
         alignment: Alignment.topRight,
         child: Container(
-          margin: const EdgeInsets.only(
-            top: 56,
-            right: 16,
-          ),
+          margin: const EdgeInsets.only(top: 56, right: 16),
           width: maxWidth / 4,
           height: 32,
           child: Builder(

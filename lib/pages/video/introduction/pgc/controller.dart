@@ -80,12 +80,12 @@ class PgcIntroController extends CommonIntroController {
     if (result case Success(:final response)) {
       final hasLike = response.like == 1;
       final hasFav = response.favorite == 1;
-      late final stat = pgcItem.stat!;
+      late final stat = pgcItem.stat;
       if (hasLike) {
-        stat.like = max(1, stat.like);
+        stat?.like = max(1, stat.like);
       }
       if (hasFav) {
-        stat.favorite = max(1, stat.favorite);
+        stat?.favorite = max(1, stat.favorite);
       }
       this.hasLike.value = hasLike;
       coinNum.value = response.coinNumber!;
@@ -106,7 +106,7 @@ class PgcIntroController extends CommonIntroController {
     var result = await VideoHttp.likeVideo(bvid: bvid, type: newVal);
     if (result case Success(:final response)) {
       SmartDialog.showToast(newVal ? response : '取消赞');
-      pgcItem.stat!.like += newVal ? 1 : -1;
+      pgcItem.stat?.like += newVal ? 1 : -1;
       hasLike.value = newVal;
     } else {
       result.toast();
@@ -429,18 +429,18 @@ class PgcIntroController extends CommonIntroController {
     }
     var result = await VideoHttp.pgcTriple(epId: epId!, seasonId: seasonId);
     if (result case Success(:final response)) {
-      late final stat = pgcItem.stat!;
+      late final stat = pgcItem.stat;
       if (response.like == 1 && !hasLike.value) {
-        stat.like++;
+        stat?.like++;
         hasLike.value = true;
       }
       if (response.coin == 1 && !hasCoin) {
-        stat.coin += 2;
+        stat?.coin += 2;
         coinNum.value = 2;
         GlobalData().afterCoin(2);
       }
       if (response.favorite == 1 && !hasFav.value) {
-        stat.favorite++;
+        stat?.favorite++;
         hasFav.value = true;
       }
       if (!hasCoin) {
