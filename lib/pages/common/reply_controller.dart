@@ -101,16 +101,12 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
     onReload();
   }
 
-  (bool inputDisable, bool canUploadPic, String? hint) get replyHint {
+  (bool inputDisable, String? hint) get replyHint {
     String? hint;
-    bool canUploadPic = true;
     bool inputDisable = false;
     try {
       if (subjectControl case final subjectControl?) {
         inputDisable = subjectControl.inputDisable;
-        canUploadPic =
-            subjectControl.uploadPictureIconState == .EditorIconState_DEFAULT ||
-            subjectControl.uploadPictureIconState == .EditorIconState_ENABLE;
         if (subjectControl.hasRootText()) {
           final rootText = subjectControl.rootText;
           if (inputDisable) {
@@ -122,7 +118,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
         }
       }
     } catch (_) {}
-    return (inputDisable, canUploadPic, hint);
+    return (inputDisable, hint);
   }
 
   void onReply(
@@ -131,9 +127,8 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
     ReplyInfo? replyItem,
     int? replyType,
   }) {
-    if (loadingState.value case Error error) {
-      final errMsg = error.errMsg;
-      if (errMsg != null && (error.code == 12061 || error.code == 12002)) {
+    if (loadingState.value case Error(:final errMsg, :final code)) {
+      if (errMsg != null && (code == 12061 || code == 12002)) {
         SmartDialog.showToast(errMsg);
         return;
       }
@@ -141,7 +136,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
 
     assert(replyItem != null || (oid != null && replyType != null));
 
-    final (bool inputDisable, bool canUploadPic, String? hint) = replyHint;
+    final (bool inputDisable, String? hint) = replyHint;
     if (inputDisable) {
       return;
     }
@@ -159,7 +154,9 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
                 replyType: replyItem?.type.toInt() ?? replyType!,
                 replyItem: replyItem,
                 items: savedReplies[key],
-                canUploadPic: canUploadPic,
+
+                /// hd api deprecated
+                // canUploadPic: canUploadPic,
                 onSave: (reply) {
                   if (reply.isEmpty) {
                     savedReplies.remove(key);
