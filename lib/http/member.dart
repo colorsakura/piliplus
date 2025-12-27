@@ -316,7 +316,10 @@ abstract final class MemberHttp {
   }
 
   static Future memberStat({int? mid}) async {
-    final res = await Request().get(Api.userStat, queryParameters: {'vmid': mid});
+    final res = await Request().get(
+      Api.userStat,
+      queryParameters: {'vmid': mid},
+    );
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {

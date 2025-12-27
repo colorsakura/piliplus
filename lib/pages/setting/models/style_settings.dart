@@ -5,7 +5,6 @@ import 'package:PiliPlus/common/widgets/color_palette.dart';
 import 'package:PiliPlus/common/widgets/custom_toast.dart';
 import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
-import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/models/common/dynamic/dynamic_badge_mode.dart';
 import 'package:PiliPlus/models/common/dynamic/up_panel_position.dart';
@@ -623,7 +622,7 @@ List<SettingsModel> get styleSettings => [
     title: '滑动动画弹簧参数',
     leading: const Icon(Icons.chrome_reader_mode_outlined),
     onTap: (context, setState) {
-      List<String> springDescription = CustomSpringDescription.springDescription
+      final List<String> springDescription = Pref.springDescription
           .map((i) => i.toString())
           .toList();
       showDialog(
@@ -641,9 +640,7 @@ List<SettingsModel> get styleSettings => [
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
                   ),
-                  onChanged: (value) {
-                    springDescription[index] = value;
-                  },
+                  onChanged: (value) => springDescription[index] = value,
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp(r'[\d\.]+')),
                   ],
@@ -655,6 +652,14 @@ List<SettingsModel> get styleSettings => [
             ),
             actions: [
               TextButton(
+                onPressed: () {
+                  Get.back();
+                  GStorage.setting.delete(SettingBoxKey.springDescription);
+                  SmartDialog.showToast('重置成功，重启生效');
+                },
+                child: const Text('重置'),
+              ),
+              TextButton(
                 onPressed: Get.back,
                 child: Text(
                   '取消',
@@ -664,19 +669,15 @@ List<SettingsModel> get styleSettings => [
                 ),
               ),
               TextButton(
-                onPressed: () async {
-                  Get.back();
-                  await GStorage.setting.put(
-                    SettingBoxKey.springDescription,
-                    List<double>.generate(
-                      3,
-                      (i) =>
-                          double.tryParse(springDescription[i]) ??
-                          CustomSpringDescription.springDescription[i],
-                    ),
-                  );
-                  SmartDialog.showToast('设置成功，重启生效');
-                  setState();
+                onPressed: () {
+                  try {
+                    final res = springDescription.map(double.parse).toList();
+                    Get.back();
+                    GStorage.setting.put(SettingBoxKey.springDescription, res);
+                    SmartDialog.showToast('设置成功，重启生效');
+                  } catch (e) {
+                    SmartDialog.showToast(e.toString());
+                  }
                 },
                 child: const Text('确定'),
               ),
