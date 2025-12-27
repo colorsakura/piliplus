@@ -22,7 +22,7 @@ abstract final class SearchHttp {
   static Future<LoadingState<SearchSuggestModel>> searchSuggest({
     required String term,
   }) async {
-    var res = await Request().get(
+    final res = await Request().get(
       Api.searchSuggest,
       queryParameters: {
         'term': term,
@@ -58,7 +58,7 @@ abstract final class SearchHttp {
     String? gaiaVtoken,
     required ValueChanged<String> onSuccess,
   }) async {
-    var params = await WbiSign.makSign({
+    final params = await WbiSign.makSign({
       'search_type': searchType.name,
       'keyword': keyword,
       'page': page,
@@ -75,7 +75,7 @@ abstract final class SearchHttp {
       'web_location': 1430654,
       'gaia_vtoken': ?gaiaVtoken,
     });
-    var res = await Request().get(
+    final res = await Request().get(
       Api.searchByType,
       queryParameters: params,
       options: Options(
@@ -142,7 +142,7 @@ abstract final class SearchHttp {
     int? pubBegin,
     int? pubEnd,
   }) async {
-    var params = await WbiSign.makSign({
+    final params = await WbiSign.makSign({
       'keyword': keyword,
       'page': page,
       if (order != null && order.isNotEmpty) 'order': order,
@@ -154,7 +154,7 @@ abstract final class SearchHttp {
       'pubtime_begin_s': ?pubBegin,
       'pubtime_end_s': ?pubEnd,
     });
-    var res = await Request().get(
+    final res = await Request().get(
       Api.searchAll,
       queryParameters: params,
     );
@@ -173,7 +173,7 @@ abstract final class SearchHttp {
   }
 
   static Future<int?> ab2c({dynamic aid, dynamic bvid, int? part}) async {
-    var res = await Request().get(
+    final res = await Request().get(
       Api.ab2c,
       queryParameters: {
         'aid': ?aid,
@@ -198,7 +198,7 @@ abstract final class SearchHttp {
     dynamic seasonId,
     dynamic epId,
   }) async {
-    var res = await Request().get(
+    final res = await Request().get(
       Api.pgcInfo,
       queryParameters: {
         'season_id': ?seasonId,
@@ -216,7 +216,7 @@ abstract final class SearchHttp {
     dynamic seasonId,
     dynamic epId,
   }) async {
-    var res = await Request().get(
+    final res = await Request().get(
       Api.pugvInfo,
       queryParameters: {
         'season_id': ?seasonId,
@@ -231,7 +231,7 @@ abstract final class SearchHttp {
   }
 
   static Future<LoadingState> episodeInfo({dynamic epId}) async {
-    var res = await Request().get(
+    final res = await Request().get(
       Api.episodeInfo,
       queryParameters: {
         'ep_id': ?epId,

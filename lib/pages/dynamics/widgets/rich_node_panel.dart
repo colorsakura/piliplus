@@ -50,7 +50,7 @@ TextSpan? richNode(
     if (richTextNodes == null || richTextNodes.isEmpty) {
       return null;
     } else {
-      for (var i in richTextNodes) {
+      for (final i in richTextNodes) {
         switch (i.type) {
           case 'RICH_TEXT_NODE_TYPE_TEXT':
             spanChildren.add(
@@ -289,7 +289,7 @@ TextSpan? richNode(
 
                       DynamicsHttp.dynPic(i.rid).then((res) {
                         if (res.isSuccess) {
-                          var list = res.data;
+                          final list = res.data;
                           if (Platform.isAndroid) {
                             i.pics = list;
                           } else {

@@ -218,7 +218,7 @@ class _SettingPageState extends State<SettingPage> {
         return MultiSelectDialog<LoginAccount>(
           title: '选择要登出的账号uid',
           initValues: const Iterable.empty(),
-          values: {for (var i in Accounts.account.values) i: i.mid.toString()},
+          values: {for (final i in Accounts.account.values) i: i.mid.toString()},
         );
       },
     );

@@ -708,7 +708,7 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
     List<Map<String, dynamic>>? extraContent = getRichContent();
     final hasRichText = extraContent != null;
     final reserveCard = _reserveCard.value;
-    var result = await DynamicsHttp.createDynamic(
+    final result = await DynamicsHttp.createDynamic(
       mid: Accounts.main.mid,
       rawText: hasRichText ? null : editController.text,
       pics: pictures,
@@ -736,7 +736,7 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
       hasPub = true;
       Get.back();
       SmartDialog.showToast('发布成功');
-      var id = result['data']?['dyn_id'];
+      final id = result['data']?['dyn_id'];
       RequestUtils.insertCreatedDyn(id);
       if (!_isPrivate.value) {
         RequestUtils.checkCreatedDyn(

@@ -300,7 +300,7 @@ List<SettingsModel> get styleSettings => [
           return MultiSelectDialog<MsgUnReadType>(
             title: '消息未读类型',
             initValues: Pref.msgUnReadTypeV2,
-            values: {for (var i in MsgUnReadType.values) i: i.title},
+            values: {for (final i in MsgUnReadType.values) i: i.title},
           );
         },
       );

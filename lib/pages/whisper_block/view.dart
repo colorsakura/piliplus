@@ -38,7 +38,7 @@ class _WhisperBlockPageState extends State<WhisperBlockPage> {
   ) {
     return switch (loadingState) {
       Loading() => loadingWidget,
-      Success(:var response) =>
+      Success(:final response) =>
         response != null && response.isNotEmpty
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,7 +141,7 @@ class _WhisperBlockPageState extends State<WhisperBlockPage> {
                   ],
                 ),
               ),
-      Error(:var errMsg) => scrollErrorWidget(
+      Error(:final errMsg) => scrollErrorWidget(
         errMsg: errMsg,
         onReload: _controller.onReload,
       ),

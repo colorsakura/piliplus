@@ -89,7 +89,7 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
   @override
   Future<void> queryVideoIntro() async {
     queryVideoTags();
-    var res = await VideoHttp.videoIntro(bvid: bvid);
+    final res = await VideoHttp.videoIntro(bvid: bvid);
     if (res.isSuccess) {
       VideoDetailData data = res.data;
       videoPlayerServiceHandler?.onVideoDetailChange(data, cid.value, heroTag);
@@ -154,7 +154,7 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
       if (mid == null) {
         return;
       }
-      var result = await MemberHttp.memberCardInfo(mid: mid);
+      final result = await MemberHttp.memberCardInfo(mid: mid);
       if (result.isSuccess) {
         userStat.value = result.data;
       }
@@ -162,8 +162,8 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
   }
 
   Future<void> queryAllStatus() async {
-    var result = await VideoHttp.videoRelation(bvid: bvid);
-    if (result case Success(:var response)) {
+    final result = await VideoHttp.videoRelation(bvid: bvid);
+    if (result case Success(:final response)) {
       late final stat = videoDetail.value.stat;
       if (response.like!) {
         stat?.like = max(1, stat.like);
@@ -191,7 +191,7 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
       SmartDialog.showToast('已三连');
       return;
     }
-    var result = await VideoHttp.ugcTriple(bvid: bvid);
+    final result = await VideoHttp.ugcTriple(bvid: bvid);
     if (result case Success(:final response)) {
       late final stat = videoDetail.value.stat;
       if (response.like == true && !hasLike.value) {
@@ -229,7 +229,7 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
       return;
     }
     final newVal = !hasLike.value;
-    var result = await VideoHttp.likeVideo(bvid: bvid, type: newVal);
+    final result = await VideoHttp.likeVideo(bvid: bvid, type: newVal);
     if (result case Success(:final response)) {
       SmartDialog.showToast(newVal ? response : '取消赞');
       videoDetail.value.stat?.like += newVal ? 1 : -1;
@@ -247,7 +247,7 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
       SmartDialog.showToast('账号未登录');
       return;
     }
-    var result = await VideoHttp.dislikeVideo(
+    final result = await VideoHttp.dislikeVideo(
       bvid: bvid,
       type: !hasDislike.value,
     );
@@ -413,7 +413,7 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
     if (videoDetail.owner == null || videoDetail.staff?.isNotEmpty == true) {
       return;
     }
-    var result = await UserHttp.hasFollow(videoDetail.owner!.mid!);
+    final result = await UserHttp.hasFollow(videoDetail.owner!.mid!);
     if (result['status']) {
       Map data = result['data'];
       if (data['special'] == 1) data['attribute'] = -10;
@@ -437,7 +437,7 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
     }
     int attr = followStatus['attribute'] ?? 0;
     if (attr == 128) {
-      var res = await VideoHttp.relationMod(
+      final res = await VideoHttp.relationMod(
         mid: mid,
         act: 6,
         reSrc: 11,

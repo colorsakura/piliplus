@@ -57,7 +57,7 @@ class DynamicsDataModel {
       items = <DynamicItemModel>[];
       late final filterBan =
           type != DynamicsTabType.up && tempBannedList?.isNotEmpty == true;
-      for (var e in list) {
+      for (final e in list) {
         DynamicItemModel item = DynamicItemModel.fromJson(e);
         if (antiGoodsDyn &&
             (item.orig?.modules.moduleDynamic?.additional?.type ==

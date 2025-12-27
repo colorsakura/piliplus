@@ -89,11 +89,13 @@ class DynamicPanel extends StatelessWidget {
             ),
             const SizedBox(height: 2),
             if (!isDetail) ...[
-              if (item.modules.moduleInteraction case final moduleInteraction?)
-                if (moduleInteraction.items?.isNotEmpty == true)
+              if (item.modules.moduleInteraction case ModuleInteraction(
+                :final items,
+              ))
+                if (items != null && items.isNotEmpty)
                   dynInteraction(
                     theme: theme,
-                    items: moduleInteraction.items!,
+                    items: items,
                   ),
               ActionPanel(item: item),
               if (item.modules.moduleFold case final moduleFold?) ...[

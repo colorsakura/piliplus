@@ -238,7 +238,7 @@ class _DynMentionPanelState
         padding: const EdgeInsets.only(top: 8),
         sliver: linearLoading,
       ),
-      Success<List<MentionGroup>?>(:var response) =>
+      Success<List<MentionGroup>?>(:final response) =>
         response != null && response.isNotEmpty
             ? SliverMainAxisGroup(
                 slivers: response.map((group) {
@@ -278,7 +278,7 @@ class _DynMentionPanelState
                 }).toList(),
               )
             : HttpError(onReload: _controller.onReload),
-      Error(:var errMsg) => HttpError(
+      Error(:final errMsg) => HttpError(
         errMsg: errMsg,
         onReload: _controller.onReload,
       ),

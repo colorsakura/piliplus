@@ -150,7 +150,7 @@ class _WhisperDetailPageState
   Widget _buildBody(LoadingState<List<Msg>?> loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
-      Success(:var response) =>
+      Success(:final response) =>
         response != null && response.isNotEmpty
             ? ListView.separated(
                 shrinkWrap: true,
@@ -180,7 +180,7 @@ class _WhisperDetailPageState
                     const SizedBox(height: 12),
               )
             : scrollErrorWidget(onReload: _whisperDetailController.onReload),
-      Error(:var errMsg) => scrollErrorWidget(
+      Error(:final errMsg) => scrollErrorWidget(
         errMsg: errMsg,
         onReload: _whisperDetailController.onReload,
       ),

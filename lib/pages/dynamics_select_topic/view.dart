@@ -189,7 +189,7 @@ class _SelectTopicPanelState
   ) {
     return switch (loadingState) {
       Loading() => loadingWidget,
-      Success<List<TopicItem>?>(:var response) =>
+      Success<List<TopicItem>?>(:final response) =>
         response != null && response.isNotEmpty
             ? ListView.builder(
                 padding: EdgeInsets.only(
@@ -208,7 +208,7 @@ class _SelectTopicPanelState
                 itemCount: response.length,
               )
             : _errWidget(),
-      Error(:var errMsg) => _errWidget(errMsg),
+      Error(:final errMsg) => _errWidget(errMsg),
     };
   }
 

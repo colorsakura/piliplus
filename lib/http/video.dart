@@ -46,7 +46,7 @@ abstract final class VideoHttp {
     required int ps,
     required int freshIdx,
   }) async {
-    var res = await Request().get(
+    final res = await Request().get(
       Api.recommendListWeb,
       queryParameters: {
         'version': 1,
@@ -60,7 +60,7 @@ abstract final class VideoHttp {
     );
     if (res.data['code'] == 0) {
       List<RecVideoItemModel> list = <RecVideoItemModel>[];
-      for (var i in res.data['data']['item']) {
+      for (final i in res.data['data']['item']) {
         //过滤掉live与ad，以及拉黑用户
         if (i['goto'] == 'av' &&
             (i['owner'] != null &&
@@ -108,7 +108,7 @@ abstract final class VideoHttp {
       'statistics': Constants.statistics,
       'voice_balance': 0,
     };
-    var res = await Request().get(
+    final res = await Request().get(
       Api.recommendListApp,
       queryParameters: params,
       options: Options(
@@ -131,7 +131,7 @@ abstract final class VideoHttp {
     );
     if (res.data['code'] == 0) {
       List<RecVideoItemAppModel> list = <RecVideoItemAppModel>[];
-      for (var i in res.data['data']['items']) {
+      for (final i in res.data['data']['items']) {
         // 屏蔽推广和拉黑用户
         if (i['card_goto'] != 'ad_av' &&
             i['card_goto'] != 'ad_web_s' &&
@@ -160,13 +160,13 @@ abstract final class VideoHttp {
     required int pn,
     required int ps,
   }) async {
-    var res = await Request().get(
+    final res = await Request().get(
       Api.hotList,
       queryParameters: {'pn': pn, 'ps': ps},
     );
     if (res.data['code'] == 0) {
       List<HotVideoItemModel> list = <HotVideoItemModel>[];
-      for (var i in res.data['data']['list']) {
+      for (final i in res.data['data']['list']) {
         if (!GlobalData().blackMids.contains(i['owner']['mid']) &&
             !RecommendFilter.filterTitle(i['title']) &&
             !RecommendFilter.filterLikeRatio(
@@ -221,7 +221,7 @@ abstract final class VideoHttp {
     });
 
     try {
-      var res = await Request().get(
+      final res = await Request().get(
         videoType.api,
         queryParameters: params,
       );
@@ -276,7 +276,7 @@ abstract final class VideoHttp {
   static Future<LoadingState<VideoDetailData>> videoIntro({
     required String bvid,
   }) async {
-    var res = await Request().get(
+    final res = await Request().get(
       Api.videoIntro,
       queryParameters: {'bvid': bvid},
     );
@@ -291,7 +291,7 @@ abstract final class VideoHttp {
   static Future<LoadingState<VideoRelation>> videoRelation({
     required String bvid,
   }) async {
-    var res = await Request().get(
+    final res = await Request().get(
       Api.videoRelation,
       queryParameters: {
         'aid': IdUtils.bv2av(bvid),
@@ -309,7 +309,7 @@ abstract final class VideoHttp {
   static Future<LoadingState<List<HotVideoItemModel>?>> relatedVideoList({
     required String bvid,
   }) async {
-    var res = await Request().get(
+    final res = await Request().get(
       Api.relatedList,
       queryParameters: {'bvid': bvid},
     );
@@ -330,7 +330,7 @@ abstract final class VideoHttp {
   static Future<LoadingState<PgcLCF>> pgcLikeCoinFav({
     required Object epId,
   }) async {
-    var res = await Request().get(
+    final res = await Request().get(
       Api.pgcLikeCoinFav,
       queryParameters: {'ep_id': epId},
     );
@@ -347,7 +347,7 @@ abstract final class VideoHttp {
     required int multiply,
     int selectLike = 0,
   }) async {
-    var res = await Request().post(
+    final res = await Request().post(
       Api.coinVideo,
       data: {
         'aid': IdUtils.bv2av(bvid).toString(),
@@ -370,7 +370,7 @@ abstract final class VideoHttp {
     required Object epId,
     Object? seasonId,
   }) async {
-    var res = await Request().post(
+    final res = await Request().post(
       Api.pgcTriple,
       data: {
         'ep_id': epId,
@@ -396,7 +396,7 @@ abstract final class VideoHttp {
   static Future<LoadingState<UgcTriple>> ugcTriple({
     required String bvid,
   }) async {
-    var res = await Request().post(
+    final res = await Request().post(
       Api.ugcTriple,
       data: {
         'aid': IdUtils.bv2av(bvid),
@@ -429,7 +429,7 @@ abstract final class VideoHttp {
     required String bvid,
     required bool type,
   }) async {
-    var res = await Request().post(
+    final res = await Request().post(
       Api.likeVideo,
       data: {
         'aid': IdUtils.bv2av(bvid).toString(),
@@ -452,7 +452,7 @@ abstract final class VideoHttp {
     if (Accounts.main.accessKey.isNullOrEmpty) {
       return const Error('请退出账号后重新登录');
     }
-    var res = await Request().post(
+    final res = await Request().post(
       Api.dislikeVideo,
       data: {
         'aid': IdUtils.bv2av(bvid).toString(),
@@ -478,7 +478,7 @@ abstract final class VideoHttp {
       return const Error('请退出账号后重新登录');
     }
     assert((reasonId != null) ^ (feedbackId != null));
-    var res = await Request().get(
+    final res = await Request().get(
       Api.feedDislike,
       queryParameters: {
         'goto': goto,
@@ -506,7 +506,7 @@ abstract final class VideoHttp {
     if (Accounts.get(AccountType.recommend).accessKey.isNullOrEmpty) {
       return const Error('请退出账号后重新登录');
     }
-    var res = await Request().get(
+    final res = await Request().get(
       Api.feedDislikeCancel,
       queryParameters: {
         'goto': goto,
@@ -557,7 +557,7 @@ abstract final class VideoHttp {
       if (syncToDynamic) 'sync_to_dynamic': 1,
       'csrf': Accounts.main.csrf,
     };
-    var res = await Request().post(
+    final res = await Request().post(
       Api.replyAdd,
       data: data,
       options: Options(contentType: Headers.formUrlEncodedContentType),
@@ -574,7 +574,7 @@ abstract final class VideoHttp {
     required int oid,
     required int rpid,
   }) async {
-    var res = await Request().post(
+    final res = await Request().post(
       Api.replyDel,
       data: {
         'type': type, //type.index
@@ -597,7 +597,7 @@ abstract final class VideoHttp {
     required int act,
     required int reSrc,
   }) async {
-    var res = await Request().post(
+    final res = await Request().post(
       Api.relationMod,
       queryParameters: {
         'statistics': '{"appId":100,"platform":5}',
@@ -717,7 +717,7 @@ abstract final class VideoHttp {
 
   // 添加追番
   static Future<LoadingState<String>> pgcAdd({int? seasonId}) async {
-    var res = await Request().post(
+    final res = await Request().post(
       Api.pgcAdd,
       data: {
         'season_id': seasonId,
@@ -734,7 +734,7 @@ abstract final class VideoHttp {
 
   // 取消追番
   static Future<LoadingState<String>> pgcDel({int? seasonId}) async {
-    var res = await Request().post(
+    final res = await Request().post(
       Api.pgcDel,
       data: {
         'season_id': seasonId,
@@ -753,7 +753,7 @@ abstract final class VideoHttp {
     required String seasonId,
     required int status,
   }) async {
-    var res = await Request().post(
+    final res = await Request().post(
       Api.pgcUpdate,
       data: {
         'season_id': seasonId,
@@ -778,7 +778,7 @@ abstract final class VideoHttp {
     required int cid,
   }) async {
     assert(aid != null || bvid != null);
-    var res = await Request().get(
+    final res = await Request().get(
       Api.onlineTotal,
       queryParameters: {
         'aid': aid,
@@ -803,7 +803,7 @@ abstract final class VideoHttp {
       'cid': cid,
       'up_mid': ?upMid,
     });
-    var res = await Request().get(Api.aiConclusion, queryParameters: params);
+    final res = await Request().get(Api.aiConclusion, queryParameters: params);
     final int? code = res.data['code'];
     if (code == 0) {
       final int? dataCode = res.data['data']?['code'];
@@ -825,7 +825,7 @@ abstract final class VideoHttp {
     dynamic epId,
   }) async {
     assert(aid != null || bvid != null);
-    var res = await Request().get(
+    final res = await Request().get(
       Api.playInfo,
       queryParameters: await WbiSign.makSign({
         'aid': ?aid,
@@ -866,7 +866,7 @@ abstract final class VideoHttp {
   }
 
   static Future<String?> vttSubtitles(String subtitleUrl) async {
-    var res = await Request().get("https:$subtitleUrl");
+    final res = await Request().get("https:$subtitleUrl");
     if (res.data?['body'] case List list) {
       return compute<List, String>(processList, list);
     }
@@ -894,7 +894,7 @@ abstract final class VideoHttp {
   static Future<LoadingState<List<HotVideoItemModel>>> getRankVideoList(
     int rid,
   ) async {
-    var res = await Request().get(
+    final res = await Request().get(
       Api.getRankApi,
       queryParameters: await WbiSign.makSign({
         'rid': rid,
@@ -903,12 +903,12 @@ abstract final class VideoHttp {
     );
     if (res.data['code'] == 0) {
       List<HotVideoItemModel> list = <HotVideoItemModel>[];
-      for (var i in res.data['data']['list']) {
+      for (final i in res.data['data']['list']) {
         if (_canAddRank(i)) {
           list.add(HotVideoItemModel.fromJson(i));
           // final List? others = i['others'];
           // if (others != null && others.isNotEmpty) {
-          //   for (var j in others) {
+          //   for (final j in others) {
           //     if (_canAddRank(j)) {
           //       list.add(HotVideoItemModel.fromJson(j));
           //     }
@@ -927,7 +927,7 @@ abstract final class VideoHttp {
     int day = 3,
     required int seasonType,
   }) async {
-    var res = await Request().get(
+    final res = await Request().get(
       Api.pgcRank,
       queryParameters: await WbiSign.makSign({
         'day': day,
@@ -950,7 +950,7 @@ abstract final class VideoHttp {
     int day = 3,
     required int seasonType,
   }) async {
-    var res = await Request().get(
+    final res = await Request().get(
       Api.pgcSeasonRank,
       queryParameters: await WbiSign.makSign({
         'day': day,
@@ -973,7 +973,7 @@ abstract final class VideoHttp {
     dynamic uperMid,
     required int page,
   }) async {
-    var res = await Request().get(
+    final res = await Request().get(
       Api.archiveNoteList,
       queryParameters: {
         'csrf': Accounts.main.csrf,
@@ -993,7 +993,7 @@ abstract final class VideoHttp {
 
   static Future<LoadingState<List<PopularSeriesListItem>?>>
   popularSeriesList() async {
-    var res = await Request().get(
+    final res = await Request().get(
       Api.popularSeriesList,
       queryParameters: await WbiSign.makSign({
         'web_location': 333.934,
@@ -1015,7 +1015,7 @@ abstract final class VideoHttp {
   static Future<LoadingState<PopularSeriesOneData>> popularSeriesOne({
     required int number,
   }) async {
-    var res = await Request().get(
+    final res = await Request().get(
       Api.popularSeriesOne,
       queryParameters: await WbiSign.makSign({
         'number': number,
@@ -1032,7 +1032,7 @@ abstract final class VideoHttp {
   static Future<LoadingState<PopularPreciousData>> popularPrecious({
     required int page,
   }) async {
-    var res = await Request().get(
+    final res = await Request().get(
       Api.popularPrecious,
       queryParameters: await WbiSign.makSign({
         'page_size': 100,

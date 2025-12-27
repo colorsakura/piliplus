@@ -274,7 +274,7 @@ class AuthorPanel extends StatelessWidget {
                   onTap: () async {
                     Get.back();
                     try {
-                      var res = await UserHttp.toViewLater(bvid: bvid);
+                      final res = await UserHttp.toViewLater(bvid: bvid);
                       SmartDialog.showToast(res['msg']);
                     } catch (err) {
                       SmartDialog.showToast('出错了：${err.toString()}');

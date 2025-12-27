@@ -178,7 +178,7 @@ Widget addWidget(
                               : btn.disable == 1
                               ? null
                               : () async {
-                                  var res = await DynamicsHttp.dynReserve(
+                                  final res = await DynamicsHttp.dynReserve(
                                     reserveId: reserve.rid,
                                     curBtnStatus: btn.status,
                                     dynamicIdStr: idStr,
