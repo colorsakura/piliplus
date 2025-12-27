@@ -1,6 +1,6 @@
 import 'package:PiliPlus/common/widgets/flutter/text_field/controller.dart';
 import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
-    show MainListReply, ReplyInfo, SubjectControl, Mode, EditorIconState;
+    show MainListReply, ReplyInfo, SubjectControl, Mode;
 import 'package:PiliPlus/grpc/bilibili/pagination.pb.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/reply.dart';
@@ -102,20 +102,23 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
   }
 
   (bool inputDisable, bool canUploadPic, String? hint) get replyHint {
-    bool inputDisable = false;
-    bool canUploadPic =
-        subjectControl?.uploadPictureIconState !=
-        EditorIconState.EditorIconState_DISABLE;
     String? hint;
+    bool canUploadPic = true;
+    bool inputDisable = false;
     try {
-      if (subjectControl != null && subjectControl!.hasRootText()) {
-        final rootText = subjectControl!.rootText;
-        inputDisable = subjectControl!.inputDisable;
-        if (inputDisable) {
-          SmartDialog.showToast(rootText);
-        }
-        if (rootText.contains('可发') || rootText.contains('可见')) {
-          hint = rootText;
+      if (subjectControl case final subjectControl?) {
+        inputDisable = subjectControl.inputDisable;
+        canUploadPic =
+            subjectControl.uploadPictureIconState == .EditorIconState_DEFAULT ||
+            subjectControl.uploadPictureIconState == .EditorIconState_ENABLE;
+        if (subjectControl.hasRootText()) {
+          final rootText = subjectControl.rootText;
+          if (inputDisable) {
+            SmartDialog.showToast(rootText);
+          }
+          if (rootText.contains('可发') || rootText.contains('可见')) {
+            hint = rootText;
+          }
         }
       }
     } catch (_) {}
