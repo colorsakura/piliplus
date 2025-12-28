@@ -11,6 +11,7 @@ import 'package:PiliPlus/utils/extension/context_ext.dart';
 import 'package:PiliPlus/utils/extension/get_ext.dart';
 import 'package:PiliPlus/utils/extension/size_ext.dart';
 import 'package:PiliPlus/utils/image_utils.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide ListTile;
@@ -177,12 +178,10 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                             '${index + 1 - _controller.topCount}',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: switch (index - _controller.topCount) {
-                                0 => const Color(0xFFfdad13),
-                                1 => const Color(0xFF8aace1),
-                                2 => const Color(0xFFdfa777),
-                                _ => theme.colorScheme.outline,
-                              },
+                              color: Utils.index2Color(
+                                index - _controller.topCount,
+                                theme.colorScheme.outline,
+                              ),
                               fontSize: 17,
                               fontStyle: FontStyle.italic,
                             ),

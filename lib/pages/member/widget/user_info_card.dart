@@ -115,10 +115,10 @@ class UserInfoCard extends StatelessWidget {
                 ? images.imgUrl
                 : images.nightImgurl)
             .http2https;
-    return Hero(
-      tag: imgUrl,
-      child: GestureDetector(
-        onTap: () => PageUtils.imageView(imgList: [SourceModel(url: imgUrl)]),
+    return GestureDetector(
+      onTap: () => PageUtils.imageView(imgList: [SourceModel(url: imgUrl)]),
+      child: Hero(
+        tag: imgUrl,
         child: CachedNetworkImage(
           imageUrl: ImageUtils.thumbnailUrl(imgUrl),
           width: double.infinity,

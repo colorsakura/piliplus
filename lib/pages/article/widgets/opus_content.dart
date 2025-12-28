@@ -220,14 +220,14 @@ class OpusContent extends StatelessWidget {
                 final height = width == null || pic.height == null
                     ? null
                     : width * pic.height! / pic.width!;
-                return Hero(
-                  tag: pic.url!,
-                  child: GestureDetector(
-                    onTap: () => PageUtils.imageView(
-                      imgList: [SourceModel(url: pic.url!)],
-                      quality: 60,
-                    ),
-                    child: Center(
+                return GestureDetector(
+                  onTap: () => PageUtils.imageView(
+                    imgList: [SourceModel(url: pic.url!)],
+                    quality: 60,
+                  ),
+                  child: Center(
+                    child: Hero(
+                      tag: pic.url!,
                       child: CachedNetworkImage(
                         width: width,
                         height: height,

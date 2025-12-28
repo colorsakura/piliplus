@@ -46,13 +46,13 @@ Widget htmlRender({
             );
           }
           final size = isEmote ? 22.0 : null;
-          return Hero(
-            tag: imgUrl,
-            child: GestureDetector(
-              onTap: () => PageUtils.imageView(
-                imgList: [SourceModel(url: imgUrl)],
-                quality: 60,
-              ),
+          return GestureDetector(
+            onTap: () => PageUtils.imageView(
+              imgList: [SourceModel(url: imgUrl)],
+              quality: 60,
+            ),
+            child: Hero(
+              tag: imgUrl,
               child: CachedNetworkImage(
                 width: size,
                 height: size,
