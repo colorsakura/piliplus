@@ -25,7 +25,7 @@ import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart' hide TextField;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart' hide ContextExtensionss;
+import 'package:get/get.dart';
 
 class ReplyPage extends CommonRichTextPubPage {
   final int oid;
@@ -409,13 +409,13 @@ class _ReplyPageState extends CommonRichTextPubPageState<ReplyPage> {
   @override
   Future<void> onCustomPublish({List? pictures}) async {
     Map<String, int> atNameToMid = {};
-    for (var e in editController.items) {
+    for (final e in editController.items) {
       if (e.type == RichTextType.at) {
         atNameToMid[e.rawText] ??= int.parse(e.id!);
       }
     }
     String message = editController.rawText;
-    var result = await VideoHttp.replyAdd(
+    final result = await VideoHttp.replyAdd(
       type: widget.replyType,
       oid: widget.oid,
       root: widget.root,

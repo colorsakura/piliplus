@@ -12,7 +12,7 @@ import 'package:PiliPlus/pages/search/controller.dart' show DebounceStreamState;
 import 'package:PiliPlus/utils/extension/context_ext.dart';
 import 'package:PiliPlus/utils/extension/scroll_controller_ext.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart' hide ContextExtensionss;
+import 'package:get/get.dart';
 
 class SelectTopicPanel extends StatefulWidget {
   const SelectTopicPanel({
@@ -104,6 +104,7 @@ class _SelectTopicPanelState
             controller: _controller.controller,
             onChanged: ctr!.add,
             decoration: InputDecoration(
+              visualDensity: .standard,
               border: const OutlineInputBorder(
                 gapPadding: 0,
                 borderSide: BorderSide.none,
@@ -188,7 +189,7 @@ class _SelectTopicPanelState
   ) {
     return switch (loadingState) {
       Loading() => loadingWidget,
-      Success<List<TopicItem>?>(:var response) =>
+      Success<List<TopicItem>?>(:final response) =>
         response != null && response.isNotEmpty
             ? ListView.builder(
                 padding: EdgeInsets.only(
@@ -207,7 +208,7 @@ class _SelectTopicPanelState
                 itemCount: response.length,
               )
             : _errWidget(),
-      Error(:var errMsg) => _errWidget(errMsg),
+      Error(:final errMsg) => _errWidget(errMsg),
     };
   }
 

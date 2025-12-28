@@ -27,8 +27,8 @@ class CreateFavPage extends StatefulWidget {
 
 class _CreateFavPageState extends State<CreateFavPage> {
   dynamic _mediaId;
-  late final _titleController = TextEditingController();
-  late final _introController = TextEditingController();
+  late final TextEditingController _titleController;
+  late final TextEditingController _introController;
   String? _cover;
   bool _isPublic = true;
   late final _imagePicker = ImagePicker();
@@ -38,6 +38,8 @@ class _CreateFavPageState extends State<CreateFavPage> {
   @override
   void initState() {
     super.initState();
+    _titleController = TextEditingController();
+    _introController = TextEditingController();
     _mediaId = Get.parameters['mediaId'];
     if (_mediaId != null) {
       _getFolderInfo();

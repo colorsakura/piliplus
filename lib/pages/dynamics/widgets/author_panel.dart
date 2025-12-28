@@ -23,7 +23,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart' hide InkWell;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart' hide ContextExtensionss;
+import 'package:get/get.dart';
 
 class AuthorPanel extends StatelessWidget {
   final DynamicItemModel item;
@@ -83,9 +83,7 @@ class AuthorPanel extends StatelessWidget {
             onTap: moduleAuthor.type == 'AUTHOR_TYPE_NORMAL'
                 ? () {
                     feedBack();
-                    Get.toNamed(
-                      '/member?mid=${moduleAuthor.mid}',
-                    );
+                    Get.toNamed('/member?mid=${moduleAuthor.mid}');
                   }
                 : null,
             child: Row(
@@ -150,8 +148,8 @@ class AuthorPanel extends StatelessWidget {
                           color: theme.colorScheme.primary,
                         ),
                         strutStyle: const StrutStyle(
-                          leading: 0,
                           height: 1,
+                          leading: 0,
                           fontSize: 12,
                         ),
                       ),
@@ -276,7 +274,7 @@ class AuthorPanel extends StatelessWidget {
                   onTap: () async {
                     Get.back();
                     try {
-                      var res = await UserHttp.toViewLater(bvid: bvid);
+                      final res = await UserHttp.toViewLater(bvid: bvid);
                       SmartDialog.showToast(res['msg']);
                     } catch (err) {
                       SmartDialog.showToast('出错了：${err.toString()}');

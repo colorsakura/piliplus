@@ -74,8 +74,8 @@ class PgcController
       PgcHttp.pgcTimeline(types: 1, before: 6, after: 6),
       PgcHttp.pgcTimeline(types: 4, before: 6, after: 6),
     ]);
-    var list1 = res.first.dataOrNull;
-    var list2 = res[1].dataOrNull;
+    final list1 = res.first.dataOrNull;
+    final list2 = res[1].dataOrNull;
     if (list1 != null &&
         list2 != null &&
         list1.isNotEmpty &&
@@ -83,10 +83,8 @@ class PgcController
       for (var i = 0; i < list1.length; i++) {
         list1[i].addAll(list2[i]);
       }
-    } else {
-      list1 ??= list2;
     }
-    timelineState.value = Success(list1);
+    timelineState.value = Success(list1 ?? list2);
   }
 
   // 我的订阅
@@ -97,7 +95,7 @@ class PgcController
       return;
     }
     followLoading = true;
-    var res = await FavHttp.favPgc(
+    final res = await FavHttp.favPgc(
       type: tabType == HomeTabType.bangumi ? 1 : 2,
       pn: followPage,
     );

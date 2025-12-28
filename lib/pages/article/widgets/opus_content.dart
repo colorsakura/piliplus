@@ -19,7 +19,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart' hide ContextExtensionss, Node;
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:re_highlight/languages/all.dart';
 import 'package:re_highlight/re_highlight.dart';
@@ -277,16 +278,18 @@ class OpusContent extends StatelessWidget {
                               surfaceLuminance: getSurfaceLuminance,
                             );
                           }
-                          if (item.rich case final rich?) {
-                            final hasUrl = rich.jumpUrl?.isNotEmpty == true;
+                          if (item.rich case Rich(
+                            :final text,
+                            :final jumpUrl,
+                          )) {
+                            final hasUrl =
+                                jumpUrl != null && jumpUrl.isNotEmpty;
                             return TextSpan(
-                              text: '${hasUrl ? '\u{1F517}' : ''}${rich.text}',
+                              text: '${hasUrl ? '\u{1F517}' : ''}$text',
                               recognizer: hasUrl
                                   ? (TapGestureRecognizer()
                                       ..onTap = () =>
-                                          PiliScheme.routePushFromUrl(
-                                            rich.jumpUrl!,
-                                          ))
+                                          PiliScheme.routePushFromUrl(jumpUrl))
                                   : null,
                               style: hasUrl
                                   ? TextStyle(color: colorScheme.primary)

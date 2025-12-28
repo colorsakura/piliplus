@@ -36,7 +36,7 @@ import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart' hide ContextExtensionss;
+import 'package:get/get.dart';
 
 class ReplyItemGrpc extends StatelessWidget {
   const ReplyItemGrpc({
@@ -800,7 +800,7 @@ class ReplyItemGrpc extends StatelessWidget {
           .where((url) => !matchedUrls.contains(url))
           .toList();
       if (unmatchedItems.isNotEmpty) {
-        for (var patternStr in unmatchedItems) {
+        for (final patternStr in unmatchedItems) {
           addUrl(patternStr, content.urls[patternStr]!);
         }
       }
@@ -916,7 +916,7 @@ class ReplyItemGrpc extends StatelessWidget {
                   return;
                 }
                 SmartDialog.showLoading(msg: '删除中...');
-                var result = await VideoHttp.replyDel(
+                final result = await VideoHttp.replyDel(
                   type: item.type.toInt(),
                   oid: item.oid.toInt(),
                   rpid: item.id.toInt(),

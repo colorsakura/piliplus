@@ -16,7 +16,7 @@ import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart' hide ContextExtensionss;
+import 'package:get/get.dart';
 
 class DynamicDetailPage extends StatefulWidget {
   const DynamicDetailPage({super.key});
@@ -210,6 +210,7 @@ class _DynamicDetailPageState extends CommonDynPageState<DynamicDetailPage> {
             final primary = theme.colorScheme.primary;
             final outline = theme.colorScheme.outline;
             final btnStyle = TextButton.styleFrom(
+              tapTargetSize: .padded,
               padding: const EdgeInsets.symmetric(horizontal: 15),
               foregroundColor: outline,
             );
