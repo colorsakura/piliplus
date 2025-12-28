@@ -1,4 +1,4 @@
-import 'dart:io' show Platform;
+import 'dart:io';
 
 import 'package:PiliPlus/build_config.dart';
 import 'package:PiliPlus/common/constants.dart';
@@ -13,9 +13,14 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 
 abstract final class Update {
+  static const MethodChannel _channel = MethodChannel('PiliPlus');
+
   // 检查更新
   static Future<void> checkUpdate([bool isAuto = true]) async {
     if (kDebugMode) return;
@@ -127,13 +132,17 @@ abstract final class Update {
   static Future<void> onDownload(Map data, {String? ext}) async {
     SmartDialog.dismiss();
     try {
-      void download(String plat) {
+      String? downloadUrl;
+      String? fileName;
+
+      void findDownloadUrl(String plat) {
         if (data['assets'].isNotEmpty) {
           for (Map<String, dynamic> i in data['assets']) {
             final String name = i['name'];
             if (name.contains(plat) &&
                 (ext == null || ext.isEmpty ? true : name.endsWith(ext))) {
-              PageUtils.launchURL(i['browser_download_url']);
+              downloadUrl = i['browser_download_url'];
+              fileName = name;
               return;
             }
           }
@@ -145,13 +154,191 @@ abstract final class Update {
         // 获取设备信息
         AndroidDeviceInfo androidInfo = await DeviceInfoPlugin().androidInfo;
         // [arm64-v8a]
-        download(androidInfo.supportedAbis.first);
+        findDownloadUrl(androidInfo.supportedAbis.first);
       } else {
-        download(Platform.operatingSystem);
+        findDownloadUrl(Platform.operatingSystem);
+      }
+
+      if (downloadUrl == null || fileName == null) {
+        throw UnsupportedError('download URL not found');
+      }
+
+      // Android 平台下载并安装
+      if (Platform.isAndroid) {
+        await _downloadAndInstallApk(downloadUrl!, fileName!);
+      } else {
+        // 其他平台使用浏览器下载
+        PageUtils.launchURL(downloadUrl!);
       }
     } catch (e) {
       if (kDebugMode) debugPrint('download error: $e');
+      SmartDialog.showToast('下载失败: $e');
       PageUtils.launchURL('${Constants.sourceCodeUrl}/releases/latest');
+    }
+  }
+
+  // 下载并安装 APK（仅 Android）
+  static Future<void> _downloadAndInstallApk(
+    String downloadUrl,
+    String fileName,
+  ) async {
+    try {
+      // 获取下载目录
+      final Directory? externalDir = await getExternalStorageDirectory();
+      if (externalDir == null) {
+        throw Exception('无法获取外部存储目录');
+      }
+
+      // 创建下载目录
+      final Directory downloadDir = Directory(
+        path.join(externalDir.path, 'Download', 'PiliPlus'),
+      );
+      if (!downloadDir.existsSync()) {
+        await downloadDir.create(recursive: true);
+      }
+
+      // APK 文件路径
+      final String apkPath = path.join(downloadDir.path, fileName);
+      final File apkFile = File(apkPath);
+
+      // 如果文件已存在，询问是否覆盖
+      if (apkFile.existsSync()) {
+        final bool? shouldOverwrite = await SmartDialog.show<bool>(
+          animationType: SmartAnimationType.centerFade_otherSlide,
+          builder: (context) {
+            final ThemeData theme = Theme.of(context);
+            return AlertDialog(
+              title: const Text('文件已存在'),
+              content: const Text('APK 文件已存在，是否覆盖？'),
+              actions: [
+                TextButton(
+                  onPressed: () => SmartDialog.dismiss(result: false),
+                  child: Text(
+                    '取消',
+                    style: TextStyle(color: theme.colorScheme.outline),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => SmartDialog.dismiss(result: true),
+                  child: Text(
+                    '覆盖',
+                    style: TextStyle(color: theme.colorScheme.primary),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+
+        if (shouldOverwrite != true) {
+          return;
+        }
+      }
+
+      // 显示下载进度对话框
+      CancelToken? cancelToken;
+      bool isDownloading = true;
+
+      SmartDialog.show(
+        animationType: SmartAnimationType.centerFade_otherSlide,
+        builder: (context) {
+          final ThemeData theme = Theme.of(context);
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return AlertDialog(
+                title: const Text('正在下载更新包'),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const CircularProgressIndicator(),
+                    const SizedBox(height: 16),
+                    Text(
+                      fileName,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.6,
+                        ),
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      cancelToken?.cancel();
+                      isDownloading = false;
+                      SmartDialog.dismiss();
+                    },
+                    child: Text(
+                      '取消',
+                      style: TextStyle(color: theme.colorScheme.outline),
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      );
+
+      // 下载文件
+      cancelToken = CancelToken();
+      try {
+        await Request().downloadFile(
+          downloadUrl,
+          apkPath,
+          cancelToken: cancelToken,
+        );
+
+        if (!isDownloading) {
+          return;
+        }
+
+        SmartDialog.dismiss();
+
+        // 检查文件是否存在
+        if (!apkFile.existsSync()) {
+          throw Exception('下载的文件不存在');
+        }
+
+        // 安装 APK
+        await _installApk(apkPath);
+      } on DioException catch (e) {
+        if (e.type == DioExceptionType.cancel) {
+          SmartDialog.dismiss();
+          SmartDialog.showToast('下载已取消');
+        } else {
+          SmartDialog.dismiss();
+          throw Exception('下载失败: ${e.message}');
+        }
+      } catch (e) {
+        SmartDialog.dismiss();
+        rethrow;
+      }
+    } catch (e) {
+      if (kDebugMode) debugPrint('download and install error: $e');
+      SmartDialog.showToast('下载或安装失败: $e');
+    }
+  }
+
+  // 安装 APK（仅 Android）
+  static Future<void> _installApk(String apkPath) async {
+    try {
+      final bool result =
+          await _channel.invokeMethod<bool>(
+            'installApk',
+            {'apkPath': apkPath},
+          ) ??
+          false;
+
+      if (!result) {
+        throw Exception('安装失败');
+      }
+    } on PlatformException catch (e) {
+      if (kDebugMode) debugPrint('install APK error: $e');
+      throw Exception('安装失败: ${e.message}');
     }
   }
 }
