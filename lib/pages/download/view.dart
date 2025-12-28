@@ -15,6 +15,7 @@ import 'package:PiliPlus/pages/download/detail/view.dart';
 import 'package:PiliPlus/pages/download/detail/widgets/item.dart';
 import 'package:PiliPlus/pages/download/search/view.dart';
 import 'package:PiliPlus/services/download/download_service.dart';
+import 'package:PiliPlus/utils/extension/iterable_ext.dart' show IterableExt;
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/platform_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -67,7 +68,7 @@ class _DownloadPageState extends State<DownloadPage> {
                   final allChecked = _controller.allChecked.toSet();
                   _controller.handleSelect();
                   final list = <BiliDownloadEntryInfo>[];
-                  for (var page in allChecked) {
+                  for (final page in allChecked) {
                     list.addAll(page.entries);
                   }
                   final res = await Future.wait(

@@ -26,13 +26,14 @@ import 'package:PiliPlus/pages/emote/view.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
 import 'package:PiliPlus/utils/extension/context_ext.dart';
+import 'package:PiliPlus/utils/extension/iterable_ext.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart' hide DraggableScrollableSheet;
 import 'package:flutter/services.dart' show LengthLimitingTextInputFormatter;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart' hide ContextExtensionss;
+import 'package:get/get.dart';
 
 class CreateDynPanel extends CommonRichTextPubPage {
   const CreateDynPanel({
@@ -144,6 +145,7 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
                             TextSpan(
                               children: [
                                 WidgetSpan(
+                                  alignment: .middle,
                                   child: Padding(
                                     padding: const EdgeInsets.only(right: 5),
                                     child: Icon(
@@ -190,6 +192,7 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
                   decoration: InputDecoration(
                     hintText: '标题，选填20字',
                     isDense: true,
+                    visualDensity: .standard,
                     contentPadding: EdgeInsets.zero,
                     border: const OutlineInputBorder(
                       gapPadding: 0,
@@ -215,7 +218,7 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Obx(() => _buildPubtimeWidget),
+                    Obx(() => _buildPubTimeWidget),
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -452,7 +455,7 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
     );
   }
 
-  Widget get _buildPubtimeWidget => _publishTime.value == null
+  Widget get _buildPubTimeWidget => _publishTime.value == null
       ? FilledButton.tonal(
           style: FilledButton.styleFrom(
             padding: const EdgeInsets.symmetric(
@@ -683,6 +686,7 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
         onSubmitted: onSubmitted,
         decoration: InputDecoration(
           hintText: '说点什么吧',
+          visualDensity: .standard,
           hintStyle: TextStyle(color: theme.colorScheme.outline),
           border: const OutlineInputBorder(
             borderSide: BorderSide.none,
@@ -704,7 +708,7 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
     List<Map<String, dynamic>>? extraContent = getRichContent();
     final hasRichText = extraContent != null;
     final reserveCard = _reserveCard.value;
-    var result = await DynamicsHttp.createDynamic(
+    final result = await DynamicsHttp.createDynamic(
       mid: Accounts.main.mid,
       rawText: hasRichText ? null : editController.text,
       pics: pictures,
@@ -732,7 +736,7 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
       hasPub = true;
       Get.back();
       SmartDialog.showToast('发布成功');
-      var id = result['data']?['dyn_id'];
+      final id = result['data']?['dyn_id'];
       RequestUtils.insertCreatedDyn(id);
       if (!_isPrivate.value) {
         RequestUtils.checkCreatedDyn(

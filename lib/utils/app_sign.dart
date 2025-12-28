@@ -9,12 +9,13 @@ abstract final class AppSign {
     String appkey = Constants.appKey,
     String appsec = Constants.appSec,
   }) {
-    assert(
-      params['appkey'] == null,
-      'appkey-appsec should be provided in appSign',
-    );
+    // retry error
+    // assert(
+    //   params['appkey'] == null,
+    //   'appkey-appsec should be provided in appSign',
+    // );
     params['appkey'] = appkey;
-    params['ts'] ??= (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString();
+    params['ts'] = (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString();
     final sorted = params.entries.toList()
       ..sort((a, b) => a.key.compareTo(b.key));
     params['sign'] = md5
@@ -27,7 +28,7 @@ abstract final class AppSign {
     List<MapEntry<String, dynamic /*String?|Iterable<String>*/>>
     queryParameters,
   ) {
-    var result = StringBuffer();
+    final result = StringBuffer();
     var separator = '';
 
     void writeParameter(String key, String? value) {
@@ -42,8 +43,8 @@ abstract final class AppSign {
       }
     }
 
-    for (var i in queryParameters) {
-      if (i.value case Iterable<String> values) {
+    for (final i in queryParameters) {
+      if (i.value case final Iterable<String> values) {
         for (final String value in values) {
           writeParameter(i.key, value);
         }

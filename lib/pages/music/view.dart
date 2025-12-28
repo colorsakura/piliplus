@@ -29,7 +29,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart' hide ContextExtensionss;
+import 'package:get/get.dart';
 
 class MusicDetailPage extends StatefulWidget {
   const MusicDetailPage({super.key});
@@ -222,6 +222,7 @@ class _MusicDetailPageState extends CommonDynPageState<MusicDetailPage> {
           color: color,
         ),
         style: TextButton.styleFrom(
+          tapTargetSize: .padded,
           padding: const EdgeInsets.symmetric(horizontal: 15),
           foregroundColor: outline,
         ),
@@ -468,7 +469,7 @@ class _MusicDetailPageState extends CommonDynPageState<MusicDetailPage> {
                           runSpacing: 2,
                           children: [
                             if (!item.artistsList.isNullOrEmpty)
-                              for (var artist in item.artistsList!)
+                              for (final artist in item.artistsList!)
                                 _buildArtist(artist, textTheme.bodySmall),
                             if (!item.musicPublish.isNullOrEmpty)
                               Text(

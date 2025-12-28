@@ -28,7 +28,7 @@ import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show LengthLimitingTextInputFormatter;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart' hide FormData, MultipartFile;
+import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
@@ -43,13 +43,14 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   LoadingState<AccountMyInfoData> _loadingState =
       LoadingState<AccountMyInfoData>.loading();
-  late final _textController = TextEditingController();
+  late final TextEditingController _textController;
   late final _imagePicker = ImagePicker();
   AccountService accountService = Get.find<AccountService>();
 
   @override
   void initState() {
     super.initState();
+    _textController = TextEditingController();
     _getInfo();
   }
 
@@ -129,7 +130,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
     return switch (loadingState) {
       Loading() => loadingWidget,
-      Success(:var response) => ListView(
+      Success(:final response) => ListView(
         padding: EdgeInsets.only(
           bottom: MediaQuery.viewPaddingOf(context).bottom + 25,
         ),
@@ -241,7 +242,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           divider1,
         ],
       ),
-      Error(:var errMsg) => scrollErrorWidget(
+      Error(:final errMsg) => scrollErrorWidget(
         errMsg: errMsg,
         onReload: _getInfo,
       ),

@@ -20,6 +20,7 @@ import 'package:PiliPlus/pages/video/pay_coins/view.dart';
 import 'package:PiliPlus/pages/video/reply/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPlus/services/service_locator.dart';
+import 'package:PiliPlus/utils/extension/iterable_ext.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
@@ -75,16 +76,16 @@ class PgcIntroController extends CommonIntroController {
 
   // 获取点赞/投币/收藏状态
   Future<void> queryPgcLikeCoinFav() async {
-    var result = await VideoHttp.pgcLikeCoinFav(epId: epId!);
+    final result = await VideoHttp.pgcLikeCoinFav(epId: epId!);
     if (result case Success(:final response)) {
       final hasLike = response.like == 1;
       final hasFav = response.favorite == 1;
-      late final stat = pgcItem.stat!;
+      late final stat = pgcItem.stat;
       if (hasLike) {
-        stat.like = max(1, stat.like);
+        stat?.like = max(1, stat.like);
       }
       if (hasFav) {
-        stat.favorite = max(1, stat.favorite);
+        stat?.favorite = max(1, stat.favorite);
       }
       this.hasLike.value = hasLike;
       coinNum.value = response.coinNumber!;
@@ -102,10 +103,10 @@ class PgcIntroController extends CommonIntroController {
       return;
     }
     final newVal = !hasLike.value;
-    var result = await VideoHttp.likeVideo(bvid: bvid, type: newVal);
+    final result = await VideoHttp.likeVideo(bvid: bvid, type: newVal);
     if (result case Success(:final response)) {
       SmartDialog.showToast(newVal ? response : '取消赞');
-      pgcItem.stat!.like += newVal ? 1 : -1;
+      pgcItem.stat?.like += newVal ? 1 : -1;
       hasLike.value = newVal;
     } else {
       result.toast();
@@ -306,9 +307,11 @@ class PgcIntroController extends CommonIntroController {
       // 重新请求评论
       if (videoDetailCtr.showReply) {
         try {
-          Get.find<VideoReplyController>(tag: heroTag)
-            ..aid = aid
-            ..onReload();
+          final replyCtr = Get.find<VideoReplyController>(tag: heroTag)
+            ..aid = aid;
+          if (replyCtr.loadingState.value is! Loading) {
+            replyCtr.onReload();
+          }
         } catch (_) {}
       }
 
@@ -329,7 +332,7 @@ class PgcIntroController extends CommonIntroController {
 
   // 追番
   Future<void> pgcAdd() async {
-    var result = await VideoHttp.pgcAdd(seasonId: pgcItem.seasonId);
+    final result = await VideoHttp.pgcAdd(seasonId: pgcItem.seasonId);
     if (result case Success(:final response)) {
       isFollowed.value = true;
       followStatus.value = 2;
@@ -341,7 +344,7 @@ class PgcIntroController extends CommonIntroController {
 
   // 取消追番
   Future<void> pgcDel() async {
-    var result = await VideoHttp.pgcDel(seasonId: pgcItem.seasonId);
+    final result = await VideoHttp.pgcDel(seasonId: pgcItem.seasonId);
     if (result case Success(:final response)) {
       isFollowed.value = false;
       SmartDialog.showToast(response);
@@ -351,7 +354,7 @@ class PgcIntroController extends CommonIntroController {
   }
 
   Future<void> pgcUpdate(int status) async {
-    var result = await VideoHttp.pgcUpdate(
+    final result = await VideoHttp.pgcUpdate(
       seasonId: pgcItem.seasonId.toString(),
       status: status,
     );
@@ -424,20 +427,20 @@ class PgcIntroController extends CommonIntroController {
       SmartDialog.showToast('已三连');
       return;
     }
-    var result = await VideoHttp.pgcTriple(epId: epId!, seasonId: seasonId);
+    final result = await VideoHttp.pgcTriple(epId: epId!, seasonId: seasonId);
     if (result case Success(:final response)) {
-      late final stat = pgcItem.stat!;
+      late final stat = pgcItem.stat;
       if (response.like == 1 && !hasLike.value) {
-        stat.like++;
+        stat?.like++;
         hasLike.value = true;
       }
       if (response.coin == 1 && !hasCoin) {
-        stat.coin += 2;
+        stat?.coin += 2;
         coinNum.value = 2;
         GlobalData().afterCoin(2);
       }
       if (response.favorite == 1 && !hasFav.value) {
-        stat.favorite++;
+        stat?.favorite++;
         hasFav.value = true;
       }
       if (!hasCoin) {
@@ -452,7 +455,7 @@ class PgcIntroController extends CommonIntroController {
 
   Future<void> queryIsFollowed() async {
     // try {
-    //   var result = await Request().get(
+    //   final result = await Request().get(
     //     'https://www.bilibili.com/bangumi/play/ss$seasonId',
     //   );
     //   dom.Document document = html_parser.parse(result.data);
@@ -470,7 +473,7 @@ class PgcIntroController extends CommonIntroController {
     // ViewGrpc.view(bvid: bvid).then((res) {
     //   if (res.isSuccess) {
     //     ViewPgcAny view = ViewPgcAny.fromBuffer(res.data.supplement.value);
-    //     var userStatus = view.ogvData.userStatus;
+    //     final userStatus = view.ogvData.userStatus;
     //     isFollowed.value = userStatus.follow == 1;
     //     followStatus.value = userStatus.followStatus;
     //   }

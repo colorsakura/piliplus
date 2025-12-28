@@ -533,11 +533,13 @@ class VideoPopupMenu extends StatelessWidget {
                       goto: item.goto!,
                     );
                     SmartDialog.dismiss();
-                    if (res.isSuccess) {SmartDialog.showToast(
-                      r?.toast ?? f!.toast!,
-                                    );
-                      onRemove?.call();} else {
-                                    res.toast();
+                    if (res.isSuccess) {
+                      SmartDialog.showToast(
+                        r?.toast ?? f!.toast!,
+                      );
+                      onRemove?.call();
+                    } else {
+                      res.toast();
                     }
                   },
                 );
@@ -628,12 +630,12 @@ class VideoPopupMenu extends StatelessWidget {
                                     bvid: videoItem.bvid!,
                                     type: true,
                                   );
-                                  SmartDialog.dismiss();if (res.isSuccess) {
-                                  SmartDialog.showToast(
-                                    '点踩成功');
-                                                  onRemove?.call();
+                                  SmartDialog.dismiss();
+                                  if (res.isSuccess) {
+                                    SmartDialog.showToast('点踩成功');
+                                    onRemove?.call();
                                   } else {
-                                  res.toast();
+                                    res.toast();
                                   }
                                 },
                                 style: FilledButton.styleFrom(
@@ -704,9 +706,9 @@ class VideoPopupMenu extends StatelessWidget {
                       );
                       if (res.isSuccess) {
                         onRemove?.call();
-                      }else {
-                      res.toast();
-                                    }
+                      } else {
+                        res.toast();
+                      }
                     },
                     child: const Text('确认'),
                   ),
@@ -728,17 +730,21 @@ class VideoPopupMenu extends StatelessWidget {
       ),
     );
 
-    return actions.map((e) => PopupMenuItem(
-      height: menuItemHeight,
-      onTap: e.onTap,
-      child: Row(
-        children: [
-          e.icon,
-          const SizedBox(width: 6),
-          Text(e.title, style: const TextStyle(fontSize: 13)),
-        ],
-      ),
-    )).toList();
+    return actions
+        .map(
+          (e) => PopupMenuItem(
+            height: menuItemHeight,
+            onTap: e.onTap,
+            child: Row(
+              children: [
+                e.icon,
+                const SizedBox(width: 6),
+                Text(e.title, style: const TextStyle(fontSize: 13)),
+              ],
+            ),
+          ),
+        )
+        .toList();
   }
 
   @override
@@ -747,7 +753,8 @@ class VideoPopupMenu extends StatelessWidget {
       child: SizedBox(
         width: size,
         height: size,
-        child: Theme.of(context).platform == TargetPlatform.android ||
+        child:
+            Theme.of(context).platform == TargetPlatform.android ||
                 Theme.of(context).platform == TargetPlatform.iOS
             ? IconButton(
                 icon: Icon(

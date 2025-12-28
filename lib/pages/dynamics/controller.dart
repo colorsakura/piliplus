@@ -22,11 +22,7 @@ class DynamicsController extends GetxController
     with GetSingleTickerProviderStateMixin, ScrollOrRefreshMixin, AccountMixin {
   @override
   final ScrollController scrollController = ScrollController();
-  late final TabController tabController = TabController(
-    length: DynamicsTabType.values.length,
-    vsync: this,
-    initialIndex: Pref.defaultDynamicType,
-  );
+  late final TabController tabController;
 
   late final RxInt mid = (-1).obs;
   late int currentMid = -1;
@@ -59,6 +55,11 @@ class DynamicsController extends GetxController
   @override
   void onInit() {
     super.onInit();
+    tabController = TabController(
+      length: DynamicsTabType.values.length,
+      vsync: this,
+      initialIndex: Pref.defaultDynamicType,
+    );
     queryFollowUp();
   }
 

@@ -86,11 +86,7 @@ class EpisodePanel extends CommonSlidePage {
 class _EpisodePanelState extends State<EpisodePanel>
     with TickerProviderStateMixin, CommonSlideMixin {
   // tab
-  late final TabController _tabController = TabController(
-    initialIndex: widget.initialTabIndex,
-    length: widget.list.length,
-    vsync: this,
-  )..addListener(listener);
+  late final TabController _tabController;
   late final RxInt _currentTabIndex = _tabController.index.obs;
 
   late final showTitle = widget.showTitle;
@@ -154,6 +150,12 @@ class _EpisodePanelState extends State<EpisodePanel>
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(
+      initialIndex: widget.initialTabIndex,
+      length: widget.list.length,
+      vsync: this,
+    )..addListener(listener);
+
     _currentItemIndex = _findCurrentItemIndex;
     _itemScrollController = List.generate(
       widget.list.length,
@@ -178,7 +180,7 @@ class _EpisodePanelState extends State<EpisodePanel>
         VideoHttp.videoRelation(bvid: widget.bvid).then(
           (result) {
             if (!mounted) return;
-            if (result case Success(:var response)) {
+            if (result case Success(:final response)) {
               final seasonFav = response.seasonFav ?? false;
               _favState!.value = Success(seasonFav);
               widget.ugcIntroController?.seasonFavState[widget.seasonId] =
@@ -196,7 +198,7 @@ class _EpisodePanelState extends State<EpisodePanel>
       ..removeListener(listener)
       ..dispose();
     _favState?.close();
-    for (var e in _itemScrollController) {
+    for (final e in _itemScrollController) {
       e.dispose();
     }
     super.dispose();
@@ -584,14 +586,14 @@ class _EpisodePanelState extends State<EpisodePanel>
 
   Widget _buildFavBtn(LoadingState<bool> loadingState) {
     return switch (loadingState) {
-      Success(:var response) => iconButton(
+      Success(:final response) => iconButton(
         iconSize: 22,
         tooltip: response ? '取消订阅' : '订阅',
         icon: response
             ? const Icon(Icons.notifications_off_outlined)
             : const Icon(Icons.notifications_active_outlined),
         onPressed: () async {
-          var result = await FavHttp.seasonFav(
+          final result = await FavHttp.seasonFav(
             isFav: response,
             seasonId: widget.seasonId,
           );

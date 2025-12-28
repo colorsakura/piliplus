@@ -15,6 +15,7 @@ import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/cache_manager.dart';
 import 'package:PiliPlus/utils/calc_window_position.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
+import 'package:PiliPlus/utils/extension/iterable_ext.dart';
 import 'package:PiliPlus/utils/extension/theme_ext.dart';
 import 'package:PiliPlus/utils/json_file_handler.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -229,7 +230,7 @@ class MyApp extends StatelessWidget {
       return;
     }
 
-    if (Get.isDialogOpen ?? Get.isBottomSheetOpen ?? false) {
+    if (Get.routing.route is! GetPageRoute) {
       Get.back();
       return;
     }
