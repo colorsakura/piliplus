@@ -39,6 +39,7 @@ class _LiveSearchChildPageState extends State<LiveSearchChildPage>
       onRefresh: _controller.onRefresh,
       child: CustomScrollView(
         controller: _controller.scrollController,
+        physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           SliverPadding(
             padding: EdgeInsets.only(

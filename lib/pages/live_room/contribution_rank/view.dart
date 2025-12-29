@@ -126,6 +126,7 @@ class _ContributionRankTypeState extends State<_ContributionRankType>
         onRefresh: _controller.onRefresh,
         child: CustomScrollView(
           controller: _controller.scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             ViewSliverSafeArea(
               sliver: Obx(

@@ -1,4 +1,5 @@
 import 'package:PiliPlus/models/common/image_preview_type.dart';
+import 'package:PiliPlus/utils/extension/num_ext.dart';
 import 'package:PiliPlus/utils/image_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -43,6 +44,7 @@ Widget htmlRender({
               height: height != null ? double.parse(height) : null,
               imageUrl: ImageUtils.thumbnailUrl(imgUrl),
               fit: BoxFit.contain,
+              placeholder: (_, _) => const SizedBox.shrink(),
             );
           }
           final size = isEmote ? 22.0 : null;
@@ -56,6 +58,7 @@ Widget htmlRender({
               child: CachedNetworkImage(
                 width: size,
                 height: size,
+                memCacheWidth: size?.cacheSize(context),
                 imageUrl: ImageUtils.thumbnailUrl(imgUrl, 60),
                 fadeInDuration: const Duration(milliseconds: 120),
                 fadeOutDuration: const Duration(milliseconds: 120),

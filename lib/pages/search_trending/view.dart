@@ -9,6 +9,7 @@ import 'package:PiliPlus/models_new/search/search_trending/list.dart';
 import 'package:PiliPlus/pages/search_trending/controller.dart';
 import 'package:PiliPlus/utils/extension/context_ext.dart';
 import 'package:PiliPlus/utils/extension/get_ext.dart';
+import 'package:PiliPlus/utils/extension/num_ext.dart';
 import 'package:PiliPlus/utils/extension/size_ext.dart';
 import 'package:PiliPlus/utils/image_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -200,8 +201,10 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                         if (item.icon?.isNotEmpty == true) ...[
                           const SizedBox(width: 4),
                           CachedNetworkImage(
-                            imageUrl: ImageUtils.thumbnailUrl(item.icon!),
                             height: 16,
+                            memCacheHeight: 16.cacheSize(context),
+                            imageUrl: ImageUtils.thumbnailUrl(item.icon!),
+                            placeholder: (_, _) => const SizedBox.shrink(),
                           ),
                         ] else if (item.showLiveIcon == true) ...[
                           const SizedBox(width: 4),
