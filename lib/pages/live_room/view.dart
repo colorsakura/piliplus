@@ -995,7 +995,8 @@ class _LiveDanmakuState extends State<LiveDanmaku> {
   @override
   void didUpdateWidget(LiveDanmaku oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.notFullscreen != widget.notFullscreen) {
+    if (oldWidget.notFullscreen != widget.notFullscreen &&
+        !DanmakuOptions.sameFontScale) {
       plPlayerController.danmakuController?.updateOption(
         DanmakuOptions.get(notFullscreen: widget.notFullscreen),
       );

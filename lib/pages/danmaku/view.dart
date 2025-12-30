@@ -68,7 +68,8 @@ class _PlDanmakuState extends State<PlDanmaku> {
   @override
   void didUpdateWidget(PlDanmaku oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.notFullscreen != widget.notFullscreen) {
+    if (oldWidget.notFullscreen != widget.notFullscreen &&
+        !DanmakuOptions.sameFontScale) {
       _controller?.updateOption(
         DanmakuOptions.get(notFullscreen: widget.notFullscreen),
       );

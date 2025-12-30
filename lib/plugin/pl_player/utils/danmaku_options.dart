@@ -19,12 +19,14 @@ abstract final class DanmakuOptions {
   static bool massiveMode = Pref.danmakuMassiveMode;
   static double danmakuLineHeight = Pref.danmakuLineHeight;
 
+  static bool sameFontScale = danmakuFontScale == danmakuFontScaleFS;
+
   static DanmakuOption get({
     required bool notFullscreen,
     double speed = 1.0,
   }) {
     return DanmakuOption(
-      fontSize: notFullscreen ? danmakuFontScaleFS : danmakuFontScale,
+      fontSize: 15 * (notFullscreen ? danmakuFontScaleFS : danmakuFontScale),
       fontWeight: danmakuFontWeight,
       area: danmakuShowArea,
       duration: danmakuDuration / speed,
