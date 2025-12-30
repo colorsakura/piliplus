@@ -26,7 +26,7 @@ abstract final class DanmakuOptions {
     double speed = 1.0,
   }) {
     return DanmakuOption(
-      fontSize: 15 * (notFullscreen ? danmakuFontScaleFS : danmakuFontScale),
+      fontSize: 15 * (notFullscreen ? danmakuFontScale : danmakuFontScaleFS),
       fontWeight: danmakuFontWeight,
       area: danmakuShowArea,
       duration: danmakuDuration / speed,
