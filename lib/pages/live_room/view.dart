@@ -265,7 +265,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                     liveRoomController: _liveRoomController,
                     plPlayerController: plPlayerController,
                     isFullScreen: isFullScreen,
-                    isPipMode: isPipMode,
+                    isPipMode: plPlayerController.isDesktopPip || isPipMode,
                   ),
           );
         }
