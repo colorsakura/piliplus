@@ -401,6 +401,9 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                   child = Image.asset(
                     'assets/images/live/default_bg.webp',
                     fit: BoxFit.cover,
+                    width: maxWidth,
+                    height: maxHeight,
+                    cacheWidth: maxWidth.cacheSize(context),
                   );
                 }
                 return Positioned.fill(
