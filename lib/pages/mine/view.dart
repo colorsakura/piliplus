@@ -317,7 +317,7 @@ class _MediaPageState extends CommonPageState<MinePage, MineController>
                           ),
                           Image.asset(
                             Utils.levelName(
-                              levelInfo!.currentLevel!,
+                              levelInfo?.currentLevel ?? 0,
                               isSeniorMember: userInfo.isSeniorMember == 1,
                             ),
                             height: 10,
@@ -342,11 +342,11 @@ class _MediaPageState extends CommonPageState<MinePage, MineController>
                               style: coinLabelStyle,
                             ),
                             TextSpan(
-                              text: levelInfo.currentExp?.toString() ?? '-',
+                              text: levelInfo?.currentExp?.toString() ?? '-',
                               style: coinValStyle,
                             ),
                             TextSpan(
-                              text: "/${levelInfo.nextExp ?? '-'}",
+                              text: "/${levelInfo?.nextExp ?? '-'}",
                               style: coinLabelStyle,
                             ),
                           ],
