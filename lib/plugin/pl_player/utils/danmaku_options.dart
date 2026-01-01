@@ -16,6 +16,7 @@ abstract final class DanmakuOptions {
   static double danmakuStaticDuration = Pref.danmakuStaticDuration;
   static double danmakuStrokeWidth = Pref.strokeWidth;
   static bool scrollFixedVelocity = Pref.danmakuFixedV;
+  static bool static2Scroll = Pref.static2Scroll;
   static bool massiveMode = Pref.danmakuMassiveMode;
   static double danmakuLineHeight = Pref.danmakuLineHeight;
 
@@ -38,7 +39,7 @@ abstract final class DanmakuOptions {
       strokeWidth: danmakuStrokeWidth,
       scrollFixedVelocity: scrollFixedVelocity,
       massiveMode: massiveMode,
-      static2Scroll: true,
+      static2Scroll: static2Scroll,
       safeArea: true,
       lineHeight: danmakuLineHeight,
     );

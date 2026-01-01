@@ -1,5 +1,4 @@
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
-import 'package:PiliPlus/pages/setting/widgets/switch_item.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/menu_row.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/utils/danmaku_options.dart';
@@ -147,6 +146,11 @@ mixin HeaderMixin<T extends StatefulWidget> on State<T> {
           setOptions();
         }
 
+        void updateDanmakuWeight(double val) {
+          plPlayerController.danmakuWeight = val.toInt();
+          setState(() {});
+        }
+
         void onUpdateBlockType(int blockType, bool blocked) {
           if (blocked) {
             DanmakuOptions.blockTypes.remove(blockType);
@@ -178,9 +182,9 @@ mixin HeaderMixin<T extends StatefulWidget> on State<T> {
                   const SizedBox(height: 10),
                   if (!isLive) ...[
                     Row(
+                      mainAxisAlignment: .spaceBetween,
                       children: [
                         Text('智能云屏蔽 ${plPlayerController.danmakuWeight} 级'),
-                        const Spacer(),
                         TextButton(
                           style: TextButton.styleFrom(
                             padding: EdgeInsets.zero,
@@ -214,8 +218,7 @@ mixin HeaderMixin<T extends StatefulWidget> on State<T> {
                           value: plPlayerController.danmakuWeight.toDouble(),
                           divisions: 10,
                           label: '${plPlayerController.danmakuWeight}',
-                          onChanged: (val) =>
-                              plPlayerController.danmakuWeight = val.toInt(),
+                          onChanged: updateDanmakuWeight,
                           onChangeEnd: (val) => GStorage.setting.put(
                             SettingBoxKey.danmakuWeight,
                             val.toInt(),
@@ -225,50 +228,64 @@ mixin HeaderMixin<T extends StatefulWidget> on State<T> {
                     ),
                   ],
                   const Text('按类型屏蔽'),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 12),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        spacing: 10,
-                        children: blockTypesList.map(
-                          (e) {
-                            final blocked = DanmakuOptions.blockTypes.contains(
-                              e.value,
-                            );
-                            return ActionRowLineItem(
-                              onTap: () => onUpdateBlockType(e.value, blocked),
-                              text: e.label,
-                              selectStatus: blocked,
-                            );
-                          },
-                        ).toList(),
-                      ),
+                  SingleChildScrollView(
+                    scrollDirection: .horizontal,
+                    padding: const .symmetric(vertical: 10),
+                    child: Row(
+                      spacing: 10,
+                      children: blockTypesList.map(
+                        (e) {
+                          final blocked = DanmakuOptions.blockTypes.contains(
+                            e.value,
+                          );
+                          return ActionRowLineItem(
+                            onTap: () => onUpdateBlockType(e.value, blocked),
+                            text: e.label,
+                            selectStatus: blocked,
+                          );
+                        },
+                      ).toList(),
                     ),
                   ),
-                  SetSwitchItem(
-                    title: '海量弹幕',
-                    contentPadding: EdgeInsets.zero,
-                    titleStyle: const TextStyle(fontSize: 14),
-                    defaultVal: DanmakuOptions.massiveMode,
-                    setKey: SettingBoxKey.danmakuMassiveMode,
-                    onChanged: (value) {
-                      DanmakuOptions.massiveMode = value;
-                      setState(() {});
-                      setOptions();
-                    },
-                  ),
-                  SetSwitchItem(
-                    title: '滚动弹幕固定速度',
-                    contentPadding: EdgeInsets.zero,
-                    titleStyle: const TextStyle(fontSize: 14),
-                    defaultVal: DanmakuOptions.scrollFixedVelocity,
-                    setKey: SettingBoxKey.danmakuFixedV,
-                    onChanged: (value) {
-                      DanmakuOptions.scrollFixedVelocity = value;
-                      setState(() {});
-                      setOptions();
-                    },
+                  const Text('其他'),
+                  SingleChildScrollView(
+                    scrollDirection: .horizontal,
+                    padding: const .symmetric(vertical: 10),
+                    child: Row(
+                      spacing: 10,
+                      children: [
+                        ActionRowLineItem(
+                          selectStatus: DanmakuOptions.massiveMode,
+                          onTap: () {
+                            DanmakuOptions.massiveMode =
+                                !DanmakuOptions.massiveMode;
+                            setState(() {});
+                            setOptions();
+                          },
+                          text: '海量弹幕',
+                        ),
+                        ActionRowLineItem(
+                          selectStatus: DanmakuOptions.static2Scroll,
+                          onTap: () {
+                            DanmakuOptions.static2Scroll =
+                                !DanmakuOptions.static2Scroll;
+                            setState(() {});
+                            setOptions();
+                          },
+                          text: '固定转滚动',
+                        ),
+                        ActionRowLineItem(
+                          selectStatus: DanmakuOptions.scrollFixedVelocity,
+                          onTap: () {
+                            DanmakuOptions.scrollFixedVelocity =
+                                !DanmakuOptions.scrollFixedVelocity;
+                            setState(() {});
+                            setOptions();
+                          },
+                          text: '滚动弹幕固定速度',
+                        ),
+                      ],
+                    ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
