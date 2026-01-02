@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:PiliPlus/common/widgets/flutter/text_field/controller.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/live.dart';
+import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/super_chat_type.dart';
 import 'package:PiliPlus/models/common/video/live_quality.dart';
@@ -221,25 +222,24 @@ class LiveRoomController extends GetxController {
       qn: currentQn,
       onlyAudio: plPlayerController.onlyPlayAudio.value,
     );
-    if (res.isSuccess) {
-      final data = res.data;
-      if (data.liveStatus != 1) {
+    if (res case Success(:final response)) {
+      if (response.liveStatus != 1) {
         _showDialog('当前直播间未开播');
         return;
       }
-      if (data.playurlInfo?.playurl == null) {
+      if (response.playurlInfo?.playurl == null) {
         _showDialog('无法获取播放地址');
         return;
       }
-      ruid = data.uid;
-      if (data.roomId != null) {
-        roomId = data.roomId!;
+      ruid = response.uid;
+      if (response.roomId != null) {
+        roomId = response.roomId!;
       }
-      liveTime.value = data.liveTime;
+      liveTime.value = response.liveTime;
       startLiveTimer();
-      isPortrait.value = data.isPortrait ?? false;
+      isPortrait.value = response.isPortrait ?? false;
       List<CodecItem> codec =
-          data.playurlInfo!.playurl!.stream!.first.format!.first.codec!;
+          response.playurlInfo!.playurl!.stream!.first.format!.first.codec!;
       CodecItem item = codec.first;
       // 以服务端返回的码率为准
       currentQn = item.currentQn!;
@@ -261,12 +261,11 @@ class LiveRoomController extends GetxController {
 
   Future<void> queryLiveInfoH5() async {
     final res = await LiveHttp.liveRoomInfoH5(roomId: roomId);
-    if (res.isSuccess) {
-      final data = res.data;
-      roomInfoH5.value = data;
-      title.value = data.roomInfo?.title ?? '';
-      watchedShow.value = data.watchedShow?.textLarge;
-      videoPlayerServiceHandler?.onVideoDetailChange(data, roomId, heroTag);
+    if (res case Success(:final response)) {
+      roomInfoH5.value = response;
+      title.value = response.roomInfo?.title ?? '';
+      watchedShow.value = response.watchedShow?.textLarge;
+      videoPlayerServiceHandler?.onVideoDetailChange(response, roomId, heroTag);
     } else {
       res.toast();
     }
@@ -358,8 +357,8 @@ class LiveRoomController extends GetxController {
       return;
     }
     LiveHttp.liveRoomGetDanmakuToken(roomId: roomId).then((res) {
-      if (res.isSuccess) {
-        initDm(dmInfo = res.data);
+      if (res case Success(:final response)) {
+        initDm(dmInfo = response);
       }
     });
   }

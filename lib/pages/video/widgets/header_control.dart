@@ -208,12 +208,15 @@ class HeaderControl extends StatefulWidget {
       return true;
     } else {
       res.toast();
-      if ((res as Error).code == 65006) {
-        extra.isLike = true;
-        return true;
-      } else if (res.code == 65004) {
-        extra.isLike = false;
-        return true;
+      if (res case Error(:final code)) {
+        if (code == 65006) {
+          extra.isLike = true;
+          return true;
+        }
+        if (code == 65004) {
+          extra.isLike = false;
+          return true;
+        }
       }
       return false;
     }

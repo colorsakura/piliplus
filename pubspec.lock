@@ -793,7 +793,7 @@ packages:
     description:
       path: "."
       ref: "version_4.7.2"
-      resolved-ref: "8b6dcbfb6217d4033204a15702de59588dd955ab"
+      resolved-ref: "58572238672734ba9351631a4fc81aed5dba3b16"
       url: "https://github.com/bggRGjQaUbCoE/getx.git"
     source: git
     version: "4.7.2"
