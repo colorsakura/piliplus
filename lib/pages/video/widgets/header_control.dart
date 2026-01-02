@@ -1289,16 +1289,16 @@ class HeaderControlState extends State<HeaderControl>
     );
   }
 
+  double get subtitleFontScale => plPlayerController.subtitleFontScale;
+  double get subtitleFontScaleFS => plPlayerController.subtitleFontScaleFS;
+  int get subtitlePaddingH => plPlayerController.subtitlePaddingH;
+  int get subtitlePaddingB => plPlayerController.subtitlePaddingB;
+  double get subtitleBgOpacity => plPlayerController.subtitleBgOpacity;
+  double get subtitleStrokeWidth => plPlayerController.subtitleStrokeWidth;
+  int get subtitleFontWeight => plPlayerController.subtitleFontWeight;
+
   /// 字幕设置
   void showSetSubtitle() {
-    double subtitleFontScale = plPlayerController.subtitleFontScale;
-    double subtitleFontScaleFS = plPlayerController.subtitleFontScaleFS;
-    int subtitlePaddingH = plPlayerController.subtitlePaddingH;
-    int subtitlePaddingB = plPlayerController.subtitlePaddingB;
-    double subtitleBgOpacity = plPlayerController.subtitleBgOpacity;
-    double subtitleStrokeWidth = plPlayerController.subtitleStrokeWidth;
-    int subtitleFontWeight = plPlayerController.subtitleFontWeight;
-
     showBottomSheet(
       padding: isFullScreen ? 70 : null,
       (context, setState) {
@@ -1314,57 +1314,50 @@ class HeaderControlState extends State<HeaderControl>
         );
 
         void updateStrokeWidth(double val) {
-          subtitleStrokeWidth = val;
           plPlayerController
-            ..subtitleStrokeWidth = subtitleStrokeWidth
+            ..subtitleStrokeWidth = val
             ..updateSubtitleStyle();
           setState(() {});
         }
 
         void updateOpacity(double val) {
-          subtitleBgOpacity = val.toPrecision(2);
           plPlayerController
-            ..subtitleBgOpacity = subtitleBgOpacity
+            ..subtitleBgOpacity = val.toPrecision(2)
             ..updateSubtitleStyle();
           setState(() {});
         }
 
         void updateBottomPadding(double val) {
-          subtitlePaddingB = val.round();
           plPlayerController
-            ..subtitlePaddingB = subtitlePaddingB
+            ..subtitlePaddingB = val.round()
             ..updateSubtitleStyle();
           setState(() {});
         }
 
         void updateHorizontalPadding(double val) {
-          subtitlePaddingH = val.round();
           plPlayerController
-            ..subtitlePaddingH = subtitlePaddingH
+            ..subtitlePaddingH = val.round()
             ..updateSubtitleStyle();
           setState(() {});
         }
 
         void updateFontScaleFS(double val) {
-          subtitleFontScaleFS = val;
           plPlayerController
-            ..subtitleFontScaleFS = subtitleFontScaleFS
+            ..subtitleFontScaleFS = val
             ..updateSubtitleStyle();
           setState(() {});
         }
 
         void updateFontScale(double val) {
-          subtitleFontScale = val;
           plPlayerController
-            ..subtitleFontScale = subtitleFontScale
+            ..subtitleFontScale = val
             ..updateSubtitleStyle();
           setState(() {});
         }
 
         void updateFontWeight(double val) {
-          subtitleFontWeight = val.toInt();
           plPlayerController
-            ..subtitleFontWeight = subtitleFontWeight
+            ..subtitleFontWeight = val.toInt()
             ..updateSubtitleStyle();
           setState(() {});
         }
@@ -1391,12 +1384,7 @@ class HeaderControlState extends State<HeaderControl>
                       Text(
                         '字体大小 ${(subtitleFontScale * 100).toStringAsFixed(1)}%',
                       ),
-                      resetBtn(
-                        theme,
-                        '100.0%',
-                        () => updateFontScale(1.0),
-                        isDanmaku: false,
-                      ),
+                      resetBtn(theme, '100.0%', () => updateFontScale(1.0)),
                     ],
                   ),
                   Padding(
@@ -1416,8 +1404,6 @@ class HeaderControlState extends State<HeaderControl>
                         label:
                             '${(subtitleFontScale * 100).toStringAsFixed(1)}%',
                         onChanged: updateFontScale,
-                        onChangeEnd: (_) =>
-                            plPlayerController.putSubtitleSettings(),
                       ),
                     ),
                   ),
@@ -1427,12 +1413,7 @@ class HeaderControlState extends State<HeaderControl>
                       Text(
                         '全屏字体大小 ${(subtitleFontScaleFS * 100).toStringAsFixed(1)}%',
                       ),
-                      resetBtn(
-                        theme,
-                        '150.0%',
-                        () => updateFontScaleFS(1.5),
-                        isDanmaku: false,
-                      ),
+                      resetBtn(theme, '150.0%', () => updateFontScaleFS(1.5)),
                     ],
                   ),
                   Padding(
@@ -1452,8 +1433,6 @@ class HeaderControlState extends State<HeaderControl>
                         label:
                             '${(subtitleFontScaleFS * 100).toStringAsFixed(1)}%',
                         onChanged: updateFontScaleFS,
-                        onChangeEnd: (_) =>
-                            plPlayerController.putSubtitleSettings,
                       ),
                     ),
                   ),
@@ -1461,12 +1440,7 @@ class HeaderControlState extends State<HeaderControl>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('字体粗细 ${subtitleFontWeight + 1}（可能无法精确调节）'),
-                      resetBtn(
-                        theme,
-                        6,
-                        () => updateFontWeight(5),
-                        isDanmaku: false,
-                      ),
+                      resetBtn(theme, 6, () => updateFontWeight(5)),
                     ],
                   ),
                   Padding(
@@ -1485,8 +1459,6 @@ class HeaderControlState extends State<HeaderControl>
                         divisions: 8,
                         label: '${subtitleFontWeight + 1}',
                         onChanged: updateFontWeight,
-                        onChangeEnd: (_) =>
-                            plPlayerController.putSubtitleSettings(),
                       ),
                     ),
                   ),
@@ -1494,12 +1466,7 @@ class HeaderControlState extends State<HeaderControl>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('描边粗细 $subtitleStrokeWidth'),
-                      resetBtn(
-                        theme,
-                        2.0,
-                        () => updateStrokeWidth(2.0),
-                        isDanmaku: false,
-                      ),
+                      resetBtn(theme, 2.0, () => updateStrokeWidth(2.0)),
                     ],
                   ),
                   Padding(
@@ -1518,8 +1485,6 @@ class HeaderControlState extends State<HeaderControl>
                         divisions: 10,
                         label: '$subtitleStrokeWidth',
                         onChanged: updateStrokeWidth,
-                        onChangeEnd: (_) =>
-                            plPlayerController.putSubtitleSettings(),
                       ),
                     ),
                   ),
@@ -1527,12 +1492,7 @@ class HeaderControlState extends State<HeaderControl>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('左右边距 $subtitlePaddingH'),
-                      resetBtn(
-                        theme,
-                        24,
-                        () => updateHorizontalPadding(24),
-                        isDanmaku: false,
-                      ),
+                      resetBtn(theme, 24, () => updateHorizontalPadding(24)),
                     ],
                   ),
                   Padding(
@@ -1551,8 +1511,6 @@ class HeaderControlState extends State<HeaderControl>
                         divisions: 100,
                         label: '$subtitlePaddingH',
                         onChanged: updateHorizontalPadding,
-                        onChangeEnd: (_) =>
-                            plPlayerController.putSubtitleSettings(),
                       ),
                     ),
                   ),
@@ -1560,12 +1518,7 @@ class HeaderControlState extends State<HeaderControl>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('底部边距 $subtitlePaddingB'),
-                      resetBtn(
-                        theme,
-                        24,
-                        () => updateBottomPadding(24),
-                        isDanmaku: false,
-                      ),
+                      resetBtn(theme, 24, () => updateBottomPadding(24)),
                     ],
                   ),
                   Padding(
@@ -1584,8 +1537,6 @@ class HeaderControlState extends State<HeaderControl>
                         divisions: 200,
                         label: '$subtitlePaddingB',
                         onChanged: updateBottomPadding,
-                        onChangeEnd: (_) =>
-                            plPlayerController.putSubtitleSettings(),
                       ),
                     ),
                   ),
@@ -1593,12 +1544,7 @@ class HeaderControlState extends State<HeaderControl>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('背景不透明度 ${(subtitleBgOpacity * 100).toInt()}%'),
-                      resetBtn(
-                        theme,
-                        '67%',
-                        () => updateOpacity(0.67),
-                        isDanmaku: false,
-                      ),
+                      resetBtn(theme, '67%', () => updateOpacity(0.67)),
                     ],
                   ),
                   Padding(
@@ -1615,8 +1561,6 @@ class HeaderControlState extends State<HeaderControl>
                         max: 1,
                         value: subtitleBgOpacity,
                         onChanged: updateOpacity,
-                        onChangeEnd: (_) =>
-                            plPlayerController.putSubtitleSettings(),
                       ),
                     ),
                   ),
@@ -1626,7 +1570,7 @@ class HeaderControlState extends State<HeaderControl>
           ),
         );
       },
-    );
+    )?.whenComplete(plPlayerController.putSubtitleSettings);
   }
 
   void showDanmakuPool() {
