@@ -81,13 +81,14 @@ Future<void> autoWrapReportDialog(
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 14, top: 6),
-              child: CheckBoxText(
-                text: '拉黑该用户',
-                onChanged: (value) => banUid = value,
+            if (options != ReportOptions.liveDanmakuReport)
+              Padding(
+                padding: const EdgeInsets.only(left: 14, top: 6),
+                child: CheckBoxText(
+                  text: '拉黑该用户',
+                  onChanged: (value) => banUid = value,
+                ),
               ),
-            ),
           ],
         ),
         actions: [

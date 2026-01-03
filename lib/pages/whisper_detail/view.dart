@@ -359,9 +359,7 @@ class _WhisperDetailPageState
   }
 
   @override
-  Future<void> onMention([bool fromClick = false]) {
-    return Future.syncValue(null);
-  }
+  Future<void>? onMention([bool fromClick = false]) => null;
 
   @override
   void onSave() {}
