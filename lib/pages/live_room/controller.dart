@@ -392,6 +392,7 @@ class LiveRoomController extends GetxController {
       ..removeListener(listener)
       ..dispose();
     pageController?.dispose();
+    danmakuController = null;
     super.onClose();
   }
 

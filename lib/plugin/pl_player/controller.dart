@@ -1692,6 +1692,7 @@ class PlPlayerController {
     }
 
     _playerCount = 0;
+    danmakuController = null;
     _stopListenerForVideoFit();
     _stopListenerForEnterFullScreen();
     disableAutoEnterPip();
