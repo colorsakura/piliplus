@@ -278,7 +278,6 @@ class HeaderControl extends StatefulWidget {
     required int roomId,
     required String msg,
     required LiveDanmaku extra,
-    required PlPlayerController ctr,
   }) {
     if (Accounts.main.isLogin) {
       return autoWrapReportDialog(
