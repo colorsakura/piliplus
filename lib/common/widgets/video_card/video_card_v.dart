@@ -100,7 +100,7 @@ class VideoCardV extends StatelessWidget {
                             src: videoItem.cover,
                             width: maxWidth,
                             height: maxHeight,
-                            radius: 0,
+                            type: .emote,
                           ),
                           Positioned(
                             bottom: 0,

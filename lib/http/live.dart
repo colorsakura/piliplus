@@ -5,9 +5,11 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/login.dart';
 import 'package:PiliPlus/http/ua_type.dart';
 import 'package:PiliPlus/models/common/account_type.dart';
-import 'package:PiliPlus/models/common/live_search_type.dart';
+import 'package:PiliPlus/models/common/live/live_contribution_rank_type.dart';
+import 'package:PiliPlus/models/common/live/live_search_type.dart';
 import 'package:PiliPlus/models_new/live/live_area_list/area_item.dart';
 import 'package:PiliPlus/models_new/live/live_area_list/area_list.dart';
+import 'package:PiliPlus/models_new/live/live_contribution_rank/data.dart';
 import 'package:PiliPlus/models_new/live/live_dm_block/data.dart';
 import 'package:PiliPlus/models_new/live/live_dm_block/shield_info.dart';
 import 'package:PiliPlus/models_new/live/live_dm_block/shield_user_list.dart';
@@ -35,10 +37,15 @@ abstract final class LiveHttp {
     required Object msg,
     Object? dmType,
     Object? emoticonOptions,
+    int replyMid = 0,
+    String replayDmid = '',
   }) async {
     String csrf = Accounts.main.csrf;
     final res = await Request().post(
       Api.sendLiveMsg,
+      queryParameters: await WbiSign.makSign({
+        'web_location': 444.8,
+      }),
       data: FormData.fromMap({
         'bubble': 0,
         'msg': msg,
@@ -50,10 +57,10 @@ abstract final class LiveHttp {
         else ...{
           'room_type': 0,
           'jumpfrom': 0,
-          'reply_mid': 0,
+          'reply_mid': replyMid,
           'reply_attr': 0,
-          'replay_dmid': '',
-          'statistics': Constants.statistics,
+          'replay_dmid': replayDmid,
+          'statistics': '{"appId":100,"platform":5}',
           'reply_type': 0,
           'reply_uname': '',
         },
@@ -654,6 +661,36 @@ abstract final class LiveHttp {
     );
     if (res.data['code'] == 0) {
       return const Success(null);
+    } else {
+      return Error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<LiveContributionRankData>> liveContributionRank({
+    required Object ruid,
+    required Object roomId,
+    required int page,
+    required LiveContributionRankType type,
+  }) async {
+    final res = await Request().get(
+      Api.liveContributionRank,
+      queryParameters: await WbiSign.makSign({
+        'ruid': ruid,
+        'room_id': roomId,
+        'page': page,
+        'page_size': 100,
+        'type': type.name,
+        'switch': type.sw1tch,
+        'platform': 'web',
+        'web_location': 444.8,
+      }),
+    );
+    if (res.data['code'] == 0) {
+      try {
+        return Success(LiveContributionRankData.fromJson(res.data['data']));
+      } catch (e, s) {
+        return Error('$e\n\n$s');
+      }
     } else {
       return Error(res.data['message']);
     }
