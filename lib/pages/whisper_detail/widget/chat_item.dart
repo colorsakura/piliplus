@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
@@ -13,7 +14,7 @@ import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
 import 'package:PiliPlus/utils/duration_utils.dart';
-import 'package:PiliPlus/utils/extension/widget_ext.dart';
+import 'package:PiliPlus/utils/extension/num_ext.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/image_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -756,17 +757,34 @@ class ChatItem extends StatelessWidget {
   }
 
   Widget msgTypePictureCard_13(dynamic content) {
-    final url = content['jump_url'];
-    return GestureDetector(
-      onTap: url == null ? null : () => PiliScheme.routePushFromUrl(url),
-      child: ClipRRect(
-        borderRadius: StyleString.mdRadius,
-        child: CachedNetworkImage(
-          imageUrl: ImageUtils.thumbnailUrl(content['pic_url']),
-          placeholder: (_, _) => const SizedBox.shrink(),
-        ),
-      ),
-    ).constraintWidth(constraints: const BoxConstraints(maxWidth: 400.0));
+    final String? url = content['jump_url'];
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final maxWidth = max(400.0, constraints.maxWidth);
+        Widget child = ClipRRect(
+          borderRadius: StyleString.mdRadius,
+          child: CachedNetworkImage(
+            width: maxWidth,
+            memCacheWidth: maxWidth.cacheSize(context),
+            imageUrl: ImageUtils.thumbnailUrl(content['pic_url']),
+            placeholder: (_, _) => const SizedBox.shrink(),
+          ),
+        );
+        if (url != null && url.isNotEmpty) {
+          child = GestureDetector(
+            onTap: () => PiliScheme.routePushFromUrl(url),
+            child: child,
+          );
+        }
+        return Align(
+          alignment: Alignment.topCenter,
+          child: SizedBox(
+            width: maxWidth,
+            child: child,
+          ),
+        );
+      },
+    );
   }
 
   Widget def(Color textColor, {err}) {
