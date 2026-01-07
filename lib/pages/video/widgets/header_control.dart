@@ -282,6 +282,7 @@ class HeaderControl extends StatefulWidget {
     if (Accounts.main.isLogin) {
       return autoWrapReportDialog(
         context,
+        ban: false,
         ReportOptions.liveDanmakuReport,
         (reasonType, reasonDesc, banUid) {
           // if (banUid) {

@@ -84,7 +84,7 @@ class LiveRoomChatPanel extends StatelessWidget {
                                 recognizer: item.uid == 0
                                     ? null
                                     : (TapGestureRecognizer()
-                                        ..onTapDown = (e) => _showMsgMenu(
+                                        ..onTapUp = (e) => _showMsgMenu(
                                           context,
                                           itemContext,
                                           e,
@@ -290,7 +290,7 @@ class LiveRoomChatPanel extends StatelessWidget {
   void _showMsgMenu(
     BuildContext context,
     BuildContext itemContext,
-    TapDownDetails details,
+    TapUpDetails details,
     DanmakuMsg item,
   ) {
     final dx = details.globalPosition.dx;

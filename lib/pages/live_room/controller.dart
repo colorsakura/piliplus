@@ -607,6 +607,7 @@ class LiveRoomController extends GetxController {
     }
     autoWrapReportDialog(
       Get.context!,
+      ban: false,
       ReportOptions.liveDanmakuReport,
       (reasonType, reasonDesc, banUid) {
         return LiveHttp.superChatReport(

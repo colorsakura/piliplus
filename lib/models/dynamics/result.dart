@@ -248,9 +248,9 @@ class ModuleDispute {
   String? jumpUrl;
 
   ModuleDispute.fromJson(Map<String, dynamic> json) {
-   title=json['title'];
-   desc=json['desc'];
-   jumpUrl=json['jump_url'];
+    title = json['title'];
+    desc = json['desc'];
+    jumpUrl = json['jump_url'];
   }
 }
 
