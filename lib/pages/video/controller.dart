@@ -1592,8 +1592,7 @@ class VideoDetailController extends GetxController
       if (response.subtitle?.subtitles?.isNotEmpty == true) {
         subtitles.value = response.subtitle!.subtitles!;
 
-        final idx = switch (SubtitlePrefType.values[Pref
-            .subtitlePreferenceV2]) {
+        final idx = switch (Pref.subtitlePreferenceV2) {
           SubtitlePrefType.off => 0,
           SubtitlePrefType.on => 1,
           SubtitlePrefType.withoutAi =>

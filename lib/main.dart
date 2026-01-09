@@ -29,7 +29,6 @@ import 'package:PiliPlus/utils/theme_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:catcher_2/catcher_2.dart';
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:flex_seed_scheme/flex_seed_scheme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart' show PointerDeviceKind;
 import 'package:flutter/material.dart';
@@ -263,7 +262,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final dynamicColor = Pref.dynamicColor && _light != null && _dark != null;
     late final brandColor = colorThemeTypes[Pref.customColor].color;
-    late final variant = FlexSchemeVariant.values[Pref.schemeVariant];
+    late final variant = Pref.schemeVariant;
     return GetMaterialApp(
       title: Constants.appName,
       theme: ThemeUtils.getThemeData(
@@ -395,7 +394,7 @@ class MyApp extends StatelessWidget {
         if (kDebugMode) {
           debugPrint('dynamic_color: Accent color detected.');
         }
-        final variant = FlexSchemeVariant.values[Pref.schemeVariant];
+        final variant = Pref.schemeVariant;
         _light = accentColor.asColorSchemeSeed(variant, .light);
         _dark = accentColor.asColorSchemeSeed(variant, .dark);
         return true;

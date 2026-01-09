@@ -33,7 +33,6 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:auto_orientation/auto_orientation.dart';
-import 'package:flex_seed_scheme/flex_seed_scheme.dart';
 import 'package:flutter/material.dart' hide StatefulBuilder;
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -593,10 +592,7 @@ List<SettingsModel> get styleSettings => [
             dimension: 32,
             child: ColorPalette(
               colorScheme: colorThemeTypes[Pref.customColor].color
-                  .asColorSchemeSeed(
-                    FlexSchemeVariant.values[Pref.schemeVariant],
-                    Get.theme.brightness,
-                  ),
+                  .asColorSchemeSeed(Pref.schemeVariant, Get.theme.brightness),
               selected: false,
               showBgColor: false,
             ),
@@ -604,28 +600,25 @@ List<SettingsModel> get styleSettings => [
   ),
   NormalModel(
     onTap: (context, setState) async {
-      final result = await showDialog<int>(
+      final result = await showDialog<NavigationBarType>(
         context: context,
         builder: (context) {
-          return SelectDialog<int>(
+          return SelectDialog<NavigationBarType>(
             title: '首页启动页',
             value: Pref.defaultHomePage,
-            values: NavigationBarType.values
-                .map((e) => (e.index, e.label))
-                .toList(),
+            values: NavigationBarType.values.map((e) => (e, e.label)).toList(),
           );
         },
       );
       if (result != null) {
-        await GStorage.setting.put(SettingBoxKey.defaultHomePage, result);
+        await GStorage.setting.put(SettingBoxKey.defaultHomePage, result.index);
         SmartDialog.showToast('设置成功，重启生效');
         setState();
       }
     },
     leading: const Icon(Icons.home_outlined),
     title: '默认启动页',
-    getSubtitle: () =>
-        '当前启动页：${NavigationBarType.values.firstWhere((e) => e.index == Pref.defaultHomePage).label}',
+    getSubtitle: () => '当前启动页：${Pref.defaultHomePage.label}',
   ),
   NormalModel(
     title: '滑动动画弹簧参数',

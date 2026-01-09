@@ -144,7 +144,9 @@ abstract final class SettingBoxKey {
       enableTapDm = 'enableTapDm',
       setSystemBrightness = 'setSystemBrightness',
       downloadPath = 'downloadPath',
-      followOrderType = 'followOrderType';
+      followOrderType = 'followOrderType',
+      enableImgMenu = 'enableImgMenu',
+      showDynDispute = 'showDynDispute';
 
   static const String minimizeOnExit = 'minimizeOnExit',
       windowSize = 'windowSize',

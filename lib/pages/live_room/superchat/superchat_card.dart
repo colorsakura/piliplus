@@ -105,6 +105,14 @@ class _SuperChatCardState extends State<SuperChatCard> {
         ),
         PopupMenuItem(
           height: 38,
+          onTap: () => Utils.copyText(Utils.jsonEncoder.convert(item.toJson())),
+          child: const Text(
+            '复制 SC 信息',
+            style: TextStyle(fontSize: 13),
+          ),
+        ),
+        PopupMenuItem(
+          height: 38,
           onTap: widget.onReport,
           child: const Text(
             '举报',
