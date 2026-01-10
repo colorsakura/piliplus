@@ -628,6 +628,9 @@ abstract final class Pref {
   static double get defaultTextScale =>
       _setting.get(SettingBoxKey.defaultTextScale, defaultValue: 1.0);
 
+  static double get uiScale =>
+      _setting.get(SettingBoxKey.uiScale, defaultValue: 1.0);
+
   static bool get dynamicsWaterfallFlow =>
       _setting.get(SettingBoxKey.dynamicsWaterfallFlow, defaultValue: true);
 

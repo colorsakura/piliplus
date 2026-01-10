@@ -292,15 +292,43 @@ class MyApp extends StatelessWidget {
       getPages: Routes.getPages,
       defaultTransition: Pref.pageTransition,
       builder: FlutterSmartDialog.init(
-        toastBuilder: (String msg) => CustomToast(msg: msg),
+        toastBuilder: (msg) => CustomToast(msg: msg),
         loadingBuilder: (msg) => LoadingWidget(msg: msg),
         builder: (context, child) {
-          child = MediaQuery(
-            data: MediaQuery.of(context).copyWith(
-              textScaler: TextScaler.linear(Pref.defaultTextScale),
-            ),
-            child: child!,
-          );
+          final uiScale = Pref.uiScale;
+          final mediaQuery = MediaQuery.of(context);
+          final textScaler = TextScaler.linear(Pref.defaultTextScale);
+          if (uiScale != 1.0) {
+            // Apply full UI scaling for desktop
+            final actualSize = mediaQuery.size;
+            final scaledSize = actualSize / uiScale;
+            child = MediaQuery(
+              data: mediaQuery.copyWith(
+                // Tell child the logical size it should layout to
+                size: scaledSize,
+                padding: mediaQuery.padding / uiScale,
+                viewPadding: mediaQuery.viewPadding / uiScale,
+                viewInsets: mediaQuery.viewInsets / uiScale,
+                textScaler: textScaler,
+              ),
+              // Use OverflowBox to let child layout to scaledSize,
+              // then FittedBox scales it to fit actualSize
+              child: FittedBox(
+                fit: BoxFit.fill,
+                alignment: Alignment.topLeft,
+                child: SizedBox(
+                  width: scaledSize.width,
+                  height: scaledSize.height,
+                  child: child,
+                ),
+              ),
+            );
+          } else {
+            child = MediaQuery(
+              data: mediaQuery.copyWith(textScaler: textScaler),
+              child: child!,
+            );
+          }
           if (PlatformUtils.isDesktop) {
             return Focus(
               canRequestFocus: false,
