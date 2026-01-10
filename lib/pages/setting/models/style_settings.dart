@@ -805,6 +805,7 @@ void _showUiScaleDialog(
                   value: uiScale,
                   min: _minUiScale,
                   max: _maxUiScale,
+                  secondaryTrackValue: 1.0,
                   divisions: ((_maxUiScale - _minUiScale) * 20).toInt(),
                   label: textController.text,
                   onChanged: (value) => setDialogState(() {
@@ -845,6 +846,7 @@ void _showUiScaleDialog(
           TextButton(
             onPressed: () {
               Navigator.pop(context);
+              Pref.uiScale = 1.0;
               GStorage.setting.delete(SettingBoxKey.uiScale).whenComplete(() {
                 setState();
                 Get.appUpdate();
@@ -864,6 +866,7 @@ void _showUiScaleDialog(
           TextButton(
             onPressed: () {
               Navigator.pop(context);
+              Pref.uiScale = uiScale;
               GStorage.setting.put(SettingBoxKey.uiScale, uiScale).whenComplete(
                 () {
                   setState();

@@ -305,10 +305,10 @@ class MyApp extends StatelessWidget {
               data: mediaQuery.copyWith(
                 // Tell child the logical size it should layout to
                 size: scaledSize,
+                textScaler: textScaler,
                 padding: mediaQuery.padding / uiScale,
                 viewPadding: mediaQuery.viewPadding / uiScale,
                 viewInsets: mediaQuery.viewInsets / uiScale,
-                textScaler: textScaler,
               ),
               // Use OverflowBox to let child layout to scaledSize,
               // then FittedBox scales it to fit actualSize

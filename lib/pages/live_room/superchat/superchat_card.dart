@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models_new/live/live_superchat/item.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/platform_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -93,7 +94,7 @@ class _SuperChatCardState extends State<SuperChatCard> {
     }
     showMenu(
       context: context,
-      position: RelativeRect.fromLTRB(offset.dx, offset.dy, offset.dx, 0),
+      position: PageUtils.menuPosition(offset),
       items: [
         PopupMenuItem(
           height: 38,
@@ -200,7 +201,7 @@ class _SuperChatCardState extends State<SuperChatCard> {
               item.message,
               style: TextStyle(
                 color: Utils.parseColor(item.messageFontColor),
-                decoration: !widget.persistentSC && item.deleted
+                decoration: widget.persistentSC && item.deleted
                     ? .lineThrough
                     : null,
                 decorationThickness: 1.5,

@@ -494,7 +494,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
   void _showDesktopMenu(Offset offset, SourceModel item) {
     showMenu(
       context: context,
-      position: RelativeRect.fromLTRB(offset.dx, offset.dy, offset.dx, 0),
+      position: PageUtils.menuPosition(offset),
       items: [
         PopupMenuItem(
           height: 42,

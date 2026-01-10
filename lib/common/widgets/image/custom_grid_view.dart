@@ -148,7 +148,7 @@ class CustomGridView extends StatelessWidget {
     HapticFeedback.mediumImpact();
     showMenu(
       context: context,
-      position: .fromLTRB(offset.dx, offset.dy, offset.dx, 0),
+      position: PageUtils.menuPosition(offset),
       items: [
         if (PlatformUtils.isMobile)
           PopupMenuItem(

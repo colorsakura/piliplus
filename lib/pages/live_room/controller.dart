@@ -527,9 +527,11 @@ class LiveRoomController extends GetxController {
               } else {
                 bool? refresh;
                 for (final id in ids) {
-                  final item = superChatMsg.firstWhereOrNull((e) => e.id == id);
-                  item?.deleted = true;
-                  refresh ??= true;
+                  if (superChatMsg.firstWhereOrNull((e) => e.id == id)
+                      case final item?) {
+                    item.deleted = true;
+                    refresh ??= true;
+                  }
                 }
                 if (refresh ?? false) {
                   superChatMsg.refresh();

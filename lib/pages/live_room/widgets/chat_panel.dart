@@ -9,6 +9,7 @@ import 'package:PiliPlus/pages/live_room/superchat/superchat_card.dart';
 import 'package:PiliPlus/pages/video/widgets/header_control.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/extension/theme_ext.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/gestures.dart';
@@ -294,9 +295,11 @@ class LiveRoomChatPanel extends StatelessWidget {
     TapUpDetails details,
     DanmakuMsg item,
   ) {
-    final dx = details.globalPosition.dx;
+    final uiScale = Pref.uiScale;
+    final dx = details.globalPosition.dx / uiScale;
     final renderBox = itemContext.findRenderObject() as RenderBox;
-    final dy = renderBox.localToGlobal(renderBox.size.bottomLeft(.zero)).dy;
+    final dy =
+        renderBox.localToGlobal(renderBox.size.bottomLeft(.zero)).dy / uiScale;
     final autoScroll =
         liveRoomController.autoScroll &&
         !liveRoomController.disableAutoScroll.value;
