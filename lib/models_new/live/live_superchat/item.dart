@@ -14,7 +14,8 @@ class SuperChatItem {
   String token;
   int ts;
   UserInfo userInfo;
-  bool expired = false;
+  late bool expired = false;
+  late bool deleted = false;
 
   SuperChatItem({
     required this.id,

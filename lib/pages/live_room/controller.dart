@@ -518,6 +518,25 @@ class LiveRoomController extends GetxController {
           }
           addDm(item);
           break;
+        case 'SUPER_CHAT_MESSAGE_DELETE' when showSuperChat:
+          if (obj['roomid'] == roomId) {
+            final ids = obj['data']?['ids'] as List?;
+            if (ids != null && ids.isNotEmpty) {
+              if (superChatType == .valid) {
+                superChatMsg.removeWhere((e) => ids.contains(e.id));
+              } else {
+                bool? refresh;
+                for (final id in ids) {
+                  final item = superChatMsg.firstWhereOrNull((e) => e.id == id);
+                  item?.deleted = true;
+                  refresh ??= true;
+                }
+                if (refresh ?? false) {
+                  superChatMsg.refresh();
+                }
+              }
+            }
+          }
         case 'WATCHED_CHANGE':
           watchedShow.value = obj['data']['text_large'];
           break;
