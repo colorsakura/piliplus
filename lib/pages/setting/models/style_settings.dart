@@ -5,6 +5,7 @@ import 'package:PiliPlus/common/widgets/color_palette.dart';
 import 'package:PiliPlus/common/widgets/custom_toast.dart';
 import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/scale_app.dart';
 import 'package:PiliPlus/common/widgets/stateful_builder.dart';
 import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/models/common/dynamic/dynamic_badge_mode.dart';
@@ -56,12 +57,6 @@ List<SettingsModel> get styleSettings => [
       needReboot: true,
     ),
   ],
-  NormalModel(
-    title: '界面缩放',
-    getSubtitle: () => '当前缩放比例：${Pref.uiScale.toStringAsFixed(2)}',
-    leading: const Icon(Icons.zoom_in_outlined),
-    onTap: _showUiScaleDialog,
-  ),
   SwitchModel(
     title: '横屏适配',
     subtitle: '启用横屏布局与逻辑，平板、折叠屏等可开启；建议全屏方向设为【不改变当前方向】',
@@ -115,6 +110,12 @@ List<SettingsModel> get styleSettings => [
     onChanged: (value) {
       Get.forceAppUpdate();
     },
+  ),
+  NormalModel(
+    title: '界面缩放',
+    getSubtitle: () => '当前缩放比例：${Pref.uiScale.toStringAsFixed(2)}',
+    leading: const Icon(Icons.zoom_in_outlined),
+    onTap: _showUiScaleDialog,
   ),
   NormalModel(
     title: '页面过渡动画',
@@ -846,10 +847,10 @@ void _showUiScaleDialog(
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              Pref.uiScale = 1.0;
               GStorage.setting.delete(SettingBoxKey.uiScale).whenComplete(() {
                 setState();
                 Get.appUpdate();
+                ScaledWidgetsFlutterBinding.instance.setScaleFactor(1.0);
               });
             },
             child: const Text('重置'),
@@ -866,11 +867,11 @@ void _showUiScaleDialog(
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              Pref.uiScale = uiScale;
               GStorage.setting.put(SettingBoxKey.uiScale, uiScale).whenComplete(
                 () {
                   setState();
                   Get.appUpdate();
+                  ScaledWidgetsFlutterBinding.instance.setScaleFactor(uiScale);
                 },
               );
             },
