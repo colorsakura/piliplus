@@ -1582,12 +1582,19 @@ class PlPlayerController {
     }
   }
 
-  void addPositionListener(Function(Duration position) listener) =>
-      _positionListeners.add(listener);
+  void addPositionListener(Function(Duration position) listener) {
+    if (_playerCount == 0) return;
+    _positionListeners.add(listener);
+  }
+
   void removePositionListener(Function(Duration position) listener) =>
       _positionListeners.remove(listener);
-  void addStatusLister(Function(PlayerStatus status) listener) =>
-      _statusListeners.add(listener);
+
+  void addStatusLister(Function(PlayerStatus status) listener) {
+    if (_playerCount == 0) return;
+    _statusListeners.add(listener);
+  }
+
   void removeStatusLister(Function(PlayerStatus status) listener) =>
       _statusListeners.remove(listener);
 
