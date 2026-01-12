@@ -21,7 +21,7 @@ import 'package:PiliPlus/models/common/video/cdn_type.dart';
 import 'package:PiliPlus/models/common/video/video_decode_type.dart';
 import 'package:PiliPlus/models/common/video/video_quality.dart';
 import 'package:PiliPlus/models/video/play/url.dart';
-import 'package:PiliPlus/models_new/video/video_play_info/subtitle.dart';
+import 'package:PiliPlus/models/video/video_play_info/subtitle.dart';
 import 'package:PiliPlus/pages/common/common_intro_controller.dart';
 import 'package:PiliPlus/pages/danmaku/danmaku_model.dart';
 import 'package:PiliPlus/pages/setting/widgets/select_dialog.dart';
@@ -32,7 +32,7 @@ import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_item.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/menu_row.dart';
 import 'package:PiliPlus/pages/video/widgets/header_mixin.dart';
-import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/pl_player_controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPlus/plugin/pl_player/utils/fullscreen.dart';
 import 'package:PiliPlus/services/service_locator.dart';
@@ -65,14 +65,14 @@ import 'package:intl/intl.dart' show DateFormat;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 mixin TimeBatteryMixin<T extends StatefulWidget> on State<T> {
-  PlPlayerController get plPlayerController;
+  PlPlayerControllerV2 get plPlayerController;
   late final titleKey = GlobalKey();
   ContextSingleTicker? provider;
   ContextSingleTicker get effectiveProvider => provider ??= ContextSingleTicker(
     context,
     autoStart: () =>
         plPlayerController.showControls.value &&
-        !plPlayerController.controlsLock.value,
+        !plPlayerController.controlsLocked.value,
   );
 
   bool get isPortrait;
@@ -179,7 +179,7 @@ class HeaderControl extends StatefulWidget {
   });
 
   final bool isPortrait;
-  final PlPlayerController controller;
+  final PlPlayerControllerV2 controller;
   final VideoDetailController videoDetailCtr;
   final String heroTag;
 
@@ -239,7 +239,7 @@ class HeaderControl extends StatefulWidget {
   static Future<void> reportDanmaku(
     BuildContext context, {
     required VideoDanmaku extra,
-    required PlPlayerController ctr,
+    required PlPlayerControllerV2 ctr,
   }) {
     if (Accounts.main.isLogin) {
       return autoWrapReportDialog(
@@ -321,7 +321,7 @@ class HeaderControl extends StatefulWidget {
 class HeaderControlState extends State<HeaderControl>
     with HeaderMixin, TimeBatteryMixin {
   @override
-  late final PlPlayerController plPlayerController = widget.controller;
+  late final PlPlayerControllerV2 plPlayerController = widget.controller;
   late final VideoDetailController videoDetailCtr = widget.videoDetailCtr;
   late final PlayUrlModel videoInfo = videoDetailCtr.data;
   static const TextStyle subTitleStyle = TextStyle(fontSize: 12);
@@ -798,9 +798,9 @@ class HeaderControlState extends State<HeaderControl>
 
   static Future<void> showPlayerInfo(
     BuildContext context, {
-    required PlPlayerController plPlayerController,
+    required PlPlayerControllerV2 plPlayerController,
   }) async {
-    final player = plPlayerController.videoPlayerController;
+    final player = plPlayerController.playerCore.player;
     if (player == null) {
       SmartDialog.showToast('播放器未初始化');
       return;
@@ -1573,7 +1573,7 @@ class HeaderControlState extends State<HeaderControl>
   }
 
   void showDanmakuPool() {
-    final ctr = plPlayerController.danmakuController;
+    final ctr = plPlayerController.danmaku.internalController;
     if (ctr == null) return;
     showBottomSheet((context, setState) {
       final theme = Theme.of(context);
@@ -1614,9 +1614,9 @@ class HeaderControlState extends State<HeaderControl>
                   bgColor: theme.colorScheme.surface,
                 ),
               ),
-              ?_buildDanmakuList(ctr.staticDanmaku.nonNulls.toList()),
-              ?_buildDanmakuList(ctr.scrollDanmaku.expand((e) => e).toList()),
-              ?_buildDanmakuList(ctr.specialDanmaku.toList()),
+              ?_buildDanmakuList(ctr.staticDanmaku.nonNulls.cast<DanmakuItem<DanmakuExtra>>().toList()),
+              ?_buildDanmakuList(ctr.scrollDanmaku.expand((e) => e).cast<DanmakuItem<DanmakuExtra>>().toList()),
+              ?_buildDanmakuList(ctr.specialDanmaku.cast<DanmakuItem<DanmakuExtra>>().toList()),
               const SliverToBoxAdapter(child: SizedBox(height: 12)),
             ],
           ),
@@ -1851,7 +1851,7 @@ class HeaderControlState extends State<HeaderControl>
                     if (plPlayerController.isDesktopPip) {
                       plPlayerController.exitDesktopPip();
                     } else if (isFullScreen) {
-                      plPlayerController.triggerFullScreen(status: false);
+                      plPlayerController.fullscreen.trigger(status: false);
                     } else if (PlatformUtils.isMobile &&
                         !horizontalScreen &&
                         !isPortrait) {

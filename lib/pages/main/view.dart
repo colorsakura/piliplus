@@ -9,7 +9,7 @@ import 'package:PiliPlus/models/common/nav_bar_config.dart';
 import 'package:PiliPlus/pages/home/view.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
-import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/pl_player_controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/extension/context_ext.dart';
@@ -120,7 +120,7 @@ class _MainAppState extends State<MainApp>
 
   @override
   Future<void> onWindowMoved() async {
-    if (PlPlayerController.instance?.isDesktopPip ?? false) {
+    if (PlPlayerControllerV2.instance?.isDesktopPip ?? false) {
       return;
     }
     final Offset offset = await windowManager.getPosition();
@@ -129,7 +129,7 @@ class _MainAppState extends State<MainApp>
 
   @override
   Future<void> onWindowResized() async {
-    if (PlPlayerController.instance?.isDesktopPip ?? false) {
+    if (PlPlayerControllerV2.instance?.isDesktopPip ?? false) {
       return;
     }
     final Rect bounds = await windowManager.getBounds();
@@ -173,16 +173,16 @@ class _MainAppState extends State<MainApp>
   void _onHideWindow() {
     if (_mainController.pauseOnMinimize) {
       _mainController.isPlaying =
-          PlPlayerController.instance?.playerStatus.value ==
+          PlPlayerControllerV2.instance?.playerCore.status.value ==
           PlayerStatus.playing;
-      PlPlayerController.pauseIfExists();
+      PlPlayerControllerV2.pauseIfExists();
     }
   }
 
   void _onShowWindow() {
     if (_mainController.pauseOnMinimize) {
       if (_mainController.isPlaying) {
-        PlPlayerController.playIfExists();
+        PlPlayerControllerV2.playIfExists();
       }
     }
   }

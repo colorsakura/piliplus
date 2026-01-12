@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/follow/data.dart';
-import 'package:PiliPlus/models_new/follow/list.dart';
+import 'package:PiliPlus/models/follow/data.dart';
+import 'package:PiliPlus/models/follow/list.dart';
 import 'package:PiliPlus/pages/common/search/common_search_page.dart';
 import 'package:PiliPlus/pages/follow/widgets/follow_item.dart';
 import 'package:PiliPlus/pages/follow_search/controller.dart';

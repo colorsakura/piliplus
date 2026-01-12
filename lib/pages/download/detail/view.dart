@@ -4,7 +4,7 @@ import 'package:PiliPlus/common/widgets/appbar/appbar.dart';
 import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/view_sliver_safe_area.dart';
-import 'package:PiliPlus/models_new/download/bili_download_entry_info.dart';
+import 'package:PiliPlus/models/download/bili_download_entry_info.dart';
 import 'package:PiliPlus/pages/common/multi_select/base.dart'
     show BaseMultiSelectMixin;
 import 'package:PiliPlus/pages/download/controller.dart';

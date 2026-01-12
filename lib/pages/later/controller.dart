@@ -3,8 +3,8 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models/common/later_view_type.dart';
 import 'package:PiliPlus/models/common/video/source_type.dart';
-import 'package:PiliPlus/models_new/later/data.dart';
-import 'package:PiliPlus/models_new/later/list.dart';
+import 'package:PiliPlus/models/later/data.dart';
+import 'package:PiliPlus/models/later/list.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart'
     show CommonListController;
 import 'package:PiliPlus/pages/common/multi_select/base.dart';

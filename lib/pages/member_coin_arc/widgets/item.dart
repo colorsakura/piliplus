@@ -7,7 +7,7 @@ import 'package:PiliPlus/common/widgets/video_card/video_card_v.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/stat_type.dart';
-import 'package:PiliPlus/models_new/member/coin_like_arc/item.dart';
+import 'package:PiliPlus/models/member/coin_like_arc/item.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
 import 'package:PiliPlus/utils/duration_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';

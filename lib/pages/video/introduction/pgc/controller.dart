@@ -9,11 +9,11 @@ import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/video/source_type.dart';
 import 'package:PiliPlus/models/common/video/video_type.dart';
-import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart';
-import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
-import 'package:PiliPlus/models_new/video/video_detail/episode.dart'
+import 'package:PiliPlus/models/pgc/pgc_info_model/episode.dart';
+import 'package:PiliPlus/models/pgc/pgc_info_model/result.dart';
+import 'package:PiliPlus/models/video/video_detail/episode.dart'
     hide EpisodeItem;
-import 'package:PiliPlus/models_new/video/video_detail/stat_detail.dart';
+import 'package:PiliPlus/models/video/video_detail/stat_detail.dart';
 import 'package:PiliPlus/pages/common/common_intro_controller.dart';
 import 'package:PiliPlus/pages/dynamics_repost/view.dart';
 import 'package:PiliPlus/pages/video/pay_coins/view.dart';

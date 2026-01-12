@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:PiliPlus/models_new/video/video_detail/data.dart';
-import 'package:PiliPlus/models_new/video/video_detail/episode.dart';
-import 'package:PiliPlus/models_new/video/video_detail/section.dart';
+import 'package:PiliPlus/models/video/video_detail/data.dart';
+import 'package:PiliPlus/models/video/video_detail/episode.dart';
+import 'package:PiliPlus/models/video/video_detail/section.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
 import 'package:PiliPlus/utils/extension/num_ext.dart';

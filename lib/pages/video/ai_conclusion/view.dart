@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/video/video_ai_conclusion/model_result.dart';
+import 'package:PiliPlus/models/video/video_ai_conclusion/model_result.dart';
 import 'package:PiliPlus/pages/common/slide/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/selectable_text.dart';
@@ -108,8 +108,7 @@ class AiConclusionPanel extends CommonSlidePage {
                                                   Duration(
                                                     seconds: item.timestamp!,
                                                   ),
-                                                  isSeek: false,
-                                                );
+                                                                                                  );
                                               } catch (_) {}
                                             })
                                         : null,

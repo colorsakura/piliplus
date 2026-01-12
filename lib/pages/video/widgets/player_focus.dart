@@ -3,7 +3,7 @@ import 'dart:math' as math;
 
 import 'package:PiliPlus/pages/common/common_intro_controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
-import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/pl_player_controller.dart';
 import 'package:PiliPlus/utils/platform_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
@@ -14,7 +14,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class PlayerFocus extends StatelessWidget {
-  const PlayerFocus({
+  PlayerFocus({
     super.key,
     required this.child,
     required this.plPlayerController,
@@ -25,7 +25,7 @@ class PlayerFocus extends StatelessWidget {
   });
 
   final Widget child;
-  final PlPlayerController plPlayerController;
+  final PlPlayerControllerV2 plPlayerController;
   final CommonIntroController? introController;
   final VoidCallback onSendDanmaku;
   final ValueGetter<bool>? canPlay;
@@ -54,34 +54,35 @@ class PlayerFocus extends StatelessWidget {
     );
   }
 
-  bool get isFullScreen => plPlayerController.isFullScreen.value;
-  bool get hasPlayer => plPlayerController.videoPlayerController != null;
+  bool get isFullScreen => plPlayerController.fullscreen.isFullScreen.value;
+  bool get hasPlayer => plPlayerController.player != null;
 
   void _setVolume({required bool isIncrease}) {
     final volume = isIncrease
-        ? math.min(
-            PlPlayerController.maxVolume,
-            plPlayerController.volume.value + 0.1,
+        ?         math.min(
+            PlPlayerControllerV2.maxVolume,
+            plPlayerController.volume.volume.value + 0.1,
           )
-        : math.max(0.0, plPlayerController.volume.value - 0.1);
+        : math.max(0.0, plPlayerController.volume.volume.value - 0.1);
     plPlayerController.setVolume(volume);
   }
 
+  Timer? _volumeTimer;
   void _updateVolume(KeyEvent event, {required bool isIncrease}) {
     if (event is KeyDownEvent) {
       if (hasPlayer) {
-        plPlayerController
-          ..cancelLongPressTimer()
-          ..longPressTimer ??= Timer.periodic(
-            const Duration(milliseconds: 150),
-            (_) => _setVolume(isIncrease: isIncrease),
-          );
+        _volumeTimer?.cancel();
+        _volumeTimer = Timer.periodic(
+          const Duration(milliseconds: 150),
+          (_) => _setVolume(isIncrease: isIncrease),
+        );
       }
     } else if (event is KeyUpEvent) {
-      if (plPlayerController.longPressTimer?.tick == 0 && hasPlayer) {
+      if (_volumeTimer?.tick == 0 && hasPlayer) {
         _setVolume(isIncrease: isIncrease);
       }
-      plPlayerController.cancelLongPressTimer();
+      _volumeTimer?.cancel();
+      _volumeTimer = null;
     }
   }
 
@@ -112,7 +113,7 @@ class PlayerFocus extends StatelessWidget {
     if (key == LogicalKeyboardKey.arrowRight) {
       if (!plPlayerController.isLive) {
         if (event is KeyDownEvent) {
-          if (hasPlayer && !plPlayerController.longPressStatus.value) {
+          if (hasPlayer && !plPlayerController.speed.isLongPressing.value) {
             plPlayerController
               ..cancelLongPressTimer()
               ..longPressTimer ??= Timer(
@@ -125,7 +126,7 @@ class PlayerFocus extends StatelessWidget {
         } else if (event is KeyUpEvent) {
           plPlayerController.cancelLongPressTimer();
           if (hasPlayer) {
-            if (plPlayerController.longPressStatus.value) {
+            if (plPlayerController.speed.isLongPressing.value) {
               plPlayerController.setLongPressStatus(false);
             } else {
               plPlayerController.onForward(
@@ -144,7 +145,7 @@ class PlayerFocus extends StatelessWidget {
         if (HardwareKeyboard.instance.isShiftPressed && hasPlayer) {
           final speed = isDigit1 ? 1.0 : 2.0;
           if (speed != plPlayerController.playbackSpeed) {
-            plPlayerController.setPlaybackSpeed(speed);
+            plPlayerController.speed.setPlaybackSpeed(speed);
           }
           SmartDialog.showToast('${speed}x播放');
         }
@@ -162,12 +163,12 @@ class PlayerFocus extends StatelessWidget {
 
         case LogicalKeyboardKey.keyF:
           final isFullScreen = this.isFullScreen;
-          if (isFullScreen && plPlayerController.controlsLock.value) {
+          if (isFullScreen && plPlayerController.controlsLocked.value) {
             plPlayerController
-              ..controlsLock.value = false
+              ..controlsLocked.value = false
               ..showControls.value = false;
           }
-          plPlayerController.triggerFullScreen(
+          plPlayerController.fullscreen.trigger(
             status: !isFullScreen,
             inAppFullScreen: HardwareKeyboard.instance.isShiftPressed,
           );
@@ -190,18 +191,18 @@ class PlayerFocus extends StatelessWidget {
           if (PlatformUtils.isDesktop && hasPlayer && !isFullScreen) {
             plPlayerController
               ..toggleDesktopPip()
-              ..controlsLock.value = false
+              ..controlsLocked.value = false
               ..showControls.value = false;
           }
           return true;
 
         case LogicalKeyboardKey.keyM:
           if (hasPlayer) {
-            final isMuted = !plPlayerController.isMuted;
-            plPlayerController.videoPlayerController!.setVolume(
-              isMuted ? 0 : plPlayerController.volume.value * 100,
+            final isMuted = !plPlayerController.volume.isMuted;
+            plPlayerController.playerCore.player!.setVolume(
+              isMuted ? 0 : plPlayerController.volume.volume.value * 100,
             );
-            plPlayerController.isMuted = isMuted;
+            plPlayerController.volume.setMute(isMuted);
             SmartDialog.showToast('${isMuted ? '' : '取消'}静音');
           }
           return true;
@@ -215,7 +216,7 @@ class PlayerFocus extends StatelessWidget {
         case LogicalKeyboardKey.keyL:
           if (isFullScreen || plPlayerController.isDesktopPip) {
             plPlayerController.onLockControl(
-              !plPlayerController.controlsLock.value,
+              !plPlayerController.controlsLocked.value,
             );
           }
           return true;

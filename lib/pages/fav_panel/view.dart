@@ -1,6 +1,6 @@
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
+import 'package:PiliPlus/models/fav/fav_folder/list.dart';
 import 'package:PiliPlus/pages/common/common_intro_controller.dart';
 import 'package:PiliPlus/utils/fav_utils.dart';
 import 'package:PiliPlus/utils/feed_back.dart';

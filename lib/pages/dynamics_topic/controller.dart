@@ -1,10 +1,10 @@
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models_new/dynamic/dyn_topic_feed/item.dart';
-import 'package:PiliPlus/models_new/dynamic/dyn_topic_feed/topic_card_list.dart';
-import 'package:PiliPlus/models_new/dynamic/dyn_topic_feed/topic_sort_by_conf.dart';
-import 'package:PiliPlus/models_new/dynamic/dyn_topic_top/top_details.dart';
+import 'package:PiliPlus/models/dynamic/dyn_topic_feed/item.dart';
+import 'package:PiliPlus/models/dynamic/dyn_topic_feed/topic_card_list.dart';
+import 'package:PiliPlus/models/dynamic/dyn_topic_feed/topic_sort_by_conf.dart';
+import 'package:PiliPlus/models/dynamic/dyn_topic_top/top_details.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/extension/scroll_controller_ext.dart';

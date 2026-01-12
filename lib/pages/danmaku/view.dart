@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:PiliPlus/grpc/bilibili/community/service/dm/v1.pb.dart';
 import 'package:PiliPlus/pages/danmaku/controller.dart';
 import 'package:PiliPlus/pages/danmaku/danmaku_model.dart';
-import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/pl_player_controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
 import 'package:PiliPlus/plugin/pl_player/utils/danmaku_options.dart';
 import 'package:PiliPlus/utils/danmaku_utils.dart';
@@ -14,7 +14,7 @@ import 'package:get/get.dart';
 /// 传入播放器控制器，监听播放进度，加载对应弹幕
 class PlDanmaku extends StatefulWidget {
   final int cid;
-  final PlPlayerController playerController;
+  final PlPlayerControllerV2 playerController;
   final bool isPipMode;
   final bool isFullScreen;
   final bool isFileSource;
@@ -37,7 +37,7 @@ class PlDanmaku extends StatefulWidget {
 }
 
 class _PlDanmakuState extends State<PlDanmaku> {
-  PlPlayerController get playerController => widget.playerController;
+  PlPlayerControllerV2 get playerController => widget.playerController;
 
   late final PlDanmakuController _plDanmakuController;
   DanmakuController<DanmakuExtra>? _controller;
@@ -57,7 +57,7 @@ class _PlDanmakuState extends State<PlDanmaku> {
       } else {
         _plDanmakuController.queryDanmaku(
           PlDanmakuController.calcSegment(
-            playerController.position.value.inMilliseconds,
+            playerController.progress.position.value.inMilliseconds,
           ),
         );
       }
@@ -93,11 +93,11 @@ class _PlDanmakuState extends State<PlDanmaku> {
       return;
     }
 
-    if (!playerController.showDanmaku && !widget.isPipMode) {
+    if (!playerController.danmaku.showDanmaku.value && !widget.isPipMode) {
       return;
     }
 
-    if (!playerController.playerStatus.playing) {
+    if (!playerController.playerCore.isPlaying) {
       return;
     }
 
@@ -137,7 +137,7 @@ class _PlDanmakuState extends State<PlDanmaku> {
                   : DmUtils.decimalToColor(e.color),
               type: DmUtils.getPosition(e.mode),
               isColorful:
-                  playerController.showVipDanmaku &&
+                  playerController.danmaku.showVipDanmaku &&
                   e.colorful == DmColorfulType.VipGradualColor,
               count: e.count > 1 ? e.count : null,
               selfSend: e.isSelf,
@@ -168,16 +168,17 @@ class _PlDanmakuState extends State<PlDanmaku> {
     return Obx(
       () => AnimatedOpacity(
         opacity: playerController.enableShowDanmaku.value
-            ? playerController.danmakuOpacity.value
+            ? playerController.danmaku.opacity.value
             : 0,
         duration: const Duration(milliseconds: 100),
         child: DanmakuScreen<DanmakuExtra>(
           createdController: (e) {
-            playerController.danmakuController = _controller = e;
+            playerController.danmaku.setDanmakuController(e);
+            _controller = e;
           },
           option: DanmakuOptions.get(
             notFullscreen: widget.notFullscreen,
-            speed: playerController.playbackSpeed,
+            speed: playerController.speed.speed,
           ),
           size: widget.size,
         ),

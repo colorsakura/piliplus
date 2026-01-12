@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:PiliPlus/common/widgets/marquee.dart';
 import 'package:PiliPlus/pages/live_room/controller.dart';
 import 'package:PiliPlus/pages/video/widgets/header_control.dart';
-import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/pl_player_controller.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/common_btn.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/platform_utils.dart';
@@ -27,7 +27,7 @@ class LiveHeaderControl extends StatefulWidget {
 
   final String? title;
   final String? upName;
-  final PlPlayerController plPlayerController;
+  final PlPlayerControllerV2 plPlayerController;
   final VoidCallback onSendDanmaku;
   final VoidCallback onPlayAudio;
   final bool isPortrait;
@@ -46,7 +46,7 @@ class _LiveHeaderControlState extends State<LiveHeaderControl>
   bool get horizontalScreen => true;
 
   @override
-  bool get isFullScreen => plPlayerController.isFullScreen.value;
+  bool get isFullScreen => plPlayerController.fullscreen.isFullScreen.value;
 
   @override
   bool get isPortrait => widget.isPortrait;
@@ -114,7 +114,7 @@ class _LiveHeaderControlState extends State<LiveHeaderControl>
                 if (plPlayerController.isDesktopPip) {
                   plPlayerController.exitDesktopPip();
                 } else {
-                  plPlayerController.triggerFullScreen(status: false);
+                  plPlayerController.fullscreen.trigger(status: false);
                 }
               },
             ),

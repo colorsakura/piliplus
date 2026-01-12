@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/history/data.dart';
-import 'package:PiliPlus/models_new/history/list.dart';
+import 'package:PiliPlus/models/history/data.dart';
+import 'package:PiliPlus/models/history/list.dart';
 import 'package:PiliPlus/pages/common/search/common_search_page.dart';
 import 'package:PiliPlus/pages/history/widgets/item.dart';
 import 'package:PiliPlus/pages/history_search/controller.dart';

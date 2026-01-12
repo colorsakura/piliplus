@@ -1,7 +1,7 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/user.dart';
-import 'package:PiliPlus/models_new/login_log/data.dart';
-import 'package:PiliPlus/models_new/login_log/list.dart';
+import 'package:PiliPlus/models/login_log/data.dart';
+import 'package:PiliPlus/models/login_log/list.dart';
 import 'package:PiliPlus/pages/log_table/controller.dart';
 
 class LoginLogController extends LogController<LoginLogData, LoginLogItem> {

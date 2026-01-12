@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart';
-import 'package:PiliPlus/models_new/pgc/pgc_info_model/new_ep.dart';
-import 'package:PiliPlus/models_new/video/video_detail/episode.dart'
+import 'package:PiliPlus/models/pgc/pgc_info_model/episode.dart';
+import 'package:PiliPlus/models/pgc/pgc_info_model/new_ep.dart';
+import 'package:PiliPlus/models/video/video_detail/episode.dart'
     hide EpisodeItem;
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/utils/extension/num_ext.dart';

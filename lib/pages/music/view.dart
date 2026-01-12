@@ -11,7 +11,7 @@ import 'package:PiliPlus/http/music.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
-import 'package:PiliPlus/models_new/music/bgm_detail.dart';
+import 'package:PiliPlus/models/music/bgm_detail.dart';
 import 'package:PiliPlus/pages/common/dyn/common_dyn_page.dart';
 import 'package:PiliPlus/pages/music/controller.dart';
 import 'package:PiliPlus/pages/music/video/view.dart';

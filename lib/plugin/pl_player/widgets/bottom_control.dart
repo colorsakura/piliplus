@@ -1,7 +1,7 @@
 import 'package:PiliPlus/common/widgets/progress_bar/audio_video_progress_bar.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/segment_progress_bar.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
-import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/pl_player_controller.dart';
 import 'package:PiliPlus/plugin/pl_player/view.dart';
 import 'package:PiliPlus/utils/extension/theme_ext.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
@@ -21,7 +21,7 @@ class BottomControl extends StatelessWidget {
 
   final double maxWidth;
   final bool isFullScreen;
-  final PlPlayerController controller;
+  final PlPlayerControllerV2 controller;
   final Widget Function() buildBottomControl;
   final VideoDetailController videoDetailController;
 
@@ -39,20 +39,23 @@ class BottomControl extends StatelessWidget {
     }
 
     void onDragUpdate(ThumbDragDetails duration, int max) {
-      if (!controller.isFileSource && controller.showSeekPreview) {
+      if (!controller.isFileSource && controller.showSeekPreview.value) {
         controller.updatePreviewIndex(duration.timeStamp.inSeconds);
       }
       controller.onUpdatedSliderProgress(duration.timeStamp);
     }
 
     void onSeek(Duration duration, int max) {
-      if (controller.showSeekPreview) {
+      if (controller.showSeekPreview.value) {
         controller.showPreview.value = false;
       }
-      controller
-        ..onChangedSliderEnd()
-        ..onChangedSlider(duration.inSeconds.toDouble())
-        ..seekTo(Duration(seconds: duration.inSeconds), isSeek: false);
+      // 先更新 sliderPosition（用于 UI 显示）
+      controller.onChangedSlider(duration.inSeconds.toDouble());
+      // 在 onChangedSliderEnd 中执行 seekTo，确保跳转完成后再设置 isSliderMoving = false
+      // 不等待完成，让 onChangedSliderEnd 内部处理异步操作
+      controller.onChangedSliderEnd(
+        seekToPosition: Duration(seconds: duration.inSeconds),
+      );
     }
 
     Widget progressBar() {

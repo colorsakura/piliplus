@@ -7,10 +7,10 @@ import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/http/sponsor_block.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/common/stat_type.dart';
-import 'package:PiliPlus/models_new/video/video_ai_conclusion/model_result.dart';
-import 'package:PiliPlus/models_new/video/video_detail/data.dart';
-import 'package:PiliPlus/models_new/video/video_detail/staff.dart';
-import 'package:PiliPlus/models_new/video/video_tag/data.dart';
+import 'package:PiliPlus/models/video/video_ai_conclusion/model_result.dart';
+import 'package:PiliPlus/models/video/video_detail/data.dart';
+import 'package:PiliPlus/models/video/video_detail/staff.dart';
+import 'package:PiliPlus/models/video/video_tag/data.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
@@ -648,8 +648,7 @@ class _UgcIntroPanelState extends State<UgcIntroPanel> {
                               videoDetailCtr.data.timeLength ??
                               videoDetailCtr
                                   .plPlayerController
-                                  .duration
-                                  .value
+                                  .progress.duration.value
                                   .inMilliseconds;
                           if (duration > 0) {
                             final ytbId = youtubeRegExp
@@ -737,8 +736,7 @@ class _UgcIntroPanelState extends State<UgcIntroPanel> {
                             Duration(
                               seconds: DurationUtils.parseDuration(matchStr),
                             ),
-                            isSeek: false,
-                          );
+                                                      );
                         } catch (_) {}
                       },
                   ),

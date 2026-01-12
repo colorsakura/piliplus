@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:PiliPlus/common/widgets/disabled_icon.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models_new/search/search_rcmd/data.dart';
+import 'package:PiliPlus/models/search/search_rcmd/data.dart';
 import 'package:PiliPlus/pages/about/view.dart' show showImportExportDialog;
 import 'package:PiliPlus/pages/search/controller.dart';
 import 'package:PiliPlus/pages/search/widgets/hot_keyword.dart';

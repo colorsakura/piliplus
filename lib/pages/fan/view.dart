@@ -1,5 +1,5 @@
 import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
-import 'package:PiliPlus/models_new/follow/list.dart';
+import 'package:PiliPlus/models/follow/list.dart';
 import 'package:PiliPlus/pages/fan/controller.dart';
 import 'package:PiliPlus/pages/follow_type/view.dart';
 import 'package:PiliPlus/pages/follow_type/widgets/item.dart';

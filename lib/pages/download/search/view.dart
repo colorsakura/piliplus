@@ -1,6 +1,6 @@
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models_new/download/bili_download_entry_info.dart';
+import 'package:PiliPlus/models/download/bili_download_entry_info.dart';
 import 'package:PiliPlus/pages/common/search/common_search_page.dart';
 import 'package:PiliPlus/pages/download/detail/widgets/item.dart';
 import 'package:PiliPlus/pages/download/search/controller.dart';

@@ -2,7 +2,7 @@ import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/view_safe_area.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/member/contribute_type.dart';
-import 'package:PiliPlus/models_new/space/space_season_series/season.dart'
+import 'package:PiliPlus/models/space/space_season_series/season.dart'
     show SpaceSsModel;
 import 'package:PiliPlus/pages/member_season_series/controller.dart';
 import 'package:PiliPlus/pages/member_season_series/widget/season_series_card.dart';

@@ -2,7 +2,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/pl_player_controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -110,8 +110,8 @@ class ShutdownTimerService with WidgetsBindingObserver {
       _showShutdownDialog();
       return;
     }
-    // PlPlayerController plPlayerController = PlPlayerController.getInstance();
-    PlayerStatus? playerStatus = PlPlayerController.getPlayerStatusIfExists();
+    // PlPlayerControllerV2.plPlayerController = PlPlayerControllerV2.getInstance();
+    PlayerStatus? playerStatus = PlPlayerControllerV2.getPlayerStatusIfExists();
     if (!exitApp && !waitForPlayingCompleted) {
       // if (!plPlayerController.playerStatus.playing) {
       if (playerStatus == PlayerStatus.paused ||
@@ -145,14 +145,14 @@ class ShutdownTimerService with WidgetsBindingObserver {
 
   void _executeShutdown() {
     if (exitApp) {
-      PlPlayerController.pauseIfExists();
+      PlPlayerControllerV2.pauseIfExists();
       //退出app
       exit(0);
     } else {
       //暂停播放
-      PlayerStatus? playerStatus = PlPlayerController.getPlayerStatusIfExists();
+      PlayerStatus? playerStatus = PlPlayerControllerV2.getPlayerStatusIfExists();
       if (playerStatus == PlayerStatus.playing) {
-        PlPlayerController.pauseIfExists();
+        PlPlayerControllerV2.pauseIfExists();
         waitForPlayingCompleted = true;
         SmartDialog.showToast("已暂停播放");
       } else {

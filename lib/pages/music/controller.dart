@@ -1,6 +1,6 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/music.dart';
-import 'package:PiliPlus/models_new/music/bgm_detail.dart';
+import 'package:PiliPlus/models/music/bgm_detail.dart';
 import 'package:PiliPlus/pages/common/dyn/common_dyn_controller.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:get/get.dart';

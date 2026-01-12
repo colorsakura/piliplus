@@ -8,7 +8,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/common/nav_bar_config.dart';
 import 'package:PiliPlus/models/user/info.dart';
-import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
+import 'package:PiliPlus/models/fav/fav_folder/list.dart';
 import 'package:PiliPlus/pages/common/common_page.dart';
 import 'package:PiliPlus/pages/home/view.dart';
 import 'package:PiliPlus/pages/login/controller.dart';

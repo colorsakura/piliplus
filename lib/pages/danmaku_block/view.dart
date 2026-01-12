@@ -7,7 +7,7 @@ import 'package:PiliPlus/models/common/dm_block_type.dart';
 import 'package:PiliPlus/models/user/danmaku_block.dart';
 import 'package:PiliPlus/models/user/danmaku_rule.dart';
 import 'package:PiliPlus/pages/danmaku_block/controller.dart';
-import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/pl_player_controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:flutter/material.dart';
@@ -24,12 +24,12 @@ class DanmakuBlockPage extends StatefulWidget {
 
 class _DanmakuBlockPageState extends State<DanmakuBlockPage> {
   final DanmakuBlockController _controller = Get.put(DanmakuBlockController());
-  late PlPlayerController plPlayerController;
+  late PlPlayerControllerV2 plPlayerController;
 
   @override
   void initState() {
     super.initState();
-    plPlayerController = Get.arguments as PlPlayerController;
+    plPlayerController = Get.arguments as PlPlayerControllerV2;
   }
 
   @override

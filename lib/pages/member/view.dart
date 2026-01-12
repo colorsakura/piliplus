@@ -3,7 +3,7 @@ import 'package:PiliPlus/common/widgets/dynamic_sliver_appbar_medium.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models_new/space/space/data.dart';
+import 'package:PiliPlus/models/space/space/data.dart';
 import 'package:PiliPlus/pages/coin_log/controller.dart';
 import 'package:PiliPlus/pages/exp_log/controller.dart';
 import 'package:PiliPlus/pages/log_table/view.dart';

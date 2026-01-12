@@ -7,62 +7,83 @@ import 'package:PiliPlus/http/download.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/video/video_quality.dart';
-import 'package:PiliPlus/models_new/download/bili_download_entry_info.dart';
-import 'package:PiliPlus/models_new/download/bili_download_media_file_info.dart';
-import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart' as pgc;
-import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
-import 'package:PiliPlus/models_new/video/video_detail/data.dart';
-import 'package:PiliPlus/models_new/video/video_detail/episode.dart' as ugc;
-import 'package:PiliPlus/models_new/video/video_detail/page.dart';
+import 'package:PiliPlus/models/download/bili_download_entry_info.dart';
+import 'package:PiliPlus/models/download/bili_download_media_file_info.dart';
+import 'package:PiliPlus/models/pgc/pgc_info_model/result.dart';
+import 'package:PiliPlus/models/video/video_detail/data.dart';
+import 'package:PiliPlus/models/video/video_detail/page.dart';
 import 'package:PiliPlus/pages/danmaku/controller.dart';
 import 'package:PiliPlus/services/download/download_manager.dart';
 import 'package:PiliPlus/utils/extension/file_ext.dart';
 import 'package:PiliPlus/utils/extension/string_ext.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/path_utils.dart';
+import 'package:PiliPlus/utils/extension/string_ext.dart' as string_ext;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 import 'package:synchronized/synchronized.dart';
+import 'package:PiliPlus/services/interfaces/download_service_interface.dart';
 
 // ref https://github.com/10miaomiao/bilimiao2/blob/master/bilimiao-download/src/main/java/cn/a10miaomiao/bilimiao/download/DownloadService.kt
 
-class DownloadService extends GetxService {
+class DownloadService extends GetxService implements IDownloadService {
   static const _entryFile = 'entry.json';
   static const _indexFile = 'index.json';
 
   final _lock = Lock();
 
+  @override
   final flagNotifier = SetNotifier();
+  
+  @override
   final waitDownloadQueue = RxList<BiliDownloadEntryInfo>();
+  
+  @override
   final downloadList = <BiliDownloadEntryInfo>[];
 
   int? _curCid;
   int? get curCid => _curCid;
-  final curDownload = Rxn<BiliDownloadEntryInfo>();
+  
+  @override
+  BiliDownloadEntryInfo? get curDownload => _curDownload.value;
+  final _curDownload = Rxn<BiliDownloadEntryInfo>();
+
   void _updateCurStatus(DownloadStatus status) {
-    if (curDownload.value != null) {
-      curDownload
-        ..value!.status = status
-        ..refresh();
+    final current = _curDownload.value;
+    if (current != null) {
+      current.status = status;
+      _curDownload.refresh();
     }
   }
 
   DownloadManager? _downloadManager;
   DownloadManager? _audioDownloadManager;
 
-  late Future<void> waitForInitialization;
+  Future<void> waitForInitialization = Future.value();
 
   @override
   void onInit() {
     super.onInit();
+    waitForInitialization = _readDownloadList();
+  }
+
+  @override
+  Future<void> initialize() async {
     initDownloadList();
   }
 
-  void initDownloadList() {
-    waitForInitialization = _readDownloadList();
+  @override
+  Future<void> dispose() async {
+    // Cancel any ongoing downloads
+    await cancelDownload(isDelete: true, downloadNext: false);
+  }
+
+  @override
+  Future<void> initDownloadList() {
+    return _readDownloadList();
   }
 
   Future<void> _readDownloadList() async {
@@ -108,10 +129,11 @@ class DownloadService extends GetxService {
     return result;
   }
 
+  @override
   void downloadVideo(
     Part page,
     VideoDetailData? videoDetail,
-    ugc.EpisodeItem? videoArc,
+    dynamic videoArc,  // 可以是 ugc.EpisodeItem 或 pgc.EpisodeItem
     VideoQuality videoQuality,
   ) {
     final cid = page.cid!;
@@ -144,7 +166,7 @@ class DownloadService extends GetxService {
       downloadedBytes: 0,
       title: videoDetail?.title ?? videoArc!.title!,
       typeTag: videoQuality.code.toString(),
-      cover: (videoDetail?.pic ?? videoArc!.cover!).http2https,
+      cover: (videoDetail?.pic ?? videoArc!.cover! as String?).http2https,
       preferedVideoQuality: videoQuality.code,
       qualityPithyDescription: videoQuality.desc,
       guessedTotalBytes: 0,
@@ -168,10 +190,11 @@ class DownloadService extends GetxService {
     _createDownload(entry);
   }
 
+  @override
   void downloadBangumi(
     int index,
     PgcInfoModel pgcItem,
-    pgc.EpisodeItem episode,
+    dynamic episode,  // 实际上是 pgc.EpisodeItem
     VideoQuality quality,
   ) {
     final cid = episode.cid!;
@@ -246,7 +269,8 @@ class DownloadService extends GetxService {
       ..entryDirPath = entryDir.path
       ..status = DownloadStatus.wait;
     waitDownloadQueue.add(entry);
-    if (curDownload.value?.status.isDownloading != true) {
+    final curEntry = _curDownload.value;
+    if (curEntry == null || !curEntry.status.isDownloading) {
       startDownload(entry);
     }
   }
@@ -278,25 +302,26 @@ class DownloadService extends GetxService {
     return dir.path;
   }
 
+  @override
   Future<void> startDownload(BiliDownloadEntryInfo entry) {
     return _lock.synchronized(() async {
       await _downloadManager?.cancel(isDelete: false);
       await _audioDownloadManager?.cancel(isDelete: false);
       _downloadManager = null;
       _audioDownloadManager = null;
-      if (curDownload.value case final curEntry?) {
-        if (curEntry.status.isDownloading) {
-          curEntry.status = DownloadStatus.pause;
-        }
+      final curEntry = _curDownload.value;
+      if (curEntry != null && curEntry.status.isDownloading) {
+        curEntry.status = DownloadStatus.pause;
       }
 
       _curCid = entry.cid;
-      curDownload.value = entry;
-      waitDownloadQueue.refresh();
+      _curDownload.value = entry;
+      waitDownloadQueue.refresh(); // RxList has a refresh method
       await _startDownload(entry);
     });
   }
 
+  @override
   Future<bool> downloadDanmaku({
     required BiliDownloadEntryInfo entry,
     bool isUpdate = false,
@@ -390,7 +415,8 @@ class DownloadService extends GetxService {
         _downloadCover(entry: entry),
       ]);
 
-      if (curDownload.value?.cid != entry.cid) {
+      final curEntry = _curDownload.value;
+      if (curEntry?.cid != entry.cid) {
         return;
       }
 
@@ -446,14 +472,15 @@ class DownloadService extends GetxService {
   }
 
   void _onReceive(int progress, int total) {
-    if (curDownload.value case final entry?) {
+    final entry = _curDownload.value;
+    if (entry != null) {
       if (progress == 0 && total != 0) {
         _updateBiliDownloadEntryJson(entry..totalBytes = total);
       }
       entry
         ..downloadedBytes = progress
         ..status = DownloadStatus.downloading;
-      curDownload.refresh();
+      _curDownload.refresh();
     }
   }
 
@@ -470,7 +497,8 @@ class DownloadService extends GetxService {
     };
     _updateCurStatus(status);
 
-    if (curDownload.value case final curEntryInfo?) {
+    final curEntryInfo = _curDownload.value;
+    if (curEntryInfo != null) {
       curEntryInfo.downloadedBytes = curEntryInfo.totalBytes;
       if (status == DownloadStatus.completed) {
         _completeDownload();
@@ -496,7 +524,7 @@ class DownloadService extends GetxService {
   }
 
   Future<void> _completeDownload() async {
-    final entry = curDownload.value;
+    final entry = _curDownload.value;
     if (entry == null) {
       return;
     }
@@ -508,18 +536,20 @@ class DownloadService extends GetxService {
     downloadList.insert(0, entry);
     flagNotifier.refresh();
     _curCid = null;
-    curDownload.value = null;
+    _curDownload.value = null;
     _downloadManager = null;
     _audioDownloadManager = null;
     nextDownload();
   }
 
+  @override
   void nextDownload() {
     if (waitDownloadQueue.isNotEmpty) {
       startDownload(waitDownloadQueue.first);
     }
   }
 
+  @override
   Future<void> deleteDownload({
     required BiliDownloadEntryInfo entry,
     bool removeList = false,
@@ -533,7 +563,8 @@ class DownloadService extends GetxService {
     if (removeQueue) {
       waitDownloadQueue.remove(entry);
     }
-    if (curDownload.value?.cid == entry.cid) {
+    final curEntry = _curDownload.value;
+    if (curEntry?.cid == entry.cid) {
       await cancelDownload(
         isDelete: true,
         downloadNext: downloadNext,
@@ -555,6 +586,7 @@ class DownloadService extends GetxService {
     }
   }
 
+  @override
   Future<void> deletePage({
     required String pageDirPath,
     bool refresh = true,
@@ -566,6 +598,7 @@ class DownloadService extends GetxService {
     }
   }
 
+  @override
   Future<void> cancelDownload({
     required bool isDelete,
     bool downloadNext = true,
@@ -575,14 +608,14 @@ class DownloadService extends GetxService {
     _downloadManager = null;
     _audioDownloadManager = null;
     if (!isDelete) {
-      final entry = curDownload.value;
+      final entry = _curDownload.value;
       if (entry != null) {
         await _updateBiliDownloadEntryJson(entry);
       }
     }
     if (isDelete) {
       _curCid = null;
-      curDownload.value = null;
+      _curDownload.value = null;
     } else {
       _updateCurStatus(DownloadStatus.pause);
     }
@@ -592,7 +625,7 @@ class DownloadService extends GetxService {
   }
 }
 
-typedef SetNotifier = Set<VoidCallback>;
+typedef SetNotifier = Set<void Function()>;
 
 extension SetNotifierExt on SetNotifier {
   void refresh() {

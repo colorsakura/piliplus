@@ -9,7 +9,7 @@ import 'package:PiliPlus/models/common/publish_panel_type.dart';
 import 'package:PiliPlus/pages/common/publish/common_text_pub_page.dart';
 import 'package:PiliPlus/pages/danmaku/danmaku_model.dart';
 import 'package:PiliPlus/pages/setting/slide_color_picker.dart';
-import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/pl_player_controller.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:canvas_danmaku/models/danmaku_content_item.dart';
 import 'package:flutter/material.dart';
@@ -474,7 +474,7 @@ class _SendDanmakuPanelState extends CommonTextPubPageState<SendDanmakuPanel> {
       if (response.dmid case final dmid?) {
         extra = VideoDanmaku(
           id: dmid,
-          mid: PlPlayerController.instance!.midHash,
+          mid: PlPlayerControllerV2.instance?.midHash ?? '',
         );
       }
       widget.onSuccess(

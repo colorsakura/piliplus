@@ -12,11 +12,11 @@ import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/models/common/episode_panel_type.dart';
-import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
-import 'package:PiliPlus/models_new/video/video_detail/episode.dart' as ugc;
-import 'package:PiliPlus/models_new/video/video_detail/page.dart';
-import 'package:PiliPlus/models_new/video/video_detail/ugc_season.dart';
-import 'package:PiliPlus/models_new/video/video_tag/data.dart';
+import 'package:PiliPlus/models/pgc/pgc_info_model/result.dart';
+import 'package:PiliPlus/models/video/video_detail/episode.dart' as ugc;
+import 'package:PiliPlus/models/video/video_detail/page.dart';
+import 'package:PiliPlus/models/video/video_detail/ugc_season.dart';
+import 'package:PiliPlus/models/video/video_tag/data.dart';
 import 'package:PiliPlus/pages/common/common_intro_controller.dart';
 import 'package:PiliPlus/pages/danmaku/view.dart';
 import 'package:PiliPlus/pages/episode_panel/view.dart';
@@ -39,7 +39,7 @@ import 'package:PiliPlus/pages/video/reply/view.dart';
 import 'package:PiliPlus/pages/video/view_point/view.dart';
 import 'package:PiliPlus/pages/video/widgets/header_control.dart';
 import 'package:PiliPlus/pages/video/widgets/player_focus.dart';
-import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/pl_player_controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/fullscreen_mode.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
@@ -81,7 +81,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
   late final VideoDetailController videoDetailController;
   late final VideoReplyController _videoReplyController;
-  PlPlayerController? plPlayerController;
+  PlPlayerControllerV2? plPlayerController;
 
   // intro ctr
   late final CommonIntroController introController =
@@ -109,7 +109,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   bool isShowing = true;
 
   bool get isFullScreen =>
-      videoDetailController.plPlayerController.isFullScreen.value;
+      videoDetailController.plPlayerController.fullscreen.isFullScreen.value;
 
   bool get _shouldShowSeasonPanel {
     if (videoDetailController.isFileSource ||
@@ -131,7 +131,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   void initState() {
     super.initState();
 
-    PlPlayerController.setPlayCallBack(playCallBack);
+    PlPlayerControllerV2.setPlayCallBack(playCallBack);
     videoDetailController = Get.put(VideoDetailController(), tag: heroTag);
 
     if (videoDetailController.showReply) {
@@ -179,9 +179,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     late final ctr = videoDetailController.plPlayerController;
     if (state == AppLifecycleState.resumed) {
-      if (!ctr.showDanmaku) {
+      if (!ctr.danmaku.showDanmaku.value) {
         introController.startTimer();
-        ctr.showDanmaku = true;
+        ctr.danmaku.showDanmaku.value = true;
 
         // 修复从后台恢复时全屏状态下屏幕方向错误的问题
         if (isFullScreen && Platform.isIOS) {
@@ -201,7 +201,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       }
     } else if (state == AppLifecycleState.paused) {
       introController.cancelTimer();
-      ctr.showDanmaku = false;
+      ctr.danmaku.showDanmaku.value = false;
     }
   }
 
@@ -267,11 +267,11 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
       // 结束播放退出全屏
       if (!notExitFlag && autoExitFullscreen) {
-        plPlayerController!.triggerFullScreen(status: false);
-        if (plPlayerController!.longPressStatus.value) {
+        plPlayerController!.fullscreen.trigger(status: false);
+        if (plPlayerController!.speed.isLongPressing.value) {
           plPlayerController!.setLongPressStatus(false);
         }
-        if (plPlayerController!.controlsLock.value) {
+        if (plPlayerController!.controlsLocked.value) {
           plPlayerController!.onLockControl(false);
         }
       }
@@ -336,7 +336,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       if (Platform.isAndroid && !videoDetailController.setSystemBrightness) {
         ScreenBrightnessPlatform.instance.resetApplicationScreenBrightness();
       }
-      PlPlayerController.setPlayCallBack(null);
+      PlPlayerControllerV2.setPlayCallBack(null);
     }
 
     if (!videoDetailController.isFileSource) {
@@ -357,8 +357,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       if (plPlayerController != null) {
         videoDetailController.makeHeartBeat();
         plPlayerController!.dispose();
-      } else {
-        PlPlayerController.updatePlayCount();
       }
     }
     PageUtils.routeObserver.unsubscribe(this);
@@ -388,8 +386,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     introController.cancelTimer();
 
     videoDetailController
-      ..playerStatus = plPlayerController?.playerStatus.value
-      ..brightness = plPlayerController?.brightness.value;
+      ..playerStatus = plPlayerController?.playerCore.status.value
+      ..brightness = plPlayerController?.brightness.brightness.value;
     if (plPlayerController != null) {
       videoDetailController.makeHeartBeat();
       plPlayerController!
@@ -415,14 +413,14 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
     WidgetsBinding.instance.addObserver(this);
 
-    plPlayerController?.isLive = false;
-    if (videoDetailController.plPlayerController.playerStatus.playing &&
+    // isLive is set during initialization
+    if (videoDetailController.plPlayerController.playerCore.isPlaying &&
         videoDetailController.playerStatus != PlayerStatus.playing) {
       videoDetailController.plPlayerController.pause();
     }
 
     isShowing = true;
-    PlPlayerController.setPlayCallBack(playCallBack);
+    PlPlayerControllerV2.setPlayCallBack(playCallBack);
 
     introController.startTimer();
 
@@ -430,7 +428,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         Platform.isAndroid &&
         !videoDetailController.setSystemBrightness) {
       if (videoDetailController.brightness != null) {
-        plPlayerController?.brightness.value =
+        plPlayerController?.brightness.brightness.value =
             videoDetailController.brightness!;
         if (videoDetailController.brightness != -1.0) {
           ScreenBrightnessPlatform.instance.setApplicationScreenBrightness(
@@ -547,18 +545,14 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           plPlayerController != null &&
           videoDetailController.autoPlay.value) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          plPlayerController!.triggerFullScreen(
-            status: true,
-            isManualFS: false,
-            mode: FullScreenMode.gravity,
-          );
+          plPlayerController!.enterFullscreen(mode: FullScreenMode.gravity);
         });
       } else if (isPortrait &&
           isFullScreen &&
           plPlayerController?.isManualFS == false &&
-          plPlayerController?.controlsLock.value == false) {
+          plPlayerController?.controlsLocked.value == false) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          plPlayerController!.triggerFullScreen(status: false);
+          plPlayerController!.fullscreen.trigger(status: false);
         });
       }
     }
@@ -622,8 +616,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                         videoDetailController.isCollapsing
                   ? animHeight
                   : videoDetailController.isCollapsing ||
-                        plPlayerController?.playerStatus.value ==
-                            PlayerStatus.playing
+                        plPlayerController?.playerCore.isPlaying == true
                   ? videoDetailController.minVideoHeight
                   : kToolbarHeight;
               if (videoDetailController.isExpanding &&
@@ -738,7 +731,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                           Text(
                                             '${videoDetailController.playedTime == null
                                                 ? '立即'
-                                                : plPlayerController!.playerStatus.completed
+                                                : plPlayerController!.playerCore.isCompleted
                                                 ? '重新'
                                                 : '继续'}播放',
                                             style: TextStyle(
@@ -827,18 +820,18 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                         handlePlay();
                                       } else {
                                         if (plPlayerController!
-                                            .videoPlayerController!
+                                            .playerCore.player!
                                             .state
                                             .completed) {
                                           await plPlayerController!
-                                              .videoPlayerController!
+                                              .playerCore.player!
                                               .seek(Duration.zero);
                                           plPlayerController!
-                                              .videoPlayerController!
+                                              .playerCore.player!
                                               .play();
                                         } else {
                                           plPlayerController!
-                                              .videoPlayerController!
+                                              .playerCore.player!
                                               .playOrPause();
                                         }
                                       }
@@ -1371,7 +1364,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                       isPipMode: isPipMode,
                       cid: videoDetailController.cid.value,
                       playerController: plPlayerController!,
-                      isFullScreen: plPlayerController!.isFullScreen.value,
+                      isFullScreen: plPlayerController!.fullscreen.isFullScreen.value,
                       isFileSource: videoDetailController.isFileSource,
                       size: Size(width, height),
                     ),
@@ -2188,12 +2181,12 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     if (didPop) {
       videoDetailController.plPlayerController.disableAutoEnterPipIfNeeded();
     }
-    if (plPlayerController?.controlsLock.value == true) {
+    if (plPlayerController?.controlsLocked.value == true) {
       plPlayerController?.onLockControl(false);
       return;
     }
     if (isFullScreen) {
-      videoDetailController.plPlayerController.triggerFullScreen(status: false);
+      videoDetailController.plPlayerController.fullscreen.trigger(status: false);
       return;
     }
     if (!videoDetailController.horizontalScreen && !isPortrait) {

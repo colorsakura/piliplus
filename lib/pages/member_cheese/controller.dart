@@ -1,7 +1,7 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
-import 'package:PiliPlus/models_new/space/space_cheese/data.dart';
-import 'package:PiliPlus/models_new/space/space_cheese/item.dart';
+import 'package:PiliPlus/models/space/space_cheese/data.dart';
+import 'package:PiliPlus/models/space/space_cheese/item.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 
 class MemberCheeseController

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:PiliPlus/http/init.dart';
-import 'package:PiliPlus/models_new/download/bili_download_entry_info.dart';
+import 'package:PiliPlus/models/download/bili_download_entry_info.dart';
 import 'package:PiliPlus/utils/extension/file_ext.dart';
 import 'package:PiliPlus/utils/extension/string_ext.dart';
 import 'package:dio/dio.dart';
@@ -59,7 +59,7 @@ class DownloadManager {
     Response<ResponseBody> response;
     try {
       response = await Request.dio.get<ResponseBody>(
-        url.http2https,
+        (url as String?).http2https,
         options: Options(
           headers: {'range': 'bytes=$received-'},
           responseType: ResponseType.stream,

@@ -22,6 +22,7 @@ import 'package:PiliPlus/pages/main_reply/view.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/triple_mixin.dart';
 import 'package:PiliPlus/pages/video/pay_coins/view.dart';
+import 'package:PiliPlus/plugin/pl_player/player_factory.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
 import 'package:PiliPlus/services/service_locator.dart';
@@ -265,7 +266,7 @@ class AudioController extends GetxController
   }
 
   void _initPlayerIfNeeded() {
-    player ??= Player();
+    player ??= PlayerFactory.acquirePlayer();
     _subscriptions ??= {
       player!.stream.position.listen((position) {
         if (isDragging) return;

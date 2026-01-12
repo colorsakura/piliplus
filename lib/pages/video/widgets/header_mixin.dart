@@ -1,6 +1,6 @@
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/menu_row.dart';
-import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/pl_player_controller.dart';
 import 'package:PiliPlus/plugin/pl_player/utils/danmaku_options.dart';
 import 'package:PiliPlus/utils/extension/num_ext.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -8,9 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 mixin HeaderMixin<T extends StatefulWidget> on State<T> {
-  PlPlayerController get plPlayerController;
+  PlPlayerControllerV2 get plPlayerController;
 
-  bool get isFullScreen => plPlayerController.isFullScreen.value;
+  bool get isFullScreen => plPlayerController.fullscreen.isFullScreen.value;
 
   Future<void>? showBottomSheet(
     StatefulWidgetBuilder builder, {
@@ -53,7 +53,7 @@ mixin HeaderMixin<T extends StatefulWidget> on State<T> {
       (value: 7, label: '高级'),
     ];
 
-    final danmakuController = plPlayerController.danmakuController;
+    final danmakuController = plPlayerController.danmaku.internalController;
 
     final isFullScreen = this.isFullScreen;
 
@@ -124,7 +124,7 @@ mixin HeaderMixin<T extends StatefulWidget> on State<T> {
         }
 
         void updateOpacity(double val) {
-          plPlayerController.danmakuOpacity.value = val;
+          plPlayerController.danmaku.opacity.value = val;
           setState(() {});
         }
 
@@ -300,7 +300,7 @@ mixin HeaderMixin<T extends StatefulWidget> on State<T> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('不透明度 ${plPlayerController.danmakuOpacity * 100}%'),
+                      Text('不透明度 ${plPlayerController.danmaku.opacity.value * 100}%'),
                       resetBtn(theme, '100.0%', () => updateOpacity(1.0)),
                     ],
                   ),
@@ -316,9 +316,9 @@ mixin HeaderMixin<T extends StatefulWidget> on State<T> {
                       child: Slider(
                         min: 0,
                         max: 1,
-                        value: plPlayerController.danmakuOpacity.value,
+                        value: plPlayerController.danmaku.opacity.value,
                         divisions: 10,
-                        label: '${plPlayerController.danmakuOpacity * 100}%',
+                        label: '${plPlayerController.danmaku.opacity.value * 100}%',
                         onChanged: updateOpacity,
                       ),
                     ),
@@ -519,7 +519,7 @@ mixin HeaderMixin<T extends StatefulWidget> on State<T> {
         );
       },
     )?.whenComplete(
-      () => DanmakuOptions.save(plPlayerController.danmakuOpacity.value),
+      () => DanmakuOptions.save(plPlayerController.danmaku.opacity.value),
     );
   }
 }

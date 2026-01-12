@@ -2,23 +2,68 @@ import 'dart:async';
 
 import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:get/get.dart';
+import 'package:PiliPlus/services/interfaces/account_service_interface.dart';
 
-class AccountService extends GetxService {
-  final RxString face = ''.obs;
-  final RxBool isLogin = false.obs;
+class AccountService extends GetxService implements IAccountService {
+  final RxString _face = ''.obs;
+  final RxBool _isLogin = false.obs;
+  late final StreamController<bool> _loginStatusController;
+
+  @override
+  RxString get face => _face;
+
+  @override
+  RxBool get isLogin => _isLogin;
+
+  @override
+  Stream<bool> get loginStatusStream => _loginStatusController.stream;
+
+  @override
+  Future<void> initialize() async {
+    UserInfoData? userInfo = Pref.userInfoCache;
+    if (userInfo != null) {
+      _face.value = userInfo.face ?? '';
+      _isLogin.value = true;
+    } else {
+      _face.value = '';
+      _isLogin.value = false;
+    }
+  }
+
+  @override
+  Future<void> dispose() async {
+    await _loginStatusController.close();
+  }
+
+  @override
+  Future<void> updateUserInfo() async {
+    UserInfoData? userInfo = Pref.userInfoCache;
+    if (userInfo != null) {
+      _face.value = userInfo.face ?? '';
+      _isLogin.value = true;
+    } else {
+      _face.value = '';
+      _isLogin.value = false;
+    }
+  }
+
+  @override
+  Future<void> logout() async {
+    await GStorage.userInfo.delete('userInfoCache');
+    _face.value = '';
+    _isLogin.value = false;
+  }
 
   @override
   void onInit() {
     super.onInit();
-    UserInfoData? userInfo = Pref.userInfoCache;
-    if (userInfo != null) {
-      face.value = userInfo.face ?? '';
-      isLogin.value = true;
-    } else {
-      face.value = '';
-      isLogin.value = false;
-    }
+    _loginStatusController = StreamController<bool>.broadcast();
+    _isLogin.listen((value) {
+      _loginStatusController.add(value);
+    });
+    initialize();
   }
 }
 

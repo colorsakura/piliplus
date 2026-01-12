@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/download/bili_download_entry_info.dart';
-import 'package:PiliPlus/models_new/video/video_detail/stat_detail.dart';
+import 'package:PiliPlus/models/download/bili_download_entry_info.dart';
+import 'package:PiliPlus/models/video/video_detail/stat_detail.dart';
 import 'package:PiliPlus/pages/common/common_intro_controller.dart';
 import 'package:PiliPlus/pages/download/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
@@ -101,9 +101,9 @@ class LocalIntroController extends CommonIntroController {
       final playCtr = videoDetailCtr.plPlayerController;
       if (playCtr.playRepeat == PlayRepeat.listCycle) {
         if (list.length == 1) {
-          if (playCtr.videoPlayerController case final ctr?) {
-            ctr.seek(Duration.zero).whenComplete(ctr.play);
-          }
+        if (playCtr.playerCore.player case final ctr?) {
+          ctr.seek(Duration.zero).whenComplete(ctr.play);
+        }
         } else {
           playIndex(0);
         }

@@ -7,7 +7,7 @@ import 'package:PiliPlus/common/widgets/flutter/draggable_sheet/draggable_scroll
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models_new/dynamic/dyn_mention/group.dart';
+import 'package:PiliPlus/models/dynamic/dyn_mention/group.dart';
 import 'package:PiliPlus/pages/dynamics_mention/controller.dart';
 import 'package:PiliPlus/pages/dynamics_mention/widgets/item.dart';
 import 'package:PiliPlus/pages/search/controller.dart' show DebounceStreamState;

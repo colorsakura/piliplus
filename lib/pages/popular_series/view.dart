@@ -9,7 +9,7 @@ import 'package:PiliPlus/common/widgets/view_sliver_safe_area.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/video/source_type.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
-import 'package:PiliPlus/models_new/popular/popular_series_one/config.dart';
+import 'package:PiliPlus/models/popular/popular_series_one/config.dart';
 import 'package:PiliPlus/pages/popular_series/controller.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/page_utils.dart';

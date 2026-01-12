@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/search/search_trending/list.dart';
+import 'package:PiliPlus/models/search/search_trending/list.dart';
 import 'package:PiliPlus/utils/extension/num_ext.dart';
 import 'package:PiliPlus/utils/extension/string_ext.dart';
 import 'package:PiliPlus/utils/image_utils.dart';

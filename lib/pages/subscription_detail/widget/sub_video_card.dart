@@ -6,7 +6,7 @@ import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/stat_type.dart';
-import 'package:PiliPlus/models_new/sub/sub_detail/media.dart';
+import 'package:PiliPlus/models/sub/sub_detail/media.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
 import 'package:PiliPlus/utils/duration_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';

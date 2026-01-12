@@ -11,7 +11,7 @@ import 'package:PiliPlus/models/common/sponsor_block/segment_type.dart';
 import 'package:PiliPlus/pages/common/slide/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/post_panel/popup_menu_text.dart';
-import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/pl_player_controller.dart';
 import 'package:PiliPlus/utils/duration_utils.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
@@ -29,7 +29,7 @@ class PostPanel extends CommonSlidePage {
   });
 
   final VideoDetailController videoDetailController;
-  final PlPlayerController plPlayerController;
+  final PlPlayerControllerV2 plPlayerController;
 
   @override
   State<PostPanel> createState() => _PostPanelState();
@@ -181,14 +181,14 @@ class _PostPanelState extends State<PostPanel>
     with SingleTickerProviderStateMixin, CommonSlideMixin {
   late final VideoDetailController videoDetailController =
       widget.videoDetailController;
-  late final PlPlayerController plPlayerController = widget.plPlayerController;
+  late final PlPlayerControllerV2 plPlayerController = widget.plPlayerController;
   late final List<PostSegmentModel> list = videoDetailController.postList;
 
   late final double videoDuration =
       plPlayerController.durationSeconds.value.inMilliseconds / 1000;
 
   double get currentPos =>
-      plPlayerController.position.value.inMilliseconds / 1000;
+      plPlayerController.progress.position.value.inMilliseconds / 1000;
 
   @override
   Widget buildPage(ThemeData theme) {
@@ -466,7 +466,7 @@ class _PostPanelState extends State<PostPanel>
             tooltip: '预览',
             icon: const Icon(Icons.preview_outlined),
             onPressed: () async {
-              final videoCtr = widget.plPlayerController.videoPlayerController;
+              final videoCtr = widget.plPlayerController.playerCore.player;
               if (videoCtr != null) {
                 final start = (item.segment.first * 1000).round();
                 final seek = max(0, start - 2000);

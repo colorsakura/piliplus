@@ -8,7 +8,7 @@ import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/member/profile_type.dart';
 import 'package:PiliPlus/models/user/info.dart';
-import 'package:PiliPlus/models_new/account_myinfo/data.dart';
+import 'package:PiliPlus/models/account_myinfo/data.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/accounts.dart';

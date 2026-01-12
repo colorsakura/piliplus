@@ -4,7 +4,7 @@ import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/segment_progress_bar.dart';
 import 'package:PiliPlus/pages/common/slide/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
-import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/pl_player_controller.dart';
 import 'package:PiliPlus/utils/duration_utils.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +19,7 @@ class ViewPointsPage extends CommonSlidePage {
   });
 
   final VideoDetailController videoDetailController;
-  final PlPlayerController? plPlayerController;
+  final PlPlayerControllerV2? plPlayerController;
 
   @override
   State<ViewPointsPage> createState() => _ViewPointsPageState();
@@ -29,7 +29,7 @@ class _ViewPointsPageState extends State<ViewPointsPage>
     with SingleTickerProviderStateMixin, CommonSlideMixin {
   VideoDetailController get videoDetailController =>
       widget.videoDetailController;
-  PlPlayerController? get plPlayerController => widget.plPlayerController;
+  PlPlayerControllerV2? get plPlayerController => widget.plPlayerController;
 
   int currentIndex = -1;
 
@@ -132,8 +132,7 @@ class _ViewPointsPageState extends State<ViewPointsPage>
                 Get.back();
                 plPlayerController?.seekTo(
                   Duration(seconds: segment.from!),
-                  isSeek: false,
-                );
+                                  );
               }
             : null,
         child: Padding(

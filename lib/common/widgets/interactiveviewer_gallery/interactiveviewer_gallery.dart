@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactive_viewer_boundary.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
+import 'package:PiliPlus/plugin/pl_player/player_factory.dart';
 import 'package:PiliPlus/utils/extension/string_ext.dart';
 import 'package:PiliPlus/utils/image_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -186,8 +187,8 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
   }
 
   void _onPlay(String liveUrl) {
-    _player ??= Player();
-    _videoController ??= VideoController(_player!);
+    _player ??= PlayerFactory.acquirePlayer();
+    _videoController ??= PlayerFactory.acquireVideoController(_player!);
     _player!.open(Media(liveUrl));
   }
 

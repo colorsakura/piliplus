@@ -1,7 +1,7 @@
 import 'package:PiliPlus/common/widgets/custom_icon.dart';
 import 'package:PiliPlus/pages/live_room/controller.dart';
 import 'package:PiliPlus/pages/video/widgets/header_mixin.dart';
-import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/pl_player_controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/video_fit_type.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/common_btn.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/play_pause_btn.dart';
@@ -21,7 +21,7 @@ class BottomControl extends StatefulWidget {
     this.titleStyle = const TextStyle(fontSize: 14),
   });
 
-  final PlPlayerController plPlayerController;
+  final PlPlayerControllerV2 plPlayerController;
   final LiveRoomController liveRoomCtr;
   final VoidCallback onRefresh;
 
@@ -35,11 +35,12 @@ class BottomControl extends StatefulWidget {
 class _BottomControlState extends State<BottomControl> with HeaderMixin {
   late final LiveRoomController liveRoomCtr = widget.liveRoomCtr;
   @override
-  late final PlPlayerController plPlayerController = widget.plPlayerController;
+  @override
+  late final PlPlayerControllerV2 plPlayerController = widget.plPlayerController;
 
   @override
   Widget build(BuildContext context) {
-    final isFullScreen = plPlayerController.isFullScreen.value;
+    final isFullScreen = plPlayerController.fullscreen.isFullScreen.value;
     return AppBar(
       backgroundColor: Colors.transparent,
       foregroundColor: Colors.white,
@@ -101,7 +102,7 @@ class _BottomControlState extends State<BottomControl> with HeaderMixin {
                         color: Colors.white,
                       ),
                 onTap: () {
-                  final newVal = !enableShowLiveDanmaku;
+                  final newVal = !plPlayerController.enableShowDanmaku.value;
                   plPlayerController.enableShowDanmaku.value = newVal;
                   if (!plPlayerController.tempPlayerConf) {
                     GStorage.setting.put(
@@ -205,12 +206,20 @@ class _BottomControlState extends State<BottomControl> with HeaderMixin {
                       size: 24,
                       color: Colors.white,
                     ),
-              onTap: () =>
-                  plPlayerController.triggerFullScreen(status: !isFullScreen),
-              onSecondaryTap: () => plPlayerController.triggerFullScreen(
-                status: !isFullScreen,
-                inAppFullScreen: true,
-              ),
+              onTap: () {
+                if (isFullScreen) {
+                  plPlayerController.exitFullscreen();
+                } else {
+                  plPlayerController.enterFullscreen();
+                }
+              },
+              onSecondaryTap: () {
+                if (isFullScreen) {
+                  plPlayerController.exitFullscreen();
+                } else {
+                  plPlayerController.enterFullscreen();
+                }
+              },
             ),
         ],
       ),

@@ -378,7 +378,7 @@ class _ReplyPageState extends CommonRichTextPubPageState<ReplyPage> {
                     );
                     final res = await plPlayerController
                         .plPlayerController
-                        .videoPlayerController
+                        .playerCore.player
                         ?.screenshot(format: 'image/png');
                     if (res != null) {
                       final file = File(

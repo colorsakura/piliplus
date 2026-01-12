@@ -2,7 +2,7 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/flutter/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models_new/space/space_archive/item.dart';
+import 'package:PiliPlus/models/space/space_archive/item.dart';
 import 'package:PiliPlus/pages/member_pgc/controller.dart';
 import 'package:PiliPlus/pages/member_pgc/widgets/pgc_card_v_member_pgc.dart';
 import 'package:PiliPlus/utils/grid.dart';

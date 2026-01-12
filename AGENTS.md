@@ -72,10 +72,8 @@ The project follows the GetX state management pattern with a clear separation of
   - API endpoint definitions
   - Request/response interceptors
 
-- **`models/`**: Legacy data models (83 files)
-  - Older API response models
-
-- **`models_new/`**: Refactored data models organized by feature
+- **`models/`**: Data models organized by feature
+  - Consolidated from both legacy models and new models
   - Organized into feature-based directories (account, video, dynamic, live, etc.)
   - Each feature contains specific model files (data.dart, list.dart, etc.)
 
@@ -239,9 +237,7 @@ The project follows standard Dart/Flutter conventions with strict linting:
   - `view.dart` - UI widget
   - `widgets/` - Feature-specific widgets
   
-- **Models**: 
-  - Legacy: `/models/` (being phased out)
-  - New: `/models_new/feature_name/` (organized by feature)
+- **Models**: `/models/feature_name/` (organized by feature)
 
 - **HTTP APIs**: `/http/`
 - **Utilities**: `/utils/`

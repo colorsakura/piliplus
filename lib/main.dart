@@ -7,7 +7,8 @@ import 'package:PiliPlus/common/widgets/mouse_back.dart';
 import 'package:PiliPlus/common/widgets/scale_app.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/models/common/theme/theme_color_type.dart';
-import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/player_factory.dart';
+import 'package:PiliPlus/plugin/pl_player/pl_player_controller.dart';
 import 'package:PiliPlus/router/app_pages.dart';
 import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/services/download/download_service.dart';
@@ -48,7 +49,23 @@ WebViewEnvironment? webViewEnvironment;
 
 void main() async {
   ScaledWidgetsFlutterBinding.ensureInitialized();
+
+  // 初始化 media_kit
   MediaKit.ensureInitialized();
+
+  // 初始化播放器工厂
+  //
+  // PlayerFactory 负责确保 native 层完全初始化，解决 release 模式下的黑屏问题。
+  //
+  // 核心原理：
+  // 1. 创建 Player + VideoController 实例
+  // 2. 调用 videoController.initialize() 并等待完成
+  // 3. 订阅核心流（position、duration 等）以激活 native 层
+  // 4. 等待首帧渲染完成，确保 native 层已就绪
+  //
+  // 这样在首次播放视频时，native 层已经完全初始化，不会出现黑屏。
+  await PlayerFactory.initialize();
+
   tmpDirPath = (await getTemporaryDirectory()).path;
   appSupportDirPath = (await getApplicationSupportDirectory()).path;
   try {
@@ -236,12 +253,12 @@ class MyApp extends StatelessWidget {
       return;
     }
 
-    final plCtr = PlPlayerController.instance;
+    final plCtr = PlPlayerControllerV2.instance;
     if (plCtr != null) {
-      if (plCtr.isFullScreen.value) {
+      if (plCtr.fullscreen.isFullScreen.value) {
         plCtr
-          ..triggerFullScreen(status: false)
-          ..controlsLock.value = false
+          ..fullscreen.trigger(status: false)
+          ..controlsLocked.value = false
           ..showControls.value = false;
         return;
       }
@@ -251,7 +268,7 @@ class MyApp extends StatelessWidget {
           ..exitDesktopPip().whenComplete(
             () => plCtr.initialFocalPoint = Offset.zero,
           )
-          ..controlsLock.value = false
+          ..controlsLocked.value = false
           ..showControls.value = false;
         return;
       }

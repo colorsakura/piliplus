@@ -1,7 +1,7 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
-import 'package:PiliPlus/models_new/member/coin_like_arc/data.dart';
-import 'package:PiliPlus/models_new/member/coin_like_arc/item.dart';
+import 'package:PiliPlus/models/member/coin_like_arc/data.dart';
+import 'package:PiliPlus/models/member/coin_like_arc/item.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 
 class MemberCoinArcController

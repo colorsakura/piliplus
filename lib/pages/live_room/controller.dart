@@ -10,21 +10,24 @@ import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/super_chat_type.dart';
 import 'package:PiliPlus/models/common/video/live_quality.dart';
 import 'package:PiliPlus/models/model_owner.dart';
-import 'package:PiliPlus/models_new/live/live_danmaku/danmaku_msg.dart';
-import 'package:PiliPlus/models_new/live/live_danmaku/live_emote.dart';
-import 'package:PiliPlus/models_new/live/live_dm_info/data.dart';
-import 'package:PiliPlus/models_new/live/live_room_info_h5/data.dart';
-import 'package:PiliPlus/models_new/live/live_room_play_info/codec.dart';
-import 'package:PiliPlus/models_new/live/live_superchat/item.dart';
+import 'package:PiliPlus/models/live/live_danmaku/danmaku_msg.dart';
+import 'package:PiliPlus/models/live/live_danmaku/live_emote.dart';
+import 'package:PiliPlus/models/live/live_dm_info/data.dart';
+import 'package:PiliPlus/models/live/live_room_info_h5/data.dart';
+import 'package:PiliPlus/models/live/live_room_play_info/codec.dart';
+import 'package:PiliPlus/models/live/live_superchat/item.dart';
 import 'package:PiliPlus/pages/common/publish/publish_route.dart';
 import 'package:PiliPlus/pages/danmaku/danmaku_model.dart';
 import 'package:PiliPlus/pages/live_room/contribution_rank/view.dart';
 import 'package:PiliPlus/pages/live_room/send_danmaku/view.dart';
 import 'package:PiliPlus/pages/video/widgets/header_control.dart';
-import 'package:PiliPlus/plugin/pl_player/controller.dart';
-import 'package:PiliPlus/plugin/pl_player/models/data_source.dart';
+import 'package:PiliPlus/plugin/pl_player/player_factory.dart';
+import 'package:PiliPlus/plugin/pl_player/pl_player_controller.dart';
 import 'package:PiliPlus/plugin/pl_player/utils/danmaku_options.dart';
+import 'package:media_kit/media_kit.dart';
+import 'package:media_kit_video/media_kit_video.dart';
 import 'package:PiliPlus/services/service_locator.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/tcp/live.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/danmaku_utils.dart';
@@ -50,9 +53,11 @@ class LiveRoomController extends GetxController {
   int roomId = Get.arguments;
   int? ruid;
   DanmakuController<DanmakuExtra>? danmakuController;
-  PlPlayerController plPlayerController = PlPlayerController.getInstance(
-    isLive: true,
-  );
+
+  // Player fields
+  late final PlPlayerControllerV2 plPlayerController;
+  Player? _player;
+  VideoController? _videoController;
 
   RxBool isLoaded = false.obs;
   Rx<RoomInfoH5Data?> roomInfoH5 = Rx<RoomInfoH5Data?>(null);
@@ -178,9 +183,47 @@ class LiveRoomController extends GetxController {
     return const SizedBox.shrink();
   });
 
+  void _initPlayerController() {
+    // 从 PlayerFactory 获取播放器实例
+    // PlayerFactory 已在应用启动时初始化，确保 native 层已就绪
+    _player = PlayerFactory.acquirePlayer();
+    _videoController = PlayerFactory.acquireVideoController(_player!);
+
+    plPlayerController = PlPlayerControllerV2(
+      initialVolume: PlatformUtils.isDesktop ? Pref.desktopVolume : 1.0,
+      setting: GStorage.setting,
+      initialBrightness: -1.0,
+      setSystemBrightness: Pref.setSystemBrightness,
+      initialSpeed: Pref.playSpeedDefault,
+      longPressSpeed: Pref.longPressSpeedDefault,
+      defaultSpeed: Pref.playSpeedDefault,
+      speedList: Pref.speedList,
+      enableAutoLongPressSpeed: Pref.enableAutoLongPressSpeed,
+      subtitleFontScale: Pref.subtitleFontScale,
+      subtitleFontScaleFS: Pref.subtitleFontScaleFS,
+      subtitlePaddingH: Pref.subtitlePaddingH,
+      subtitlePaddingB: Pref.subtitlePaddingB,
+      subtitleBgOpacity: Pref.subtitleBgOpacity,
+      subtitleStrokeWidth: Pref.subtitleStrokeWidth,
+      subtitleFontWeight: Pref.subtitleFontWeight,
+      enableDragSubtitle: Pref.enableDragSubtitle,
+      autoPiP: Pref.autoPiP,
+      pipNoDanmaku: Pref.pipNoDanmaku,
+      fullScreenMode: Pref.fullScreenMode,
+      horizontalScreen: Pref.horizontalScreen,
+      enableHeart: false, // Live streams don't need heartbeat
+      danmakuOpacity: Pref.danmakuOpacity,
+      mergeDanmaku: Pref.mergeDanmaku,
+      enableTapDanmaku: PlatformUtils.isMobile && Pref.enableTapDm,
+      showVipDanmaku: Pref.showVipDanmaku,
+      danmakuFilter: Pref.danmakuFilterRule,
+    );
+  }
+
   @override
   void onInit() {
     super.onInit();
+    _initPlayerController();
     scrollController = ScrollController()..addListener(listener);
     final account = Accounts.heartbeat;
     isLogin = account.isLogin;
@@ -195,24 +238,35 @@ class LiveRoomController extends GetxController {
     }
   }
 
-  Future<void>? playerInit({bool autoplay = true}) {
+  Future<void> playerInit({bool autoplay = true}) async {
     if (videoUrl == null) {
-      return null;
+      return;
     }
-    return plPlayerController.setDataSource(
-      DataSource(
-        videoSource: videoUrl,
-        audioSource: null,
-        type: DataSourceType.network,
+
+    // 设置全局实例（用于静态方法访问）
+    PlPlayerControllerV2.setGlobalInstance(plPlayerController);
+    
+    // Initialize controller with player
+    await plPlayerController.initialize(
+      player: _player!,
+      videoController: _videoController,
+      isLive: true,
+      isVertical: isPortrait.value,
+      width: 0, // Live streams don't have fixed dimensions
+      height: 0,
+    );
+
+    // Open the media source
+    await _player!.open(
+      Media(
+        videoUrl!,
         httpHeaders: {
           'user-agent':
               'Mozilla/5.0 (Macintosh; Intel Mac OS X 13_3_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.4 Safari/605.1.15',
           'referer': HttpString.baseUrl,
         },
       ),
-      isLive: true,
-      autoplay: autoplay,
-      isVertical: isPortrait.value,
+      play: autoplay,
     );
   }
 
@@ -223,7 +277,7 @@ class LiveRoomController extends GetxController {
     final res = await LiveHttp.liveRoomInfo(
       roomId: roomId,
       qn: currentQn,
-      onlyAudio: plPlayerController.onlyPlayAudio.value,
+      onlyAudio: false, // Only audio feature disabled for live streams
     );
     if (res case Success(:final response)) {
       if (response.liveStatus != 1) {
@@ -405,6 +459,17 @@ class LiveRoomController extends GetxController {
       ..dispose();
     pageController?.dispose();
     danmakuController = null;
+
+    // 释放播放器资源
+    if (_player != null) {
+      PlayerFactory.releasePlayer(_player!);
+      _player = null;
+    }
+    if (_videoController != null) {
+      PlayerFactory.releaseVideoController(_videoController!);
+      _videoController = null;
+    }
+
     super.onClose();
   }
 
@@ -439,7 +504,7 @@ class LiveRoomController extends GetxController {
   void addDm(dynamic msg, [DanmakuContentItem<DanmakuExtra>? item]) {
     messages.add(msg);
 
-    if (plPlayerController.showDanmaku) {
+    if (plPlayerController.danmaku.showDanmaku.value) {
       if (item != null) {
         danmakuController?.addDanmaku(item);
       }
@@ -511,7 +576,7 @@ class LiveRoomController extends GetxController {
         case 'SUPER_CHAT_MESSAGE' when showSuperChat:
           final item = SuperChatItem.fromJson(obj['data']);
           superChatMsg.insert(0, item);
-          if (isFullScreen || plPlayerController.isDesktopPip) {
+          if (isFullScreen || plPlayerController.pip.isPipMode) {
             fsSC.value = item.copyWith(
               endTime: DateTime.now().millisecondsSinceEpoch ~/ 1000 + 10,
             );

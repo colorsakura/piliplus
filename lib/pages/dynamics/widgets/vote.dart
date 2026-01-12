@@ -9,7 +9,7 @@ import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/dynamics/vote_model.dart';
-import 'package:PiliPlus/models_new/followee_votes/vote.dart';
+import 'package:PiliPlus/models/followee_votes/vote.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
 import 'package:PiliPlus/utils/extension/iterable_ext.dart';

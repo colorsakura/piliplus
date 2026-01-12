@@ -1,8 +1,8 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
-import 'package:PiliPlus/models_new/space/space/tab2.dart';
-import 'package:PiliPlus/models_new/space/space_opus/data.dart';
-import 'package:PiliPlus/models_new/space/space_opus/item.dart';
+import 'package:PiliPlus/models/space/space/tab2.dart';
+import 'package:PiliPlus/models/space/space_opus/data.dart';
+import 'package:PiliPlus/models/space/space_opus/item.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/pages/member/controller.dart';
 import 'package:PiliPlus/utils/extension/iterable_ext.dart';

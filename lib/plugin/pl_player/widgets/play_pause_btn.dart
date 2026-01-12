@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/pl_player_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
 
 class PlayOrPauseButton extends StatefulWidget {
-  final PlPlayerController plPlayerController;
+  final PlPlayerControllerV2 plPlayerController;
 
   const PlayOrPauseButton({
     super.key,
@@ -25,7 +25,7 @@ class PlayOrPauseButtonState extends State<PlayOrPauseButton>
   @override
   void initState() {
     super.initState();
-    player = widget.plPlayerController.videoPlayerController!;
+    player = widget.plPlayerController.playerCore.player!;
     controller = AnimationController(
       vsync: this,
       value: player.state.playing ? 1 : 0,

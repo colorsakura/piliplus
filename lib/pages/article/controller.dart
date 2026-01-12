@@ -6,7 +6,7 @@ import 'package:PiliPlus/models/dynamics/article_content_model.dart'
     show ArticleContentModel;
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/model_avatar.dart';
-import 'package:PiliPlus/models_new/article/article_view/data.dart';
+import 'package:PiliPlus/models/article/article_view/data.dart';
 import 'package:PiliPlus/pages/common/dyn/common_dyn_controller.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';

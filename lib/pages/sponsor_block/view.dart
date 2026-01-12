@@ -7,7 +7,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/sponsor_block.dart';
 import 'package:PiliPlus/models/common/sponsor_block/segment_type.dart';
 import 'package:PiliPlus/models/common/sponsor_block/skip_type.dart';
-import 'package:PiliPlus/models_new/sponsor_block/user_info.dart';
+import 'package:PiliPlus/models/sponsor_block/user_info.dart';
 import 'package:PiliPlus/pages/setting/slide_color_picker.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';

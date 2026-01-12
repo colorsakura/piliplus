@@ -2,7 +2,7 @@ import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/flutter/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models_new/fav/fav_article/item.dart';
+import 'package:PiliPlus/models/fav/fav_article/item.dart';
 import 'package:PiliPlus/pages/fav/article/controller.dart';
 import 'package:PiliPlus/pages/fav/article/widget/item.dart';
 import 'package:PiliPlus/utils/grid.dart';
