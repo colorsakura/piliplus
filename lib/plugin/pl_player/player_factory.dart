@@ -81,9 +81,6 @@ class PlayerFactory {
   /// 播放器实例池（用于复用）
   static final List<Player> _playerPool = [];
 
-  /// 视频控制器实例池（用于复用）
-  static final List<VideoController> _videoControllerPool = [];
-
   /// 最大池大小（避免占用过多资源）
   static const int _maxPoolSize = 2;
 
@@ -234,6 +231,18 @@ class PlayerFactory {
           'PlayerFactory: Acquired player from pool (${_playerPool.length} left)',
         );
       }
+
+      // 清理播放器状态，避免旧数据导致黑屏
+      // 停止播放
+      try {
+        player.pause();
+      } catch (_) {}
+
+      // 清空播放列表 - 使用空字符串创建一个空的 Media
+      try {
+        player.open(Media(''), play: false);
+      } catch (_) {}
+
       return player;
     }
 
@@ -247,7 +256,10 @@ class PlayerFactory {
 
   /// 获取视频控制器实例
   ///
-  /// 为指定的 Player 创建或从池中获取 VideoController。
+  /// 为指定的 Player 创建新的 VideoController。
+  ///
+  /// 注意：VideoController 不应该被复用，因为每个 VideoController 都
+  /// 与特定的 Player 实例绑定。复用可能导致渲染问题。
   ///
   /// 注意：调用此方法前必须先调用 [initialize()]。
   static VideoController acquireVideoController(Player player) {
@@ -258,10 +270,8 @@ class PlayerFactory {
       );
     }
 
-    // 注意：VideoController 不暴露其关联的 Player，所以我们无法检查
-    // 简化处理：总是创建新的 VideoController
-
-    // 创建新实例
+    // 总是创建新的 VideoController
+    // VideoController 必须与 Player 配对使用，不能复用
     final videoController = VideoController(player);
     if (kDebugMode) {
       debugPrint('PlayerFactory: Created new VideoController instance');
@@ -306,40 +316,21 @@ class PlayerFactory {
 
   /// 释放视频控制器实例
   ///
-  /// 将视频控制器回收到池中以便复用，或者直接销毁。
+  /// VideoController 会随 Player 一起释放，不需要单独管理。
+  /// 此方法仅为 API 一致性而保留。
   ///
   /// 参数：
-  /// - [videoController] 要释放的视频控制器实例
-  /// - [dispose] 是否直接销毁而不回收（默认 false）
+  /// - [videoController] 要释放的视频控制器实例（会被忽略）
   static void releaseVideoController(
     VideoController videoController, {
     bool dispose = false,
   }) {
-    // VideoController 不需要手动释放，会随 Player 一起释放
-    if (dispose) {
-      if (kDebugMode) {
-        debugPrint(
-          'PlayerFactory: VideoController will be disposed with Player',
-        );
-      }
-      return;
-    }
-
-    // 回收到池中
-    if (_videoControllerPool.length < _maxPoolSize) {
-      _videoControllerPool.add(videoController);
-      if (kDebugMode) {
-        debugPrint(
-          'PlayerFactory: Released VideoController to pool (${_videoControllerPool.length} in pool)',
-        );
-      }
-    } else {
-      // 池已满，直接忽略
-      if (kDebugMode) {
-        debugPrint(
-          'PlayerFactory: VideoController pool full, dropping instance',
-        );
-      }
+    // VideoController 不需要手动管理
+    // 它会随 Player 一起释放，或者由 Widget 树自动管理
+    if (kDebugMode) {
+      debugPrint(
+        'PlayerFactory: VideoController release requested (will be disposed with Player or by Widget tree)',
+      );
     }
   }
 
@@ -359,16 +350,13 @@ class PlayerFactory {
     // 释放预热实例
     await _preWarmPlayer?.dispose();
     _preWarmPlayer = null;
-    _preWarmVideoController = null; // VideoController 随 Player 释放
+    _preWarmVideoController = null;
 
     // 清空池
     for (final player in _playerPool) {
       await player.dispose();
     }
     _playerPool.clear();
-
-    // VideoController 不需要手动释放，已随 Player 释放
-    _videoControllerPool.clear();
 
     // 重置状态
     _isReady = false;
